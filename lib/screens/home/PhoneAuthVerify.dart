@@ -94,7 +94,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
             'ChipChop Seller',
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: CustomColors.mfinWhite,
+                color: CustomColors.sellerWhite,
                 fontSize: 20.0,
                 fontWeight: FontWeight.w700),
           ),
@@ -109,7 +109,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                       TextSpan(
                           text: 'Please enter the ',
                           style: TextStyle(
-                              color: CustomColors.mfinWhite,
+                              color: CustomColors.sellerWhite,
                               fontWeight: FontWeight.w400)),
                       TextSpan(
                           text: 'One Time Password',
@@ -120,7 +120,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                       TextSpan(
                         text: ' sent to your mobile',
                         style: TextStyle(
-                            color: CustomColors.mfinWhite,
+                            color: CustomColors.sellerWhite,
                             fontWeight: FontWeight.w400),
                       ),
                     ],
@@ -279,12 +279,12 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
           },
           maxLengthEnforced: false,
           textAlign: TextAlign.center,
-          cursorColor: CustomColors.mfinWhite,
+          cursorColor: CustomColors.sellerWhite,
           keyboardType: TextInputType.number,
           style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.w600,
-              color: CustomColors.mfinWhite),
+              color: CustomColors.sellerWhite),
         ),
       );
 }

@@ -25,7 +25,7 @@ Widget contactAndSupportDialog(context) {
             title: Text(
               AppLocalizations.of(context).translate('help_and_support'),
               style: TextStyle(
-                  color: CustomColors.mfinPositiveGreen,
+                  color: CustomColors.sellerPositiveGreen,
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold),
             ),
@@ -54,7 +54,7 @@ Widget contactAndSupportDialog(context) {
             AppLocalizations.of(context).translate('happy_to_help'),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: CustomColors.mfinPositiveGreen,
+                color: CustomColors.sellerPositiveGreen,
                 fontSize: 14.0,
                 fontWeight: FontWeight.bold),
           ),
@@ -77,13 +77,13 @@ Widget contactAndSupportDialog(context) {
               RaisedButton.icon(
                 icon: Icon(
                   Icons.email,
-                  color: CustomColors.mfinLightGrey,
+                  color: CustomColors.sellerLightGrey,
                 ),
                 elevation: 15.0,
                 onPressed: () {
                   UrlLauncherUtils.sendEmail(
                       'hello.ifin@gmail.com',
-                      'mFIN - Help %26 Support',
+                      'ChipChop Seller - Help %26 Support',
                       'Please type your query/issue here with your mobile number.. We will get back to you ASAP!');
                 },
                 label: Text(
@@ -105,7 +105,7 @@ Widget contactAndSupportDialog(context) {
               RaisedButton.icon(
                 icon: Icon(
                   Icons.phone,
-                  color: CustomColors.mfinLightGrey,
+                  color: CustomColors.sellerLightGrey,
                 ),
                 elevation: 15.0,
                 onPressed: () {

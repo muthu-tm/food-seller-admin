@@ -13,7 +13,7 @@ class ColorLoader extends StatefulWidget {
   final Icon dotIcon;
 
   ColorLoader(
-      {this.dotOneColor = CustomColors.mfinAlertRed,
+      {this.dotOneColor = CustomColors.sellerAlertRed,
       this.dotTwoColor = CustomColors.mfinButtonGreen,
       this.dotThreeColor = CustomColors.mfinLightBlue,
       this.duration = const Duration(milliseconds: 1000),

@@ -18,7 +18,7 @@ class _AddressWidgetState extends State<AddressWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: CustomColors.mfinLightGrey,
+      color: CustomColors.sellerLightGrey,
       elevation: 5.0,
       margin: EdgeInsets.all(5.0),
       child: Column(
@@ -64,7 +64,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: CustomColors.mfinFadedButtonGreen)),
-                      fillColor: CustomColors.mfinWhite,
+                      fillColor: CustomColors.sellerWhite,
                       filled: true,
                     ),
                     validator: (street) {
@@ -99,7 +99,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: CustomColors.mfinFadedButtonGreen)),
-                      fillColor: CustomColors.mfinWhite,
+                      fillColor: CustomColors.sellerWhite,
                       filled: true,
                     ),
                     validator: (city) {
@@ -128,7 +128,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: CustomColors.mfinFadedButtonGreen)),
-                      fillColor: CustomColors.mfinWhite,
+                      fillColor: CustomColors.sellerWhite,
                       filled: true,
                     ),
                     validator: (state) {
@@ -163,7 +163,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: CustomColors.mfinFadedButtonGreen)),
-                      fillColor: CustomColors.mfinWhite,
+                      fillColor: CustomColors.sellerWhite,
                       filled: true,
                     ),
                     validator: (pinCode) {

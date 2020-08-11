@@ -113,7 +113,7 @@ class _DoNotAskAgainDialogState extends State<DoNotAskAgainDialog> {
                   },
                   child: Text(
                     widget.doNotAskAgainText,
-                    style: TextStyle(color: CustomColors.mfinGrey),
+                    style: TextStyle(color: CustomColors.sellerGrey),
                   ),
                 ),
               ],
@@ -133,7 +133,7 @@ class _DoNotAskAgainDialogState extends State<DoNotAskAgainDialog> {
         FlatButton(
           child: Text(
             widget.negativeButtonText,
-            style: TextStyle(color: CustomColors.mfinAlertRed),
+            style: TextStyle(color: CustomColors.sellerAlertRed),
           ),
           onPressed: () async {
             Navigator.pop(context);

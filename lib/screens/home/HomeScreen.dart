@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
                       icon: Icon(
                         Icons.menu,
                         size: 30.0,
-                        color: CustomColors.mfinWhite,
+                        color: CustomColors.sellerWhite,
                       ),
                       onPressed: () => _scaffoldKey.currentState.openDrawer(),
                     ),
@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                             .translate('welcome_back'),
                         style: TextStyle(
                           fontSize: 16.0,
-                          color: CustomColors.mfinLightGrey,
+                          color: CustomColors.sellerLightGrey,
                           fontFamily: 'Georgia',
                           fontWeight: FontWeight.w600,
                         ),
@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                             text: 'Muthu!',
                             style: TextStyle(
                               fontSize: 18.0,
-                              color: CustomColors.mfinLightGrey,
+                              color: CustomColors.sellerLightGrey,
                               fontFamily: 'Georgia',
                               fontWeight: FontWeight.bold,
                             ),
@@ -74,7 +74,7 @@ class HomeScreen extends StatelessWidget {
             child: Container(
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                color: CustomColors.mfinLightGrey,
+                color: CustomColors.sellerLightGrey,
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(30.0),
                   topLeft: Radius.circular(30.0),
@@ -102,7 +102,7 @@ class HomeScreen extends StatelessWidget {
                               ],
                               gradient: LinearGradient(
                                 colors: <Color>[
-                                  CustomColors.mfinBlack,
+                                  CustomColors.sellerBlack,
                                   CustomColors.mfinButtonGreen,
                                 ],
                                 begin: Alignment.topLeft,
@@ -131,7 +131,7 @@ class HomeScreen extends StatelessWidget {
                                         style: TextStyle(
                                           fontSize: 17.0,
                                           fontFamily: "Georgia",
-                                          color: CustomColors.mfinWhite,
+                                          color: CustomColors.sellerWhite,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),

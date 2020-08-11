@@ -124,7 +124,7 @@ class CustomDialogs {
             title: new Text(
               title,
               style: TextStyle(
-                  color: CustomColors.mfinAlertRed,
+                  color: CustomColors.sellerAlertRed,
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold),
               textAlign: TextAlign.start,
@@ -157,11 +157,11 @@ class CustomDialogs {
               ),
               RaisedButton(
                 elevation: 10.0,
-                splashColor: CustomColors.mfinAlertRed,
+                splashColor: CustomColors.sellerAlertRed,
                 child: new Text(
                   'YES',
                   style: TextStyle(
-                      color: CustomColors.mfinAlertRed, fontSize: 18.0),
+                      color: CustomColors.sellerAlertRed, fontSize: 18.0),
                   textAlign: TextAlign.center,
                 ),
                 onPressed: yesAction,

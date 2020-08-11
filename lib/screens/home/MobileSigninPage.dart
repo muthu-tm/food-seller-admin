@@ -40,7 +40,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: CustomColors.mfinLightGrey,
+      backgroundColor: CustomColors.sellerLightGrey,
       body: SingleChildScrollView(
         child: _getBody(),
       ),
@@ -88,7 +88,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       keyboardType: TextInputType.number,
                       key: Key('EnterPhone-TextFormField'),
                       decoration: InputDecoration(
-                        fillColor: CustomColors.mfinWhite,
+                        fillColor: CustomColors.sellerWhite,
                         filled: true,
                         suffixIcon: Icon(
                           Icons.phone_android,
@@ -116,7 +116,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                 textCapitalization: TextCapitalization.sentences,
                 decoration: InputDecoration(
                   hintText: AppLocalizations.of(context).translate('name'),
-                  fillColor: CustomColors.mfinWhite,
+                  fillColor: CustomColors.sellerWhite,
                   filled: true,
                   suffixIcon: Icon(
                     Icons.sentiment_satisfied,
@@ -139,7 +139,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                 decoration: InputDecoration(
                   hintText: AppLocalizations.of(context)
                       .translate('four_digit_secret'),
-                  fillColor: CustomColors.mfinWhite,
+                  fillColor: CustomColors.sellerWhite,
                   filled: true,
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -164,7 +164,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(width: 5),
-              Icon(Icons.info, color: CustomColors.mfinAlertRed, size: 20.0),
+              Icon(Icons.info, color: CustomColors.sellerAlertRed, size: 20.0),
               SizedBox(width: 10.0),
               Expanded(
                 child: RichText(
@@ -179,7 +179,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       text: AppLocalizations.of(context)
                           .translate('one_time_password'),
                       style: TextStyle(
-                          color: CustomColors.mfinAlertRed,
+                          color: CustomColors.sellerAlertRed,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w700)),
                   TextSpan(
@@ -222,7 +222,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   style: TextStyle(
                     fontSize: 12,
                     fontFamily: 'Georgia',
-                    color: CustomColors.mfinPositiveGreen,
+                    color: CustomColors.sellerPositiveGreen,
                   ),
                 ),
               ),

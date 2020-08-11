@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
     return widget.isNewScaffold
         ? Scaffold(
             key: _scaffoldKey,
-            backgroundColor: CustomColors.mfinLightGrey,
+            backgroundColor: CustomColors.sellerLightGrey,
             body: Center(
               child: SingleChildScrollView(
                 child: _getBody(),
@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           hintText: AppLocalizations.of(context)
                               .translate('mobile_number'),
-                          fillColor: CustomColors.mfinWhite,
+                          fillColor: CustomColors.sellerWhite,
                           filled: true,
                           suffixIcon: Icon(
                             Icons.phone_android,
@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: <Widget>[
                       Icon(
                         Icons.info,
-                        color: CustomColors.mfinWhite,
+                        color: CustomColors.sellerWhite,
                         size: 20.0,
                       ),
                       SizedBox(width: 5.0),
@@ -137,14 +137,14 @@ class _LoginPageState extends State<LoginPage> {
                                 text: AppLocalizations.of(context)
                                     .translate('we_will_send'),
                                 style: TextStyle(
-                                    color: CustomColors.mfinWhite,
+                                    color: CustomColors.sellerWhite,
                                     fontWeight: FontWeight.w400),
                               ),
                               TextSpan(
                                 text: AppLocalizations.of(context)
                                     .translate('one_time_password'),
                                 style: TextStyle(
-                                    color: CustomColors.mfinAlertRed,
+                                    color: CustomColors.sellerAlertRed,
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.w700),
                               ),
@@ -152,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                                 text: AppLocalizations.of(context)
                                     .translate('to_mobile_no'),
                                 style: TextStyle(
-                                    color: CustomColors.mfinWhite,
+                                    color: CustomColors.sellerWhite,
                                     fontWeight: FontWeight.w400),
                               ),
                             ],
@@ -201,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                     fontSize: 13.0,
                     fontFamily: 'Georgia',
-                    color: CustomColors.mfinAlertRed,
+                    color: CustomColors.sellerAlertRed,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
     Analytics.setupAnalytics(analytics, observer);
     return MaterialApp(
       locale: this.locale,
-      title: 'mFIN',
+      title: 'ChipChop Seller',
       theme: ThemeData(
         brightness: Brightness.light,
         fontFamily: 'Georgia',
@@ -59,17 +59,14 @@ class _MyAppState extends State<MyApp> {
           bodyText2: TextStyle(
             fontSize: 14.0,
             fontFamily: 'Hind',
-            color: CustomColors.mfinWhite,
+            color: CustomColors.sellerWhite,
           ),
         ),
       ),
       supportedLocales: [
         Locale('en', 'US'),
         Locale('ta', 'IN'),
-        Locale('hi', 'IN'),
-        Locale('ml', 'IN'),
-        Locale('kn', 'IN'),
-        Locale('te', 'IN')
+        Locale('hi', 'IN')
       ],
       localizationsDelegates: [
         AppLocalizations.delegate,
@@ -96,14 +93,8 @@ class _MyAppState extends State<MyApp> {
 
     if(_language == "Tamil"){
       return Locale('ta', 'IN');
-    } else if(_language == "Malayalam"){
-      return Locale('ml', 'IN');
     } else if(_language == "Hindi"){
       return Locale('hi', 'IN');
-    } else if(_language == "Kannada"){
-      return Locale('kn', 'IN');
-    } else if(_language == "Telugu"){
-      return Locale('te', 'IN');
     } else {
       return Locale('en', 'US');
     }

@@ -127,7 +127,7 @@ Widget spenDrawer(BuildContext context) {
           },
         ),
         ListTile(
-          leading: Icon(Icons.error, color: CustomColors.mfinAlertRed),
+          leading: Icon(Icons.error, color: CustomColors.sellerAlertRed),
           title: Text(
             AppLocalizations.of(context).translate('logout'),
           ),

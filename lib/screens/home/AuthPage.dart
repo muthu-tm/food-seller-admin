@@ -32,7 +32,7 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: CustomColors.mfinLightGrey,
+      backgroundColor: CustomColors.sellerLightGrey,
       body: Center(
         child: SingleChildScrollView(
           child: FutureBuilder<String>(
@@ -89,7 +89,7 @@ class _AuthPageState extends State<AuthPage> {
                                 "Serving From",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: CustomColors.mfinGrey,
+                                  color: CustomColors.sellerGrey,
                                   fontSize: 12,
                                   fontFamily: "Georgia",
                                 ),
@@ -140,7 +140,7 @@ class _AuthPageState extends State<AuthPage> {
         text,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: CustomColors.mfinWhite,
+          color: CustomColors.sellerWhite,
           fontSize: size,
           fontFamily: "Georgia",
         ),
@@ -202,7 +202,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                             child: Icon(
                               Icons.person,
                               size: 45.0,
-                              color: CustomColors.mfinLightGrey,
+                              color: CustomColors.sellerLightGrey,
                             ),
                           )
                         : CircleAvatar(
@@ -217,7 +217,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: CustomColors.mfinLightGrey,
+                      color: CustomColors.sellerLightGrey,
                     ),
                   ),
                   Text(
@@ -225,7 +225,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     style: TextStyle(
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: CustomColors.mfinLightGrey,
+                      color: CustomColors.sellerLightGrey,
                     ),
                   ),
                   Padding(
@@ -239,7 +239,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                         decoration: InputDecoration(
                           hintText: AppLocalizations.of(context)
                               .translate('secret_key'),
-                          fillColor: CustomColors.mfinWhite,
+                          fillColor: CustomColors.sellerWhite,
                           filled: true,
                         ),
                       ),
@@ -257,7 +257,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                                 "Fingerprint",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: CustomColors.mfinGrey,
+                                  color: CustomColors.sellerGrey,
                                   fontSize: 11.0,
                                 ),
                               ),
@@ -276,7 +276,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                           AppLocalizations.of(context).translate('forget_key'),
                           textAlign: TextAlign.end,
                           style: TextStyle(
-                            color: CustomColors.mfinAlertRed,
+                            color: CustomColors.sellerAlertRed,
                             fontSize: 11.0,
                           ),
                         ),
@@ -324,7 +324,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     fontSize: 13.0,
                     fontFamily: 'Georgia',
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.mfinAlertRed.withOpacity(0.7),
+                    color: CustomColors.sellerAlertRed.withOpacity(0.7),
                   ),
                 ),
                 FlatButton(
@@ -341,7 +341,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.mfinPositiveGreen,
+                      color: CustomColors.sellerPositiveGreen,
                     ),
                   ),
                 ),

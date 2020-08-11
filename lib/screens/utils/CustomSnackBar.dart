@@ -9,11 +9,11 @@ class CustomSnackBar {
         textAlign: TextAlign.center,
         style: TextStyle(
             fontSize: 16.0,
-            color: CustomColors.mfinLightGrey,
+            color: CustomColors.sellerLightGrey,
             fontWeight: FontWeight.bold),
       ),
       duration: Duration(seconds: duration),
-      backgroundColor: CustomColors.mfinAlertRed,
+      backgroundColor: CustomColors.sellerAlertRed,
     );
   }
 
