@@ -66,5 +66,20 @@
     "profile_settings": "Profile Settings",
     "logout": "Logout",
     "logout_message": "Do you really want to Logout?",
-    "unable_to_open" : "Unable to open update URL now. Please update manually!"
+    "unable_to_open" : "Unable to open update URL now. Please update manually!",
+    "contact_number": "Contact Number",
+    "edit_profile": "Edit Profile",
+    "user_name": "User Name",
+    "dob": "Date of Birth",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "change_secret_key": "Change Secret KEY",
+    "new_secret_key": "New Secret KEY",
+    "confirm_secret_key": "Confirm Secret KEY",
+    "reenter_secret_key": "Re-Enter your New KEY",
+    "secret_key_mismatch": "Error! Secret KEY mismatch!",
+    "secret_key_updated_successfully": "Your Secret KEY updated successfully",
+    "save": "Save",
+    "search": "Search"
 }

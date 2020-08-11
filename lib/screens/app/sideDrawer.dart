@@ -1,36 +1,37 @@
 import 'package:chipchop_seller/screens/Home/AuthPage.dart';
 import 'package:chipchop_seller/screens/app/ContactAndSupportWidget.dart';
 import 'package:chipchop_seller/screens/home/HomeScreen.dart';
+import 'package:chipchop_seller/screens/settings/SettingsHome.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import '../../app_localizations.dart';
 
-Widget spenDrawer(BuildContext context) {
+Widget sideDrawer(BuildContext context) {
   return Drawer(
     child: ListView(
       children: <Widget>[
         DrawerHeader(
-          decoration: BoxDecoration(
-            color: CustomColors.mfinBlue,
-          ),
-          child: Container()
-        ),
-        ListTile(
-            leading: Icon(Icons.home, color: CustomColors.mfinButtonGreen),
-            title: Text(
-              "Home",
+            decoration: BoxDecoration(
+              color: CustomColors.mfinBlue,
             ),
-            onTap: () async {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
-                  settings: RouteSettings(name: '/home'),
-                ),
-                (Route<dynamic> route) => false,
-              );
-            }),
+            child: Container()),
+        ListTile(
+          leading: Icon(Icons.home, color: CustomColors.mfinButtonGreen),
+          title: Text(
+            "Home",
+          ),
+          onTap: () async {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+                settings: RouteSettings(name: '/home'),
+              ),
+              (Route<dynamic> route) => false,
+            );
+          },
+        ),
         Divider(indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
         ExpansionTile(
           title: Text(
@@ -96,11 +97,20 @@ Widget spenDrawer(BuildContext context) {
         ),
         Divider(indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
         ListTile(
-          leading:
-              Icon(Icons.store_mall_directory, color: CustomColors.mfinButtonGreen),
+          leading: Icon(Icons.store_mall_directory,
+              color: CustomColors.mfinButtonGreen),
           title: Text(
             "Store settings",
           ),
+          onTap: () async {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SettingsHome(),
+                settings: RouteSettings(name: '/settings'),
+              ),
+            );
+          },
         ),
         ListTile(
           leading: Icon(Icons.settings, color: CustomColors.mfinButtonGreen),

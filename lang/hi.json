@@ -65,5 +65,20 @@
     "profile_settings": "पार्श्वचित्र समायोजन",
     "logout": "लॉग आउट",
     "logout_message": "क्या तुम सच में लॉगआउट करना चाहते हैं?",
-    "unable_to_open" : "Unable to open update URL now. Please update manually!"
+    "unable_to_open" : "Unable to open update URL now. Please update manually!",
+    "contact_number": "संपर्क संख्या",
+    "edit_profile": "Edit Profile",
+    "user_name": "User Name",
+    "dob": "Date of Birth",
+    "gender": "लिंग",
+    "male": "नर",
+    "female": "महिला",
+    "change_secret_key": "गोपनीय कुंजी बदलें",
+    "new_secret_key": "नई गोपनीय कुंजी",
+    "confirm_secret_key": "गोपनीय कुंजी की पुष्टि करें",
+    "reenter_secret_key": "अपने नए कुंजी पुन: दर्ज करें",
+    "secret_key_mismatch": "त्रुटि! गोपनीय कुंजी बेमेल!",
+    "secret_key_updated_successfully": "अपनी गुप्त कुंजी सफलतापूर्वक अपडेट किया गया",
+    "save": "सहेजें",
+    "search": "खोज"
 }

@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: CustomColors.mfinBlue,
       key: _scaffoldKey,
-      drawer: spenDrawer(context),
+      drawer: sideDrawer(context),
       body: Stack(
         children: <Widget>[
           Container(

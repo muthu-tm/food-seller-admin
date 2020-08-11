@@ -49,46 +49,6 @@ class User extends Model {
 
   User();
 
-  setGuid(String uid) {
-    this.guid = uid;
-  }
-
-  setPassword(String password) {
-    this.password = password;
-  }
-
-  setGender(String gender) {
-    this.gender = gender;
-  }
-
-  setEmailID(String emailID) {
-    this.emailID = emailID;
-  }
-
-  setFirstName(String fname) {
-    this.firstName = fname;
-  }
-
-  setLastName(String lname) {
-    this.lastName = lname;
-  }
-
-  setDOB(DateTime date) {
-    this.dateOfBirth = DateUtils.getUTCDateEpoch(date);
-  }
-
-  setLastSignInTime(DateTime dateTime) {
-    this.lastSignInTime = dateTime;
-  }
-
-  setProfilePathOrg(String displayPath) {
-    this.profilePathOrg = displayPath;
-  }
-
-  setAddress(Address address) {
-    this.address = address;
-  }
-
   String getProfilePicPath() {
     if (this.profilePath != null && this.profilePath != "")
       return this.profilePath;

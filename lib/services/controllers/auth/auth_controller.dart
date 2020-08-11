@@ -1,5 +1,6 @@
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/user_preferences.dart';
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:chipchop_seller/services/utils/hash_generator.dart';
 import 'package:chipchop_seller/db/models/user.dart';
 import 'package:chipchop_seller/services/analytics/analytics.dart';
@@ -41,10 +42,10 @@ class AuthController {
       }
 
       user.update({'last_signed_in_at': DateTime.now()});
-      user.setLastSignInTime(DateTime.now());
+      user.lastSignInTime = DateTime.now();
 
       // cache the user data
-      // _userService.setCachedUser(user);
+      cachedLocalUser = user;
 
       return CustomResponse.getSuccesReponse(user.toJson());
     } catch (err) {
@@ -72,7 +73,7 @@ class AuthController {
       user.update({'last_signed_in_at': DateTime.now()});
 
       // cache the user data
-      // _userService.setCachedUser(user);
+      cachedLocalUser = user;
 
       return CustomResponse.getSuccesReponse(user);
     } catch (err) {

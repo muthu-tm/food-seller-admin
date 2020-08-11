@@ -1,4 +1,10 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'user_preferences.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
 
 UserPreferences _$UserPreferencesFromJson(Map<String, dynamic> json) {
   return UserPreferences()
@@ -8,6 +14,6 @@ UserPreferences _$UserPreferencesFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$UserPreferencesToJson(UserPreferences instance) =>
     <String, dynamic>{
-      'language': instance.prefLanguage ?? 'English',
-      'enable_fingerprint_auth': instance.isfingerAuthEnabled ?? false,
+      'language': instance.prefLanguage,
+      'enable_fingerprint_auth': instance.isfingerAuthEnabled,
     };

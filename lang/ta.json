@@ -71,5 +71,17 @@
     "profile_settings": "சுயவிபர அமைப்பு",
     "logout": "வெளியேறு",
     "logout_message": "இதிலிருந்து வெளியேற விருப்பமா?",
-    "unable_to_open": "Unable to open update URL now. Please update manually!"
+    "unable_to_open": "Unable to open update URL now. Please update manually!",
+    "contact_number": "அலைபேசி எண்",
+    "edit_profile": "Edit Profile",
+    "user_name": "User Name",
+    "dob": "Date of Birth",
+    "change_secret_key": "ரகசிய எண்ணை மாற்று",
+    "new_secret_key": "புதிய ரகசிய எண்",
+    "confirm_secret_key": "ரகசிய எண்ணை உறுதிபடுத்தவும்",
+    "reenter_secret_key": "புதிய ரகசிய எண்ணை மீண்டும் எழுது",
+    "secret_key_mismatch": "பிழை! ரகசிய எண் பொருந்தவில்லை",
+    "secret_key_updated_successfully": "உங்கள் ரகசிய எண் வெற்றிகரமாக புதுப்பிக்கப்பட்டது",
+    "save": "சேமி",
+    "search": "தேடு"
 }
