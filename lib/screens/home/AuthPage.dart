@@ -130,8 +130,8 @@ class _AuthPageState extends State<AuthPage> {
     return ShaderMask(
       shaderCallback: (bounds) => LinearGradient(
         colors: [
-          CustomColors.mfinButtonGreen,
-          CustomColors.mfinBlue,
+          CustomColors.sellerButtonGreen,
+          CustomColors.sellerPurple,
         ],
       ).createShader(
         Rect.fromLTWH(0, 0, bounds.width, bounds.height),
@@ -176,7 +176,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
       child: Column(
         children: <Widget>[
           Card(
-            color: CustomColors.mfinBlue,
+            color: CustomColors.sellerPurple,
             elevation: 2.0,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0)),
@@ -195,7 +195,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                  color: CustomColors.mfinFadedButtonGreen,
+                                  color: CustomColors.sellerButtonGreen,
                                   style: BorderStyle.solid,
                                   width: 2.0),
                             ),
@@ -276,7 +276,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                           AppLocalizations.of(context).translate('forget_key'),
                           textAlign: TextAlign.end,
                           style: TextStyle(
-                            color: CustomColors.sellerAlertRed,
+                            color: CustomColors.sellerOrange,
                             fontSize: 11.0,
                           ),
                         ),
@@ -292,7 +292,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                       width: 150.0,
                       height: 50.0,
                       decoration: BoxDecoration(
-                        color: CustomColors.mfinFadedButtonGreen,
+                        color: CustomColors.sellerButtonGreen,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Center(
@@ -302,7 +302,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                           style: TextStyle(
                             fontSize: 18.0,
                             fontFamily: 'Georgia',
-                            color: CustomColors.mfinBlue,
+                            color: CustomColors.sellerBlue,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -341,7 +341,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.sellerPositiveGreen,
+                      color: CustomColors.sellerButtonGreen,
                     ),
                   ),
                 ),

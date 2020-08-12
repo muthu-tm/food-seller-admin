@@ -3,7 +3,7 @@ import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 
 class CustomSnackBar {
   static errorSnackBar(String errorText, int duration) {
-    return new SnackBar(
+    return SnackBar(
       content: Text(
         errorText,
         textAlign: TextAlign.center,
@@ -24,12 +24,12 @@ class CustomSnackBar {
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 16.0,
-          color: CustomColors.mfinBlue,
+          color: CustomColors.sellerPurple,
           fontWeight: FontWeight.bold,
         ),
       ),
       duration: Duration(seconds: duration),
-      backgroundColor: CustomColors.mfinFadedButtonGreen,
+      backgroundColor: CustomColors.sellerFadedButtonGreen,
     );
   }
 }

@@ -27,7 +27,7 @@ class _UserSettingState extends State<UserSetting> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).translate('profile_settings')),
-        backgroundColor: CustomColors.mfinBlue,
+        backgroundColor: CustomColors.sellerPurple,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
@@ -102,11 +102,11 @@ class _UserSettingState extends State<UserSetting> {
           ),
           actions: <Widget>[
             FlatButton(
-              color: CustomColors.mfinButtonGreen,
+              color: CustomColors.sellerButtonGreen,
               child: Text(
                 "NO",
                 style: TextStyle(
-                    color: CustomColors.mfinBlue,
+                    color: CustomColors.sellerPurple,
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold),
                 textAlign: TextAlign.start,

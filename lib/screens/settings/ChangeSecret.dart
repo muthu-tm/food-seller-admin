@@ -26,11 +26,11 @@ class _ChangeSecretState extends State<ChangeSecret> {
       appBar: AppBar(
         title:
             Text(AppLocalizations.of(context).translate('change_secret_key')),
-        backgroundColor: CustomColors.mfinBlue,
+        backgroundColor: CustomColors.sellerPurple,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.mfinBlue,
+        backgroundColor: CustomColors.sellerPurple,
         onPressed: () async {
           _submit();
         },
@@ -46,7 +46,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
         icon: Icon(
           Icons.check,
           size: 35,
-          color: CustomColors.mfinFadedButtonGreen,
+          color: CustomColors.sellerFadedButtonGreen,
         ),
       ),
       body: Form(
@@ -55,7 +55,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
           child: Padding(
             padding: EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
             child: Card(
-              color: CustomColors.sellerAlertRed.withOpacity(0.4),
+              color: CustomColors.sellerOrange.withOpacity(0.7),
               elevation: 5.0,
               child: Column(
                 children: <Widget>[
@@ -68,7 +68,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
-                          color: CustomColors.mfinBlue,
+                          color: CustomColors.sellerPurple,
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         fillColor: CustomColors.sellerWhite,
@@ -96,7 +96,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
                       obscureText: true,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
-                          color: CustomColors.mfinBlue,
+                          color: CustomColors.sellerPurple,
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         fillColor: CustomColors.sellerWhite,

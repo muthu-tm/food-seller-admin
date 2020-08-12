@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: <Widget>[
           Card(
-            color: CustomColors.mfinBlue,
+            color: CustomColors.sellerPurple,
             elevation: 2.0,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0)),
@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                           prefixText: " +91 ",
                           prefixStyle: TextStyle(
                             fontSize: 16.0,
-                            color: CustomColors.mfinBlue,
+                            color: CustomColors.sellerPurple,
                           ),
                           hintText: AppLocalizations.of(context)
                               .translate('mobile_number'),
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                           filled: true,
                           suffixIcon: Icon(
                             Icons.phone_android,
-                            color: CustomColors.mfinFadedButtonGreen,
+                            color: CustomColors.sellerFadedButtonGreen,
                             size: 35.0,
                           ),
                         ),
@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: 150.0,
                       height: 50.0,
                       decoration: BoxDecoration(
-                        color: CustomColors.mfinFadedButtonGreen,
+                        color: CustomColors.sellerFadedButtonGreen,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Center(
@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                           AppLocalizations.of(context).translate('get_otp'),
                           style: TextStyle(
                             fontSize: 20.0,
-                            color: CustomColors.mfinBlue,
+                            color: CustomColors.sellerPurple,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -218,7 +218,7 @@ class _LoginPageState extends State<LoginPage> {
                     AppLocalizations.of(context).translate('sign_up'),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.mfinBlue,
+                      color: CustomColors.sellerPurple,
                       fontSize: 18.0,
                     ),
                   ),
@@ -246,14 +246,14 @@ class _LoginPageState extends State<LoginPage> {
               },
               icon: Icon(
                 Icons.info,
-                color: CustomColors.mfinBlue,
+                color: CustomColors.sellerPurple,
               ),
               label: Text(
                 AppLocalizations.of(context).translate('help_support'),
                 style: TextStyle(
                   fontFamily: 'Georgia',
                   fontWeight: FontWeight.bold,
-                  color: CustomColors.mfinBlue,
+                  color: CustomColors.sellerPurple,
                   fontSize: 16.0,
                 ),
               ),

@@ -35,12 +35,12 @@ class _AddressWidgetState extends State<AddressWidget> {
                 fontSize: 18,
                 fontFamily: "Georgia",
                 fontWeight: FontWeight.bold,
-                color: CustomColors.mfinBlue,
+                color: CustomColors.sellerPurple,
               ),
             ),
           ),
           Divider(
-            color: CustomColors.mfinBlue,
+            color: CustomColors.sellerPurple,
           ),
           Padding(
             padding: EdgeInsets.all(5.0),
@@ -57,13 +57,13 @@ class _AddressWidgetState extends State<AddressWidget> {
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
-                        color: CustomColors.mfinBlue,
+                        color: CustomColors.sellerPurple,
                       ),
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
-                              color: CustomColors.mfinFadedButtonGreen)),
+                              color: CustomColors.sellerFadedButtonGreen)),
                       fillColor: CustomColors.sellerWhite,
                       filled: true,
                     ),
@@ -92,13 +92,13 @@ class _AddressWidgetState extends State<AddressWidget> {
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
-                        color: CustomColors.mfinBlue,
+                        color: CustomColors.sellerPurple,
                       ),
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
-                              color: CustomColors.mfinFadedButtonGreen)),
+                              color: CustomColors.sellerFadedButtonGreen)),
                       fillColor: CustomColors.sellerWhite,
                       filled: true,
                     ),
@@ -121,13 +121,13 @@ class _AddressWidgetState extends State<AddressWidget> {
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
-                        color: CustomColors.mfinBlue,
+                        color: CustomColors.sellerPurple,
                       ),
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
-                              color: CustomColors.mfinFadedButtonGreen)),
+                              color: CustomColors.sellerFadedButtonGreen)),
                       fillColor: CustomColors.sellerWhite,
                       filled: true,
                     ),
@@ -156,13 +156,13 @@ class _AddressWidgetState extends State<AddressWidget> {
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
-                        color: CustomColors.mfinBlue,
+                        color: CustomColors.sellerPurple,
                       ),
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
-                              color: CustomColors.mfinFadedButtonGreen)),
+                              color: CustomColors.sellerFadedButtonGreen)),
                       fillColor: CustomColors.sellerWhite,
                       filled: true,
                     ),

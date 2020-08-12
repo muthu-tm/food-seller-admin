@@ -23,12 +23,12 @@ class UserProfileWidget extends StatelessWidget {
             leading: Icon(
               Icons.assignment_ind,
               size: 35.0,
-              color: CustomColors.mfinFadedButtonGreen,
+              color: CustomColors.sellerFadedButtonGreen,
             ),
             title: Text(
               title,
               style: TextStyle(
-                color: CustomColors.mfinBlue,
+                color: CustomColors.sellerPurple,
                 fontSize: 18.0,
               ),
             ),
@@ -36,7 +36,7 @@ class UserProfileWidget extends StatelessWidget {
               icon: Icon(
                 Icons.edit,
                 size: 35.0,
-                color: CustomColors.mfinBlue,
+                color: CustomColors.sellerPurple,
               ),
               onPressed: () {
                 if (user.mobileNumber != cachedLocalUser.mobileNumber) {
@@ -58,7 +58,7 @@ class UserProfileWidget extends StatelessWidget {
             ),
           ),
           Divider(
-            color: CustomColors.mfinButtonGreen,
+            color: CustomColors.sellerButtonGreen,
           ),
           ListTile(
             leading: SizedBox(
@@ -243,7 +243,7 @@ class UserProfileWidget extends StatelessWidget {
                 suffixIcon: Icon(
                   Icons.perm_contact_calendar,
                   size: 35,
-                  color: CustomColors.mfinBlue,
+                  color: CustomColors.sellerPurple,
                 ),
               ),
               readOnly: true,

@@ -10,14 +10,14 @@ class HomeScreen extends StatelessWidget {
         new GlobalKey<ScaffoldState>();
 
     return Scaffold(
-      backgroundColor: CustomColors.mfinBlue,
+      backgroundColor: CustomColors.sellerPurple,
       key: _scaffoldKey,
       drawer: sideDrawer(context),
       body: Stack(
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
-              color: CustomColors.mfinBlue,
+              color: CustomColors.sellerPurple,
               borderRadius: BorderRadius.only(
                 bottomRight: Radius.circular(40.0),
                 bottomLeft: Radius.circular(40.0),
@@ -95,7 +95,7 @@ class HomeScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                               boxShadow: <BoxShadow>[
                                 BoxShadow(
-                                    color: CustomColors.mfinButtonGreen
+                                    color: CustomColors.sellerButtonGreen
                                         .withOpacity(0.6),
                                     offset: const Offset(1.1, 4.0),
                                     blurRadius: 8.0),
@@ -103,7 +103,7 @@ class HomeScreen extends StatelessWidget {
                               gradient: LinearGradient(
                                 colors: <Color>[
                                   CustomColors.sellerBlack,
-                                  CustomColors.mfinButtonGreen,
+                                  CustomColors.sellerButtonGreen,
                                 ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,

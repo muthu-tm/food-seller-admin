@@ -10,6 +10,8 @@ class Store extends Model {
 
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
+  @JsonKey(name: 'owned_by', defaultValue: "")
+  String ownedBy;
   @JsonKey(name: 'store_name', defaultValue: "")
   String storeName;
   @JsonKey(name: 'store_type')

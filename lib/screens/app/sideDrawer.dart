@@ -13,11 +13,11 @@ Widget sideDrawer(BuildContext context) {
       children: <Widget>[
         DrawerHeader(
             decoration: BoxDecoration(
-              color: CustomColors.mfinBlue,
+              color: CustomColors.sellerPurple,
             ),
             child: Container()),
         ListTile(
-          leading: Icon(Icons.home, color: CustomColors.mfinButtonGreen),
+          leading: Icon(Icons.home, color: CustomColors.sellerButtonGreen),
           title: Text(
             "Home",
           ),
@@ -32,13 +32,13 @@ Widget sideDrawer(BuildContext context) {
             );
           },
         ),
-        Divider(indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
+        Divider(indent: 15.0, color: CustomColors.sellerBlue, thickness: 1.0),
         ExpansionTile(
           title: Text(
             "Orders",
           ),
           leading:
-              Icon(Icons.content_copy, color: CustomColors.mfinButtonGreen),
+              Icon(Icons.content_copy, color: CustomColors.sellerButtonGreen),
           children: <Widget>[
             ListTile(
               title: Text(
@@ -56,7 +56,7 @@ Widget sideDrawer(BuildContext context) {
         ),
         ExpansionTile(
           leading: Icon(Icons.supervisor_account,
-              color: CustomColors.mfinButtonGreen),
+              color: CustomColors.sellerButtonGreen),
           title: Text(
             "Products",
           ),
@@ -76,29 +76,29 @@ Widget sideDrawer(BuildContext context) {
           ],
         ),
         ListTile(
-          leading: Icon(Icons.description, color: CustomColors.mfinButtonGreen),
+          leading: Icon(Icons.description, color: CustomColors.sellerButtonGreen),
           title: Text(
             AppLocalizations.of(context).translate('reports'),
           ),
         ),
         ListTile(
-          leading: Icon(Icons.assessment, color: CustomColors.mfinButtonGreen),
+          leading: Icon(Icons.assessment, color: CustomColors.sellerButtonGreen),
           title: Text(
             AppLocalizations.of(context).translate('statistics'),
           ),
         ),
-        Divider(indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
+        Divider(indent: 15.0, color: CustomColors.sellerBlue, thickness: 1.0),
         ListTile(
           leading: Icon(Icons.notifications_active,
-              color: CustomColors.mfinButtonGreen),
+              color: CustomColors.sellerButtonGreen),
           title: Text(
             "Notifications",
           ),
         ),
-        Divider(indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
+        Divider(indent: 15.0, color: CustomColors.sellerBlue, thickness: 1.0),
         ListTile(
           leading: Icon(Icons.store_mall_directory,
-              color: CustomColors.mfinButtonGreen),
+              color: CustomColors.sellerButtonGreen),
           title: Text(
             "Store settings",
           ),
@@ -113,14 +113,14 @@ Widget sideDrawer(BuildContext context) {
           },
         ),
         ListTile(
-          leading: Icon(Icons.settings, color: CustomColors.mfinButtonGreen),
+          leading: Icon(Icons.settings, color: CustomColors.sellerButtonGreen),
           title: Text(
             AppLocalizations.of(context).translate('profile_settings'),
           ),
         ),
-        Divider(indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
+        Divider(indent: 15.0, color: CustomColors.sellerBlue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.headset_mic, color: CustomColors.mfinButtonGreen),
+          leading: Icon(Icons.headset_mic, color: CustomColors.sellerButtonGreen),
           title: Text(
             AppLocalizations.of(context).translate('help_and_support'),
           ),
@@ -157,7 +157,7 @@ Widget sideDrawer(BuildContext context) {
           }, () => Navigator.pop(context, false)),
         ),
         Container(
-          color: CustomColors.mfinBlue,
+          color: CustomColors.sellerPurple,
           child: AboutListTile(
             dense: true,
             applicationIcon: Container(
@@ -183,7 +183,7 @@ Widget sideDrawer(BuildContext context) {
                 text: TextSpan(
                   text: '',
                   style: TextStyle(
-                    color: CustomColors.mfinLightBlue,
+                    color: CustomColors.sellerFadedPurple,
                     fontFamily: 'Georgia',
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -192,7 +192,7 @@ Widget sideDrawer(BuildContext context) {
                     TextSpan(
                       text: 'ChipChop',
                       style: TextStyle(
-                        color: CustomColors.mfinFadedButtonGreen,
+                        color: CustomColors.sellerButtonGreen,
                         fontFamily: 'Georgia',
                         fontSize: 16.0,
                       ),
@@ -200,7 +200,7 @@ Widget sideDrawer(BuildContext context) {
                     TextSpan(
                       text: ' Seller',
                       style: TextStyle(
-                        color: CustomColors.mfinButtonGreen,
+                        color: CustomColors.sellerButtonGreen,
                         fontFamily: 'Georgia',
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
@@ -221,7 +221,7 @@ Widget sideDrawer(BuildContext context) {
                   text: TextSpan(
                     text: 'ChipChop',
                     style: TextStyle(
-                      color: CustomColors.mfinBlue,
+                      color: CustomColors.sellerBlue,
                       fontFamily: 'Georgia',
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
@@ -230,7 +230,7 @@ Widget sideDrawer(BuildContext context) {
                       TextSpan(
                         text: ' Seller',
                         style: TextStyle(
-                          color: CustomColors.mfinButtonGreen,
+                          color: CustomColors.sellerBlue,
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -245,14 +245,14 @@ Widget sideDrawer(BuildContext context) {
               ListTile(
                 leading: Icon(
                   Icons.info,
-                  color: CustomColors.mfinBlue,
+                  color: CustomColors.sellerPurple,
                   size: 35.0,
                 ),
                 title: Text(
                   AppLocalizations.of(context)
                       .translate('terms_and_conditions'),
                   style: TextStyle(
-                    color: CustomColors.mfinLightBlue,
+                    color: CustomColors.sellerFadedPurple,
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
                   ),

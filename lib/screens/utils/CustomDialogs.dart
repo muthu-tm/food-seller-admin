@@ -28,8 +28,8 @@ class CustomDialogs {
               FlatButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('OK'),
-                textColor: CustomColors.mfinButtonGreen,
-                color: CustomColors.mfinBlue,
+                textColor: CustomColors.sellerButtonGreen,
+                color: CustomColors.sellerPurple,
               )
             ],
           );
@@ -80,9 +80,9 @@ class CustomDialogs {
                   height: 45,
                   child: CircularProgressIndicator(
                     strokeWidth: 3,
-                    backgroundColor: CustomColors.mfinButtonGreen,
+                    backgroundColor: CustomColors.sellerButtonGreen,
                     valueColor:
-                        AlwaysStoppedAnimation<Color>(CustomColors.mfinBlue),
+                        AlwaysStoppedAnimation<Color>(CustomColors.sellerPurple),
                   ),
                 ),
               ),
@@ -95,8 +95,8 @@ class CustomDialogs {
               size: 18.0,
               gradient: LinearGradient(
                 colors: [
-                  CustomColors.mfinBlue,
-                  CustomColors.mfinButtonGreen,
+                  CustomColors.sellerPurple,
+                  CustomColors.sellerButtonGreen,
                 ],
               ),
             ),
@@ -116,58 +116,59 @@ class CustomDialogs {
   static confirm(BuildContext context, String title, String description,
       Function() yesAction, Function() noAction) {
     return showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            elevation: 10.0,
-            title: new Text(
-              title,
-              style: TextStyle(
-                  color: CustomColors.sellerAlertRed,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold),
-              textAlign: TextAlign.start,
-            ),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  new Container(
-                    child: new Text(
-                      description,
-                      style: TextStyle(
-                          color: CustomColors.mfinBlue, fontSize: 20.0),
-                      textAlign: TextAlign.center,
-                    ),
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          elevation: 10.0,
+          title: new Text(
+            title,
+            style: TextStyle(
+                color: CustomColors.sellerAlertRed,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold),
+            textAlign: TextAlign.start,
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    description,
+                    style:
+                        TextStyle(color: CustomColors.sellerPurple, fontSize: 20.0),
+                    textAlign: TextAlign.center,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            actions: <Widget>[
-              RaisedButton(
-                elevation: 10.0,
-                splashColor: CustomColors.mfinButtonGreen,
-                child: new Text(
-                  'NO',
-                  style: TextStyle(
-                      color: CustomColors.mfinButtonGreen, fontSize: 18.0),
-                  textAlign: TextAlign.center,
-                ),
-                onPressed: noAction,
+          ),
+          actions: <Widget>[
+            RaisedButton(
+              elevation: 10.0,
+              splashColor: CustomColors.sellerButtonGreen,
+              child: Text(
+                'NO',
+                style: TextStyle(
+                    color: CustomColors.sellerButtonGreen, fontSize: 18.0),
+                textAlign: TextAlign.center,
               ),
-              RaisedButton(
-                elevation: 10.0,
-                splashColor: CustomColors.sellerAlertRed,
-                child: new Text(
-                  'YES',
-                  style: TextStyle(
-                      color: CustomColors.sellerAlertRed, fontSize: 18.0),
-                  textAlign: TextAlign.center,
-                ),
-                onPressed: yesAction,
+              onPressed: noAction,
+            ),
+            RaisedButton(
+              elevation: 10.0,
+              splashColor: CustomColors.sellerAlertRed,
+              child: Text(
+                'YES',
+                style: TextStyle(
+                    color: CustomColors.sellerAlertRed, fontSize: 18.0),
+                textAlign: TextAlign.center,
               ),
-            ],
-          );
-        });
+              onPressed: yesAction,
+            ),
+          ],
+        );
+      },
+    );
   }
 }

@@ -67,7 +67,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
   }
 
   Widget _getBody() => Card(
-        color: CustomColors.mfinLightBlue,
+        color: CustomColors.sellerPurple,
         elevation: 2.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -114,7 +114,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                       TextSpan(
                           text: 'One Time Password',
                           style: TextStyle(
-                              color: CustomColors.mfinButtonGreen,
+                              color: CustomColors.sellerButtonGreen,
                               fontSize: 16.0,
                               fontWeight: FontWeight.w700)),
                       TextSpan(
@@ -153,16 +153,16 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
             elevation: 16.0,
             onPressed: signIn,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: Text(
                 AppLocalizations.of(context).translate('verify'),
                 style: TextStyle(
-                  color: CustomColors.mfinButtonGreen,
+                  color: CustomColors.sellerButtonGreen,
                   fontSize: 18.0,
                 ),
               ),
             ),
-            color: CustomColors.mfinBlue,
+            color: CustomColors.sellerPurple,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
           )

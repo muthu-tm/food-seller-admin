@@ -20,10 +20,63 @@ class _SettingsHomeState extends State<SettingsHome> {
           height: MediaQuery.of(context).size.height,
           child: ListView(
             children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.home, color: CustomColors.mfinButtonGreen),
-                title: Text(
-                  "Profile Settings",
+              InkWell(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            width: 85,
+                            height: 80,
+                            decoration: BoxDecoration(
+                                color: CustomColors.sellerButtonGreen
+                                    .withOpacity(0.3),
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(40),
+                                    bottomRight: Radius.circular(40))),
+                          ),
+                          Positioned(
+                            top: 10,
+                            left: 10,
+                            child: SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color:
+                                      CustomColors.sellerBlue.withOpacity(0.3),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Icon(
+                                    Icons.person,
+                                    size: 35,
+                                    color: CustomColors.sellerBlue,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        "Profile Settings",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontFamily: 'Georgia',
+                          color: CustomColors.sellerBlack,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 onTap: () async {
                   Navigator.push(
@@ -36,59 +89,236 @@ class _SettingsHomeState extends State<SettingsHome> {
                 },
               ),
               Divider(
-                  indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
-              ExpansionTile(
-                title: Text(
-                  "Store",
+                indent: 45,
+                color: CustomColors.sellerButtonGreen,
+                thickness: 2.0,
+                height: 0,
+              ),
+              InkWell(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            width: 85,
+                            height: 80,
+                            decoration: BoxDecoration(
+                                color: CustomColors.sellerButtonGreen
+                                    .withOpacity(0.3),
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(40),
+                                    bottomRight: Radius.circular(40))),
+                          ),
+                          Positioned(
+                            top: 10,
+                            left: 10,
+                            child: SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color:
+                                      CustomColors.sellerBlue.withOpacity(0.3),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Icon(
+                                    Icons.store_mall_directory,
+                                    size: 35,
+                                    color: CustomColors.sellerBlue,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        "Store Settings",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontFamily: 'Georgia',
+                          color: CustomColors.sellerBlack,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                leading: Icon(Icons.content_copy,
-                    color: CustomColors.mfinButtonGreen),
-                children: <Widget>[
-                  ListTile(
-                    title: Text(
-                      "General Info",
+                onTap: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserSetting(),
+                      settings: RouteSettings(name: '/settings/profile'),
                     ),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                  ListTile(
-                    title: Text(
-                      "Locations",
-                    ),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                ],
+                  );
+                },
               ),
               Divider(
-                  indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
-              ExpansionTile(
-                leading: Icon(Icons.supervisor_account,
-                    color: CustomColors.mfinButtonGreen),
-                title: Text(
-                  "PromoCode",
+                indent: 45,
+                color: CustomColors.sellerButtonGreen,
+                thickness: 2.0,
+                height: 0,
+              ),
+              InkWell(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            width: 85,
+                            height: 80,
+                            decoration: BoxDecoration(
+                                color: CustomColors.sellerButtonGreen
+                                    .withOpacity(0.3),
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(40),
+                                    bottomRight: Radius.circular(40))),
+                          ),
+                          Positioned(
+                            top: 10,
+                            left: 10,
+                            child: SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color:
+                                      CustomColors.sellerBlue.withOpacity(0.3),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Icon(
+                                    Icons.local_offer,
+                                    size: 35,
+                                    color: CustomColors.sellerBlue,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        "PromoCode",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontFamily: 'Georgia',
+                          color: CustomColors.sellerBlack,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                children: <Widget>[
-                  ListTile(
-                    title: Text(
-                      "Add Promo",
+                onTap: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserSetting(),
+                      settings: RouteSettings(name: '/settings/profile'),
                     ),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                  ListTile(
-                    title: Text(
-                      "View Promo",
-                    ),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                ],
+                  );
+                },
               ),
               Divider(
-                  indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
-              ListTile(
-                leading: Icon(Icons.home, color: CustomColors.mfinButtonGreen),
-                title: Text(
-                  "ChipChop Seller",
+                indent: 45,
+                color: CustomColors.sellerButtonGreen,
+                thickness: 2.0,
+                height: 0,
+              ),
+              InkWell(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            width: 85,
+                            height: 80,
+                            decoration: BoxDecoration(
+                                color: CustomColors.sellerButtonGreen
+                                    .withOpacity(0.3),
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(40),
+                                    bottomRight: Radius.circular(40))),
+                          ),
+                          Positioned(
+                            top: 10,
+                            left: 10,
+                            child: SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color:
+                                      CustomColors.sellerBlue.withOpacity(0.3),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: ClipRRect(
+                                    child: Image.asset(
+                                      "images/icons/logo.png",
+                                      height: 25,
+                                      width: 25,
+                                      cacheHeight: 30,
+                                      cacheWidth: 35,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        "ChipChop Seller",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontFamily: 'Georgia',
+                          color: CustomColors.sellerBlack,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                onTap: () async {},
+                onTap: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserSetting(),
+                      settings: RouteSettings(name: '/settings/profile'),
+                    ),
+                  );
+                },
+              ),
+              Divider(
+                indent: 45,
+                color: CustomColors.sellerButtonGreen,
+                thickness: 2.0,
+                height: 0,
               ),
             ],
           ),

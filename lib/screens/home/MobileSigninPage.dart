@@ -77,7 +77,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                     " +91",
                     style: TextStyle(
                       fontSize: 16.0,
-                      color: CustomColors.mfinBlue,
+                      color: CustomColors.sellerPurple,
                     ),
                   ),
                   Expanded(
@@ -92,7 +92,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                         filled: true,
                         suffixIcon: Icon(
                           Icons.phone_android,
-                          color: CustomColors.mfinFadedButtonGreen,
+                          color: CustomColors.sellerFadedButtonGreen,
                           size: 35.0,
                         ),
                         hintText: AppLocalizations.of(context)
@@ -120,7 +120,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   filled: true,
                   suffixIcon: Icon(
                     Icons.sentiment_satisfied,
-                    color: CustomColors.mfinFadedButtonGreen,
+                    color: CustomColors.sellerFadedButtonGreen,
                     size: 35.0,
                   ),
                 ),
@@ -146,7 +146,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       _passwordVisible
                           ? Icons.visibility_off
                           : Icons.visibility,
-                      color: CustomColors.mfinFadedButtonGreen,
+                      color: CustomColors.sellerFadedButtonGreen,
                       size: 35.0,
                     ),
                     onPressed: () {
@@ -173,7 +173,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       text: AppLocalizations.of(context)
                           .translate('we_will_send'),
                       style: TextStyle(
-                          color: CustomColors.mfinBlue,
+                          color: CustomColors.sellerPurple,
                           fontWeight: FontWeight.w400)),
                   TextSpan(
                       text: AppLocalizations.of(context)
@@ -186,7 +186,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       text: AppLocalizations.of(context)
                           .translate('to_mobile_no'),
                       style: TextStyle(
-                          color: CustomColors.mfinBlue,
+                          color: CustomColors.sellerPurple,
                           fontWeight: FontWeight.w400)),
                 ])),
               ),
@@ -202,12 +202,12 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               child: Text(
                 AppLocalizations.of(context).translate('get_otp'),
                 style: TextStyle(
-                  color: CustomColors.mfinButtonGreen,
+                  color: CustomColors.sellerButtonGreen,
                   fontSize: 18.0,
                 ),
               ),
             ),
-            color: CustomColors.mfinBlue,
+            color: CustomColors.sellerPurple,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
@@ -234,7 +234,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.mfinBlue,
+                    color: CustomColors.sellerPurple,
                   ),
                 ),
               ),
