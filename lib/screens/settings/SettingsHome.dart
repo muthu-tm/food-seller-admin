@@ -1,6 +1,7 @@
 import 'package:chipchop_seller/screens/app/appBar.dart';
 import 'package:chipchop_seller/screens/app/sideDrawer.dart';
 import 'package:chipchop_seller/screens/settings/UserProfileSettings.dart';
+import 'package:chipchop_seller/screens/store/AddStoreHome.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
@@ -156,8 +157,8 @@ class _SettingsHomeState extends State<SettingsHome> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => UserSetting(),
-                      settings: RouteSettings(name: '/settings/profile'),
+                      builder: (context) => AddNewStoreHome(),
+                      settings: RouteSettings(name: '/settings/store'),
                     ),
                   );
                 },

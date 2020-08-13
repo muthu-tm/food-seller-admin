@@ -81,5 +81,10 @@
     "secret_key_mismatch": "Error! Secret KEY mismatch!",
     "secret_key_updated_successfully": "Your Secret KEY updated successfully",
     "save": "Save",
-    "search": "Search"
+    "search": "Search",
+
+    "general_details": "General Info",
+    "store_name": "Store Name",
+    "available_products": "Available Products",
+    "location": "Location"
 }
