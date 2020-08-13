@@ -43,11 +43,6 @@ class _ChangeSecretState extends State<ChangeSecret> {
           ),
         ),
         splashColor: CustomColors.sellerWhite,
-        icon: Icon(
-          Icons.check,
-          size: 35,
-          color: CustomColors.sellerFadedButtonGreen,
-        ),
       ),
       body: Form(
         key: _formKey,

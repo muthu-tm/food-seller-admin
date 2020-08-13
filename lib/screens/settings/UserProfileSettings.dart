@@ -31,7 +31,7 @@ class _UserSettingState extends State<UserSetting> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerAlertRed.withOpacity(0.7),
+        backgroundColor: CustomColors.sellerOrange.withOpacity(0.7),
         onPressed: () async {
           await forceDeactivate(context);
         },

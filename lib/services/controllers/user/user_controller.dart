@@ -27,6 +27,8 @@ class UserController {
   Future updateUser(Map<String, dynamic> userJson) async {
     try {
       User user = User();
+      user.countryCode = cachedLocalUser.countryCode;
+      user.mobileNumber = cachedLocalUser.mobileNumber;
       var result = await user.update(userJson);
 
       cachedLocalUser = (User.fromJson(await user.getByID(getCurrentUserID())));

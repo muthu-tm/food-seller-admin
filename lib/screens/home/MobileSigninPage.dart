@@ -202,7 +202,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               child: Text(
                 AppLocalizations.of(context).translate('get_otp'),
                 style: TextStyle(
-                  color: CustomColors.sellerButtonGreen,
+                  color: CustomColors.sellerLightGrey,
                   fontSize: 18.0,
                 ),
               ),

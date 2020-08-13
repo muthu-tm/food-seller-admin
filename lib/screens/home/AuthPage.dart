@@ -172,148 +172,151 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: <Color>[
+            CustomColors.sellerButtonGreen,
+            CustomColors.sellerBlack,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Card(
-            color: CustomColors.sellerPurple,
-            elevation: 2.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0)),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.5,
-              width: MediaQuery.of(context).size.width * 0.85,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Flexible(
-                    child: widget._user.getProfilePicPath() == ""
-                        ? Container(
-                            width: 80,
-                            height: 80,
-                            margin: EdgeInsets.only(bottom: 5),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: CustomColors.sellerButtonGreen,
-                                  style: BorderStyle.solid,
-                                  width: 2.0),
-                            ),
-                            child: Icon(
-                              Icons.person,
-                              size: 45.0,
-                              color: CustomColors.sellerLightGrey,
-                            ),
-                          )
-                        : CircleAvatar(
-                            radius: 45.0,
-                            backgroundImage:
-                                NetworkImage(widget._user.getProfilePicPath()),
-                            backgroundColor: Colors.transparent,
-                          ),
-                  ),
-                  Text(
-                    widget._user.firstName,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.25,
+          ),
+          Flexible(
+            child: widget._user.getProfilePicPath() == ""
+                ? Container(
+                    width: 80,
+                    height: 80,
+                    margin: EdgeInsets.only(bottom: 5),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          color: CustomColors.sellerButtonGreen,
+                          style: BorderStyle.solid,
+                          width: 2.0),
+                    ),
+                    child: Icon(
+                      Icons.person,
+                      size: 45.0,
                       color: CustomColors.sellerLightGrey,
                     ),
+                  )
+                : CircleAvatar(
+                    radius: 45.0,
+                    backgroundImage:
+                        NetworkImage(widget._user.getProfilePicPath()),
+                    backgroundColor: Colors.transparent,
                   ),
-                  Text(
-                    widget._user.mobileNumber.toString(),
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w500,
-                      color: CustomColors.sellerLightGrey,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
-                    child: Card(
-                      child: TextFormField(
-                        textAlign: TextAlign.center,
-                        obscureText: true,
-                        autofocus: false,
-                        controller: _pController,
-                        decoration: InputDecoration(
-                          hintText: AppLocalizations.of(context)
-                              .translate('secret_key'),
-                          fillColor: CustomColors.sellerWhite,
-                          filled: true,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      (widget._user.preferences.isfingerAuthEnabled)
-                          ? FlatButton(
-                              onPressed: () async {
-                                await biometric();
-                              },
-                              child: Text(
-                                "Fingerprint",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: CustomColors.sellerGrey,
-                                  fontSize: 11.0,
-                                ),
-                              ),
-                            )
-                          : Container(),
-                      FlatButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  LoginPage(true, widget._scaffoldKey),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          AppLocalizations.of(context).translate('forget_key'),
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                            color: CustomColors.sellerOrange,
-                            fontSize: 11.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(padding: EdgeInsets.all(20.0)),
-                  InkWell(
-                    onTap: () {
-                      _submit(widget._user);
-                    },
-                    child: Container(
-                      width: 150.0,
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        color: CustomColors.sellerButtonGreen,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Center(
-                        child: Text(
-                          AppLocalizations.of(context).translate('login'),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontFamily: 'Georgia',
-                            color: CustomColors.sellerBlue,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+          ),
+          Text(
+            widget._user.firstName,
+            style: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+              color: CustomColors.sellerLightGrey,
+            ),
+          ),
+          Text(
+            widget._user.mobileNumber.toString(),
+            style: TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.w500,
+              color: CustomColors.sellerLightGrey,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
+            child: Card(
+              child: TextFormField(
+                textAlign: TextAlign.center,
+                obscureText: true,
+                autofocus: false,
+                controller: _pController,
+                decoration: InputDecoration(
+                  hintText:
+                      AppLocalizations.of(context).translate('secret_key'),
+                  fillColor: CustomColors.sellerWhite,
+                  filled: true,
+                ),
               ),
             ),
           ),
-          Padding(padding: EdgeInsets.all(25.0)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              (widget._user.preferences.isfingerAuthEnabled)
+                  ? FlatButton(
+                      onPressed: () async {
+                        await biometric();
+                      },
+                      child: Text(
+                        "Fingerprint",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          color: CustomColors.sellerGrey,
+                          fontSize: 11.0,
+                        ),
+                      ),
+                    )
+                  : Container(),
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          LoginPage(true, widget._scaffoldKey),
+                    ),
+                  );
+                },
+                child: Text(
+                  AppLocalizations.of(context).translate('forget_key'),
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    color: CustomColors.sellerOrange,
+                    fontSize: 11.0,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(padding: EdgeInsets.all(20.0)),
+          InkWell(
+            onTap: () {
+              _submit(widget._user);
+            },
+            child: Container(
+              width: 150.0,
+              height: 50.0,
+              decoration: BoxDecoration(
+                color: CustomColors.sellerButtonGreen,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Center(
+                child: Text(
+                  AppLocalizations.of(context).translate('login'),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontFamily: 'Georgia',
+                    color: CustomColors.sellerWhite,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.2,
+          ),
           Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -323,11 +326,11 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                   style: TextStyle(
                     fontSize: 13.0,
                     fontFamily: 'Georgia',
-                    fontWeight: FontWeight.bold,
-                    color: CustomColors.sellerAlertRed.withOpacity(0.7),
+                    color: CustomColors.sellerOrange,
                   ),
                 ),
                 FlatButton(
+                  splashColor: CustomColors.sellerWhite,
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(

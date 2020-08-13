@@ -1,6 +1,7 @@
 import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/user.dart';
 import 'package:chipchop_seller/screens/settings/ChangeSecret.dart';
+import 'package:chipchop_seller/screens/settings/EditUserProfile.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
@@ -23,7 +24,7 @@ class UserProfileWidget extends StatelessWidget {
             leading: Icon(
               Icons.assignment_ind,
               size: 35.0,
-              color: CustomColors.sellerFadedButtonGreen,
+              color: CustomColors.sellerButtonGreen,
             ),
             title: Text(
               title,
@@ -36,7 +37,7 @@ class UserProfileWidget extends StatelessWidget {
               icon: Icon(
                 Icons.edit,
                 size: 35.0,
-                color: CustomColors.sellerPurple,
+                color: CustomColors.sellerButtonGreen,
               ),
               onPressed: () {
                 if (user.mobileNumber != cachedLocalUser.mobileNumber) {
@@ -46,13 +47,13 @@ class UserProfileWidget extends StatelessWidget {
                       CustomColors.sellerAlertRed,
                       "You are not allowed to edit this user data!");
                 } else {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => EditUserProfile(),
-                  //     settings: RouteSettings(name: '/settings/user/edit'),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditUserProfile(),
+                      settings: RouteSettings(name: '/settings/user/edit'),
+                    ),
+                  );
                 }
               },
             ),
@@ -100,7 +101,7 @@ class UserProfileWidget extends StatelessWidget {
               ),
             ),
             title: TextFormField(
-              initialValue: user.mobileNumber.toString(),
+              initialValue: user.countryCode+' '+user.mobileNumber.toString(),
               decoration: InputDecoration(
                 fillColor: CustomColors.sellerLightGrey,
                 filled: true,
@@ -243,7 +244,7 @@ class UserProfileWidget extends StatelessWidget {
                 suffixIcon: Icon(
                   Icons.perm_contact_calendar,
                   size: 35,
-                  color: CustomColors.sellerPurple,
+                  color: CustomColors.sellerButtonGreen,
                 ),
               ),
               readOnly: true,

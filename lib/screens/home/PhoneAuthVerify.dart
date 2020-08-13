@@ -162,7 +162,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                 ),
               ),
             ),
-            color: CustomColors.sellerPurple,
+            color: CustomColors.sellerBlue,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
           )

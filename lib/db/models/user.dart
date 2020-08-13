@@ -1,7 +1,6 @@
 import 'package:chipchop_seller/db/models/model.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/user_preferences.dart';
-import 'package:chipchop_seller/services/utils/DateUtils.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 part 'user.g.dart';
