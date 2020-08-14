@@ -88,5 +88,7 @@
     "available_products": "Available Products",
     "location": "Location",
     "working_days": "Working Days",
-    "working_hours": "Working Hours"
+    "working_hours": "Working Hours",
+    "delivery_details": "Delivery Details",
+    "max_delivery": "Max Delivery"
 }

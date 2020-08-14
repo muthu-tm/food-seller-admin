@@ -333,11 +333,6 @@ class _LoginPageState extends State<LoginPage> {
         _scaffoldKey.currentState
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 2));
       } else {
-        try {} catch (err) {
-          _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-              AppLocalizations.of(context).translate('unable_to_login'), 2));
-          return;
-        }
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (BuildContext context) => UpdateApp(

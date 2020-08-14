@@ -51,34 +51,35 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: CustomColors.sellerPurple,
-          onPressed: () {
-            final FormState form = _formKey.currentState;
+        backgroundColor: CustomColors.sellerPurple,
+        onPressed: () {
+          final FormState form = _formKey.currentState;
 
-            if (form.validate()) {
-              Store store = Store();
-              StoreLocations loc = StoreLocations();
-              store.storeName = this.storeName;
-              loc.availProducts = this.availProducts;
-              loc.activeFrom = activeFrom;
-              loc.activeTill = activeTill;
-              loc.locationName = storeName;
-              loc.workingDays = workingDays;
-              store.locations = [loc];
+          if (form.validate()) {
+            Store store = Store();
+            StoreLocations loc = StoreLocations();
+            store.storeName = this.storeName;
+            loc.availProducts = this.availProducts;
+            loc.activeFrom = activeFrom;
+            loc.activeTill = activeTill;
+            loc.locationName = storeName;
+            loc.workingDays = workingDays;
+            store.locations = [loc];
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LocationPicker(store),
-                  settings: RouteSettings(name: '/settings/store/add/location'),
-                ),
-              );
-            } else {
-              _scaffoldKey.currentState.showSnackBar(
-                  CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
-            }
-          },
-          label: Text("Next")),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LocationPicker(store),
+                settings: RouteSettings(name: '/settings/store/add/location'),
+              ),
+            );
+          } else {
+            _scaffoldKey.currentState.showSnackBar(
+                CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
+          }
+        },
+        label: Text("Next"),
+      ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -311,6 +312,55 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                         ),
                       ),
                     ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0, top: 10, right: 10),
+                  child: Card(
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 40,
+                            alignment: Alignment.center,
+                            child: Text(
+                              AppLocalizations.of(context)
+                                  .translate('delivery_details'),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: "Georgia",
+                                fontWeight: FontWeight.bold,
+                                color: CustomColors.sellerButtonGreen,
+                              ),
+                            ),
+                          ),
+                          Divider(
+                            color: CustomColors.sellerPurple,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 85,
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('max_delivery'),
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontFamily: "Georgia",
+                                      fontWeight: FontWeight.bold,
+                                      color: CustomColors.sellerButtonGreen,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(height: 80),
