@@ -11,7 +11,6 @@ Store _$StoreFromJson(Map<String, dynamic> json) {
     ..uuid = json['uuid'] as String
     ..storeName = json['store_name'] as String ?? ''
     ..ownedBy = json['owned_by'] as String
-    ..type = json['store_type'] as int ?? 29
     ..storeImageOrg = json['store_image_org'] as String ?? ''
     ..storeImage = json['store_image'] as String ?? ''
     ..locations = (json['locations'] as List)
@@ -37,7 +36,6 @@ Map<String, dynamic> _$StoreToJson(Store instance) => <String, dynamic>{
       'uuid': instance.uuid,
       'store_name': instance.storeName,
       'owned_by': instance.ownedBy,
-      'store_type': instance.type,
       'store_image_org': instance.storeImageOrg,
       'store_image': instance.storeImage,
       'locations': instance.locations?.map((e) => e?.toJson())?.toList(),

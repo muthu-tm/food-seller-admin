@@ -14,8 +14,6 @@ class Store extends Model {
   String ownedBy;
   @JsonKey(name: 'store_name', defaultValue: "")
   String storeName;
-  @JsonKey(name: 'store_type')
-  int type;
   @JsonKey(name: 'store_image_org', defaultValue: "")
   String storeImageOrg;
   @JsonKey(name: 'store_image', defaultValue: "")

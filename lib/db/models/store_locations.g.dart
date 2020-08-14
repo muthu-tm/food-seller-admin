@@ -9,12 +9,15 @@ part of 'store_locations.dart';
 StoreLocations _$StoreLocationsFromJson(Map<String, dynamic> json) {
   return StoreLocations()
     ..locationName = json['loc_name'] as String ?? ''
+    ..availProducts =
+        (json['avail_products'] as List)?.map((e) => e as int)?.toList()
     ..workingDays =
         (json['working_days'] as List)?.map((e) => e as int)?.toList()
-    ..activeFrom = json['active_from'] as int
-    ..activeTill = json['active_till'] as int
-    ..address = json['address'] as String
-    ..pincode = json['pincode'] as String ?? ''
+    ..activeFrom = json['active_from'] as String
+    ..activeTill = json['active_till'] as String
+    ..address = json['address'] == null
+        ? new Address()
+        : Address.fromJson(json['address'] as Map<String, dynamic>)
     ..isActive = json['is_active'] as bool ?? true
     ..contacts = (json['contacts'] as List)
         ?.map((e) => e == null
@@ -31,11 +34,11 @@ StoreLocations _$StoreLocationsFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$StoreLocationsToJson(StoreLocations instance) =>
     <String, dynamic>{
       'loc_name': instance.locationName,
+      'avail_products': instance.availProducts,
       'working_days': instance.workingDays,
       'active_from': instance.activeFrom,
       'active_till': instance.activeTill,
-      'address': instance.address,
-      'pincode': instance.pincode,
+      'address': instance.address?.toJson(),
       'is_active': instance.isActive,
       'contacts': instance.contacts?.map((e) => e?.toJson())?.toList(),
       'delivery': instance.deliveryDetails?.map((e) => e?.toJson())?.toList(),

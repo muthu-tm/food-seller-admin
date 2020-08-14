@@ -1,8 +1,11 @@
 import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/product_categories.dart';
+import 'package:chipchop_seller/db/models/store.dart';
+import 'package:chipchop_seller/db/models/store_locations.dart';
 import 'package:chipchop_seller/screens/store/LocationPicker.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:flutter/material.dart';
 
 class AddNewStoreHome extends StatefulWidget {
@@ -16,10 +19,27 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   String storeName = '';
   List<int> availProducts = [];
   List<int> workingDays = [];
-  int activeFrom;
-  int activeTill;
-  Address address = Address();
+  TimeOfDay fromTime = TimeOfDay(hour: 9, minute: 0);
+  TimeOfDay tillTime = TimeOfDay(hour: 18, minute: 0);
+  String activeFrom;
+  String activeTill;
   List<String> _categories = ProductCategories.getCategories();
+  List<String> _days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    activeFrom = '${fromTime.hour}:${fromTime.minute}';
+    activeTill = '${tillTime.hour}:${tillTime.minute}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +53,30 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
       floatingActionButton: FloatingActionButton.extended(
           backgroundColor: CustomColors.sellerPurple,
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LocationPicker(),
-                settings: RouteSettings(name: '/settings/store/add/location'),
-              ),
-            );
+            final FormState form = _formKey.currentState;
+
+            if (form.validate()) {
+              Store store = Store();
+              StoreLocations loc = StoreLocations();
+              store.storeName = this.storeName;
+              loc.availProducts = this.availProducts;
+              loc.activeFrom = activeFrom;
+              loc.activeTill = activeTill;
+              loc.locationName = storeName;
+              loc.workingDays = workingDays;
+              store.locations = [loc];
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LocationPicker(store),
+                  settings: RouteSettings(name: '/settings/store/add/location'),
+                ),
+              );
+            } else {
+              _scaffoldKey.currentState.showSnackBar(
+                  CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
+            }
           },
           label: Text("Next")),
       body: Form(
@@ -75,7 +112,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                           fontFamily: "Georgia",
                           color: CustomColors.sellerGrey,
                           fontWeight: FontWeight.bold,
-                          fontSize: 14),
+                          fontSize: 16),
                     ),
                   ),
                 ),
@@ -115,7 +152,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                           fontFamily: "Georgia",
                           color: CustomColors.sellerGrey,
                           fontWeight: FontWeight.bold,
-                          fontSize: 14),
+                          fontSize: 16),
                     ),
                   ),
                 ),
@@ -165,11 +202,141 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0, top: 10),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      AppLocalizations.of(context).translate('working_days'),
+                      style: TextStyle(
+                          fontFamily: "Georgia",
+                          color: CustomColors.sellerGrey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0, top: 10, right: 10),
+                  child: Container(
+                    height: 200,
+                    color: CustomColors.sellerGrey,
+                    child: ListView.builder(
+                      primary: true,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: 7,
+                      itemBuilder: (BuildContext context, int index) {
+                        String _d = _days[index];
+                        return InkWell(
+                          onTap: () {
+                            if (workingDays.contains(index)) {
+                              setState(() {
+                                workingDays.remove(index);
+                              });
+                            } else {
+                              setState(() {
+                                workingDays.add(index);
+                              });
+                            }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            color: workingDays.contains(index)
+                                ? CustomColors.sellerPurple
+                                : CustomColors.sellerWhite,
+                            height: 40,
+                            width: 50,
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              _d,
+                              style: TextStyle(
+                                  fontFamily: "Georgia",
+                                  color: workingDays.contains(index)
+                                      ? CustomColors.sellerWhite
+                                      : CustomColors.sellerPurple),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0, top: 10),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      AppLocalizations.of(context).translate('working_hours'),
+                      style: TextStyle(
+                          fontFamily: "Georgia",
+                          color: CustomColors.sellerGrey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0, top: 10, right: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: ListTile(
+                          title: Text("${fromTime.format(context)}"),
+                          trailing: Icon(Icons.keyboard_arrow_down),
+                          onTap: () async {
+                            await _pickFromTime();
+                          },
+                        ),
+                      ),
+                      Text(
+                        "--",
+                        style: TextStyle(
+                          fontFamily: "Georgia",
+                          color: CustomColors.sellerPurple,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: ListTile(
+                          title: Text("${tillTime.format(context)}"),
+                          trailing: Icon(Icons.keyboard_arrow_down),
+                          onTap: () async {
+                            await _pickTillTime();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 80),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  _pickFromTime() async {
+    TimeOfDay t = await showTimePicker(context: context, initialTime: fromTime);
+    if (t != null)
+      setState(() {
+        fromTime = t;
+        activeFrom = '${t.hour}:${t.minute}';
+      });
+  }
+
+  _pickTillTime() async {
+    TimeOfDay t = await showTimePicker(context: context, initialTime: tillTime);
+    if (t != null)
+      setState(() {
+        tillTime = t;
+        activeTill = '${t.hour}:${t.minute}';
+      });
   }
 }

@@ -1,4 +1,5 @@
 import 'package:chipchop_seller/app_localizations.dart';
+import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
@@ -6,6 +7,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationPicker extends StatefulWidget {
+  LocationPicker(this.store);
+
+  final Store store;
   @override
   State createState() => LocationPickerState();
 }
@@ -18,7 +22,6 @@ class LocationPickerState extends State<LocationPicker> {
 
   final Set<Marker> _markers = {};
   String searchKey = "";
-  Position pos;
 
   @override
   void initState() {
