@@ -10,7 +10,7 @@ StoreContacts _$StoreContactsFromJson(Map<String, dynamic> json) {
   return StoreContacts()
     ..contactName = json['contact_name'] as String ?? ''
     ..contactNumber = json['contact_number'] as int
-    ..countryCode = json['country_code'] as String ?? '+91'
+    ..countryCode = json['country_code'] as int ?? 91
     ..emailId = json['email'] as String ?? ''
     ..isVerfied = json['is_verified'] as bool ?? false
     ..isActive = json['is_active'] as bool ?? true;

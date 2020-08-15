@@ -7,9 +7,9 @@ class DeliveryDetails {
   @JsonKey(name: 'max_distance', defaultValue: 5)
   int maxDistance;
   @JsonKey(name: 'delivery_from')
-  int deliveryFrom;
+  String deliveryFrom;
   @JsonKey(name: 'delivery_till')
-  int deliveryTill;
+  String deliveryTill;
   @JsonKey(name: 'delivery_options', defaultValue: [1, 2])
   List<int> availableOptions;
   @JsonKey(name: 'delivery_charges_02')

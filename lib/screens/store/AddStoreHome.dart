@@ -1,11 +1,15 @@
 import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/address.dart';
+import 'package:chipchop_seller/db/models/delivery_details.dart';
 import 'package:chipchop_seller/db/models/product_categories.dart';
 import 'package:chipchop_seller/db/models/store.dart';
+import 'package:chipchop_seller/db/models/store_contacts.dart';
 import 'package:chipchop_seller/db/models/store_locations.dart';
 import 'package:chipchop_seller/screens/store/LocationPicker.dart';
+import 'package:chipchop_seller/screens/utils/AddressWidget.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
 
 class AddNewStoreHome extends StatefulWidget {
@@ -16,9 +20,11 @@ class AddNewStoreHome extends StatefulWidget {
 class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  Address sAddress = Address();
   String storeName = '';
+  String ownedBy = '';
   List<int> availProducts = [];
-  List<int> workingDays = [];
+  List<int> workingDays = [1, 2, 3, 4, 5];
   TimeOfDay fromTime = TimeOfDay(hour: 9, minute: 0);
   TimeOfDay tillTime = TimeOfDay(hour: 18, minute: 0);
   String activeFrom;
@@ -39,6 +45,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
     super.initState();
     activeFrom = '${fromTime.hour}:${fromTime.minute}';
     activeTill = '${tillTime.hour}:${tillTime.minute}';
+
+    ownedBy = cachedLocalUser.firstName + cachedLocalUser.lastName;
   }
 
   @override
@@ -46,7 +54,9 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Create New Store"),
+        title: Text(
+          AppLocalizations.of(context).translate('create_new_store'),
+        ),
         backgroundColor: CustomColors.sellerPurple,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -56,20 +66,50 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
           final FormState form = _formKey.currentState;
 
           if (form.validate()) {
+            if (availProducts.length == 0) {
+              _scaffoldKey.currentState.showSnackBar(
+                CustomSnackBar.errorSnackBar(
+                    "Please Select your available products!", 2),
+              );
+              return;
+            }
+            if (workingDays.length == 0) {
+              _scaffoldKey.currentState.showSnackBar(
+                CustomSnackBar.errorSnackBar(
+                    "Please Set your working days!", 2),
+              );
+              return;
+            }
+            if (sAddress.pincode == null || sAddress.pincode.isEmpty) {
+              _scaffoldKey.currentState.showSnackBar(
+                CustomSnackBar.errorSnackBar("Please enter your PINCODE!", 2),
+              );
+              return;
+            }
             Store store = Store();
             StoreLocations loc = StoreLocations();
+            StoreContacts contacts = StoreContacts();
+            contacts.contactName = cachedLocalUser.firstName;
+            contacts.contactNumber = cachedLocalUser.mobileNumber;
+            contacts.countryCode = cachedLocalUser.countryCode;
+            contacts.isActive = true;
+            contacts.isVerfied = true;
+
             store.storeName = this.storeName;
+            store.ownedBy = this.ownedBy;
             loc.availProducts = this.availProducts;
             loc.activeFrom = activeFrom;
             loc.activeTill = activeTill;
             loc.locationName = storeName;
+            loc.address = sAddress;
             loc.workingDays = workingDays;
-            store.locations = [loc];
+            loc.contacts = [contacts];
+            loc.deliveryDetails = [DeliveryDetails()];
 
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => LocationPicker(store),
+                builder: (context) => LocationPicker(store, loc),
                 settings: RouteSettings(name: '/settings/store/add/location'),
               ),
             );
@@ -78,7 +118,9 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                 CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
           }
         },
-        label: Text("Next"),
+        label: Text(
+          AppLocalizations.of(context).translate('button_next'),
+        ),
       ),
       body: Form(
         key: _formKey,
@@ -120,6 +162,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                 Padding(
                   padding: EdgeInsets.only(left: 10, top: 10, right: 10),
                   child: TextFormField(
+                    autofocus: false,
                     keyboardType: TextInputType.text,
                     textAlign: TextAlign.start,
                     initialValue: storeName,
@@ -137,6 +180,46 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                         return "Enter Store Name";
                       } else {
                         this.storeName = name.trim();
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10.0, top: 10),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      AppLocalizations.of(context).translate('owner_name'),
+                      style: TextStyle(
+                          fontFamily: "Georgia",
+                          color: CustomColors.sellerGrey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10, top: 10, right: 10),
+                  child: TextFormField(
+                    autofocus: false,
+                    keyboardType: TextInputType.text,
+                    textAlign: TextAlign.start,
+                    initialValue: ownedBy,
+                    decoration: InputDecoration(
+                      fillColor: CustomColors.sellerWhite,
+                      filled: true,
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: CustomColors.sellerGrey)),
+                    ),
+                    validator: (owner) {
+                      if (owner.isEmpty) {
+                        return "Enter Owner Name";
+                      } else {
+                        this.ownedBy = owner.trim();
                       }
                       return null;
                     },
@@ -315,53 +398,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 15.0, top: 10, right: 10),
-                  child: Card(
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 40,
-                            alignment: Alignment.center,
-                            child: Text(
-                              AppLocalizations.of(context)
-                                  .translate('delivery_details'),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: "Georgia",
-                                fontWeight: FontWeight.bold,
-                                color: CustomColors.sellerButtonGreen,
-                              ),
-                            ),
-                          ),
-                          Divider(
-                            color: CustomColors.sellerPurple,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(5),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 85,
-                                  child: Text(
-                                    AppLocalizations.of(context)
-                                        .translate('max_delivery'),
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontFamily: "Georgia",
-                                      fontWeight: FontWeight.bold,
-                                      color: CustomColors.sellerButtonGreen,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  padding: EdgeInsets.all(5),
+                  child: AddressWidget("Store Address", Address(), sAddress),
                 ),
                 SizedBox(height: 80),
               ],

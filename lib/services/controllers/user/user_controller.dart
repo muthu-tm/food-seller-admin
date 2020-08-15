@@ -6,7 +6,7 @@ import 'package:chipchop_seller/services/utils/response_utils.dart';
 
 class UserController {
   String getCurrentUserID() {
-    return cachedLocalUser.countryCode +
+    return cachedLocalUser.countryCode.toString() +
         cachedLocalUser.mobileNumber.toString();
   }
 

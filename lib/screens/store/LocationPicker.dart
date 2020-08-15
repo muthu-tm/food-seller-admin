@@ -1,24 +1,31 @@
 import 'package:chipchop_seller/app_localizations.dart';
+import 'package:chipchop_seller/db/models/geopoint_data.dart';
 import 'package:chipchop_seller/db/models/store.dart';
+import 'package:chipchop_seller/db/models/store_locations.dart';
+import 'package:chipchop_seller/screens/home/HomeScreen.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationPicker extends StatefulWidget {
-  LocationPicker(this.store);
+  LocationPicker(this.store, this.loc);
 
   final Store store;
+  final StoreLocations loc;
   @override
   State createState() => LocationPickerState();
 }
 
 class LocationPickerState extends State<LocationPicker> {
-  TextEditingController _addressController = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   GoogleMapController mapController;
   Geoflutterfire geo = Geoflutterfire();
+
+  GeoPointData geoData;
 
   final Set<Marker> _markers = {};
   String searchKey = "";
@@ -26,113 +33,106 @@ class LocationPickerState extends State<LocationPicker> {
   @override
   void initState() {
     super.initState();
-
-    _animateToUser();
+    this.searchKey = widget.loc.address.pincode;
   }
 
   @override
   Widget build(context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Add Store Location"),
+        title: Text(
+          AppLocalizations.of(context).translate('title_add_location'),
+        ),
         backgroundColor: CustomColors.sellerPurple,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height - 300,
-                child: Stack(
-                  children: [
-                    GoogleMap(
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(12.9716, 77.5946),
-                      ),
-                      onTap: (latlang) {
-                        if (_markers.length >= 1) {
-                          _markers.clear();
-                        }
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: CustomColors.sellerPurple,
+        onPressed: () {
+          if (geoData == null || geoData.geoHash.isEmpty) {
+            _scaffoldKey.currentState.showSnackBar(
+              CustomSnackBar.errorSnackBar(
+                  "Please PIN your location correctly!", 2),
+            );
+            return;
+          }
+          widget.loc.geoPoint = geoData;
+          try {
+            widget.store.create(widget.loc);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) => HomeScreen(),
+                settings: RouteSettings(name: '/'),
+              ),
+            );
+          } catch (err) {
+            _scaffoldKey.currentState.showSnackBar(
+              CustomSnackBar.errorSnackBar(
+                  "Sorry, Unable to create your store now. Please try again later!",
+                  2),
+            );
+          }
+        },
+        label: Text(
+          AppLocalizations.of(context).translate('button_create_store'),
+        ),
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            GoogleMap(
+              initialCameraPosition:
+                  CameraPosition(target: LatLng(12.9716, 77.5946), zoom: 5),
+              onTap: (latlang) {
+                if (_markers.length >= 1) {
+                  _markers.clear();
+                }
 
-                        _onAddMarkerButtonPressed(latlang);
+                _onAddMarkerButtonPressed(latlang);
+              },
+              compassEnabled: true,
+              onMapCreated: _onMapCreated,
+              myLocationButtonEnabled: true,
+              mapToolbarEnabled: true,
+              myLocationEnabled: true,
+              markers: _markers,
+              mapType: MapType.normal,
+            ),
+            Positioned(
+              top: 10,
+              left: 10,
+              right: 80,
+              child: Card(
+                elevation: 5.0,
+                color: CustomColors.sellerWhite,
+                child: TextField(
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)
+                        .translate('hint_search_with_picode'),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(5),
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () async {
+                        if (searchKey != "") await _searchAndNavigate();
                       },
-                      compassEnabled: true,
-                      onMapCreated: _onMapCreated,
-                      myLocationEnabled: true,
-                      markers: _markers,
-                      mapType: MapType.normal,
-                    ),
-                    Positioned(
-                      top: 10,
-                      left: 10,
-                      right: 80,
-                      child: Card(
-                        elevation: 5.0,
-                        color: CustomColors.sellerWhite,
-                        child: TextField(
-                          textAlignVertical: TextAlignVertical.center,
-                          decoration: InputDecoration(
-                            hintText: "Enter Address",
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(5),
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.search),
-                              onPressed: () async {
-                                if (searchKey != "") await _searchAndNavigate();
-                              },
-                            ),
-                          ),
-                          autofocus: false,
-                          onChanged: (val) {
-                            setState(
-                              () {
-                                searchKey = val;
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.0, top: 10),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    AppLocalizations.of(context).translate('location'),
-                    style: TextStyle(
-                        fontFamily: "Georgia",
-                        color: CustomColors.sellerGrey,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.0, top: 10),
-                child: Container(
-                  child: TextField(
-                    autofocus: false,
-                    maxLines: 6,
-                    controller: _addressController,
-                    decoration: InputDecoration(
-                      hintText:
-                          AppLocalizations.of(context).translate('location'),
-                      fillColor: CustomColors.sellerWhite,
-                      filled: true,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 3.0),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: CustomColors.sellerWhite),
-                      ),
                     ),
                   ),
+                  autofocus: false,
+                  onChanged: (val) {
+                    setState(
+                      () {
+                        searchKey = val;
+                      },
+                    );
+                  },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -145,7 +145,7 @@ class LocationPickerState extends State<LocationPicker> {
       mapController.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
-            zoom: 10,
+            zoom: 11,
             target:
                 LatLng(marks[0].position.latitude, marks[0].position.longitude),
           ),
@@ -156,32 +156,8 @@ class LocationPickerState extends State<LocationPicker> {
     }
   }
 
-  _updateAddress(double latitude, double longitude) async {
-    try {
-      List<Placemark> marks =
-          await Geolocator().placemarkFromCoordinates(latitude, longitude);
-
-      String _address =
-          (marks[0].thoroughfare != "" ? marks[0].thoroughfare + ",\n" : "") +
-              (marks[0].subLocality != "" ? marks[0].subLocality + ",\n" : "") +
-              (marks[0].locality != "" ? marks[0].locality + ",\n" : "") +
-              (marks[0].administrativeArea != ""
-                  ? marks[0].administrativeArea + ",\n"
-                  : "") +
-              (marks[0].country != "" ? marks[0].country + ",\n" : "") +
-              (marks[0].postalCode != "" ? marks[0].postalCode + "" : "");
-
-      setState(() {
-        _addressController.text = _address;
-      });
-    } catch (err) {
-      print(err.toString());
-    }
-  }
-
   void _onAddMarkerButtonPressed(LatLng latlang) async {
     String hashID = _loadAddress(latlang.latitude, latlang.longitude);
-    await _updateAddress(latlang.latitude, latlang.longitude);
 
     setState(() {
       _markers.add(Marker(
@@ -189,7 +165,7 @@ class LocationPickerState extends State<LocationPicker> {
         markerId: MarkerId(hashID),
         position: latlang,
         infoWindow: InfoWindow(
-          title: "address",
+          title: "${widget.store.storeName}",
           //  snippet: '5 Star Rating',
         ),
         icon: BitmapDescriptor.defaultMarker,
@@ -199,6 +175,11 @@ class LocationPickerState extends State<LocationPicker> {
 
   String _loadAddress(double latitude, double longitude) {
     GeoFirePoint point = geo.point(latitude: latitude, longitude: longitude);
+    GeoPointData geoPoint = GeoPointData();
+    geoPoint.geoHash = point.hash;
+    geoPoint.latitude = latitude;
+    geoPoint.longitude = longitude;
+    geoData = geoPoint;
     return point.hash;
   }
 
@@ -208,7 +189,7 @@ class LocationPickerState extends State<LocationPicker> {
 
     mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
       target: LatLng(pos.latitude, pos.latitude),
-      zoom: 17.0,
+      zoom: 10.0,
     )));
     _loadAddress(pos.latitude, pos.longitude);
   }

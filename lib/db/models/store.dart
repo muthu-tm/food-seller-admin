@@ -18,8 +18,6 @@ class Store extends Model {
   String storeImageOrg;
   @JsonKey(name: 'store_image', defaultValue: "")
   String storeImage;
-  @JsonKey(name: 'locations')
-  List<StoreLocations> locations;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)
@@ -29,4 +27,40 @@ class Store extends Model {
 
   factory Store.fromJson(Map<String, dynamic> json) => _$StoreFromJson(json);
   Map<String, dynamic> toJson() => _$StoreToJson(this);
+
+  CollectionReference getCollectionRef() {
+    return _storeCollRef;
+  }
+
+  DocumentReference getDocumentReference(String uuid) {
+    return _storeCollRef.document(uuid);
+  }
+
+  String getID() {
+    return this.uuid;
+  }
+
+  Stream<DocumentSnapshot> streamStoreData() {
+    return getDocumentReference(getID()).snapshots();
+  }
+
+  Future<Store> create(StoreLocations loc) async {
+    this.createdAt = DateTime.now();
+    this.updatedAt = DateTime.now();
+
+    WriteBatch bWrite = Model.db.batch();
+
+    DocumentReference docRef = this.getCollectionRef().document();
+    this.uuid = docRef.documentID;
+    bWrite.setData(docRef, this.toJson());
+
+    DocumentReference locDocRef = getDocumentReference(this.uuid)
+        .collection("store_locations")
+        .document();
+
+    loc.uuid = locDocRef.documentID;
+    bWrite.setData(locDocRef, loc.toJson());
+    await bWrite.commit();
+    return this;
+  }
 }

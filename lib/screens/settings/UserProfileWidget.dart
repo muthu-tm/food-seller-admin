@@ -101,7 +101,9 @@ class UserProfileWidget extends StatelessWidget {
               ),
             ),
             title: TextFormField(
-              initialValue: user.countryCode+' '+user.mobileNumber.toString(),
+              initialValue: user.countryCode.toString() +
+                  ' ' +
+                  user.mobileNumber.toString(),
               decoration: InputDecoration(
                 fillColor: CustomColors.sellerLightGrey,
                 filled: true,

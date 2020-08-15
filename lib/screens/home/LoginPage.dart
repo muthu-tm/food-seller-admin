@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   User _user;
 
   String number = "";
-  String countryCode = "+91";
+  String countryCode = "91";
   String _smsVerificationCode;
 
   @override
@@ -301,7 +301,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _verifyPhoneNumber() async {
-    String phoneNumber = countryCode + number;
+    String phoneNumber = "+" + countryCode + number;
     final FirebaseAuth _auth = FirebaseAuth.instance;
     await _auth.verifyPhoneNumber(
         phoneNumber: phoneNumber,

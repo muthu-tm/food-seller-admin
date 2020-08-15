@@ -10,12 +10,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController {
-  dynamic registerWithMobileNumber(int mobileNumber, String countryCode,
+  dynamic registerWithMobileNumber(int mobileNumber, int countryCode,
       String passkey, String firstName, String lastName, String uid) async {
     try {
       User user = User();
       String hKey = HashGenerator.hmacGenerator(
-          passkey, countryCode + mobileNumber.toString());
+          passkey, countryCode.toString() + mobileNumber.toString());
       user.password = hKey;
       user.countryCode = countryCode;
       user.mobileNumber = mobileNumber;
