@@ -177,8 +177,7 @@ class LocationPickerState extends State<LocationPicker> {
     GeoFirePoint point = geo.point(latitude: latitude, longitude: longitude);
     GeoPointData geoPoint = GeoPointData();
     geoPoint.geoHash = point.hash;
-    geoPoint.latitude = latitude;
-    geoPoint.longitude = longitude;
+    geoPoint.geoPoint = point.geoPoint;
     geoData = geoPoint;
     return point.hash;
   }
