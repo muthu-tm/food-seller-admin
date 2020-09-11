@@ -20,13 +20,18 @@ StoreLocations _$StoreLocationsFromJson(Map<String, dynamic> json) {
         ? new Address()
         : Address.fromJson(json['address'] as Map<String, dynamic>)
     ..geoPoint = json['geo_point'] == null
-        ? new GeoPointData()
+        ? null
         : GeoPointData.fromJson(json['geo_point'] as Map<String, dynamic>)
     ..isActive = json['is_active'] as bool ?? true
     ..contacts = (json['contacts'] as List)
         ?.map((e) => e == null
-            ? new StoreContacts()
+            ? null
             : StoreContacts.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..users = (json['users'] as List)
+        ?.map((e) => e == null
+            ? null
+            : StoreUserAccess.fromJson(e as Map<String, dynamic>))
         ?.toList()
     ..deliveryDetails = (json['delivery'] as List)
         ?.map((e) => e == null
@@ -47,5 +52,6 @@ Map<String, dynamic> _$StoreLocationsToJson(StoreLocations instance) =>
       'geo_point': instance.geoPoint?.toJson(),
       'is_active': instance.isActive,
       'contacts': instance.contacts?.map((e) => e?.toJson())?.toList(),
+      'users': instance.users?.map((e) => e?.toJson())?.toList(),
       'delivery': instance.deliveryDetails?.map((e) => e?.toJson())?.toList(),
     };

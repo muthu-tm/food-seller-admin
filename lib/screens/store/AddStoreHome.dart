@@ -5,6 +5,7 @@ import 'package:chipchop_seller/db/models/product_categories.dart';
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/db/models/store_contacts.dart';
 import 'package:chipchop_seller/db/models/store_locations.dart';
+import 'package:chipchop_seller/db/models/store_user_access.dart';
 import 'package:chipchop_seller/screens/store/LocationPicker.dart';
 import 'package:chipchop_seller/screens/utils/AddressWidget.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
@@ -105,6 +106,12 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             loc.workingDays = workingDays;
             loc.contacts = [contacts];
             loc.deliveryDetails = [DeliveryDetails()];
+
+            StoreUserAccess userAccess = StoreUserAccess();
+            userAccess.positionName = "Owner";
+            userAccess.userNumber = cachedLocalUser.getIntID();
+            userAccess.accessLevel = [0];
+            loc.users = [userAccess];
 
             Navigator.push(
               context,

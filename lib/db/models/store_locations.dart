@@ -4,6 +4,7 @@ import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/db/models/store_contacts.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/geopoint_data.dart';
+import 'package:chipchop_seller/db/models/store_user_access.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -29,6 +30,8 @@ class StoreLocations {
   Address address;
   @JsonKey(name: 'is_active', defaultValue: true)
   bool isActive;
+  @JsonKey(name: 'users')
+  List<StoreUserAccess> users;
   @JsonKey(name: 'contacts')
   List<StoreContacts> contacts;
   @JsonKey(name: 'delivery')

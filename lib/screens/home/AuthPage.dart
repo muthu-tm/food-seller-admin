@@ -9,6 +9,7 @@ import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_seller/services/controllers/auth/auth_controller.dart';
+import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:chipchop_seller/services/utils/hash_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
@@ -79,7 +80,7 @@ class _AuthPageState extends State<AuthPage> {
                               Padding(
                                 padding: EdgeInsets.all(5),
                                 child:
-                                    shadowGradientText("ChipChop Seller", 16.0),
+                                    shadowGradientText(seller_app_name, 16.0),
                               ),
                               SizedBox(
                                 height:

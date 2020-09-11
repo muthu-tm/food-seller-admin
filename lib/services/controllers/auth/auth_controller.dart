@@ -22,6 +22,7 @@ class AuthController {
       user.firstName = firstName;
       user.lastName = lastName;
       user.guid = uid;
+      user.gender = "Male";
       user.address = Address.fromJson(Address().toJson());
       user.preferences = UserPreferences.fromJson(UserPreferences().toJson());
       user = await user.create();

@@ -33,7 +33,12 @@ class _EditUserProfileState extends State<EditUserProfile> {
   @override
   void initState() {
     super.initState();
-    gender = user.gender;
+    if (cachedLocalUser.gender == null || cachedLocalUser.gender == "") {
+      gender = "Male";
+      updatedUser['gender'] = "Male";
+    } else
+      gender = cachedLocalUser.gender;
+
     if (user.dateOfBirth != null)
       this._date.text = DateUtils.formatDate(
           DateTime.fromMillisecondsSinceEpoch(user.dateOfBirth));

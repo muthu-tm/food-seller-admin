@@ -244,7 +244,7 @@ class UserProfileWidget extends StatelessWidget {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: CustomColors.sellerGrey)),
                 suffixIcon: Icon(
-                  Icons.perm_contact_calendar,
+                  Icons.cake,
                   size: 35,
                   color: CustomColors.sellerButtonGreen,
                 ),

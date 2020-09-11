@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/screens/Home/AuthPage.dart';
 import 'package:chipchop_seller/screens/app/ContactAndSupportWidget.dart';
 import 'package:chipchop_seller/screens/home/HomeScreen.dart';
-import 'package:chipchop_seller/screens/settings/SettingsHome.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
+import 'package:chipchop_seller/services/utils/hash_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import '../../app_localizations.dart';
@@ -12,10 +14,158 @@ Widget sideDrawer(BuildContext context) {
     child: ListView(
       children: <Widget>[
         DrawerHeader(
-            decoration: BoxDecoration(
-              color: CustomColors.sellerPurple,
-            ),
-            child: Container()),
+          decoration: BoxDecoration(
+            color: CustomColors.sellerPurple
+          ),
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: cachedLocalUser.getProfilePicPath() == ""
+                    ? Container(
+                        width: 90,
+                        height: 90,
+                        margin: EdgeInsets.only(bottom: 5),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: CustomColors.sellerButtonGreen,
+                            style: BorderStyle.solid,
+                            width: 2.0,
+                          ),
+                        ),
+                        child: FlatButton(
+                          onPressed: () {
+                            // showDialog(
+                            //   context: context,
+                            //   routeSettings:
+                            //       RouteSettings(name: "/profile/upload"),
+                            //   builder: (context) {
+                            //     return Center(
+                            //       child: ProfilePictureUpload(
+                            //           0,
+                            //           cachedLocalUser.getMediumProfilePicPath(),
+                            //           HashGenerator.hmacGenerator(
+                            //               cachedLocalUser.getID(),
+                            //               cachedLocalUser
+                            //                   .createdAt.millisecondsSinceEpoch
+                            //                   .toString()),
+                            //           cachedLocalUser.getIntID()),
+                            //     );
+                            //   },
+                            // );
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.all(5),
+                                child: Icon(
+                                  Icons.person,
+                                  size: 45.0,
+                                  color: CustomColors.sellerLightGrey,
+                                ),
+                              ),
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('upload'),
+                                style: TextStyle(
+                                  fontSize: 8.0,
+                                  color: CustomColors.sellerLightGrey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Container(
+                        child: Stack(
+                          children: <Widget>[
+                            SizedBox(
+                              width: 95.0,
+                              height: 95.0,
+                              child: Center(
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      cachedLocalUser.getMediumProfilePicPath(),
+                                  imageBuilder: (context, imageProvider) =>
+                                      CircleAvatar(
+                                    radius: 45.0,
+                                    backgroundImage: imageProvider,
+                                    backgroundColor: Colors.transparent,
+                                  ),
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                  errorWidget: (context, url, error) => Icon(
+                                    Icons.error,
+                                    size: 35,
+                                  ),
+                                  fadeOutDuration: Duration(seconds: 1),
+                                  fadeInDuration: Duration(seconds: 2),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: -8,
+                              left: 35,
+                              child: FlatButton(
+                                onPressed: () {
+                                  // showDialog(
+                                  //   context: context,
+                                  //   routeSettings:
+                                  //       RouteSettings(name: "/profile/upload"),
+                                  //   builder: (context) {
+                                  //     return Center(
+                                  //       child: ProfilePictureUpload(
+                                  //           0,
+                                  //           cachedLocalUser
+                                  //               .getMediumProfilePicPath(),
+                                  //           HashGenerator.hmacGenerator(
+                                  //               cachedLocalUser.getID(),
+                                  //               cachedLocalUser.createdAt
+                                  //                   .millisecondsSinceEpoch
+                                  //                   .toString()),
+                                  //           cachedLocalUser.getIntID()),
+                                  //     );
+                                  //   },
+                                  // );
+                                },
+                                child: CircleAvatar(
+                                  backgroundColor: CustomColors.sellerButtonGreen,
+                                  radius: 15,
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: CustomColors.sellerPurple,
+                                    size: 20.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+              ),
+              Text(
+                cachedLocalUser.firstName,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                  color: CustomColors.sellerLightGrey,
+                ),
+              ),
+              Text(
+                cachedLocalUser.mobileNumber.toString(),
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w500,
+                  color: CustomColors.sellerLightGrey,
+                ),
+              ),
+            ],
+          ),
+        ),
         ListTile(
           leading: Icon(Icons.home, color: CustomColors.sellerButtonGreen),
           title: Text(
@@ -103,12 +253,13 @@ Widget sideDrawer(BuildContext context) {
             "Store settings",
           ),
           onTap: () async {
-            Navigator.pushReplacement(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => SettingsHome(),
-                settings: RouteSettings(name: '/settings'),
+                builder: (context) => HomeScreen(4),
+                settings: RouteSettings(name: '/home'),
               ),
+              (Route<dynamic> route) => false,
             );
           },
         ),
