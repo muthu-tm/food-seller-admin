@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/screens/Home/AuthPage.dart';
 import 'package:chipchop_seller/screens/app/ContactAndSupportWidget.dart';
 import 'package:chipchop_seller/screens/home/HomeScreen.dart';
+import 'package:chipchop_seller/screens/settings/UserProfileSettings.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:chipchop_seller/services/utils/hash_generator.dart';
@@ -226,15 +227,15 @@ Widget sideDrawer(BuildContext context) {
           ],
         ),
         ListTile(
-          leading: Icon(Icons.description, color: CustomColors.sellerButtonGreen),
+          leading: Icon(Icons.assessment, color: CustomColors.sellerButtonGreen),
           title: Text(
-            AppLocalizations.of(context).translate('reports'),
+            AppLocalizations.of(context).translate('sales'),
           ),
         ),
         ListTile(
-          leading: Icon(Icons.assessment, color: CustomColors.sellerButtonGreen),
+          leading: Icon(Icons.description, color: CustomColors.sellerButtonGreen),
           title: Text(
-            AppLocalizations.of(context).translate('statistics'),
+            AppLocalizations.of(context).translate('reports'),
           ),
         ),
         Divider(indent: 15.0, color: CustomColors.sellerBlue, thickness: 1.0),
@@ -253,13 +254,12 @@ Widget sideDrawer(BuildContext context) {
             "Store settings",
           ),
           onTap: () async {
-            Navigator.pushAndRemoveUntil(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => HomeScreen(4),
-                settings: RouteSettings(name: '/home'),
+                settings: RouteSettings(name: '/settings/store'),
               ),
-              (Route<dynamic> route) => false,
             );
           },
         ),
@@ -268,6 +268,15 @@ Widget sideDrawer(BuildContext context) {
           title: Text(
             AppLocalizations.of(context).translate('profile_settings'),
           ),
+          onTap: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => UserSetting(),
+                settings: RouteSettings(name: '/settings/profile'),
+              ),
+            );
+          },
         ),
         Divider(indent: 15.0, color: CustomColors.sellerBlue, thickness: 1.0),
         ListTile(
