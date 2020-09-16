@@ -35,12 +35,12 @@ class _AddressWidgetState extends State<AddressWidget> {
                 fontSize: 18,
                 fontFamily: "Georgia",
                 fontWeight: FontWeight.bold,
-                color: CustomColors.sellerPurple,
+                color: CustomColors.sellerGreen,
               ),
             ),
           ),
           Divider(
-            color: CustomColors.sellerPurple,
+            color: CustomColors.sellerGreen,
           ),
           Padding(
             padding: EdgeInsets.all(5.0),
@@ -57,7 +57,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
-                        color: CustomColors.sellerPurple,
+                        color: CustomColors.sellerGreen,
                       ),
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -92,7 +92,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
-                        color: CustomColors.sellerPurple,
+                        color: CustomColors.sellerGreen,
                       ),
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
@@ -121,7 +121,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
-                        color: CustomColors.sellerPurple,
+                        color: CustomColors.sellerGreen,
                       ),
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
@@ -156,7 +156,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
-                        color: CustomColors.sellerPurple,
+                        color: CustomColors.sellerGreen,
                       ),
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),

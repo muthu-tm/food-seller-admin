@@ -58,11 +58,11 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
         title: Text(
           AppLocalizations.of(context).translate('create_new_store'),
         ),
-        backgroundColor: CustomColors.sellerPurple,
+        backgroundColor: CustomColors.sellerGreen,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerPurple,
+        backgroundColor: CustomColors.sellerGreen,
         onPressed: () {
           final FormState form = _formKey.currentState;
 
@@ -145,12 +145,12 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       fontSize: 18,
                       fontFamily: "Georgia",
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.sellerButtonGreen,
+                      color: CustomColors.sellerBlue,
                     ),
                   ),
                 ),
                 Divider(
-                  color: CustomColors.sellerPurple,
+                  color: CustomColors.sellerGreen,
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 10.0, top: 10),
@@ -274,7 +274,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                           child: Container(
                             padding: EdgeInsets.all(10),
                             color: availProducts.contains(index)
-                                ? CustomColors.sellerPurple
+                                ? CustomColors.sellerGreen
                                 : CustomColors.sellerWhite,
                             height: 40,
                             width: 50,
@@ -285,7 +285,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                                   fontFamily: "Georgia",
                                   color: availProducts.contains(index)
                                       ? CustomColors.sellerWhite
-                                      : CustomColors.sellerPurple),
+                                      : CustomColors.sellerGreen),
                             ),
                           ),
                         );
@@ -334,7 +334,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                           child: Container(
                             padding: EdgeInsets.all(10),
                             color: workingDays.contains(index)
-                                ? CustomColors.sellerPurple
+                                ? CustomColors.sellerGreen
                                 : CustomColors.sellerWhite,
                             height: 40,
                             width: 50,
@@ -345,7 +345,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                                   fontFamily: "Georgia",
                                   color: workingDays.contains(index)
                                       ? CustomColors.sellerWhite
-                                      : CustomColors.sellerPurple),
+                                      : CustomColors.sellerGreen),
                             ),
                           ),
                         );
@@ -386,7 +386,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                         "--",
                         style: TextStyle(
                           fontFamily: "Georgia",
-                          color: CustomColors.sellerPurple,
+                          color: CustomColors.sellerGreen,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),

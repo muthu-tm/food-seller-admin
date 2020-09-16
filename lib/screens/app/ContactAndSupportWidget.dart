@@ -20,7 +20,7 @@ Widget contactAndSupportDialog(context) {
             leading: Icon(
               Icons.headset_mic,
               size: 35.0,
-              color: CustomColors.sellerPurple,
+              color: CustomColors.sellerGreen,
             ),
             title: Text(
               AppLocalizations.of(context).translate('help_and_support'),
@@ -31,7 +31,7 @@ Widget contactAndSupportDialog(context) {
             ),
           ),
           Divider(
-            color: CustomColors.sellerButtonGreen,
+            color: CustomColors.sellerBlue,
           ),
           SizedBox(height: 5),
           ClipRRect(
@@ -46,7 +46,7 @@ Widget contactAndSupportDialog(context) {
             AppLocalizations.of(context).translate('lost_need_help'),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: CustomColors.sellerPurple,
+                color: CustomColors.sellerGreen,
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold),
           ),
@@ -63,7 +63,7 @@ Widget contactAndSupportDialog(context) {
             AppLocalizations.of(context).translate('contact_us'),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: CustomColors.sellerPurple,
+                color: CustomColors.sellerGreen,
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold),
           ),
@@ -89,12 +89,12 @@ Widget contactAndSupportDialog(context) {
                 label: Text(
                     AppLocalizations.of(context).translate('email'),
                     style: TextStyle(
-                      color: CustomColors.sellerButtonGreen,
+                      color: CustomColors.sellerBlue,
                       fontSize: 14.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                color: CustomColors.sellerPurple,
+                color: CustomColors.sellerGreen,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -114,12 +114,12 @@ Widget contactAndSupportDialog(context) {
                 label: Text(
                     AppLocalizations.of(context).translate('phone'),
                     style: TextStyle(
-                      color: CustomColors.sellerButtonGreen,
+                      color: CustomColors.sellerBlue,
                       fontSize: 14.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                color: CustomColors.sellerPurple,
+                color: CustomColors.sellerGreen,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),

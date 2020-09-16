@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class AsyncWidgets {
   static asyncWaiting(
       {dotOneColor = CustomColors.sellerAlertRed,
-      dotTwoColor = CustomColors.sellerButtonGreen,
+      dotTwoColor = CustomColors.sellerBlue,
       dotThreeColor = CustomColors.sellerFadedPurple}) {
     return <Widget>[
       ColorLoader(
@@ -20,8 +20,8 @@ class AsyncWidgets {
         size: 18.0,
         gradient: LinearGradient(
           colors: [
-            CustomColors.sellerPurple,
-            CustomColors.sellerButtonGreen,
+            CustomColors.sellerGreen,
+            CustomColors.sellerBlue,
           ],
         ),
       ),

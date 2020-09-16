@@ -26,11 +26,11 @@ class _ChangeSecretState extends State<ChangeSecret> {
       appBar: AppBar(
         title:
             Text(AppLocalizations.of(context).translate('change_secret_key')),
-        backgroundColor: CustomColors.sellerPurple,
+        backgroundColor: CustomColors.sellerGreen,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerPurple,
+        backgroundColor: CustomColors.sellerGreen,
         onPressed: () async {
           _submit();
         },
@@ -63,7 +63,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
-                          color: CustomColors.sellerPurple,
+                          color: CustomColors.sellerGreen,
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         fillColor: CustomColors.sellerWhite,
@@ -91,7 +91,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
                       obscureText: true,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
-                          color: CustomColors.sellerPurple,
+                          color: CustomColors.sellerGreen,
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         fillColor: CustomColors.sellerWhite,

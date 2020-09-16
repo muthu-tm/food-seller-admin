@@ -28,8 +28,8 @@ class CustomDialogs {
               FlatButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('OK'),
-                textColor: CustomColors.sellerButtonGreen,
-                color: CustomColors.sellerPurple,
+                textColor: CustomColors.sellerBlue,
+                color: CustomColors.sellerGreen,
               )
             ],
           );
@@ -80,9 +80,9 @@ class CustomDialogs {
                   height: 45,
                   child: CircularProgressIndicator(
                     strokeWidth: 3,
-                    backgroundColor: CustomColors.sellerButtonGreen,
+                    backgroundColor: CustomColors.sellerBlue,
                     valueColor:
-                        AlwaysStoppedAnimation<Color>(CustomColors.sellerPurple),
+                        AlwaysStoppedAnimation<Color>(CustomColors.sellerGreen),
                   ),
                 ),
               ),
@@ -95,8 +95,8 @@ class CustomDialogs {
               size: 18.0,
               gradient: LinearGradient(
                 colors: [
-                  CustomColors.sellerPurple,
-                  CustomColors.sellerButtonGreen,
+                  CustomColors.sellerGreen,
+                  CustomColors.sellerBlue,
                 ],
               ),
             ),
@@ -136,7 +136,7 @@ class CustomDialogs {
                   child: Text(
                     description,
                     style:
-                        TextStyle(color: CustomColors.sellerPurple, fontSize: 20.0),
+                        TextStyle(color: CustomColors.sellerGreen, fontSize: 20.0),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -146,11 +146,11 @@ class CustomDialogs {
           actions: <Widget>[
             RaisedButton(
               elevation: 10.0,
-              splashColor: CustomColors.sellerButtonGreen,
+              splashColor: CustomColors.sellerBlue,
               child: Text(
                 'NO',
                 style: TextStyle(
-                    color: CustomColors.sellerButtonGreen, fontSize: 18.0),
+                    color: CustomColors.sellerBlue, fontSize: 18.0),
                 textAlign: TextAlign.center,
               ),
               onPressed: noAction,

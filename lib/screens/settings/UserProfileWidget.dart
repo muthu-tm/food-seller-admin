@@ -24,12 +24,12 @@ class UserProfileWidget extends StatelessWidget {
             leading: Icon(
               Icons.assignment_ind,
               size: 35.0,
-              color: CustomColors.sellerButtonGreen,
+              color: CustomColors.sellerBlue,
             ),
             title: Text(
               title,
               style: TextStyle(
-                color: CustomColors.sellerPurple,
+                color: CustomColors.sellerGreen,
                 fontSize: 18.0,
               ),
             ),
@@ -37,7 +37,7 @@ class UserProfileWidget extends StatelessWidget {
               icon: Icon(
                 Icons.edit,
                 size: 35.0,
-                color: CustomColors.sellerButtonGreen,
+                color: CustomColors.sellerBlue,
               ),
               onPressed: () {
                 if (user.mobileNumber != cachedLocalUser.mobileNumber) {
@@ -59,7 +59,7 @@ class UserProfileWidget extends StatelessWidget {
             ),
           ),
           Divider(
-            color: CustomColors.sellerButtonGreen,
+            color: CustomColors.sellerBlue,
           ),
           ListTile(
             leading: SizedBox(
@@ -246,7 +246,7 @@ class UserProfileWidget extends StatelessWidget {
                 suffixIcon: Icon(
                   Icons.cake,
                   size: 35,
-                  color: CustomColors.sellerButtonGreen,
+                  color: CustomColors.sellerBlue,
                 ),
               ),
               readOnly: true,

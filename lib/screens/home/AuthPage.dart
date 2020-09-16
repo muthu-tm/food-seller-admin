@@ -33,7 +33,6 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: CustomColors.sellerLightGrey,
       body: Center(
         child: SingleChildScrollView(
           child: FutureBuilder<String>(
@@ -131,8 +130,8 @@ class _AuthPageState extends State<AuthPage> {
     return ShaderMask(
       shaderCallback: (bounds) => LinearGradient(
         colors: [
-          CustomColors.sellerPurple,
-          CustomColors.sellerButtonGreen,
+          CustomColors.sellerGreen,
+          CustomColors.sellerBlue,
         ],
       ).createShader(
         Rect.fromLTWH(0, 0, bounds.width, bounds.height),
@@ -177,14 +176,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: <Color>[
-            CustomColors.sellerButtonGreen,
-            CustomColors.sellerBlack,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: CustomColors.sellerGreen,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -201,7 +193,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                          color: CustomColors.sellerButtonGreen,
+                          color: CustomColors.sellerBlue,
                           style: BorderStyle.solid,
                           width: 2.0),
                     ),
@@ -222,8 +214,8 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             widget._user.firstName,
             style: TextStyle(
               fontSize: 16.0,
-              fontWeight: FontWeight.w500,
-              color: CustomColors.sellerLightGrey,
+              fontWeight: FontWeight.bold,
+              color: CustomColors.sellerBlue,
             ),
           ),
           Text(
@@ -231,7 +223,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             style: TextStyle(
               fontSize: 14.0,
               fontWeight: FontWeight.w500,
-              color: CustomColors.sellerLightGrey,
+              color: CustomColors.sellerBlue,
             ),
           ),
           Padding(
@@ -245,7 +237,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                 decoration: InputDecoration(
                   hintText:
                       AppLocalizations.of(context).translate('secret_key'),
-                  fillColor: CustomColors.sellerWhite,
+                  fillColor: CustomColors.sellerLightGrey,
                   filled: true,
                 ),
               ),
@@ -298,8 +290,8 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
               width: 150.0,
               height: 50.0,
               decoration: BoxDecoration(
-                color: CustomColors.sellerButtonGreen,
-                borderRadius: BorderRadius.circular(10.0),
+                color: CustomColors.sellerBlue,
+                borderRadius: BorderRadius.circular(5.0),
               ),
               child: Center(
                 child: Text(
@@ -345,7 +337,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.sellerButtonGreen,
+                      color: CustomColors.sellerBlue,
                     ),
                   ),
                 ),

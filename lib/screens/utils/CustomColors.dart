@@ -8,6 +8,7 @@ class CustomColors {
   static const Color sellerFadedOrange = Color(0xFFf15f0a);
   static const Color sellerButtonGreen = Color(0xFF0b7573);
   static const Color sellerFadedButtonGreen = Color(0xFF13be78);
+  static const Color sellerGreen = Color(0xFF34D578);
   static const Color sellerGrey = Color(0xFFAFAFAF);
   static const Color sellerLightGrey = Color(0xFFF3F3F3);
   static const Color sellerWhite = Color(0xFFFFFFFF);

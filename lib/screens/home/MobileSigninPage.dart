@@ -77,7 +77,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                     " +91",
                     style: TextStyle(
                       fontSize: 16.0,
-                      color: CustomColors.sellerPurple,
+                      color: CustomColors.sellerGreen,
                     ),
                   ),
                   Expanded(
@@ -173,7 +173,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       text: AppLocalizations.of(context)
                           .translate('we_will_send'),
                       style: TextStyle(
-                          color: CustomColors.sellerPurple,
+                          color: CustomColors.sellerGreen,
                           fontWeight: FontWeight.w400)),
                   TextSpan(
                       text: AppLocalizations.of(context)
@@ -186,7 +186,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       text: AppLocalizations.of(context)
                           .translate('to_mobile_no'),
                       style: TextStyle(
-                          color: CustomColors.sellerPurple,
+                          color: CustomColors.sellerGreen,
                           fontWeight: FontWeight.w400)),
                 ])),
               ),
@@ -207,7 +207,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                 ),
               ),
             ),
-            color: CustomColors.sellerPurple,
+            color: CustomColors.sellerGreen,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
@@ -234,7 +234,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.sellerPurple,
+                    color: CustomColors.sellerGreen,
                   ),
                 ),
               ),

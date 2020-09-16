@@ -9,7 +9,7 @@ class AddStoreWidget extends StatelessWidget {
       padding: EdgeInsets.all(5.0),
       child: Material(
         elevation: 5.0,
-        shadowColor: CustomColors.sellerButtonGreen,
+        shadowColor: CustomColors.sellerBlue,
         borderRadius: BorderRadius.circular(10.0),
         child: Container(
           width: 225,
@@ -18,13 +18,13 @@ class AddStoreWidget extends StatelessWidget {
             icon: Icon(
               Icons.store,
               size: 35.0,
-              color: CustomColors.sellerButtonGreen,
+              color: CustomColors.sellerBlue,
             ),
             label: Text(
               "Create New Store",
               style: TextStyle(
                   fontFamily: 'Georgia',
-                  color: CustomColors.sellerPurple,
+                  color: CustomColors.sellerGreen,
                   fontSize: 15.0),
             ),
             onPressed: () => Navigator.push(

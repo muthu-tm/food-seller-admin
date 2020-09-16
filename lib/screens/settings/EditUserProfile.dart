@@ -54,11 +54,11 @@ class _EditUserProfileState extends State<EditUserProfile> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).translate('edit_profile')),
-        backgroundColor: CustomColors.sellerPurple,
+        backgroundColor: CustomColors.sellerGreen,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerPurple,
+        backgroundColor: CustomColors.sellerGreen,
         onPressed: () {
           _submit();
         },
@@ -238,7 +238,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                               suffixIcon: Icon(
                                 Icons.perm_contact_calendar,
                                 size: 35,
-                                color: CustomColors.sellerButtonGreen,
+                                color: CustomColors.sellerBlue,
                               ),
                             ),
                           ),
@@ -267,7 +267,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                             title: Text(
                               AppLocalizations.of(context).translate('male'),
                               style: TextStyle(
-                                  color: CustomColors.sellerButtonGreen),
+                                  color: CustomColors.sellerBlue),
                             ),
                             value: "Male",
                             selected: gender.contains("Male"),
@@ -285,7 +285,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                             title: Text(
                               AppLocalizations.of(context).translate('female'),
                               style: TextStyle(
-                                  color: CustomColors.sellerButtonGreen),
+                                  color: CustomColors.sellerBlue),
                             ),
                             value: "Female",
                             selected: gender.contains("Female"),

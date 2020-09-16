@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static const TextStyle optionStyle = TextStyle(
       fontSize: 30,
       fontWeight: FontWeight.bold,
-      color: CustomColors.sellerPurple);
+      color: CustomColors.sellerGreen);
 
   static List<Widget> _widgetOptions = <Widget>[
     Text(
@@ -70,14 +70,44 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       bottomNavigationBar: ConvexAppBar(
-        backgroundColor: CustomColors.sellerPurple,
+        backgroundColor: CustomColors.sellerGreen,
         style: TabStyle.flip,
         items: [
-          TabItem(icon: Icons.store, title: 'Home'),
-          TabItem(icon: Icons.add_shopping_cart, title: 'Products'),
-          TabItem(icon: Icons.assessment, title: 'Sales'),
-          TabItem(icon: Icons.description, title: 'Reports'),
-          TabItem(icon: Icons.settings, title: 'Settings'),
+          TabItem(
+              icon: Icon(
+                Icons.store,
+                color: CustomColors.sellerBlue,
+                size: 30,
+              ),
+              title: 'Home'),
+          TabItem(
+              icon: Icon(
+                Icons.add_shopping_cart,
+                color: CustomColors.sellerBlue,
+                size: 30,
+              ),
+              title: 'Products'),
+          TabItem(
+              icon: Icon(
+                Icons.assessment,
+                color: CustomColors.sellerBlue,
+                size: 30,
+              ),
+              title: 'Sales'),
+          TabItem(
+              icon: Icon(
+                Icons.description,
+                color: CustomColors.sellerBlue,
+                size: 30,
+              ),
+              title: 'Reports'),
+          TabItem(
+              icon: Icon(
+                Icons.settings,
+                color: CustomColors.sellerBlue,
+                size: 30,
+              ),
+              title: 'Setting s'),
         ],
         initialActiveIndex: _selectedIndex, //optional, default as 0
         onTap: _onItemTapped,

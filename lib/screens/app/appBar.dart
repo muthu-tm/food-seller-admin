@@ -3,7 +3,7 @@ import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 
 Widget appBar(BuildContext context) {
   return AppBar(
-    backgroundColor: CustomColors.sellerPurple,
+    backgroundColor: CustomColors.sellerGreen,
     titleSpacing: 0.0,
     automaticallyImplyLeading: false,
     title: Builder(

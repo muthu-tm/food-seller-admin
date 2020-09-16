@@ -23,7 +23,7 @@ class SettingsHome extends StatelessWidget {
                           width: 85,
                           height: 80,
                           decoration: BoxDecoration(
-                              color: CustomColors.sellerButtonGreen
+                              color: CustomColors.sellerBlue
                                   .withOpacity(0.3),
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.only(
@@ -80,7 +80,7 @@ class SettingsHome extends StatelessWidget {
             ),
             Divider(
               indent: 45,
-              color: CustomColors.sellerButtonGreen,
+              color: CustomColors.sellerBlue,
               thickness: 2.0,
               height: 0,
             ),
@@ -96,7 +96,7 @@ class SettingsHome extends StatelessWidget {
                           width: 85,
                           height: 80,
                           decoration: BoxDecoration(
-                              color: CustomColors.sellerButtonGreen
+                              color: CustomColors.sellerBlue
                                   .withOpacity(0.3),
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.only(
@@ -153,7 +153,7 @@ class SettingsHome extends StatelessWidget {
             ),
             Divider(
               indent: 45,
-              color: CustomColors.sellerButtonGreen,
+              color: CustomColors.sellerBlue,
               thickness: 2.0,
               height: 0,
             ),
@@ -169,7 +169,7 @@ class SettingsHome extends StatelessWidget {
                           width: 85,
                           height: 80,
                           decoration: BoxDecoration(
-                              color: CustomColors.sellerButtonGreen
+                              color: CustomColors.sellerBlue
                                   .withOpacity(0.3),
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.only(
@@ -226,7 +226,7 @@ class SettingsHome extends StatelessWidget {
             ),
             Divider(
               indent: 45,
-              color: CustomColors.sellerButtonGreen,
+              color: CustomColors.sellerBlue,
               thickness: 2.0,
               height: 0,
             ),
@@ -242,7 +242,7 @@ class SettingsHome extends StatelessWidget {
                           width: 85,
                           height: 80,
                           decoration: BoxDecoration(
-                              color: CustomColors.sellerButtonGreen
+                              color: CustomColors.sellerBlue
                                   .withOpacity(0.3),
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.only(
@@ -303,7 +303,7 @@ class SettingsHome extends StatelessWidget {
             ),
             Divider(
               indent: 45,
-              color: CustomColors.sellerButtonGreen,
+              color: CustomColors.sellerBlue,
               thickness: 2.0,
               height: 0,
             ),

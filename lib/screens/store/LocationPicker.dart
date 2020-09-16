@@ -44,11 +44,11 @@ class LocationPickerState extends State<LocationPicker> {
         title: Text(
           AppLocalizations.of(context).translate('title_add_location'),
         ),
-        backgroundColor: CustomColors.sellerPurple,
+        backgroundColor: CustomColors.sellerGreen,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerPurple,
+        backgroundColor: CustomColors.sellerGreen,
         onPressed: () {
           if (geoData == null || geoData.geoHash.isEmpty) {
             _scaffoldKey.currentState.showSnackBar(

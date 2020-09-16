@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: <Widget>[
           Card(
-            color: CustomColors.sellerPurple,
+            color: CustomColors.sellerGreen,
             elevation: 2.0,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0)),
@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                           prefixText: " +91 ",
                           prefixStyle: TextStyle(
                             fontSize: 16.0,
-                            color: CustomColors.sellerPurple,
+                            color: CustomColors.sellerGreen,
                           ),
                           hintText: AppLocalizations.of(context)
                               .translate('mobile_number'),
@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                           AppLocalizations.of(context).translate('get_otp'),
                           style: TextStyle(
                             fontSize: 20.0,
-                            color: CustomColors.sellerPurple,
+                            color: CustomColors.sellerGreen,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -218,7 +218,7 @@ class _LoginPageState extends State<LoginPage> {
                     AppLocalizations.of(context).translate('sign_up'),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.sellerPurple,
+                      color: CustomColors.sellerGreen,
                       fontSize: 18.0,
                     ),
                   ),
@@ -246,14 +246,14 @@ class _LoginPageState extends State<LoginPage> {
               },
               icon: Icon(
                 Icons.info,
-                color: CustomColors.sellerPurple,
+                color: CustomColors.sellerGreen,
               ),
               label: Text(
                 AppLocalizations.of(context).translate('help_support'),
                 style: TextStyle(
                   fontFamily: 'Georgia',
                   fontWeight: FontWeight.bold,
-                  color: CustomColors.sellerPurple,
+                  color: CustomColors.sellerGreen,
                   fontSize: 16.0,
                 ),
               ),
