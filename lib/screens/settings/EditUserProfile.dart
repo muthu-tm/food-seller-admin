@@ -58,7 +58,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerGreen,
+        backgroundColor: CustomColors.sellerBlue,
         onPressed: () {
           _submit();
         },

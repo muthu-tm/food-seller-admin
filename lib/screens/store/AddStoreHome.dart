@@ -62,7 +62,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerGreen,
+        backgroundColor: CustomColors.sellerBlue,
         onPressed: () {
           final FormState form = _formKey.currentState;
 
@@ -274,7 +274,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                           child: Container(
                             padding: EdgeInsets.all(10),
                             color: availProducts.contains(index)
-                                ? CustomColors.sellerGreen
+                                ? CustomColors.sellerBlue
                                 : CustomColors.sellerWhite,
                             height: 40,
                             width: 50,
@@ -334,7 +334,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                           child: Container(
                             padding: EdgeInsets.all(10),
                             color: workingDays.contains(index)
-                                ? CustomColors.sellerGreen
+                                ? CustomColors.sellerBlue
                                 : CustomColors.sellerWhite,
                             height: 40,
                             width: 50,

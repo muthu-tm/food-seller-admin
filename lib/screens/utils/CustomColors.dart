@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomColors {
-  static const Color sellerBlue = Color(0xFF001d5f);
+  static const Color sellerBlue = Color(0xFF193C7E);
   static const Color sellerPurple = Color(0xFF6c014f);
   static const Color sellerFadedPurple = Color(0xFF8e0076);
   static const Color sellerOrange = Color(0xFFe71e4c);
