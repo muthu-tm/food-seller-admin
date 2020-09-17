@@ -14,8 +14,8 @@ class Store extends Model {
   String ownedBy;
   @JsonKey(name: 'store_name', defaultValue: "")
   String storeName;
-  @JsonKey(name: 'store_image', defaultValue: "")
-  String storeImage;
+  @JsonKey(name: 'store_profile', defaultValue: "")
+  String storeProfile;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)

@@ -31,8 +31,8 @@ class StoreLocations {
   Address address;
   @JsonKey(name: 'is_active', defaultValue: true)
   bool isActive;
-  @JsonKey(name: 'store_image', defaultValue: "")
-  String storeImage;
+  @JsonKey(name: 'store_profile', defaultValue: "")
+  String storeProfile;
   @JsonKey(name: 'users')
   List<int> users;
   @JsonKey(name: 'users_access')

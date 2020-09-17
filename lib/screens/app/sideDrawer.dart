@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/screens/Home/AuthPage.dart';
 import 'package:chipchop_seller/screens/app/ContactAndSupportWidget.dart';
+import 'package:chipchop_seller/screens/app/ProfilePictureUpload.dart';
 import 'package:chipchop_seller/screens/home/HomeScreen.dart';
 import 'package:chipchop_seller/screens/settings/UserProfileSettings.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
@@ -15,9 +16,7 @@ Widget sideDrawer(BuildContext context) {
     child: ListView(
       children: <Widget>[
         DrawerHeader(
-          decoration: BoxDecoration(
-            color: CustomColors.sellerGreen
-          ),
+          decoration: BoxDecoration(color: CustomColors.sellerGreen),
           child: Column(
             children: <Widget>[
               Container(
@@ -36,24 +35,24 @@ Widget sideDrawer(BuildContext context) {
                         ),
                         child: FlatButton(
                           onPressed: () {
-                            // showDialog(
-                            //   context: context,
-                            //   routeSettings:
-                            //       RouteSettings(name: "/profile/upload"),
-                            //   builder: (context) {
-                            //     return Center(
-                            //       child: ProfilePictureUpload(
-                            //           0,
-                            //           cachedLocalUser.getMediumProfilePicPath(),
-                            //           HashGenerator.hmacGenerator(
-                            //               cachedLocalUser.getID(),
-                            //               cachedLocalUser
-                            //                   .createdAt.millisecondsSinceEpoch
-                            //                   .toString()),
-                            //           cachedLocalUser.getIntID()),
-                            //     );
-                            //   },
-                            // );
+                            showDialog(
+                              context: context,
+                              routeSettings:
+                                  RouteSettings(name: "/profile/upload"),
+                              builder: (context) {
+                                return Center(
+                                  child: ProfilePictureUpload(
+                                      0,
+                                      cachedLocalUser.getMediumProfilePicPath(),
+                                      HashGenerator.hmacGenerator(
+                                          cachedLocalUser.getID(),
+                                          cachedLocalUser
+                                              .createdAt.millisecondsSinceEpoch
+                                              .toString()),
+                                      cachedLocalUser.getIntID()),
+                                );
+                              },
+                            );
                           },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -113,25 +112,25 @@ Widget sideDrawer(BuildContext context) {
                               left: 35,
                               child: FlatButton(
                                 onPressed: () {
-                                  // showDialog(
-                                  //   context: context,
-                                  //   routeSettings:
-                                  //       RouteSettings(name: "/profile/upload"),
-                                  //   builder: (context) {
-                                  //     return Center(
-                                  //       child: ProfilePictureUpload(
-                                  //           0,
-                                  //           cachedLocalUser
-                                  //               .getMediumProfilePicPath(),
-                                  //           HashGenerator.hmacGenerator(
-                                  //               cachedLocalUser.getID(),
-                                  //               cachedLocalUser.createdAt
-                                  //                   .millisecondsSinceEpoch
-                                  //                   .toString()),
-                                  //           cachedLocalUser.getIntID()),
-                                  //     );
-                                  //   },
-                                  // );
+                                  showDialog(
+                                    context: context,
+                                    routeSettings:
+                                        RouteSettings(name: "/profile/upload"),
+                                    builder: (context) {
+                                      return Center(
+                                        child: ProfilePictureUpload(
+                                            0,
+                                            cachedLocalUser
+                                                .getMediumProfilePicPath(),
+                                            HashGenerator.hmacGenerator(
+                                                cachedLocalUser.getID(),
+                                                cachedLocalUser.createdAt
+                                                    .millisecondsSinceEpoch
+                                                    .toString()),
+                                            cachedLocalUser.getIntID()),
+                                      );
+                                    },
+                                  );
                                 },
                                 child: CircleAvatar(
                                   backgroundColor: CustomColors.sellerBlue,
@@ -188,8 +187,7 @@ Widget sideDrawer(BuildContext context) {
           title: Text(
             "Orders",
           ),
-          leading:
-              Icon(Icons.content_copy, color: CustomColors.sellerBlue),
+          leading: Icon(Icons.content_copy, color: CustomColors.sellerBlue),
           children: <Widget>[
             ListTile(
               title: Text(
@@ -206,8 +204,8 @@ Widget sideDrawer(BuildContext context) {
           ],
         ),
         ExpansionTile(
-          leading: Icon(Icons.supervisor_account,
-              color: CustomColors.sellerBlue),
+          leading:
+              Icon(Icons.supervisor_account, color: CustomColors.sellerBlue),
           title: Text(
             "Products",
           ),
@@ -240,16 +238,16 @@ Widget sideDrawer(BuildContext context) {
         ),
         Divider(indent: 15.0, color: CustomColors.sellerBlue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.notifications_active,
-              color: CustomColors.sellerBlue),
+          leading:
+              Icon(Icons.notifications_active, color: CustomColors.sellerBlue),
           title: Text(
             "Notifications",
           ),
         ),
         Divider(indent: 15.0, color: CustomColors.sellerBlue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.store_mall_directory,
-              color: CustomColors.sellerBlue),
+          leading:
+              Icon(Icons.store_mall_directory, color: CustomColors.sellerBlue),
           title: Text(
             "Store settings",
           ),
