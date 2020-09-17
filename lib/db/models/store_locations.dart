@@ -5,6 +5,7 @@ import 'package:chipchop_seller/db/models/store_contacts.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/geopoint_data.dart';
 import 'package:chipchop_seller/db/models/store_user_access.dart';
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -30,8 +31,12 @@ class StoreLocations {
   Address address;
   @JsonKey(name: 'is_active', defaultValue: true)
   bool isActive;
+  @JsonKey(name: 'store_image', defaultValue: "")
+  String storeImage;
   @JsonKey(name: 'users')
-  List<StoreUserAccess> users;
+  List<int> users;
+  @JsonKey(name: 'users_access')
+  List<StoreUserAccess> usersAccess;
   @JsonKey(name: 'contacts')
   List<StoreContacts> contacts;
   @JsonKey(name: 'delivery')
@@ -56,6 +61,12 @@ class StoreLocations {
   }
 
   DocumentReference getDocumentReference(String storeUUID, String locUUID) {
-    return getCollectionRef(uuid).document();
+    return getCollectionRef(storeUUID).document(locUUID);
+  }
+
+  Stream<QuerySnapshot> streamStoresForUser() {
+    return getGroupQuery()
+        .where('users', arrayContains: cachedLocalUser.getIntID())
+        .snapshots();
   }
 }

@@ -111,7 +111,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             userAccess.positionName = "Owner";
             userAccess.userNumber = cachedLocalUser.getIntID();
             userAccess.accessLevel = [0];
-            loc.users = [userAccess];
+            loc.users = [cachedLocalUser.getIntID()];
+            loc.usersAccess = [userAccess];
 
             Navigator.push(
               context,

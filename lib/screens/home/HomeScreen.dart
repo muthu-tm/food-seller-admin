@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: CustomColors.sellerBlue,
                 size: 30,
               ),
-              title: 'Setting s'),
+              title: 'Settings'),
         ],
         initialActiveIndex: _selectedIndex, //optional, default as 0
         onTap: _onItemTapped,

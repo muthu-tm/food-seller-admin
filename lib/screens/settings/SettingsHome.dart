@@ -1,3 +1,4 @@
+import 'package:chipchop_seller/screens/settings/StoreSettings.dart';
 import 'package:chipchop_seller/screens/settings/UserProfileSettings.dart';
 import 'package:chipchop_seller/screens/store/AddStoreHome.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
@@ -23,12 +24,13 @@ class SettingsHome extends StatelessWidget {
                           width: 85,
                           height: 80,
                           decoration: BoxDecoration(
-                              color: CustomColors.sellerBlue
-                                  .withOpacity(0.3),
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(40),
-                                  bottomRight: Radius.circular(40))),
+                            color: CustomColors.sellerGreen,
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(40),
+                              bottomRight: Radius.circular(40),
+                            ),
+                          ),
                         ),
                         Positioned(
                           top: 10,
@@ -38,7 +40,7 @@ class SettingsHome extends StatelessWidget {
                             height: 60,
                             child: DecoratedBox(
                               decoration: BoxDecoration(
-                                color: CustomColors.sellerBlue.withOpacity(0.3),
+                                color: CustomColors.sellerBlue.withOpacity(0.4),
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
@@ -79,10 +81,9 @@ class SettingsHome extends StatelessWidget {
               },
             ),
             Divider(
-              indent: 45,
-              color: CustomColors.sellerBlue,
+              color: CustomColors.sellerGreen,
               thickness: 2.0,
-              height: 0,
+              height: 1,
             ),
             InkWell(
               child: Row(
@@ -96,12 +97,13 @@ class SettingsHome extends StatelessWidget {
                           width: 85,
                           height: 80,
                           decoration: BoxDecoration(
-                              color: CustomColors.sellerBlue
-                                  .withOpacity(0.3),
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(40),
-                                  bottomRight: Radius.circular(40))),
+                            color: CustomColors.sellerGreen,
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(40),
+                              bottomRight: Radius.circular(40),
+                            ),
+                          ),
                         ),
                         Positioned(
                           top: 10,
@@ -111,7 +113,7 @@ class SettingsHome extends StatelessWidget {
                             height: 60,
                             child: DecoratedBox(
                               decoration: BoxDecoration(
-                                color: CustomColors.sellerBlue.withOpacity(0.3),
+                                color: CustomColors.sellerBlue.withOpacity(0.4),
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
@@ -145,17 +147,16 @@ class SettingsHome extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AddNewStoreHome(),
+                    builder: (context) => StoreSettings(),
                     settings: RouteSettings(name: '/settings/store'),
                   ),
                 );
               },
             ),
             Divider(
-              indent: 45,
-              color: CustomColors.sellerBlue,
+              color: CustomColors.sellerGreen,
               thickness: 2.0,
-              height: 0,
+              height: 1,
             ),
             InkWell(
               child: Row(
@@ -169,12 +170,13 @@ class SettingsHome extends StatelessWidget {
                           width: 85,
                           height: 80,
                           decoration: BoxDecoration(
-                              color: CustomColors.sellerBlue
-                                  .withOpacity(0.3),
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(40),
-                                  bottomRight: Radius.circular(40))),
+                            color: CustomColors.sellerGreen,
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(40),
+                              bottomRight: Radius.circular(40),
+                            ),
+                          ),
                         ),
                         Positioned(
                           top: 10,
@@ -184,7 +186,7 @@ class SettingsHome extends StatelessWidget {
                             height: 60,
                             child: DecoratedBox(
                               decoration: BoxDecoration(
-                                color: CustomColors.sellerBlue.withOpacity(0.3),
+                                color: CustomColors.sellerBlue.withOpacity(0.4),
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
@@ -225,10 +227,9 @@ class SettingsHome extends StatelessWidget {
               },
             ),
             Divider(
-              indent: 45,
-              color: CustomColors.sellerBlue,
+              color: CustomColors.sellerGreen,
               thickness: 2.0,
-              height: 0,
+              height: 1,
             ),
             InkWell(
               child: Row(
@@ -242,12 +243,13 @@ class SettingsHome extends StatelessWidget {
                           width: 85,
                           height: 80,
                           decoration: BoxDecoration(
-                              color: CustomColors.sellerBlue
-                                  .withOpacity(0.3),
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(40),
-                                  bottomRight: Radius.circular(40))),
+                            color: CustomColors.sellerGreen,
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(40),
+                              bottomRight: Radius.circular(40),
+                            ),
+                          ),
                         ),
                         Positioned(
                           top: 10,
@@ -257,7 +259,7 @@ class SettingsHome extends StatelessWidget {
                             height: 60,
                             child: DecoratedBox(
                               decoration: BoxDecoration(
-                                color: CustomColors.sellerBlue.withOpacity(0.3),
+                                color: CustomColors.sellerBlue.withOpacity(0.4),
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
@@ -302,10 +304,9 @@ class SettingsHome extends StatelessWidget {
               },
             ),
             Divider(
-              indent: 45,
-              color: CustomColors.sellerBlue,
+              color: CustomColors.sellerGreen,
               thickness: 2.0,
-              height: 0,
+              height: 1,
             ),
           ],
         ),
