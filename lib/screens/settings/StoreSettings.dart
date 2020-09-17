@@ -1,4 +1,5 @@
-import 'package:chipchop_seller/db/models/store_locations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/app/appBar.dart';
 import 'package:chipchop_seller/screens/app/sideDrawer.dart';
 import 'package:chipchop_seller/screens/store/AddStoreHome.dart';
@@ -46,68 +47,122 @@ class _StoreSettingsState extends State<StoreSettings> {
 
   Widget getStores(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: StoreLocations().streamStoresForUser(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          List<Widget> children;
+      stream: Store().streamStoresForUser(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        Widget children;
 
-          if (snapshot.hasData) {
-            if (snapshot.data.documents.isNotEmpty) {
-              StoreLocations storeLoc =
-                  StoreLocations.fromJson(snapshot.data.documents.first.data);
-              children = [
-                Container(
-                  height: 90,
-                  child: Text(
-                    storeLoc.locationName,
-                    style: TextStyle(color: CustomColors.sellerBlue),
+        if (snapshot.hasData) {
+          if (snapshot.data.documents.isNotEmpty) {
+            children = ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              primary: false,
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: (BuildContext context, int index) {
+                Store store =
+                    Store.fromJson(snapshot.data.documents.first.data);
+                return Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
                   ),
-                ),
-              ];
-            } else {
-              children = [
-                Container(
-                  height: 90,
                   child: Column(
-                    children: <Widget>[
-                      Spacer(),
-                      Text(
-                        "No Store Available",
-                        style: TextStyle(
-                          color: CustomColors.sellerAlertRed,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    children: [
+                      Row(
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: store.getMediumProfilePicPath(),
+                            imageBuilder: (context, imageProvider) => Container(
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              height: 140,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                                shape: BoxShape.rectangle,
+                                image: DecorationImage(
+                                    fit: BoxFit.fill, image: imageProvider),
+                              ),
+                            ),
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) =>
+                                    CircularProgressIndicator(
+                                        value: downloadProgress.progress),
+                            errorWidget: (context, url, error) => Icon(
+                              Icons.error,
+                              size: 35,
+                            ),
+                            fadeOutDuration: Duration(seconds: 1),
+                            fadeInDuration: Duration(seconds: 2),
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                store.storeName,
+                                style: TextStyle(
+                                  color: CustomColors.sellerBlue,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
                       ),
-                      Spacer(
-                        flex: 2,
-                      ),
-                      Text(
-                        "Add your Store Now1",
-                        style: TextStyle(
-                          color: CustomColors.sellerBlue,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      Spacer(),
                     ],
                   ),
-                ),
-              ];
-            }
-          } else if (snapshot.hasError) {
-            children = AsyncWidgets.asyncError();
+                );
+              },
+            );
           } else {
-            children = AsyncWidgets.asyncWaiting();
+            children = Container(
+              height: 90,
+              child: Column(
+                children: <Widget>[
+                  Spacer(),
+                  Text(
+                    "No Store Available",
+                    style: TextStyle(
+                      color: CustomColors.sellerAlertRed,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(
+                    flex: 2,
+                  ),
+                  Text(
+                    "Add your Store Now!",
+                    style: TextStyle(
+                      color: CustomColors.sellerBlue,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Spacer(),
+                ],
+              ),
+            );
           }
-
-          return Center(
+        } else if (snapshot.hasError) {
+          children = Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: children,
+              children: AsyncWidgets.asyncError(),
             ),
           );
-        });
+        } else {
+          children = Center(
+            child: Column(
+              children: AsyncWidgets.asyncWaiting(),
+            ),
+          );
+        }
+
+        return children;
+      },
+    );
   }
 }

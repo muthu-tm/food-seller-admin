@@ -98,6 +98,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
 
             store.storeName = this.storeName;
             store.ownedBy = this.ownedBy;
+            store.users = [cachedLocalUser.getIntID()];
             loc.availProducts = this.availProducts;
             loc.activeFrom = activeFrom;
             loc.activeTill = activeTill;

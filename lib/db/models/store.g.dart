@@ -12,6 +12,10 @@ Store _$StoreFromJson(Map<String, dynamic> json) {
     ..storeName = json['store_name'] as String ?? ''
     ..ownedBy = json['owned_by'] as String
     ..storeProfile = json['store_profile'] as String ?? ''
+    ..users = (json['users'] as List)
+            ?.map((e) => e == null ? null : e as int)
+            ?.toList() ??
+        []
     ..createdAt = json['created_at'] == null
         ? null
         : DateTime.fromMillisecondsSinceEpoch(
@@ -31,6 +35,7 @@ Map<String, dynamic> _$StoreToJson(Store instance) => <String, dynamic>{
       'store_name': instance.storeName,
       'owned_by': instance.ownedBy,
       'store_profile': instance.storeProfile ?? "",
+      'users': instance.users == null ? [] : instance.users,
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
     };

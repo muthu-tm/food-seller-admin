@@ -63,10 +63,4 @@ class StoreLocations {
   DocumentReference getDocumentReference(String storeUUID, String locUUID) {
     return getCollectionRef(storeUUID).document(locUUID);
   }
-
-  Stream<QuerySnapshot> streamStoresForUser() {
-    return getGroupQuery()
-        .where('users', arrayContains: cachedLocalUser.getIntID())
-        .snapshots();
-  }
 }

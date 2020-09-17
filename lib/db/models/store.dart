@@ -1,4 +1,6 @@
 import 'package:chipchop_seller/db/models/store_locations.dart';
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
+import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_seller/db/models/model.dart';
@@ -16,12 +18,23 @@ class Store extends Model {
   String storeName;
   @JsonKey(name: 'store_profile', defaultValue: "")
   String storeProfile;
+  @JsonKey(name: 'users')
+  List<int> users;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)
   DateTime updatedAt;
 
   Store();
+
+  String getMediumProfilePicPath() {
+    if (this.storeProfile != null && this.storeProfile != "")
+      return this
+          .storeProfile
+          .replaceFirst(firebase_storage_path, image_kit_path + ik_medium_size);
+    else
+      return "";
+  }
 
   factory Store.fromJson(Map<String, dynamic> json) => _$StoreFromJson(json);
   Map<String, dynamic> toJson() => _$StoreToJson(this);
@@ -60,5 +73,11 @@ class Store extends Model {
     bWrite.setData(locDocRef, loc.toJson());
     await bWrite.commit();
     return this;
+  }
+
+  Stream<QuerySnapshot> streamStoresForUser() {
+    return getCollectionRef()
+        .where('users', arrayContains: cachedLocalUser.getIntID())
+        .snapshots();
   }
 }
