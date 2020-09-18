@@ -2,15 +2,19 @@ import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/delivery_details.dart';
 import 'package:chipchop_seller/db/models/product_categories.dart';
+import 'package:chipchop_seller/db/models/product_sub_categories.dart';
+import 'package:chipchop_seller/db/models/product_types.dart';
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/db/models/store_contacts.dart';
 import 'package:chipchop_seller/db/models/store_locations.dart';
 import 'package:chipchop_seller/db/models/store_user_access.dart';
 import 'package:chipchop_seller/screens/store/LocationPicker.dart';
 import 'package:chipchop_seller/screens/utils/AddressWidget.dart';
+import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class AddNewStoreHome extends StatefulWidget {
@@ -24,13 +28,15 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   Address sAddress = Address();
   String storeName = '';
   String ownedBy = '';
-  List<int> availProducts = [];
+  List<String> availProducts = [];
+  List<String> availProductCategories = [];
+  List<ProductCategories> productCategories = [];
+  List<String> availProductSubCategories = [];
   List<int> workingDays = [1, 2, 3, 4, 5];
   TimeOfDay fromTime = TimeOfDay(hour: 9, minute: 0);
   TimeOfDay tillTime = TimeOfDay(hour: 18, minute: 0);
   String activeFrom;
   String activeTill;
-  List<String> _categories = ProductCategories.getCategories();
   List<String> _days = [
     "Sunday",
     "Monday",
@@ -100,6 +106,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             store.ownedBy = this.ownedBy;
             store.users = [cachedLocalUser.getIntID()];
             loc.availProducts = this.availProducts;
+            loc.availProductCategories = this.availProductCategories;
+            loc.availProductSubCategories = this.availProductSubCategories;
             loc.activeFrom = activeFrom;
             loc.activeTill = activeTill;
             loc.locationName = storeName;
@@ -254,45 +262,51 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   child: Container(
                     height: 300,
                     color: CustomColors.sellerGrey,
-                    child: ListView.builder(
-                      primary: true,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemCount: _categories.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        String _c = _categories[index];
-                        return InkWell(
-                          onTap: () {
-                            if (availProducts.contains(index)) {
-                              setState(() {
-                                availProducts.remove(index);
-                              });
-                            } else {
-                              setState(() {
-                                availProducts.add(index);
-                              });
-                            }
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            color: availProducts.contains(index)
-                                ? CustomColors.sellerBlue
-                                : CustomColors.sellerWhite,
-                            height: 40,
-                            width: 50,
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              _c,
-                              style: TextStyle(
-                                  fontFamily: "Georgia",
-                                  color: availProducts.contains(index)
-                                      ? CustomColors.sellerWhite
-                                      : CustomColors.sellerGreen),
-                            ),
-                          ),
-                        );
-                      },
+                    child: getProductTypes(context),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0, top: 10),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Product Categories",
+                      style: TextStyle(
+                          fontFamily: "Georgia",
+                          color: CustomColors.sellerGrey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
                     ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0, top: 10, right: 10),
+                  child: Container(
+                    height: 300,
+                    color: CustomColors.sellerGrey,
+                    child: getProductCategories(context),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0, top: 10),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Product Sub Categories",
+                      style: TextStyle(
+                          fontFamily: "Georgia",
+                          color: CustomColors.sellerGrey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0, top: 10, right: 10),
+                  child: Container(
+                    height: 300,
+                    color: CustomColors.sellerGrey,
+                    child: getProductSubCategories(context),
                   ),
                 ),
                 Padding(
@@ -416,6 +430,304 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget getProductTypes(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: ProductTypes().streamProductTypes(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        Widget children;
+
+        if (snapshot.hasData) {
+          if (snapshot.data.documents.isNotEmpty) {
+            children = ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              primary: false,
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: (BuildContext context, int index) {
+                ProductTypes types =
+                    ProductTypes.fromJson(snapshot.data.documents[index].data);
+                return InkWell(
+                  onTap: () {
+                    if (availProducts.contains(types.uuid)) {
+                      setState(() {
+                        availProducts.remove(types.uuid);
+                      });
+                    } else {
+                      setState(() {
+                        availProducts.add(types.uuid);
+                      });
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    color: availProducts.contains(types.uuid)
+                        ? CustomColors.sellerBlue
+                        : CustomColors.sellerWhite,
+                    height: 40,
+                    width: 50,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      types.name,
+                      style: TextStyle(
+                          fontFamily: "Georgia",
+                          color: availProducts.contains(types.uuid)
+                              ? CustomColors.sellerWhite
+                              : CustomColors.sellerGreen),
+                    ),
+                  ),
+                );
+              },
+            );
+          } else {
+            children = Container(
+              height: 90,
+              child: Column(
+                children: <Widget>[
+                  Spacer(),
+                  Text(
+                    "No Product Types Available",
+                    style: TextStyle(
+                      color: CustomColors.sellerAlertRed,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(
+                    flex: 2,
+                  ),
+                  Text(
+                    "Sorry. Please Try Again Later!",
+                    style: TextStyle(
+                      color: CustomColors.sellerBlue,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Spacer(),
+                ],
+              ),
+            );
+          }
+        } else if (snapshot.hasError) {
+          children = Center(
+            child: Column(
+              children: AsyncWidgets.asyncError(),
+            ),
+          );
+        } else {
+          children = Center(
+            child: Column(
+              children: AsyncWidgets.asyncWaiting(),
+            ),
+          );
+        }
+
+        return children;
+      },
+    );
+  }
+
+  Widget getProductCategories(BuildContext context) {
+    return FutureBuilder<List<ProductCategories>>(
+      future: ProductCategories().getCategoriesForTypes(availProducts),
+      builder: (BuildContext context,
+          AsyncSnapshot<List<ProductCategories>> snapshot) {
+        Widget children;
+
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            children = ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              primary: false,
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                ProductCategories categories = snapshot.data[index];
+                return InkWell(
+                  onTap: () {
+                    if (availProductCategories.contains(categories.uuid)) {
+                      setState(() {
+                        availProductCategories.remove(categories.uuid);
+                        productCategories.remove(categories);
+                      });
+                    } else {
+                      setState(() {
+                        availProductCategories.add(categories.uuid);
+                        productCategories.add(categories);
+                      });
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    color: availProductCategories.contains(categories.uuid)
+                        ? CustomColors.sellerBlue
+                        : CustomColors.sellerWhite,
+                    height: 40,
+                    width: 50,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      categories.name,
+                      style: TextStyle(
+                          fontFamily: "Georgia",
+                          color:
+                              availProductCategories.contains(categories.uuid)
+                                  ? CustomColors.sellerWhite
+                                  : CustomColors.sellerGreen),
+                    ),
+                  ),
+                );
+              },
+            );
+          } else {
+            children = Container(
+              height: 90,
+              child: Column(
+                children: <Widget>[
+                  Spacer(),
+                  Text(
+                    "No Product Categories Available",
+                    style: TextStyle(
+                      color: CustomColors.sellerAlertRed,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(
+                    flex: 2,
+                  ),
+                  Text(
+                    "Sorry. Please Try Again Later!",
+                    style: TextStyle(
+                      color: CustomColors.sellerBlue,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Spacer(),
+                ],
+              ),
+            );
+          }
+        } else if (snapshot.hasError) {
+          children = Center(
+            child: Column(
+              children: AsyncWidgets.asyncError(),
+            ),
+          );
+        } else {
+          children = Center(
+            child: Column(
+              children: AsyncWidgets.asyncWaiting(),
+            ),
+          );
+        }
+
+        return children;
+      },
+    );
+  }
+
+  Widget getProductSubCategories(BuildContext context) {
+    return FutureBuilder<List<ProductSubCategories>>(
+      future: ProductSubCategories().getSubCategories(productCategories),
+      builder: (BuildContext context,
+          AsyncSnapshot<List<ProductSubCategories>> snapshot) {
+        Widget children;
+
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            children = ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              primary: false,
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                ProductSubCategories categories = snapshot.data[index];
+                return InkWell(
+                  onTap: () {
+                    if (availProductSubCategories.contains(categories.uuid)) {
+                      setState(() {
+                        availProductSubCategories.remove(categories.uuid);
+                      });
+                    } else {
+                      setState(() {
+                        availProductSubCategories.add(categories.uuid);
+                      });
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    color: availProductSubCategories.contains(categories.uuid)
+                        ? CustomColors.sellerBlue
+                        : CustomColors.sellerWhite,
+                    height: 40,
+                    width: 50,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      categories.name,
+                      style: TextStyle(
+                          fontFamily: "Georgia",
+                          color:
+                              availProductSubCategories.contains(categories.uuid)
+                                  ? CustomColors.sellerWhite
+                                  : CustomColors.sellerGreen),
+                    ),
+                  ),
+                );
+              },
+            );
+          } else {
+            children = Container(
+              height: 90,
+              child: Column(
+                children: <Widget>[
+                  Spacer(),
+                  Text(
+                    "No Product SubCategories Available",
+                    style: TextStyle(
+                      color: CustomColors.sellerAlertRed,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(
+                    flex: 2,
+                  ),
+                  Text(
+                    "Sorry. Please Try Again Later!",
+                    style: TextStyle(
+                      color: CustomColors.sellerBlue,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Spacer(),
+                ],
+              ),
+            );
+          }
+        } else if (snapshot.hasError) {
+          children = Center(
+            child: Column(
+              children: AsyncWidgets.asyncError(),
+            ),
+          );
+        } else {
+          children = Center(
+            child: Column(
+              children: AsyncWidgets.asyncWaiting(),
+            ),
+          );
+        }
+
+        return children;
+      },
     );
   }
 

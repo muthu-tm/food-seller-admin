@@ -1,15 +1,15 @@
-import 'package:chipchop_seller/db/models/product_types.dart';
+import 'package:chipchop_seller/db/models/product_categories.dart';
 import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-part 'product_categories.g.dart';
+part 'product_sub_categories.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class ProductCategories {
+class ProductSubCategories {
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
-  @JsonKey(name: 'type_uuid', nullable: false)
-  String typeUUID;
+  @JsonKey(name: 'category_uuid', nullable: false)
+  String categoryUUID;
   @JsonKey(name: 'name', defaultValue: "")
   String name;
   @JsonKey(name: 'short_details', defaultValue: "")
@@ -21,7 +21,7 @@ class ProductCategories {
   @JsonKey(name: 'updated_at', nullable: true)
   DateTime updatedAt;
 
-  ProductCategories();
+  ProductSubCategories();
 
   List<String> getMediumProfilePicPath() {
     List<String> paths = [];
@@ -35,40 +35,39 @@ class ProductCategories {
     return paths;
   }
 
-  factory ProductCategories.fromJson(Map<String, dynamic> json) =>
-      _$ProductCategoriesFromJson(json);
-  Map<String, dynamic> toJson() => _$ProductCategoriesToJson(this);
+  factory ProductSubCategories.fromJson(Map<String, dynamic> json) =>
+      _$ProductSubCategoriesFromJson(json);
+  Map<String, dynamic> toJson() => _$ProductSubCategoriesToJson(this);
 
-  CollectionReference getCollectionRef(String uuid) {
-    return ProductTypes()
-        .getDocumentReference(uuid)
-        .collection("product_categories");
-  }
-
-  DocumentReference getDocumentReference(String typeUUID, String uuid) {
-    return getCollectionRef(typeUUID).document(uuid);
+  CollectionReference getCollectionRef(String typeUUID, String catUUID) {
+    return ProductCategories()
+        .getDocumentReference(typeUUID, catUUID)
+        .collection("product_sub_categories");
   }
 
   String getID() {
     return this.uuid;
   }
 
-  Future<List<ProductCategories>> getCategoriesForTypes(
-      List<String> types) async {
-    List<ProductCategories> categories = [];
+  Future<List<ProductSubCategories>> getSubCategories(
+      List<ProductCategories> categories) async {
+    List<ProductSubCategories> subCategories = [];
 
-    for (var i = 0; i < types.length; i++) {
-      QuerySnapshot snap = await getCollectionRef(types[i]).getDocuments();
+    for (var i = 0; i < categories.length; i++) {
+      QuerySnapshot snap =
+          await getCollectionRef(categories[i].typeUUID, categories[i].uuid)
+              .getDocuments();
       if (snap.documents.isEmpty)
         continue;
       else {
         for (var j = 0; j < snap.documents.length; j++) {
-          ProductCategories _c = ProductCategories.fromJson(snap.documents[j].data);
-          categories.add(_c);
+          ProductSubCategories _c =
+              ProductSubCategories.fromJson(snap.documents[j].data);
+          subCategories.add(_c);
         }
       }
     }
 
-    return categories;
+    return subCategories;
   }
 }
