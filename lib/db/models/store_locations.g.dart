@@ -9,6 +9,7 @@ part of 'store_locations.dart';
 StoreLocations _$StoreLocationsFromJson(Map<String, dynamic> json) {
   return StoreLocations()
     ..uuid = json['uuid'] as String ?? ''
+    ..storeUUID = json['store_uuid'] as String ?? ''
     ..locationName = json['loc_name'] as String ?? ''
     ..availProducts =
         (json['avail_products'] as List)?.map((e) => e as int)?.toList()
@@ -48,6 +49,7 @@ StoreLocations _$StoreLocationsFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$StoreLocationsToJson(StoreLocations instance) =>
     <String, dynamic>{
       'uuid': instance.uuid,
+      'store_uuid': instance.storeUUID,
       'loc_name': instance.locationName,
       'avail_products': instance.availProducts,
       'working_days': instance.workingDays,

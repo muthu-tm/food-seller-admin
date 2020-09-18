@@ -5,7 +5,6 @@ import 'package:chipchop_seller/db/models/store_contacts.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/geopoint_data.dart';
 import 'package:chipchop_seller/db/models/store_user_access.dart';
-import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -15,6 +14,8 @@ part 'store_locations.g.dart';
 class StoreLocations {
   @JsonKey(name: 'uuid', defaultValue: "")
   String uuid;
+  @JsonKey(name: 'store_uuid', defaultValue: "")
+  String storeUUID;
   @JsonKey(name: 'loc_name', defaultValue: "")
   String locationName;
   @JsonKey(name: 'geo_point', defaultValue: "")
