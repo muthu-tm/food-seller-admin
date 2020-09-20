@@ -25,6 +25,8 @@ class Store extends Model {
   @JsonKey(name: 'updated_at', nullable: true)
   DateTime updatedAt;
 
+  StoreLocations location;
+
   Store();
 
   String getMediumProfilePicPath() {
@@ -79,5 +81,37 @@ class Store extends Model {
     return getCollectionRef()
         .where('users', arrayContains: cachedLocalUser.getIntID())
         .snapshots();
+  }
+
+  Future<List<Store>> getStoresWithLocation() async {
+    try {
+      List<Store> stores = [];
+
+      QuerySnapshot snap = await getCollectionRef()
+          .where('users', arrayContains: cachedLocalUser.getIntID())
+          .getDocuments();
+      if (snap.documents.isNotEmpty) {
+        for (var i = 0; i < snap.documents.length; i++) {
+          Store _s = Store.fromJson(snap.documents[i].data);
+          QuerySnapshot locsnap = await getDocumentReference(_s.uuid)
+              .collection("store_locations")
+              .where('users', arrayContains: cachedLocalUser.getIntID())
+              .getDocuments();
+
+          if (locsnap.documents.isNotEmpty) {
+            for (var j = 0; j < locsnap.documents.length; j++) {
+              StoreLocations _sl = StoreLocations.fromJson(locsnap.documents[j].data);
+              _s.location = _sl;
+              stores.add(_s);
+            }
+          }
+          // stores.add(_s);
+        }
+      }
+
+      return stores;
+    } catch (err) {
+      throw err;
+    }
   }
 }

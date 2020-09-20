@@ -198,7 +198,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
             elevation: 16.0,
             onPressed: startPhoneAuth,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(5.0),
               child: Text(
                 AppLocalizations.of(context).translate('get_otp'),
                 style: TextStyle(
@@ -207,9 +207,9 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                 ),
               ),
             ),
-            color: CustomColors.sellerGreen,
+            color: CustomColors.sellerBlue,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(5.0),
             ),
           ),
           Padding(padding: EdgeInsets.all(25.0)),

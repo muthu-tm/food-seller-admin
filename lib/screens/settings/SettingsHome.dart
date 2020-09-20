@@ -1,6 +1,5 @@
 import 'package:chipchop_seller/screens/settings/StoreSettings.dart';
 import 'package:chipchop_seller/screens/settings/UserProfileSettings.dart';
-import 'package:chipchop_seller/screens/store/AddStoreHome.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 

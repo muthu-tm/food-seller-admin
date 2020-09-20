@@ -10,4 +10,6 @@ const store_profile_folder = "store_profile";
 const seller_profile_folder = "seller_profile";
 const store_offers_folder = "store_offers";
 
-const seller_app_name = "Uniques Food";
+const no_image_placeholder = "https://firebasestorage.googleapis.com/v0/b/fc-chipchop-test.appspot.com/o/products%2Fno-image-placeholder.png?alt=media&token=79d89977-7088-4af2-9437-d2a26e4b0ad8";
+
+const seller_app_name = "Uniques Seller";

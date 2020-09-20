@@ -1,5 +1,6 @@
 import 'package:chipchop_seller/screens/app/appBar.dart';
 import 'package:chipchop_seller/screens/app/sideDrawer.dart';
+import 'package:chipchop_seller/screens/products/ProductsHome.dart';
 import 'package:chipchop_seller/screens/settings/SettingsHome.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -26,10 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
       'TODO: Home',
       style: optionStyle,
     ),
-    Text(
-      'TODO: Products',
-      style: optionStyle,
-    ),
+    ProductsHome(),
     Text(
       'TODO: Sales',
       style: optionStyle,

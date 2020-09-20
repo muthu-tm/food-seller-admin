@@ -1,16 +1,22 @@
-import 'package:chipchop_seller/db/models/store_locations.dart';
-import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_seller/db/models/model.dart';
+import 'package:chipchop_seller/services/utils/constants.dart';
 part 'products.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Products extends Model {
-  static CollectionReference _storeCollRef = Model.db.collection("products");
+  static CollectionReference _storeCollRef =
+      Model.db.collection("chipchop_products");
 
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
+  @JsonKey(name: 'product_type', nullable: false)
+  String productType;
+  @JsonKey(name: 'product_category', defaultValue: "")
+  String productCategory;
+  @JsonKey(name: 'product_sub_category', defaultValue: "")
+  String productSubCategory;
   @JsonKey(name: 'name', defaultValue: "")
   String name;
   @JsonKey(name: 'short_details', defaultValue: "")
@@ -23,18 +29,40 @@ class Products extends Model {
   List<String> productImages;
   @JsonKey(name: 'weight')
   double weight;
+  @JsonKey(name: 'unit')
+  int unit;
   @JsonKey(name: 'org_price')
   double originalPrice;
   @JsonKey(name: 'offer', defaultValue: 0.00)
   double offer;
   @JsonKey(name: 'current_price')
   double currentPrice;
+  @JsonKey(name: 'is_available')
+  bool isAvailable;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)
   DateTime updatedAt;
 
   Products();
+
+  String getUnit() {
+    if (this.unit == null) return "";
+
+    if (this.unit == 0) {
+      return "Count";
+    } else if (this.unit == 1) {
+      return "Kg";
+    } else if (this.unit == 2) {
+      return "gram";
+    } else if (this.unit == 3) {
+      return "milli gram";
+    } else if (this.unit == 4) {
+      return "litre";
+    } else {
+      return "milli litre";
+    }
+  }
 
   List<String> getSmallProfilePicPath() {
     List<String> paths = [];
@@ -80,23 +108,53 @@ class Products extends Model {
     return getDocumentReference(getID()).snapshots();
   }
 
-  Future<Products> create(StoreLocations loc) async {
-    this.createdAt = DateTime.now();
-    this.updatedAt = DateTime.now();
+  String getProductImage() {
+    if (this.productImages.isEmpty) {
+      return no_image_placeholder.replaceFirst(
+          firebase_storage_path, image_kit_path + ik_medium_size);
+    } else {
+      if (this.productImages.first != null && this.productImages.first != "")
+        return this.productImages.first.replaceFirst(
+            firebase_storage_path, image_kit_path + ik_medium_size);
+      else
+        return no_image_placeholder.replaceFirst(
+          firebase_storage_path, image_kit_path + ik_medium_size);
+    }
+  }
 
-    WriteBatch bWrite = Model.db.batch();
+  Stream<QuerySnapshot> streamProducts(String storeID, String locID) {
+    try {
+      return getCollectionRef()
+          .where('store_uuid', isEqualTo: storeID)
+          .where('loc_uuid', isEqualTo: locID)
+          .snapshots();
+    } catch (err) {
+      throw err;
+    }
+  }
 
-    DocumentReference docRef = this.getCollectionRef().document();
-    this.uuid = docRef.documentID;
-    bWrite.setData(docRef, this.toJson());
+  Stream<QuerySnapshot> streamAvailableProducts(String storeID, String locID) {
+    try {
+      return getCollectionRef()
+          .where('store_uuid', isEqualTo: storeID)
+          .where('loc_uuid', isEqualTo: locID)
+          .where('is_available', isEqualTo: true)
+          .snapshots();
+    } catch (err) {
+      throw err;
+    }
+  }
 
-    DocumentReference locDocRef = getDocumentReference(this.uuid)
-        .collection("store_locations")
-        .document();
-
-    loc.uuid = locDocRef.documentID;
-    bWrite.setData(locDocRef, loc.toJson());
-    await bWrite.commit();
-    return this;
+  Stream<QuerySnapshot> streamUnAvailableProducts(
+      String storeID, String locID) {
+    try {
+      return getCollectionRef()
+          .where('store_uuid', isEqualTo: storeID)
+          .where('loc_uuid', isEqualTo: locID)
+          .where('is_available', isEqualTo: false)
+          .snapshots();
+    } catch (err) {
+      throw err;
+    }
   }
 }

@@ -5,6 +5,7 @@ import 'package:chipchop_seller/db/models/store_contacts.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/geopoint_data.dart';
 import 'package:chipchop_seller/db/models/store_user_access.dart';
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -67,5 +68,27 @@ class StoreLocations {
 
   DocumentReference getDocumentReference(String storeUUID, String locUUID) {
     return getCollectionRef(storeUUID).document(locUUID);
+  }
+
+  Future<List<StoreLocations>> getStoresWithLocation() async {
+    try {
+      List<StoreLocations> stores = [];
+
+      QuerySnapshot locsnap = await getGroupQuery()
+          .where('users', arrayContains: cachedLocalUser.getIntID())
+          .getDocuments();
+
+      if (locsnap.documents.isNotEmpty) {
+        for (var j = 0; j < locsnap.documents.length; j++) {
+          StoreLocations _sl =
+              StoreLocations.fromJson(locsnap.documents[j].data);
+          stores.add(_sl);
+        }
+      }
+
+      return stores;
+    } catch (err) {
+      throw err;
+    }
   }
 }

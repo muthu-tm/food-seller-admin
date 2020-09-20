@@ -170,8 +170,8 @@ class _LoginPageState extends State<LoginPage> {
                       width: 150.0,
                       height: 50.0,
                       decoration: BoxDecoration(
-                        color: CustomColors.sellerFadedButtonGreen,
-                        borderRadius: BorderRadius.circular(10.0),
+                        color: CustomColors.sellerBlue,
+                        borderRadius: BorderRadius.circular(5.0),
                       ),
                       child: Center(
                         child: Text(
