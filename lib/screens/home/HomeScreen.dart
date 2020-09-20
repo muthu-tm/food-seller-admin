@@ -29,11 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
     ProductsHome(),
     Text(
-      'TODO: Sales',
-      style: optionStyle,
-    ),
-    Text(
-      'TODO: Reports',
+      'TODO: Orders',
       style: optionStyle,
     ),
     SettingsHome(),
@@ -91,14 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: CustomColors.sellerBlue,
                 size: 30,
               ),
-              title: 'Sales'),
-          TabItem(
-              icon: Icon(
-                Icons.description,
-                color: CustomColors.sellerBlue,
-                size: 30,
-              ),
-              title: 'Reports'),
+              title: 'Orders'),
           TabItem(
               icon: Icon(
                 Icons.settings,

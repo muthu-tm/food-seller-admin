@@ -184,26 +184,6 @@ Widget sideDrawer(BuildContext context) {
         ),
         Divider(indent: 15.0, color: CustomColors.sellerBlue, thickness: 1.0),
         ExpansionTile(
-          title: Text(
-            "Orders",
-          ),
-          leading: Icon(Icons.content_copy, color: CustomColors.sellerBlue),
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                "Active Orders",
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-            ListTile(
-              title: Text(
-                "History",
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-          ],
-        ),
-        ExpansionTile(
           leading:
               Icon(Icons.supervisor_account, color: CustomColors.sellerBlue),
           title: Text(
@@ -227,16 +207,9 @@ Widget sideDrawer(BuildContext context) {
         ListTile(
           leading: Icon(Icons.assessment, color: CustomColors.sellerBlue),
           title: Text(
-            AppLocalizations.of(context).translate('sales'),
+            "Orders",
           ),
         ),
-        ListTile(
-          leading: Icon(Icons.description, color: CustomColors.sellerBlue),
-          title: Text(
-            AppLocalizations.of(context).translate('reports'),
-          ),
-        ),
-        Divider(indent: 15.0, color: CustomColors.sellerBlue, thickness: 1.0),
         ListTile(
           leading:
               Icon(Icons.notifications_active, color: CustomColors.sellerBlue),
