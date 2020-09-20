@@ -1,5 +1,7 @@
+import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/products/ActiveProductsScreen.dart';
 import 'package:chipchop_seller/screens/products/InActiveProductsHome.dart';
+import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
@@ -17,84 +19,7 @@ class _ProductsHomeState extends State<ProductsHome> {
         color: CustomColors.sellerLightGrey,
         child: Column(
           children: [
-            Card(
-              elevation: 5.0,
-              child: Container(
-                padding: EdgeInsets.all(5),
-                alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width,
-                height: 75,
-                child: ListTile(
-                  leading: Icon(
-                    Icons.adjust,
-                    size: 35,
-                    color: CustomColors.sellerBlue,
-                  ),
-                  title: Text(
-                    "Active Products",
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontFamily: 'Georgia',
-                      color: CustomColors.sellerBlack,
-                    ),
-                  ),
-                  trailing: Icon(
-                    Icons.keyboard_arrow_right,
-                    size: 35,
-                    color: CustomColors.sellerBlue,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ActiveProductsScreen(),
-                        settings:
-                            RouteSettings(name: '/settings/products/active'),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            Card(
-              elevation: 5.0,
-              child: Container(
-                padding: EdgeInsets.all(5),
-                alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width,
-                height: 75,
-                child: ListTile(
-                  leading: Icon(
-                    Icons.adjust,
-                    size: 35,
-                    color: CustomColors.sellerAlertRed,
-                  ),
-                  title: Text(
-                    "InActive Products",
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontFamily: 'Georgia',
-                      color: CustomColors.sellerBlack,
-                    ),
-                  ),
-                  trailing: Icon(
-                    Icons.keyboard_arrow_right,
-                    size: 35,
-                    color: CustomColors.sellerAlertRed,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => InActiveProductsScreen(),
-                        settings:
-                            RouteSettings(name: '/settings/products/inactive'),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
+            getStores(context),
             Padding(padding: EdgeInsets.all(40)),
             Card(
               elevation: 10,
@@ -136,6 +61,191 @@ class _ProductsHomeState extends State<ProductsHome> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget getStores(BuildContext context) {
+    return FutureBuilder<List<Store>>(
+      future: Store().getStoresWithLocation(),
+      builder: (BuildContext context, AsyncSnapshot<List<Store>> snapshot) {
+        Widget children;
+
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            children = Container(
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                ),
+                color: CustomColors.sellerWhite,
+              ),
+              child: Column(
+                children: [
+                  Card(
+                    elevation: 5.0,
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width,
+                      child: ExpansionTile(
+                        leading: Icon(
+                          Icons.adjust,
+                          size: 35,
+                          color: CustomColors.sellerBlue,
+                        ),
+                        title: Text(
+                          "Active Products",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontFamily: 'Georgia',
+                            color: CustomColors.sellerBlack,
+                          ),
+                        ),
+                        children: [
+                          ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            primary: false,
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              Store store = snapshot.data[index];
+                              return ListTile(
+                                leading: Icon(Icons.store,
+                                    color: CustomColors.sellerBlue),
+                                title: Text(
+                                  store.storeName,
+                                ),
+                                trailing: Icon(
+                                  Icons.keyboard_arrow_right,
+                                  size: 35,
+                                  color: CustomColors.sellerBlue,
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ActiveProductsScreen(store),
+                                      settings: RouteSettings(
+                                          name: '/settings/products/active'),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Card(
+                    elevation: 5.0,
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width,
+                      child: ExpansionTile(
+                        leading: Icon(
+                          Icons.adjust,
+                          size: 35,
+                          color: CustomColors.sellerAlertRed,
+                        ),
+                        title: Text(
+                          "InActive Products",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontFamily: 'Georgia',
+                            color: CustomColors.sellerBlack,
+                          ),
+                        ),
+                        children: [
+                          ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            primary: false,
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              Store store = snapshot.data[index];
+                              return ListTile(
+                                leading: Icon(Icons.store,
+                                    color: CustomColors.sellerBlue),
+                                title: Text(
+                                  store.storeName,
+                                ),
+                                trailing: Icon(
+                                  Icons.keyboard_arrow_right,
+                                  size: 35,
+                                  color: CustomColors.sellerBlue,
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          InActiveProductsScreen(store),
+                                      settings: RouteSettings(
+                                          name: '/settings/products/active'),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            children = Container(
+              color: CustomColors.sellerWhite,
+              height: 90,
+              child: Column(
+                children: <Widget>[
+                  Spacer(),
+                  Text(
+                    "No Store Available",
+                    style: TextStyle(
+                      color: CustomColors.sellerAlertRed,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(
+                    flex: 2,
+                  ),
+                  Text(
+                    "Add your Store Now!",
+                    style: TextStyle(
+                      color: CustomColors.sellerBlue,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Spacer(),
+                ],
+              ),
+            );
+          }
+        } else if (snapshot.hasError) {
+          children = Center(
+            child: Column(
+              children: AsyncWidgets.asyncError(),
+            ),
+          );
+        } else {
+          children = Center(
+            child: Column(
+              children: AsyncWidgets.asyncWaiting(),
+            ),
+          );
+        }
+        return children;
+      },
     );
   }
 }

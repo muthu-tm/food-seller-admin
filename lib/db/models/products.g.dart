@@ -19,7 +19,8 @@ Products _$ProductsFromJson(Map<String, dynamic> json) {
     ..originalPrice = (json['org_price'] as num)?.toDouble() ?? 0.00
     ..offer = (json['offer'] as num)?.toDouble() ?? 0.00
     ..currentPrice = (json['current_price'] as num)?.toDouble() ?? 0.00
-    ..isAvailable = json['is_available'] as bool
+    ..isAvailable = json['is_available'] as bool ?? true
+    ..isDeliverable= json['is_deliverable'] as bool ?? true
     ..createdAt = json['created_at'] == null
         ? null
         : DateTime.fromMillisecondsSinceEpoch(
@@ -50,6 +51,7 @@ Map<String, dynamic> _$ProductsToJson(Products instance) => <String, dynamic>{
       'offer': instance.offer ?? 0.00,
       'current_price': instance.currentPrice ?? 0.00,
       'is_available': instance.isAvailable ?? true,
+      'is_deliverable': instance.isDeliverable ?? true,
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
     };

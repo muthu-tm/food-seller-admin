@@ -9,6 +9,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class InActiveProductsScreen extends StatefulWidget {
+  InActiveProductsScreen(this.store);
+
+  final Store store;
   @override
   _InActiveProductsScreenState createState() => _InActiveProductsScreenState();
 }
@@ -21,120 +24,15 @@ class _InActiveProductsScreenState extends State<InActiveProductsScreen> {
       appBar: appBar(context),
       drawer: sideDrawer(context),
       body: SingleChildScrollView(
-        child: getStores(context),
+        child: getProductsByStoreLocation(context),
       ),
     );
   }
 
-  Widget getStores(BuildContext context) {
-    return FutureBuilder<List<Store>>(
-      future: Store().getStoresWithLocation(),
-      builder: (BuildContext context, AsyncSnapshot<List<Store>> snapshot) {
-        Widget children;
-
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            children = ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              primary: false,
-              itemCount: snapshot.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                Store store = snapshot.data[index];
-                return Container(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                    color: CustomColors.sellerWhite,
-                  ),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading: Text(
-                          store.storeName,
-                          style: TextStyle(
-                            fontFamily: "Georgia",
-                            fontWeight: FontWeight.bold,
-                            color: CustomColors.sellerGreen,
-                            fontSize: 17.0,
-                          ),
-                        ),
-                        trailing: IconButton(
-                          tooltip: "Generate Products Report",
-                          icon: Icon(
-                            Icons.print,
-                            size: 30,
-                            color: CustomColors.sellerBlue,
-                          ),
-                          onPressed: () async {},
-                        ),
-                      ),
-                      Divider(color: CustomColors.sellerBlue),
-                      Center(
-                        child: getProductsByStoreLocation(context, store),
-                      )
-                    ],
-                  ),
-                );
-              },
-            );
-          } else {
-            children = Container(
-              color: CustomColors.sellerWhite,
-              height: 90,
-              child: Column(
-                children: <Widget>[
-                  Spacer(),
-                  Text(
-                    "No Store Available",
-                    style: TextStyle(
-                      color: CustomColors.sellerAlertRed,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(
-                    flex: 2,
-                  ),
-                  Text(
-                    "Add your Store Now!",
-                    style: TextStyle(
-                      color: CustomColors.sellerBlue,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Spacer(),
-                ],
-              ),
-            );
-          }
-        } else if (snapshot.hasError) {
-          children = Center(
-            child: Column(
-              children: AsyncWidgets.asyncError(),
-            ),
-          );
-        } else {
-          children = Center(
-            child: Column(
-              children: AsyncWidgets.asyncWaiting(),
-            ),
-          );
-        }
-        return children;
-      },
-    );
-  }
-
-  Widget getProductsByStoreLocation(BuildContext context, Store store) {
+  Widget getProductsByStoreLocation(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream:
-          Products().streamUnAvailableProducts(store.uuid, store.location.uuid),
+          Products().streamUnAvailableProducts(widget.store.uuid, widget.store.location.uuid),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget children;
 

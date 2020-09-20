@@ -39,6 +39,8 @@ class Products extends Model {
   double currentPrice;
   @JsonKey(name: 'is_available')
   bool isAvailable;
+  @JsonKey(name: 'is_deliverable')
+  bool isDeliverable;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)
@@ -59,8 +61,10 @@ class Products extends Model {
       return "milli gram";
     } else if (this.unit == 4) {
       return "litre";
-    } else {
+    } else if (this.unit == 5) {
       return "milli litre";
+    } else {
+      return "Count";
     }
   }
 
