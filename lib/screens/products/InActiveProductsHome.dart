@@ -21,8 +21,10 @@ class _InActiveProductsScreenState extends State<InActiveProductsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomColors.sellerLightGrey,
-      appBar: appBar(context),
-      drawer: sideDrawer(context),
+      appBar: AppBar(
+        backgroundColor: CustomColors.sellerGreen,
+        title: Text("InActive Products"),
+      ),
       body: SingleChildScrollView(
         child: getProductsByStoreLocation(context),
       ),

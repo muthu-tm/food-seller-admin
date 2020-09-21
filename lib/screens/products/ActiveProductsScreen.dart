@@ -21,8 +21,10 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomColors.sellerLightGrey,
-      appBar: appBar(context),
-      drawer: sideDrawer(context),
+      appBar: AppBar(
+        backgroundColor: CustomColors.sellerGreen,
+        title: Text("Active Products"),
+      ),
       body: SingleChildScrollView(
         child: getProductsByStoreLocation(context),
       ),

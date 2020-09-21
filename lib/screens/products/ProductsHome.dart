@@ -1,5 +1,6 @@
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/products/ActiveProductsScreen.dart';
+import 'package:chipchop_seller/screens/products/AddProducts.dart';
 import 'package:chipchop_seller/screens/products/InActiveProductsHome.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
@@ -17,49 +18,7 @@ class _ProductsHomeState extends State<ProductsHome> {
       child: Container(
         height: MediaQuery.of(context).size.height,
         color: CustomColors.sellerLightGrey,
-        child: Column(
-          children: [
-            getStores(context),
-            Padding(padding: EdgeInsets.all(40)),
-            Card(
-              elevation: 10,
-              child: Container(
-                padding: EdgeInsets.all(5),
-                width: 200,
-                child: InkWell(
-                  splashColor: CustomColors.sellerGreen,
-                  onTap: () {
-                    print("Add Product");
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(5.0),
-                        child: Icon(
-                          Icons.add_circle,
-                          size: 35,
-                          color: CustomColors.sellerGreen,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text(
-                          "Add Product",
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontFamily: 'Georgia',
-                            color: CustomColors.sellerBlack,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
+        child: getStores(context),
       ),
     );
   }
@@ -82,6 +41,91 @@ class _ProductsHomeState extends State<ProductsHome> {
               ),
               child: Column(
                 children: [
+                  Card(
+                    elevation: 5.0,
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(5.0),
+                                child: Icon(
+                                  Icons.add_circle,
+                                  size: 35,
+                                  color: CustomColors.sellerGreen,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  "Add Product",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontFamily: 'Georgia',
+                                    color: CustomColors.sellerBlack,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Divider(color: CustomColors.sellerBlue),
+                          TextFormField(
+                            textAlign: TextAlign.center,
+                            autofocus: false,
+                            keyboardType: TextInputType.phone,
+                            decoration: InputDecoration(
+                              hintText: "Search from existing Products",
+                              fillColor: CustomColors.sellerWhite,
+                              filled: true,
+                              suffixIcon: Icon(
+                                Icons.search,
+                                color: CustomColors.sellerFadedButtonGreen,
+                                size: 35.0,
+                              ),
+                            ),
+                            onTap: () {
+                              showSearch(context: context, delegate: Search());
+                            },
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(10),
+                          ),
+                          RaisedButton.icon(
+                            padding: EdgeInsets.all(5),
+                            color: CustomColors.sellerBlue,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AddProduct(null),
+                                  settings: RouteSettings(
+                                      name: '/settings/products/add'),
+                                ),
+                              );
+                            },
+                            icon: Icon(
+                              Icons.add_circle,
+                              size: 30,
+                              color: CustomColors.sellerGreen,
+                            ),
+                            label: Text(
+                              "Add Product",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontFamily: 'Georgia',
+                                color: CustomColors.sellerLightGrey,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   Card(
                     elevation: 5.0,
                     child: Container(

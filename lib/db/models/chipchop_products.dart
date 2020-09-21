@@ -2,12 +2,12 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_seller/db/models/model.dart';
 import 'package:chipchop_seller/services/utils/constants.dart';
-part 'products.g.dart';
+part 'chipchop_products.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class Products extends Model {
+class ChipChopProducts extends Model {
   static CollectionReference _storeCollRef =
-      Model.db.collection("products");
+      Model.db.collection("chipchop_products");
 
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
@@ -21,10 +21,6 @@ class Products extends Model {
   String name;
   @JsonKey(name: 'short_details', defaultValue: "")
   String shortDetails;
-  @JsonKey(name: 'store_uuid', defaultValue: "")
-  String storeUUID;
-  @JsonKey(name: 'loc_uuid', defaultValue: "")
-  String locUUID;
   @JsonKey(name: 'product_images', defaultValue: [""])
   List<String> productImages;
   @JsonKey(name: 'weight')
@@ -41,12 +37,14 @@ class Products extends Model {
   bool isAvailable;
   @JsonKey(name: 'is_deliverable')
   bool isDeliverable;
+  @JsonKey(name: 'keywords', defaultValue: [""])
+  List<String> keywords;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)
   DateTime updatedAt;
 
-  Products();
+  ChipChopProducts();
 
   String getUnit() {
     if (this.unit == null) return "";
@@ -92,9 +90,9 @@ class Products extends Model {
     return paths;
   }
 
-  factory Products.fromJson(Map<String, dynamic> json) =>
-      _$ProductsFromJson(json);
-  Map<String, dynamic> toJson() => _$ProductsToJson(this);
+  factory ChipChopProducts.fromJson(Map<String, dynamic> json) =>
+      _$ChipChopProductsFromJson(json);
+  Map<String, dynamic> toJson() => _$ChipChopProductsToJson(this);
 
   CollectionReference getCollectionRef() {
     return _storeCollRef;
@@ -122,41 +120,24 @@ class Products extends Model {
             firebase_storage_path, image_kit_path + ik_medium_size);
       else
         return no_image_placeholder.replaceFirst(
-          firebase_storage_path, image_kit_path + ik_medium_size);
+            firebase_storage_path, image_kit_path + ik_medium_size);
     }
   }
 
-  Stream<QuerySnapshot> streamProducts(String storeID, String locID) {
+  Future<List<ChipChopProducts>> searchByKeyword(String key) async {
     try {
-      return getCollectionRef()
-          .where('store_uuid', isEqualTo: storeID)
-          .where('loc_uuid', isEqualTo: locID)
-          .snapshots();
-    } catch (err) {
-      throw err;
-    }
-  }
+      List<ChipChopProducts> products = [];
 
-  Stream<QuerySnapshot> streamAvailableProducts(String storeID, String locID) {
-    try {
-      return getCollectionRef()
-          .where('store_uuid', isEqualTo: storeID)
-          .where('loc_uuid', isEqualTo: locID)
-          .where('is_available', isEqualTo: true)
-          .snapshots();
-    } catch (err) {
-      throw err;
-    }
-  }
+      QuerySnapshot locsnap = await getCollectionRef()
+          .where('keywords', arrayContains: key)
+          .getDocuments();
 
-  Stream<QuerySnapshot> streamUnAvailableProducts(
-      String storeID, String locID) {
-    try {
-      return getCollectionRef()
-          .where('store_uuid', isEqualTo: storeID)
-          .where('loc_uuid', isEqualTo: locID)
-          .where('is_available', isEqualTo: false)
-          .snapshots();
+      for (var doc in locsnap.documents) {
+        ChipChopProducts prod = ChipChopProducts.fromJson(doc.data);
+        products.add(prod);
+      }
+
+      return products;
     } catch (err) {
       throw err;
     }
