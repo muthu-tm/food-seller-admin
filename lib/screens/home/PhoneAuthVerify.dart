@@ -157,7 +157,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
               child: Text(
                 AppLocalizations.of(context).translate('verify'),
                 style: TextStyle(
-                  color: CustomColors.sellerBlue,
+                  color: CustomColors.sellerGreen,
                   fontSize: 18.0,
                 ),
               ),
