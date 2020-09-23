@@ -2,6 +2,8 @@ import 'package:chipchop_seller/db/models/product_types.dart';
 import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'product_sub_categories.dart';
 part 'product_categories.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -70,5 +72,24 @@ class ProductCategories {
     }
 
     return categories;
+  }
+
+  Future<List<ProductSubCategories>> getSubCategories(String typeUUId, String cuuid) async {
+    try {
+      QuerySnapshot snap = await getDocumentReference(typeUUId, cuuid)
+              .collection("product_sub_categories").getDocuments();
+
+      List<ProductSubCategories> _c = [];
+      if (snap.documents.isNotEmpty) {
+        for (var i = 0; i < snap.documents.length; i++) {
+          ProductSubCategories _s = ProductSubCategories.fromJson(snap.documents[i].data);
+          _c.add(_s);
+        }
+      }
+
+      return _c;
+    } catch (err) {
+      throw err;
+    }
   }
 }

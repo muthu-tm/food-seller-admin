@@ -2,11 +2,14 @@ import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_seller/db/models/model.dart';
+
+import 'product_categories.dart';
 part 'product_types.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ProductTypes extends Model {
-  static CollectionReference _storeCollRef = Model.db.collection("product_types");
+  static CollectionReference _storeCollRef =
+      Model.db.collection("product_types");
 
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
@@ -53,5 +56,42 @@ class ProductTypes extends Model {
 
   Stream<QuerySnapshot> streamProductTypes() {
     return getCollectionRef().snapshots();
+  }
+
+  Future<List<ProductTypes>> getProductTypes() async {
+    try {
+      QuerySnapshot snap = await getCollectionRef().getDocuments();
+
+      List<ProductTypes> types = [];
+      if (snap.documents.isNotEmpty) {
+        for (var i = 0; i < snap.documents.length; i++) {
+          ProductTypes _s = ProductTypes.fromJson(snap.documents[i].data);
+          types.add(_s);
+        }
+      }
+
+      return types;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<List<ProductCategories>> getCategories(String uuid) async {
+    try {
+      QuerySnapshot snap = await getDocumentReference(uuid)
+              .collection("product_categories").getDocuments();
+
+      List<ProductCategories> _c = [];
+      if (snap.documents.isNotEmpty) {
+        for (var i = 0; i < snap.documents.length; i++) {
+          ProductCategories _s = ProductCategories.fromJson(snap.documents[i].data);
+          _c.add(_s);
+        }
+      }
+
+      return _c;
+    } catch (err) {
+      throw err;
+    }
   }
 }

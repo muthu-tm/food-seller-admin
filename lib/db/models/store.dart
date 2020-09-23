@@ -83,6 +83,26 @@ class Store extends Model {
         .snapshots();
   }
 
+  Future<List<Store>> getStoresForUser() async {
+    try {
+      QuerySnapshot snap = await getCollectionRef()
+          .where('users', arrayContains: cachedLocalUser.getIntID())
+          .getDocuments();
+
+      List<Store> stores = [];
+      if (snap.documents.isNotEmpty) {
+        for (var i = 0; i < snap.documents.length; i++) {
+          Store _s = Store.fromJson(snap.documents[i].data);
+          stores.add(_s);
+        }
+      }
+
+      return stores;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   Future<List<Store>> getStoresWithLocation() async {
     try {
       List<Store> stores = [];
@@ -100,7 +120,8 @@ class Store extends Model {
 
           if (locsnap.documents.isNotEmpty) {
             for (var j = 0; j < locsnap.documents.length; j++) {
-              StoreLocations _sl = StoreLocations.fromJson(locsnap.documents[j].data);
+              StoreLocations _sl =
+                  StoreLocations.fromJson(locsnap.documents[j].data);
               _s.location = _sl;
               stores.add(_s);
             }
@@ -110,6 +131,29 @@ class Store extends Model {
       }
 
       return stores;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<List<StoreLocations>> getLocations(String uuid) async {
+    try {
+      List<StoreLocations> locations = [];
+
+      QuerySnapshot locsnap = await getDocumentReference(uuid)
+          .collection("store_locations")
+          .where('users', arrayContains: cachedLocalUser.getIntID())
+          .getDocuments();
+
+      if (locsnap.documents.isNotEmpty) {
+        for (var j = 0; j < locsnap.documents.length; j++) {
+          StoreLocations _sl =
+              StoreLocations.fromJson(locsnap.documents[j].data);
+          locations.add(_sl);
+        }
+      }
+
+      return locations;
     } catch (err) {
       throw err;
     }

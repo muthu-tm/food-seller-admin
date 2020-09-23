@@ -49,48 +49,51 @@ class _ProductsHomeState extends State<ProductsHome> {
                       width: MediaQuery.of(context).size.width,
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(5.0),
-                                child: Icon(
-                                  Icons.add_circle_outline,
-                                  size: 35,
-                                  color: CustomColors.sellerGreen,
-                                ),
+                          ListTile(
+                            leading: Icon(
+                              Icons.add_circle_outline,
+                              size: 35,
+                              color: CustomColors.sellerBlue,
+                            ),
+                            title: Text(
+                              "Add Product",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontFamily: 'Georgia',
+                                color: CustomColors.sellerBlack,
                               ),
-                              Padding(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  "Add Product",
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontFamily: 'Georgia',
-                                    color: CustomColors.sellerBlack,
-                                  ),
-                                ),
-                              )
-                            ],
+                            ),
                           ),
                           Divider(color: CustomColors.sellerBlue),
                           TextFormField(
                             textAlign: TextAlign.center,
                             autofocus: false,
-                            keyboardType: TextInputType.phone,
+                            readOnly: true,
                             decoration: InputDecoration(
                               hintText: "Search & Load from existing Products",
                               fillColor: CustomColors.sellerWhite,
                               filled: true,
                               suffixIcon: Icon(
                                 Icons.search,
-                                color: CustomColors.sellerFadedButtonGreen,
+                                color: CustomColors.sellerBlue,
                                 size: 35.0,
                               ),
                             ),
                             onTap: () {
                               showSearch(context: context, delegate: Search());
                             },
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(10),
+                          ),
+                          Text(
+                            "OR",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontFamily: 'Georgia',
+                              color: CustomColors.sellerGrey,
+                            ),
                           ),
                           Padding(
                             padding: EdgeInsets.all(10),
@@ -114,7 +117,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                               color: CustomColors.sellerGreen,
                             ),
                             label: Text(
-                              "Add Product",
+                              "Add Custom Product",
                               style: TextStyle(
                                 fontSize: 16.0,
                                 fontFamily: 'Georgia',
