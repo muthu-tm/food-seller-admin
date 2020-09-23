@@ -55,7 +55,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                               Padding(
                                 padding: EdgeInsets.all(5.0),
                                 child: Icon(
-                                  Icons.add_circle,
+                                  Icons.add_circle_outline,
                                   size: 35,
                                   color: CustomColors.sellerGreen,
                                 ),
@@ -79,7 +79,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                             autofocus: false,
                             keyboardType: TextInputType.phone,
                             decoration: InputDecoration(
-                              hintText: "Search from existing Products",
+                              hintText: "Search & Load from existing Products",
                               fillColor: CustomColors.sellerWhite,
                               filled: true,
                               suffixIcon: Icon(

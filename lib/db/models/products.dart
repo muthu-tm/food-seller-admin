@@ -41,6 +41,8 @@ class Products extends Model {
   bool isAvailable;
   @JsonKey(name: 'is_deliverable')
   bool isDeliverable;
+  @JsonKey(name: 'keywords', defaultValue: [""])
+  List<String> keywords;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)

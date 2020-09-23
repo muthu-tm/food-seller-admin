@@ -15,8 +15,20 @@ class _AddProductState extends State<AddProduct> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<String> pImages = [];
   String pName = "";
+  String shortDetails = "";
+  String productType = "";
+  String productCategory = "";
+  String productSubCategory = "";
+  String storeUUID = "";
+  String locUUID = "";
+  double weight = 0.00;
+  int unit = 1;
+  double originalPrice = 0.00;
+  double offer = 0.00;
+  double currentPrice = 0.00;
+  bool isAvailable = true;
+  bool isDeliverable = true;
   List<String> keywords = [];
-  bool validKeyword = true;
 
   @override
   void initState() {

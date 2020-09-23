@@ -54,6 +54,8 @@ Map<String, dynamic> _$ChipChopProductsToJson(ChipChopProducts instance) =>
       'current_price': instance.currentPrice ?? 0.00,
       'is_available': instance.isAvailable ?? true,
       'is_deliverable': instance.isDeliverable ?? true,
+      'keywords':
+          instance.keywords == null ? [] : instance.keywords,
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
     };
