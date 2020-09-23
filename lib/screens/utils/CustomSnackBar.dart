@@ -24,7 +24,7 @@ class CustomSnackBar {
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 16.0,
-          color: CustomColors.sellerGreen,
+          color: CustomColors.sellerLightGrey,
           fontWeight: FontWeight.bold,
         ),
       ),

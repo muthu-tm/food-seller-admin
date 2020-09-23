@@ -174,7 +174,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('invalid_otp'), 2));
     } else {
-      CustomDialogs.actionWaiting(context, 'Verifying User');
+      CustomDialogs.actionWaiting(context);
       verifyOTPAndLogin(code.join());
     }
   }

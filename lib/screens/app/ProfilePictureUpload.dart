@@ -252,10 +252,8 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
 
   Future _uploadImage(String path) async {
     if (path != null) {
-      CustomDialogs.actionWaiting(context, "Checking..");
       File imageFile = await fixExifRotation(path);
-      Navigator.pop(context);
-      CustomDialogs.actionWaiting(context, "Uploading!");
+      CustomDialogs.actionWaiting(context);
       await Uploader().uploadImage(
         widget.type,
         widget.type == 0

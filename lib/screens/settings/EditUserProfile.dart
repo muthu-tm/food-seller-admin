@@ -336,7 +336,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
     final FormState form = _formKey.currentState;
 
     if (form.validate()) {
-      CustomDialogs.actionWaiting(context, "Updating YOU!");
+      CustomDialogs.actionWaiting(context);
       updatedUser['address'] = updatedAddress.toJson();
       var result = await _userController.updateUser(updatedUser);
 

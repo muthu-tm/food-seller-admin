@@ -270,7 +270,7 @@ class _LoginPageState extends State<LoginPage> {
           AppLocalizations.of(context).translate('enter_valid_phone'), 2));
       return;
     } else {
-      CustomDialogs.actionWaiting(context, 'Checking User');
+      CustomDialogs.actionWaiting(context);
 
       number = _nController.text;
       try {
@@ -357,7 +357,7 @@ class _LoginPageState extends State<LoginPage> {
 
     _smsVerificationCode = verificationId;
     Navigator.pop(context);
-    CustomDialogs.actionWaiting(context, 'Verifying User');
+    CustomDialogs.actionWaiting(context);
   }
 
   _verificationFailed(AuthException authException, BuildContext context) {

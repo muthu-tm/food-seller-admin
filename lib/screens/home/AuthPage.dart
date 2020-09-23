@@ -411,8 +411,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
   }
 
   login(User _user) async {
-    CustomDialogs.actionWaiting(
-        context, AppLocalizations.of(context).translate('logging_in'));
+    CustomDialogs.actionWaiting(context);
 
     var result = await _authController.signInWithMobileNumber(_user);
 

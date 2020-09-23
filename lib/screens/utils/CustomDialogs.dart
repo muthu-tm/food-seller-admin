@@ -53,63 +53,46 @@ class CustomDialogs {
         });
   }
 
-  static actionWaiting(BuildContext context, String actionName) {
-    AlertDialog alert = AlertDialog(
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Stack(
-            children: <Widget>[
-              Container(
-                width: 45,
-                height: 45,
-                alignment: Alignment.center,
-                child: ClipRRect(
-                  child: Image.asset(
-                    "images/icons/logo.png",
-                    height: 35,
-                    width: 35,
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 0,
-                left: 0,
-                child: SizedBox(
-                  width: 45,
-                  height: 45,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 3,
-                    backgroundColor: CustomColors.sellerBlue,
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(CustomColors.sellerGreen),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 5),
-            child: GradientText(
-              actionName,
-              size: 18.0,
-              gradient: LinearGradient(
-                colors: [
-                  CustomColors.sellerGreen,
-                  CustomColors.sellerBlue,
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  static actionWaiting(BuildContext context) {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
+      barrierColor: CustomColors.sellerLightGrey.withOpacity(0.7),
+      child: Container(
+        alignment: Alignment.center,
+        width: 50,
+        height: 50,
+        child: Stack(
+          children: <Widget>[
+            Container(
+              width: 45,
+              height: 45,
+              alignment: Alignment.center,
+              child: ClipRRect(
+                child: Image.asset(
+                  "images/icons/logo.png",
+                  height: 35,
+                  width: 35,
+                ),
+              ),
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              child: SizedBox(
+                width: 45,
+                height: 45,
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  backgroundColor: CustomColors.sellerBlue,
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(CustomColors.sellerGreen),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -135,8 +118,8 @@ class CustomDialogs {
                 Container(
                   child: Text(
                     description,
-                    style:
-                        TextStyle(color: CustomColors.sellerGreen, fontSize: 20.0),
+                    style: TextStyle(
+                        color: CustomColors.sellerGreen, fontSize: 20.0),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -149,8 +132,8 @@ class CustomDialogs {
               splashColor: CustomColors.sellerBlue,
               child: Text(
                 'NO',
-                style: TextStyle(
-                    color: CustomColors.sellerBlue, fontSize: 18.0),
+                style:
+                    TextStyle(color: CustomColors.sellerBlue, fontSize: 18.0),
                 textAlign: TextAlign.center,
               ),
               onPressed: noAction,

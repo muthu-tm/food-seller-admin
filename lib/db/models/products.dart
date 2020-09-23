@@ -6,8 +6,7 @@ part 'products.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Products extends Model {
-  static CollectionReference _storeCollRef =
-      Model.db.collection("products");
+  static CollectionReference _storeCollRef = Model.db.collection("products");
 
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
@@ -114,6 +113,19 @@ class Products extends Model {
     return getDocumentReference(getID()).snapshots();
   }
 
+  Future<void> create() async {
+    try {
+      DocumentReference docRef = getCollectionRef().document();
+      this.createdAt = DateTime.now();
+      this.updatedAt = DateTime.now();
+      this.uuid = docRef.documentID;
+
+      await docRef.setData(this.toJson());
+    } catch (err) {
+      throw err;
+    }
+  }
+
   String getProductImage() {
     if (this.productImages.isEmpty) {
       return no_image_placeholder.replaceFirst(
@@ -124,7 +136,7 @@ class Products extends Model {
             firebase_storage_path, image_kit_path + ik_medium_size);
       else
         return no_image_placeholder.replaceFirst(
-          firebase_storage_path, image_kit_path + ik_medium_size);
+            firebase_storage_path, image_kit_path + ik_medium_size);
     }
   }
 

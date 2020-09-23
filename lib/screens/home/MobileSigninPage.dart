@@ -257,8 +257,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           AppLocalizations.of(context).translate('secret_key_validation'), 2));
       return;
     } else {
-      CustomDialogs.actionWaiting(
-          context, AppLocalizations.of(context).translate('checking_user'));
+      CustomDialogs.actionWaiting(context);
       this.number = _phoneNumberController.text;
 
       var data = await User().getByID(countryCode.toString() + number);
@@ -338,8 +337,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
 
     _smsVerificationCode = verificationId;
     Navigator.pop(context);
-    CustomDialogs.actionWaiting(
-        context, AppLocalizations.of(context).translate('verify_user'));
+    CustomDialogs.actionWaiting(context);
   }
 
   _verificationFailed(AuthException authException, BuildContext context) {

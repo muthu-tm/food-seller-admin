@@ -28,12 +28,15 @@ class _ChangeSecretState extends State<ChangeSecret> {
             Text(AppLocalizations.of(context).translate('change_secret_key')),
         backgroundColor: CustomColors.sellerGreen,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerGreen,
+        backgroundColor: CustomColors.sellerBlue,
         onPressed: () async {
           _submit();
         },
+        icon: Icon(
+          Icons.done_all,
+          size: 35,
+        ),
         label: Text(
           AppLocalizations.of(context).translate('save'),
           style: TextStyle(
@@ -135,7 +138,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
     final FormState form = _formKey.currentState;
 
     if (form.validate()) {
-      CustomDialogs.actionWaiting(context, "Updating KEY!");
+      CustomDialogs.actionWaiting(context);
 
       var result = await UserController().updateSecretKey(secretKey);
       if (!result['is_success']) {
