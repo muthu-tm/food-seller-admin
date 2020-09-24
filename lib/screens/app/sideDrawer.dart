@@ -6,6 +6,7 @@ import 'package:chipchop_seller/screens/home/HomeScreen.dart';
 import 'package:chipchop_seller/screens/settings/UserProfileSettings.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
+import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:chipchop_seller/services/utils/hash_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
@@ -182,7 +183,7 @@ Widget sideDrawer(BuildContext context) {
             );
           },
         ),
-        Divider(indent: 15.0, color: CustomColors.sellerBlue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.sellerBlue, thickness: 1.0),
         ExpansionTile(
           leading:
               Icon(Icons.supervisor_account, color: CustomColors.sellerBlue),
@@ -217,7 +218,7 @@ Widget sideDrawer(BuildContext context) {
             "Notifications",
           ),
         ),
-        Divider(indent: 15.0, color: CustomColors.sellerBlue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.sellerBlue, thickness: 1.0),
         ListTile(
           leading:
               Icon(Icons.store_mall_directory, color: CustomColors.sellerBlue),
@@ -249,7 +250,7 @@ Widget sideDrawer(BuildContext context) {
             );
           },
         ),
-        Divider(indent: 15.0, color: CustomColors.sellerBlue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.sellerBlue, thickness: 1.0),
         ListTile(
           leading: Icon(Icons.headset_mic, color: CustomColors.sellerBlue),
           title: Text(
@@ -287,8 +288,8 @@ Widget sideDrawer(BuildContext context) {
             );
           }, () => Navigator.pop(context, false)),
         ),
+        Divider(color: CustomColors.sellerBlue, thickness: 1.0),
         Container(
-          color: CustomColors.sellerGreen,
           child: AboutListTile(
             dense: true,
             applicationIcon: Container(
@@ -305,39 +306,18 @@ Widget sideDrawer(BuildContext context) {
                 ),
               ),
             ),
-            applicationName: 'ChipChop Seller',
+            applicationName: seller_app_name,
             applicationLegalese:
                 AppLocalizations.of(context).translate('copyright'),
             child: ListTile(
-              leading: RichText(
+              leading: Text(
+                seller_app_name,
                 textAlign: TextAlign.justify,
-                text: TextSpan(
-                  text: '',
-                  style: TextStyle(
-                    color: CustomColors.sellerFadedPurple,
-                    fontFamily: 'Georgia',
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'ChipChop',
-                      style: TextStyle(
-                        color: CustomColors.sellerBlue,
-                        fontFamily: 'Georgia',
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' Seller',
-                      style: TextStyle(
-                        color: CustomColors.sellerBlue,
-                        fontFamily: 'Georgia',
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                style: TextStyle(
+                  color: CustomColors.sellerGreen,
+                  fontFamily: 'Georgia',
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
