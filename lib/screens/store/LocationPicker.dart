@@ -1,7 +1,6 @@
 import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/geopoint_data.dart';
 import 'package:chipchop_seller/db/models/store.dart';
-import 'package:chipchop_seller/db/models/store_locations.dart';
 import 'package:chipchop_seller/screens/home/HomeScreen.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
@@ -11,10 +10,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationPicker extends StatefulWidget {
-  LocationPicker(this.store, this.loc);
+  LocationPicker(this.store);
 
   final Store store;
-  final StoreLocations loc;
   @override
   State createState() => LocationPickerState();
 }
@@ -33,7 +31,7 @@ class LocationPickerState extends State<LocationPicker> {
   @override
   void initState() {
     super.initState();
-    this.searchKey = widget.loc.address.pincode;
+    this.searchKey = widget.store.address.pincode;
   }
 
   @override
@@ -57,9 +55,9 @@ class LocationPickerState extends State<LocationPicker> {
             );
             return;
           }
-          widget.loc.geoPoint = geoData;
+          widget.store.geoPoint = geoData;
           try {
-            widget.store.create(widget.loc);
+            widget.store.create();
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (BuildContext context) => HomeScreen(),

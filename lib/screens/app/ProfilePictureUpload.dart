@@ -126,7 +126,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                                 onPressed: () async {
                                   String tempPath =
                                       (await getTemporaryDirectory()).path;
-                                  String filePath = '$tempPath/ifin_image.png';
+                                  String filePath = '$tempPath/chipchop_image.png';
                                   if (File(filePath).existsSync())
                                     await File(filePath).delete();
                                   await _showCamera(filePath);

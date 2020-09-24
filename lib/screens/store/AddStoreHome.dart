@@ -94,7 +94,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
               return;
             }
             Store store = Store();
-            StoreLocations loc = StoreLocations();
             StoreContacts contacts = StoreContacts();
             contacts.contactName = cachedLocalUser.firstName;
             contacts.contactNumber = cachedLocalUser.mobileNumber;
@@ -105,28 +104,27 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             store.storeName = this.storeName;
             store.ownedBy = this.ownedBy;
             store.users = [cachedLocalUser.getIntID()];
-            loc.availProducts = this.availProducts;
-            loc.availProductCategories = this.availProductCategories;
-            loc.availProductSubCategories = this.availProductSubCategories;
-            loc.activeFrom = activeFrom;
-            loc.activeTill = activeTill;
-            loc.locationName = storeName;
-            loc.address = sAddress;
-            loc.workingDays = workingDays;
-            loc.contacts = [contacts];
-            loc.deliveryDetails = [DeliveryDetails()];
+            store.availProducts = this.availProducts;
+            store.availProductCategories = this.availProductCategories;
+            store.availProductSubCategories = this.availProductSubCategories;
+            store.activeFrom = activeFrom;
+            store.activeTill = activeTill;
+            store.address = sAddress;
+            store.workingDays = workingDays;
+            store.contacts = [contacts];
+            store.deliveryDetails = [DeliveryDetails()];
 
             StoreUserAccess userAccess = StoreUserAccess();
             userAccess.positionName = "Owner";
             userAccess.userNumber = cachedLocalUser.getIntID();
             userAccess.accessLevel = [0];
-            loc.users = [cachedLocalUser.getIntID()];
-            loc.usersAccess = [userAccess];
+            store.users = [cachedLocalUser.getIntID()];
+            store.usersAccess = [userAccess];
 
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => LocationPicker(store, loc),
+                builder: (context) => LocationPicker(store),
                 settings: RouteSettings(name: '/settings/store/add/location'),
               ),
             );
