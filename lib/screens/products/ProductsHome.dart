@@ -28,7 +28,6 @@ class _ProductsHomeState extends State<ProductsHome> {
       future: Store().getStoresForUser(),
       builder: (BuildContext context, AsyncSnapshot<List<Store>> snapshot) {
         Widget children;
-
         if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
             children = Container(

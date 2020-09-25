@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/db/models/store.dart';
+import 'package:chipchop_seller/screens/products/ProductDetailsScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,7 +47,14 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
 
                 return InkWell(
                   onTap: () {
-                    print("Products Open");
+                    Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductDetailsScreen(product),
+                                  settings: RouteSettings(
+                                      name: '/settings/products/add'),
+                                ),
+                              );
                   },
                   child: Container(
                     padding: EdgeInsets.only(top: 20),
