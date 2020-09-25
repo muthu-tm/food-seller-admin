@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/db/models/store.dart';
-import 'package:chipchop_seller/screens/app/appBar.dart';
-import 'package:chipchop_seller/screens/app/sideDrawer.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,9 +23,7 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
         backgroundColor: CustomColors.sellerGreen,
         title: Text("Active Products"),
       ),
-      body: SingleChildScrollView(
-        child: getProductsByStoreLocation(context),
-      ),
+      body: getProductsByStoreLocation(context),
     );
   }
 
@@ -40,82 +36,87 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
 
         if (snapshot.hasData) {
           if (snapshot.data.documents.isNotEmpty) {
-            children = ListView.separated(
-              scrollDirection: Axis.vertical,
+            children = GridView.count(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
               shrinkWrap: true,
-              primary: true,
-              itemCount: snapshot.data.documents.length,
-              separatorBuilder: (BuildContext context, int index) => Divider(),
-              itemBuilder: (BuildContext context, int index) {
+              mainAxisSpacing: 10,
+              children: List.generate(snapshot.data.documents.length, (index) {
                 Products product =
                     Products.fromJson(snapshot.data.documents[index].data);
+
                 return InkWell(
                   onTap: () {
                     print("Products Open");
                   },
                   child: Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.only(top: 20),
                     color: CustomColors.sellerWhite,
                     height: 100,
-                    width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
-                    child: Row(
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: product.getProductImage(),
-                          imageBuilder: (context, imageProvider) => Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: product.getProductImage(),
+                            imageBuilder: (context, imageProvider) => Container(
+                              width: 125,
+                              height: 105,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                                shape: BoxShape.rectangle,
+                                image: DecorationImage(
+                                    fit: BoxFit.fill, image: imageProvider),
                               ),
-                              shape: BoxShape.rectangle,
-                              image: DecorationImage(
-                                  fit: BoxFit.fill, image: imageProvider),
                             ),
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) =>
+                                    CircularProgressIndicator(
+                                        value: downloadProgress.progress),
+                            errorWidget: (context, url, error) => Icon(
+                              Icons.error,
+                              size: 35,
+                            ),
+                            fadeOutDuration: Duration(seconds: 1),
+                            fadeInDuration: Duration(seconds: 2),
                           ),
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) =>
-                                  CircularProgressIndicator(
-                                      value: downloadProgress.progress),
-                          errorWidget: (context, url, error) => Icon(
-                            Icons.error,
-                            size: 35,
-                          ),
-                          fadeOutDuration: Duration(seconds: 1),
-                          fadeInDuration: Duration(seconds: 2),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(5),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                product.name,
-                                style: TextStyle(
-                                  fontFamily: 'Georgia',
-                                  color: CustomColors.sellerBlue,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
+                          Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    product.name,
+                                    style: TextStyle(
+                                      fontFamily: 'Georgia',
+                                      color: CustomColors.sellerBlue,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                product.originalPrice.toString(),
-                                style: TextStyle(
-                                  color: CustomColors.sellerBlue,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.bold,
+                                Center(
+                                  child: Text(
+                                    "${product.weight} ${product.getUnit()} - Rs. ${product.originalPrice.toString()}",
+                                    style: TextStyle(
+                                      color: CustomColors.sellerBlue,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 );
-              },
+              }),
             );
           } else {
             children = Container(
