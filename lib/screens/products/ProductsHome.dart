@@ -25,7 +25,7 @@ class _ProductsHomeState extends State<ProductsHome> {
 
   Widget getStores(BuildContext context) {
     return FutureBuilder<List<Store>>(
-      future: Store().getStoresWithLocation(),
+      future: Store().getStoresForUser(),
       builder: (BuildContext context, AsyncSnapshot<List<Store>> snapshot) {
         Widget children;
 
@@ -161,7 +161,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                                 leading: Icon(Icons.store,
                                     color: CustomColors.sellerBlue),
                                 title: Text(
-                                  store.storeName,
+                                  store.name
                                 ),
                                 trailing: Icon(
                                   Icons.keyboard_arrow_right,
@@ -218,7 +218,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                                 leading: Icon(Icons.store,
                                     color: CustomColors.sellerBlue),
                                 title: Text(
-                                  store.storeName,
+                                  store.name,
                                 ),
                                 trailing: Icon(
                                   Icons.keyboard_arrow_right,

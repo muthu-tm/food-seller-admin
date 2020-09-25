@@ -100,7 +100,7 @@ class _StoreSettingsState extends State<StoreSettings> {
                           Column(
                             children: [
                               Text(
-                                store.storeName,
+                                store.name,
                                 style: TextStyle(
                                   color: CustomColors.sellerBlue,
                                   fontSize: 18.0,

@@ -29,8 +29,7 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
 
   Widget getProductsByStoreLocation(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Products().streamAvailableProducts(
-          widget.store.uuid, widget.store.location.uuid),
+      stream: Products().streamAvailableProducts(widget.store.uuid),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget children;
 

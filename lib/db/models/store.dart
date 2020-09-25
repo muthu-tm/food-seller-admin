@@ -1,4 +1,3 @@
-import 'package:chipchop_seller/db/models/store_locations.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -20,7 +19,7 @@ class Store extends Model {
   @JsonKey(name: 'owned_by', defaultValue: "")
   String ownedBy;
   @JsonKey(name: 'store_name', defaultValue: "")
-  String storeName;
+  String name;
   @JsonKey(name: 'geo_point', defaultValue: "")
   GeoPointData geoPoint;
   @JsonKey(name: 'avail_products')
@@ -54,8 +53,6 @@ class Store extends Model {
   @JsonKey(name: 'updated_at', nullable: true)
   DateTime updatedAt;
 
-  StoreLocations location;
-
   Store();
 
   String getMediumProfilePicPath() {
@@ -64,8 +61,8 @@ class Store extends Model {
           .storeProfile
           .replaceFirst(firebase_storage_path, image_kit_path + ik_medium_size);
     else
-        return no_image_placeholder.replaceFirst(
-            firebase_storage_path, image_kit_path + ik_medium_size);
+      return no_image_placeholder.replaceFirst(
+          firebase_storage_path, image_kit_path + ik_medium_size);
   }
 
   factory Store.fromJson(Map<String, dynamic> json) => _$StoreFromJson(json);
@@ -121,62 +118,6 @@ class Store extends Model {
       }
 
       return stores;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  Future<List<Store>> getStoresWithLocation() async {
-    try {
-      List<Store> stores = [];
-
-      QuerySnapshot snap = await getCollectionRef()
-          .where('users', arrayContains: cachedLocalUser.getIntID())
-          .getDocuments();
-      if (snap.documents.isNotEmpty) {
-        for (var i = 0; i < snap.documents.length; i++) {
-          Store _s = Store.fromJson(snap.documents[i].data);
-          QuerySnapshot locsnap = await getDocumentReference(_s.uuid)
-              .collection("store_locations")
-              .where('users', arrayContains: cachedLocalUser.getIntID())
-              .getDocuments();
-
-          if (locsnap.documents.isNotEmpty) {
-            for (var j = 0; j < locsnap.documents.length; j++) {
-              StoreLocations _sl =
-                  StoreLocations.fromJson(locsnap.documents[j].data);
-              _s.location = _sl;
-              stores.add(_s);
-            }
-          }
-          // stores.add(_s);
-        }
-      }
-
-      return stores;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  Future<List<StoreLocations>> getLocations(String uuid) async {
-    try {
-      List<StoreLocations> locations = [];
-
-      QuerySnapshot locsnap = await getDocumentReference(uuid)
-          .collection("store_locations")
-          .where('users', arrayContains: cachedLocalUser.getIntID())
-          .getDocuments();
-
-      if (locsnap.documents.isNotEmpty) {
-        for (var j = 0; j < locsnap.documents.length; j++) {
-          StoreLocations _sl =
-              StoreLocations.fromJson(locsnap.documents[j].data);
-          locations.add(_sl);
-        }
-      }
-
-      return locations;
     } catch (err) {
       throw err;
     }

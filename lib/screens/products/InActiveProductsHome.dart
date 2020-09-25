@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/db/models/store.dart';
-import 'package:chipchop_seller/screens/app/appBar.dart';
-import 'package:chipchop_seller/screens/app/sideDrawer.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -34,7 +32,7 @@ class _InActiveProductsScreenState extends State<InActiveProductsScreen> {
   Widget getProductsByStoreLocation(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream:
-          Products().streamUnAvailableProducts(widget.store.uuid, widget.store.location.uuid),
+          Products().streamUnAvailableProducts(widget.store.uuid),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget children;
 

@@ -163,7 +163,7 @@ class LocationPickerState extends State<LocationPicker> {
         markerId: MarkerId(hashID),
         position: latlang,
         infoWindow: InfoWindow(
-          title: "${widget.store.storeName}",
+          title: "${widget.store.name}",
           //  snippet: '5 Star Rating',
         ),
         icon: BitmapDescriptor.defaultMarker,

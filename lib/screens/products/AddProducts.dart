@@ -10,7 +10,6 @@ import '../../db/models/product_categories.dart';
 import '../../db/models/product_sub_categories.dart';
 import '../../db/models/product_types.dart';
 import '../../db/models/store.dart';
-import '../../db/models/store_locations.dart';
 
 class AddProduct extends StatefulWidget {
   AddProduct(this.product);
@@ -27,7 +26,6 @@ class _AddProductState extends State<AddProduct> {
   TextEditingController priceController = TextEditingController();
 
   Map<String, String> _stores = {"0": "Choose your Store"};
-  Map<String, String> _locations = {"0": "Choose your Branch"};
   Map<String, String> _types = {"0": "Choose Product Type"};
   Map<String, String> _categories = {"0": "Choose Product Category"};
   Map<String, String> _subcategories = {"0": "Choose Product SubCategory"};
@@ -41,7 +39,6 @@ class _AddProductState extends State<AddProduct> {
   };
 
   String _selectedStore = "0";
-  String _selectedLocation = "0";
   String _selectedType = "0";
   String _selectedCategory = "0";
   String _selectedSubCategory = "0";
@@ -53,8 +50,7 @@ class _AddProductState extends State<AddProduct> {
   String productType = "";
   String productCategory = "";
   String productSubCategory = "";
-  String storeUUID = "";
-  String locUUID = "";
+  String storeID = "";
   double weight = 0.00;
   int unit = 0;
   double originalPrice = 0.00;
@@ -142,8 +138,7 @@ class _AddProductState extends State<AddProduct> {
         _p.offer = offer;
         _p.isAvailable = true;
         _p.isDeliverable = true;
-        _p.locUUID = _selectedLocation == "0" ? "" : _selectedLocation;
-        _p.storeUUID = _selectedStore;
+        _p.storeID = _selectedStore;
         _p.weight = weight;
         _p.unit = int.parse(_selectedUnit);
         _p.productType = _selectedType == "0" ? "" : _selectedType;
@@ -201,43 +196,6 @@ class _AddProductState extends State<AddProduct> {
                 ).toList(),
                 onChanged: onStoreDropdownItem,
                 value: _selectedStore,
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.branding_watermark,
-                size: 35,
-                color: CustomColors.sellerBlue,
-              ),
-              title: Text(
-                "Branch",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontFamily: 'Georgia',
-                  color: CustomColors.sellerBlack,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Text(""),
-              title: DropdownButton<String>(
-                isExpanded: true,
-                items: _locations.entries.map(
-                  (f) {
-                    return DropdownMenuItem<String>(
-                      value: f.key,
-                      child: Text(f.value),
-                    );
-                  },
-                ).toList(),
-                onChanged: (uuid) {
-                  setState(
-                    () {
-                      _selectedLocation = uuid;
-                    },
-                  );
-                },
-                value: _selectedLocation,
               ),
             ),
             ListTile(
@@ -704,7 +662,7 @@ class _AddProductState extends State<AddProduct> {
     if (stores.length > 0) {
       stores.forEach(
         (b) {
-          storeList[b.uuid] = b.storeName;
+          storeList[b.uuid] = b.name;
         },
       );
 
@@ -735,37 +693,11 @@ class _AddProductState extends State<AddProduct> {
   }
 
   onStoreDropdownItem(String uuid) async {
-    if (uuid == "0") {
-      setState(
-        () {
-          _selectedStore = uuid;
-        },
-      );
-      return;
-    }
-
-    List<StoreLocations> branches = await Store().getLocations(uuid);
-    Map<String, String> branchList = Map();
-    if (branches.length > 0) {
-      branches.forEach(
-        (b) {
-          branchList[b.uuid] = b.locationName;
-        },
-      );
-
-      setState(
-        () {
-          _selectedStore = uuid;
-          _locations = _locations..addAll(branchList);
-        },
-      );
-    } else {
-      setState(
-        () {
-          _selectedStore = uuid;
-        },
-      );
-    }
+    setState(
+      () {
+        _selectedStore = uuid;
+      },
+    );
   }
 
   onTypesDropdownItem(String uuid) async {
@@ -814,7 +746,7 @@ class _AddProductState extends State<AddProduct> {
     }
 
     List<ProductSubCategories> subCategories =
-        await ProductCategories().getSubCategories(_selectedType, uuid);
+        await ProductSubCategories().getSubCategoriesByIDs([uuid]);
     Map<String, String> scList = Map();
     if (subCategories.length > 0) {
       subCategories.forEach(
