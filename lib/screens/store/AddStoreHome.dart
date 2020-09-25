@@ -6,7 +6,6 @@ import 'package:chipchop_seller/db/models/product_sub_categories.dart';
 import 'package:chipchop_seller/db/models/product_types.dart';
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/db/models/store_contacts.dart';
-import 'package:chipchop_seller/db/models/store_locations.dart';
 import 'package:chipchop_seller/db/models/store_user_access.dart';
 import 'package:chipchop_seller/screens/store/LocationPicker.dart';
 import 'package:chipchop_seller/screens/utils/AddressWidget.dart';
@@ -101,7 +100,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             contacts.isActive = true;
             contacts.isVerfied = true;
 
-            store.storeName = this.storeName;
+            store.name = this.storeName;
             store.ownedBy = this.ownedBy;
             store.users = [cachedLocalUser.getIntID()];
             store.availProducts = this.availProducts;
