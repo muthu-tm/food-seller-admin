@@ -746,7 +746,7 @@ class _AddProductState extends State<AddProduct> {
     }
 
     List<ProductSubCategories> subCategories =
-        await ProductCategories().getSubCategories(_selectedType, uuid);
+        await ProductSubCategories().getSubCategoriesByIDs([uuid]);
     Map<String, String> scList = Map();
     if (subCategories.length > 0) {
       subCategories.forEach(
