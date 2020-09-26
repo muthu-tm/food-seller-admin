@@ -48,13 +48,12 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                 return InkWell(
                   onTap: () {
                     Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProductDetailsScreen(product),
-                                  settings: RouteSettings(
-                                      name: '/settings/products/add'),
-                                ),
-                              );
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductDetailsScreen(product),
+                        settings: RouteSettings(name: '/settings/products/add'),
+                      ),
+                    );
                   },
                   child: Container(
                     padding: EdgeInsets.only(top: 20),
@@ -64,30 +63,34 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                     child: Center(
                       child: Column(
                         children: [
-                          CachedNetworkImage(
-                            imageUrl: product.getProductImage(),
-                            imageBuilder: (context, imageProvider) => Container(
-                              width: 125,
-                              height: 105,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10.0),
+                          Hero(
+                            tag: "${product.uuid}",
+                            child: CachedNetworkImage(
+                              imageUrl: product.getProductImage(),
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                width: 125,
+                                height: 105,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.0),
+                                  ),
+                                  shape: BoxShape.rectangle,
+                                  image: DecorationImage(
+                                      fit: BoxFit.fill, image: imageProvider),
                                 ),
-                                shape: BoxShape.rectangle,
-                                image: DecorationImage(
-                                    fit: BoxFit.fill, image: imageProvider),
                               ),
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) =>
+                                      CircularProgressIndicator(
+                                          value: downloadProgress.progress),
+                              errorWidget: (context, url, error) => Icon(
+                                Icons.error,
+                                size: 35,
+                              ),
+                              fadeOutDuration: Duration(seconds: 1),
+                              fadeInDuration: Duration(seconds: 2),
                             ),
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) =>
-                                    CircularProgressIndicator(
-                                        value: downloadProgress.progress),
-                            errorWidget: (context, url, error) => Icon(
-                              Icons.error,
-                              size: 35,
-                            ),
-                            fadeOutDuration: Duration(seconds: 1),
-                            fadeInDuration: Duration(seconds: 2),
                           ),
                           Padding(
                             padding: EdgeInsets.all(5),
