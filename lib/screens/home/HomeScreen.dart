@@ -1,5 +1,6 @@
 import 'package:chipchop_seller/screens/app/appBar.dart';
 import 'package:chipchop_seller/screens/app/sideDrawer.dart';
+import 'package:chipchop_seller/screens/home/HomeScreenStoreWidget.dart';
 import 'package:chipchop_seller/screens/products/ProductsHome.dart';
 import 'package:chipchop_seller/screens/settings/SettingsHome.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
@@ -23,10 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
       color: CustomColors.sellerGreen);
 
   static List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'TODO: Home',
-      style: optionStyle,
-    ),
+    HomeScreenStoreWidget(),
     ProductsHome(),
     Text(
       'TODO: Orders',

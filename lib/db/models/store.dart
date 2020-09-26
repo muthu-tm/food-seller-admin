@@ -38,8 +38,8 @@ class Store extends Model {
   Address address;
   @JsonKey(name: 'is_active', defaultValue: true)
   bool isActive;
-  @JsonKey(name: 'store_profile', defaultValue: "")
-  String storeProfile;
+  @JsonKey(name: 'store_images', defaultValue: [""])
+  List<String> storeImages;
   @JsonKey(name: 'users')
   List<int> users;
   @JsonKey(name: 'users_access')
@@ -55,14 +55,46 @@ class Store extends Model {
 
   Store();
 
-  String getMediumProfilePicPath() {
-    if (this.storeProfile != null && this.storeProfile != "")
-      return this
-          .storeProfile
-          .replaceFirst(firebase_storage_path, image_kit_path + ik_medium_size);
-    else
-      return no_image_placeholder.replaceFirst(
-          firebase_storage_path, image_kit_path + ik_medium_size);
+  List<String> getStoreImages() {
+    if (this.storeImages.isEmpty) {
+      return [
+        no_image_placeholder.replaceFirst(
+            firebase_storage_path, image_kit_path + ik_medium_size)
+      ];
+    } else {
+      if (this.storeImages.first != null && this.storeImages.first != "") {
+        List<String> images = [];
+        for (var img in this.storeImages) {
+          images.add(img.replaceFirst(
+              firebase_storage_path, image_kit_path + ik_medium_size));
+        }
+        return images;
+      } else
+        return [
+          no_image_placeholder.replaceFirst(
+              firebase_storage_path, image_kit_path + ik_medium_size)
+        ];
+    }
+  }
+
+  List<String> getStoreOriginalImages() {
+    if (this.storeImages.isEmpty) {
+      return [
+        no_image_placeholder.replaceFirst(firebase_storage_path, image_kit_path)
+      ];
+    } else {
+      if (this.storeImages.first != null && this.storeImages.first != "") {
+        List<String> images = [];
+        for (var img in this.storeImages) {
+          images.add(img.replaceFirst(firebase_storage_path, image_kit_path));
+        }
+        return images;
+      } else
+        return [
+          no_image_placeholder.replaceFirst(
+              firebase_storage_path, image_kit_path)
+        ];
+    }
   }
 
   factory Store.fromJson(Map<String, dynamic> json) => _$StoreFromJson(json);

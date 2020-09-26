@@ -73,7 +73,7 @@ class _StoreSettingsState extends State<StoreSettings> {
                       Row(
                         children: [
                           CachedNetworkImage(
-                            imageUrl: store.getMediumProfilePicPath(),
+                            imageUrl: store.getStoreImages().first,
                             imageBuilder: (context, imageProvider) => Container(
                               width: MediaQuery.of(context).size.width * 0.45,
                               height: 140,

@@ -1,6 +1,7 @@
 import 'package:chipchop_seller/db/models/model.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/user_preferences.dart';
+import 'package:chipchop_seller/db/models/user_locations.dart';
 import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,6 +41,8 @@ class User extends Model {
   int deactivatedAt;
   @JsonKey(name: 'preferences')
   UserPreferences preferences;
+  @JsonKey(name: 'primary_location')
+  UserLocations primaryLocation;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)
