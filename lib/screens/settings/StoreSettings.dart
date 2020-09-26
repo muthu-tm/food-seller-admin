@@ -60,7 +60,7 @@ class _StoreSettingsState extends State<StoreSettings> {
               itemCount: snapshot.data.documents.length,
               itemBuilder: (BuildContext context, int index) {
                 Store store =
-                    Store.fromJson(snapshot.data.documents.first.data);
+                    Store.fromJson(snapshot.data.documents[index].data);
                 return Container(
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
