@@ -69,7 +69,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         height: 200,
                         child: Text(
                           product.shortDetails,
-                          style: TextStyle(height: 1.5),
+                          style: TextStyle(
+                              height: 1.5, color: CustomColors.sellerBlack, fontFamily: 'Georgia'),
                         ),
                       ),
                     ),
