@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
     return widget.isNewScaffold
         ? Scaffold(
             key: _scaffoldKey,
-            backgroundColor: CustomColors.sellerLightGrey,
+            backgroundColor: CustomColors.lightGrey,
             body: Center(
               child: SingleChildScrollView(
                 child: _getBody(),
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: <Widget>[
           Card(
-            color: CustomColors.sellerGreen,
+            color: CustomColors.green,
             elevation: 2.0,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0)),
@@ -105,15 +105,15 @@ class _LoginPageState extends State<LoginPage> {
                           prefixText: " +91 ",
                           prefixStyle: TextStyle(
                             fontSize: 16.0,
-                            color: CustomColors.sellerGreen,
+                            color: CustomColors.green,
                           ),
                           hintText: AppLocalizations.of(context)
                               .translate('mobile_number'),
-                          fillColor: CustomColors.sellerWhite,
+                          fillColor: CustomColors.white,
                           filled: true,
                           suffixIcon: Icon(
                             Icons.phone_android,
-                            color: CustomColors.sellerFadedButtonGreen,
+                            color: CustomColors.lightGreen,
                             size: 35.0,
                           ),
                         ),
@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: <Widget>[
                       Icon(
                         Icons.info,
-                        color: CustomColors.sellerWhite,
+                        color: CustomColors.white,
                         size: 20.0,
                       ),
                       SizedBox(width: 5.0),
@@ -137,14 +137,14 @@ class _LoginPageState extends State<LoginPage> {
                                 text: AppLocalizations.of(context)
                                     .translate('we_will_send'),
                                 style: TextStyle(
-                                    color: CustomColors.sellerWhite,
+                                    color: CustomColors.white,
                                     fontWeight: FontWeight.w400),
                               ),
                               TextSpan(
                                 text: AppLocalizations.of(context)
                                     .translate('one_time_password'),
                                 style: TextStyle(
-                                    color: CustomColors.sellerAlertRed,
+                                    color: CustomColors.alertRed,
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.w700),
                               ),
@@ -152,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                                 text: AppLocalizations.of(context)
                                     .translate('to_mobile_no'),
                                 style: TextStyle(
-                                    color: CustomColors.sellerWhite,
+                                    color: CustomColors.white,
                                     fontWeight: FontWeight.w400),
                               ),
                             ],
@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: 150.0,
                       height: 50.0,
                       decoration: BoxDecoration(
-                        color: CustomColors.sellerBlue,
+                        color: CustomColors.blue,
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                       child: Center(
@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                           AppLocalizations.of(context).translate('get_otp'),
                           style: TextStyle(
                             fontSize: 20.0,
-                            color: CustomColors.sellerGreen,
+                            color: CustomColors.green,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -201,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                     fontSize: 13.0,
                     fontFamily: 'Georgia',
-                    color: CustomColors.sellerAlertRed,
+                    color: CustomColors.alertRed,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -218,7 +218,7 @@ class _LoginPageState extends State<LoginPage> {
                     AppLocalizations.of(context).translate('sign_up'),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.sellerGreen,
+                      color: CustomColors.green,
                       fontSize: 18.0,
                     ),
                   ),
@@ -246,14 +246,14 @@ class _LoginPageState extends State<LoginPage> {
               },
               icon: Icon(
                 Icons.info,
-                color: CustomColors.sellerGreen,
+                color: CustomColors.green,
               ),
               label: Text(
                 AppLocalizations.of(context).translate('help_support'),
                 style: TextStyle(
                   fontFamily: 'Georgia',
                   fontWeight: FontWeight.bold,
-                  color: CustomColors.sellerGreen,
+                  color: CustomColors.green,
                   fontSize: 16.0,
                 ),
               ),

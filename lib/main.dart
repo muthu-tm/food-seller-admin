@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
           bodyText2: TextStyle(
             fontSize: 14.0,
             fontFamily: 'Hind',
-            color: CustomColors.sellerWhite,
+            color: CustomColors.white,
           ),
         ),
       ),

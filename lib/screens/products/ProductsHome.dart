@@ -17,7 +17,7 @@ class _ProductsHomeState extends State<ProductsHome> {
     return SingleChildScrollView(
       child: Container(
         height: MediaQuery.of(context).size.height,
-        color: CustomColors.sellerLightGrey,
+        color: CustomColors.lightGrey,
         child: getStores(context),
       ),
     );
@@ -36,7 +36,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.0),
                 ),
-                color: CustomColors.sellerWhite,
+                color: CustomColors.white,
               ),
               child: Column(
                 children: [
@@ -52,29 +52,29 @@ class _ProductsHomeState extends State<ProductsHome> {
                             leading: Icon(
                               Icons.add_circle_outline,
                               size: 35,
-                              color: CustomColors.sellerBlue,
+                              color: CustomColors.blue,
                             ),
                             title: Text(
                               "Add Product",
                               style: TextStyle(
                                 fontSize: 16.0,
                                 fontFamily: 'Georgia',
-                                color: CustomColors.sellerBlack,
+                                color: CustomColors.black,
                               ),
                             ),
                           ),
-                          Divider(color: CustomColors.sellerBlue),
+                          Divider(color: CustomColors.blue),
                           TextFormField(
                             textAlign: TextAlign.center,
                             autofocus: false,
                             readOnly: true,
                             decoration: InputDecoration(
                               hintText: "Search & Load from existing Products",
-                              fillColor: CustomColors.sellerWhite,
+                              fillColor: CustomColors.white,
                               filled: true,
                               suffixIcon: Icon(
                                 Icons.search,
-                                color: CustomColors.sellerBlue,
+                                color: CustomColors.blue,
                                 size: 35.0,
                               ),
                             ),
@@ -91,7 +91,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                             style: TextStyle(
                               fontSize: 16.0,
                               fontFamily: 'Georgia',
-                              color: CustomColors.sellerGrey,
+                              color: CustomColors.grey,
                             ),
                           ),
                           Padding(
@@ -99,7 +99,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                           ),
                           RaisedButton.icon(
                             padding: EdgeInsets.all(5),
-                            color: CustomColors.sellerBlue,
+                            color: CustomColors.blue,
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -113,14 +113,14 @@ class _ProductsHomeState extends State<ProductsHome> {
                             icon: Icon(
                               Icons.add_circle,
                               size: 30,
-                              color: CustomColors.sellerGreen,
+                              color: CustomColors.green,
                             ),
                             label: Text(
                               "Add Custom Product",
                               style: TextStyle(
                                 fontSize: 16.0,
                                 fontFamily: 'Georgia',
-                                color: CustomColors.sellerLightGrey,
+                                color: CustomColors.lightGrey,
                               ),
                             ),
                           ),
@@ -138,14 +138,14 @@ class _ProductsHomeState extends State<ProductsHome> {
                         leading: Icon(
                           Icons.adjust,
                           size: 35,
-                          color: CustomColors.sellerBlue,
+                          color: CustomColors.blue,
                         ),
                         title: Text(
                           "Active Products",
                           style: TextStyle(
                             fontSize: 16.0,
                             fontFamily: 'Georgia',
-                            color: CustomColors.sellerBlack,
+                            color: CustomColors.black,
                           ),
                         ),
                         children: [
@@ -158,14 +158,14 @@ class _ProductsHomeState extends State<ProductsHome> {
                               Store store = snapshot.data[index];
                               return ListTile(
                                 leading: Icon(Icons.store,
-                                    color: CustomColors.sellerBlue),
+                                    color: CustomColors.blue),
                                 title: Text(
                                   store.name
                                 ),
                                 trailing: Icon(
                                   Icons.keyboard_arrow_right,
                                   size: 35,
-                                  color: CustomColors.sellerBlue,
+                                  color: CustomColors.blue,
                                 ),
                                 onTap: () {
                                   Navigator.push(
@@ -195,14 +195,14 @@ class _ProductsHomeState extends State<ProductsHome> {
                         leading: Icon(
                           Icons.adjust,
                           size: 35,
-                          color: CustomColors.sellerAlertRed,
+                          color: CustomColors.alertRed,
                         ),
                         title: Text(
                           "InActive Products",
                           style: TextStyle(
                             fontSize: 16.0,
                             fontFamily: 'Georgia',
-                            color: CustomColors.sellerBlack,
+                            color: CustomColors.black,
                           ),
                         ),
                         children: [
@@ -215,14 +215,14 @@ class _ProductsHomeState extends State<ProductsHome> {
                               Store store = snapshot.data[index];
                               return ListTile(
                                 leading: Icon(Icons.store,
-                                    color: CustomColors.sellerBlue),
+                                    color: CustomColors.blue),
                                 title: Text(
                                   store.name,
                                 ),
                                 trailing: Icon(
                                   Icons.keyboard_arrow_right,
                                   size: 35,
-                                  color: CustomColors.sellerBlue,
+                                  color: CustomColors.blue,
                                 ),
                                 onTap: () {
                                   Navigator.push(
@@ -247,7 +247,7 @@ class _ProductsHomeState extends State<ProductsHome> {
             );
           } else {
             children = Container(
-              color: CustomColors.sellerWhite,
+              color: CustomColors.white,
               height: 90,
               child: Column(
                 children: <Widget>[
@@ -255,7 +255,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                   Text(
                     "No Store Available",
                     style: TextStyle(
-                      color: CustomColors.sellerAlertRed,
+                      color: CustomColors.alertRed,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -266,7 +266,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                   Text(
                     "Add your Store Now!",
                     style: TextStyle(
-                      color: CustomColors.sellerBlue,
+                      color: CustomColors.blue,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),

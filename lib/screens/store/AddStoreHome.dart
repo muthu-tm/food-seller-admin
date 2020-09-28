@@ -63,11 +63,11 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
         title: Text(
           AppLocalizations.of(context).translate('create_new_store'),
         ),
-        backgroundColor: CustomColors.sellerGreen,
+        backgroundColor: CustomColors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerBlue,
+        backgroundColor: CustomColors.blue,
         onPressed: () {
           final FormState form = _formKey.currentState;
 
@@ -152,12 +152,12 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       fontSize: 18,
                       fontFamily: "Georgia",
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.sellerBlue,
+                      color: CustomColors.blue,
                     ),
                   ),
                 ),
                 Divider(
-                  color: CustomColors.sellerGreen,
+                  color: CustomColors.green,
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 10.0, top: 10),
@@ -167,7 +167,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       AppLocalizations.of(context).translate('store_name'),
                       style: TextStyle(
                           fontFamily: "Georgia",
-                          color: CustomColors.sellerGrey,
+                          color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
                     ),
@@ -181,13 +181,13 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     textAlign: TextAlign.start,
                     initialValue: storeName,
                     decoration: InputDecoration(
-                      fillColor: CustomColors.sellerWhite,
+                      fillColor: CustomColors.white,
                       filled: true,
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
                       border: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: CustomColors.sellerGrey)),
+                              BorderSide(color: CustomColors.grey)),
                     ),
                     validator: (name) {
                       if (name.isEmpty) {
@@ -207,7 +207,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       AppLocalizations.of(context).translate('owner_name'),
                       style: TextStyle(
                           fontFamily: "Georgia",
-                          color: CustomColors.sellerGrey,
+                          color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
                     ),
@@ -221,13 +221,13 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     textAlign: TextAlign.start,
                     initialValue: ownedBy,
                     decoration: InputDecoration(
-                      fillColor: CustomColors.sellerWhite,
+                      fillColor: CustomColors.white,
                       filled: true,
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
                       border: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: CustomColors.sellerGrey)),
+                              BorderSide(color: CustomColors.grey)),
                     ),
                     validator: (owner) {
                       if (owner.isEmpty) {
@@ -248,7 +248,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                           .translate('available_products'),
                       style: TextStyle(
                           fontFamily: "Georgia",
-                          color: CustomColors.sellerGrey,
+                          color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
                     ),
@@ -258,7 +258,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   padding: EdgeInsets.only(left: 15.0, top: 10, right: 10),
                   child: Container(
                     height: 300,
-                    color: CustomColors.sellerGrey,
+                    color: CustomColors.grey,
                     child: getProductTypes(context),
                   ),
                 ),
@@ -270,7 +270,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       "Product Categories",
                       style: TextStyle(
                           fontFamily: "Georgia",
-                          color: CustomColors.sellerGrey,
+                          color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
                     ),
@@ -280,7 +280,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   padding: EdgeInsets.only(left: 15.0, top: 10, right: 10),
                   child: Container(
                     height: 300,
-                    color: CustomColors.sellerGrey,
+                    color: CustomColors.grey,
                     child: getProductCategories(context),
                   ),
                 ),
@@ -292,7 +292,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       "Product Sub Categories",
                       style: TextStyle(
                           fontFamily: "Georgia",
-                          color: CustomColors.sellerGrey,
+                          color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
                     ),
@@ -302,7 +302,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   padding: EdgeInsets.only(left: 15.0, top: 10, right: 10),
                   child: Container(
                     height: 300,
-                    color: CustomColors.sellerGrey,
+                    color: CustomColors.grey,
                     child: getProductSubCategories(context),
                   ),
                 ),
@@ -314,7 +314,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       AppLocalizations.of(context).translate('working_days'),
                       style: TextStyle(
                           fontFamily: "Georgia",
-                          color: CustomColors.sellerGrey,
+                          color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
                     ),
@@ -324,7 +324,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   padding: EdgeInsets.only(left: 15.0, top: 10, right: 10),
                   child: Container(
                     height: 200,
-                    color: CustomColors.sellerGrey,
+                    color: CustomColors.grey,
                     child: ListView.builder(
                       primary: true,
                       shrinkWrap: true,
@@ -347,8 +347,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                           child: Container(
                             padding: EdgeInsets.all(10),
                             color: workingDays.contains(index)
-                                ? CustomColors.sellerBlue
-                                : CustomColors.sellerWhite,
+                                ? CustomColors.blue
+                                : CustomColors.white,
                             height: 40,
                             width: 50,
                             alignment: Alignment.centerLeft,
@@ -357,8 +357,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                               style: TextStyle(
                                   fontFamily: "Georgia",
                                   color: workingDays.contains(index)
-                                      ? CustomColors.sellerWhite
-                                      : CustomColors.sellerGreen),
+                                      ? CustomColors.white
+                                      : CustomColors.green),
                             ),
                           ),
                         );
@@ -374,7 +374,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       AppLocalizations.of(context).translate('working_hours'),
                       style: TextStyle(
                           fontFamily: "Georgia",
-                          color: CustomColors.sellerGrey,
+                          color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
                     ),
@@ -399,7 +399,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                         "--",
                         style: TextStyle(
                           fontFamily: "Georgia",
-                          color: CustomColors.sellerGreen,
+                          color: CustomColors.green,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
@@ -461,8 +461,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   child: Container(
                     padding: EdgeInsets.all(10),
                     color: availProducts.contains(types.uuid)
-                        ? CustomColors.sellerBlue
-                        : CustomColors.sellerWhite,
+                        ? CustomColors.blue
+                        : CustomColors.white,
                     height: 40,
                     width: 50,
                     alignment: Alignment.centerLeft,
@@ -471,8 +471,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       style: TextStyle(
                           fontFamily: "Georgia",
                           color: availProducts.contains(types.uuid)
-                              ? CustomColors.sellerWhite
-                              : CustomColors.sellerGreen),
+                              ? CustomColors.white
+                              : CustomColors.green),
                     ),
                   ),
                 );
@@ -487,7 +487,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   Text(
                     "No Product Types Available",
                     style: TextStyle(
-                      color: CustomColors.sellerAlertRed,
+                      color: CustomColors.alertRed,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -498,7 +498,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   Text(
                     "Sorry. Please Try Again Later!",
                     style: TextStyle(
-                      color: CustomColors.sellerBlue,
+                      color: CustomColors.blue,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -561,8 +561,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   child: Container(
                     padding: EdgeInsets.all(10),
                     color: availProductCategories.contains(categories.uuid)
-                        ? CustomColors.sellerBlue
-                        : CustomColors.sellerWhite,
+                        ? CustomColors.blue
+                        : CustomColors.white,
                     height: 40,
                     width: 50,
                     alignment: Alignment.centerLeft,
@@ -572,8 +572,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                           fontFamily: "Georgia",
                           color:
                               availProductCategories.contains(categories.uuid)
-                                  ? CustomColors.sellerWhite
-                                  : CustomColors.sellerGreen),
+                                  ? CustomColors.white
+                                  : CustomColors.green),
                     ),
                   ),
                 );
@@ -588,7 +588,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   Text(
                     "No Product Categories Available",
                     style: TextStyle(
-                      color: CustomColors.sellerAlertRed,
+                      color: CustomColors.alertRed,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -599,7 +599,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   Text(
                     "Sorry. Please Try Again Later!",
                     style: TextStyle(
-                      color: CustomColors.sellerBlue,
+                      color: CustomColors.blue,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -660,8 +660,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   child: Container(
                     padding: EdgeInsets.all(10),
                     color: availProductSubCategories.contains(categories.uuid)
-                        ? CustomColors.sellerBlue
-                        : CustomColors.sellerWhite,
+                        ? CustomColors.blue
+                        : CustomColors.white,
                     height: 40,
                     width: 50,
                     alignment: Alignment.centerLeft,
@@ -671,8 +671,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                           fontFamily: "Georgia",
                           color:
                               availProductSubCategories.contains(categories.uuid)
-                                  ? CustomColors.sellerWhite
-                                  : CustomColors.sellerGreen),
+                                  ? CustomColors.white
+                                  : CustomColors.green),
                     ),
                   ),
                 );
@@ -687,7 +687,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   Text(
                     "No Product SubCategories Available",
                     style: TextStyle(
-                      color: CustomColors.sellerAlertRed,
+                      color: CustomColors.alertRed,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -698,7 +698,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   Text(
                     "Sorry. Please Try Again Later!",
                     style: TextStyle(
-                      color: CustomColors.sellerBlue,
+                      color: CustomColors.blue,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),

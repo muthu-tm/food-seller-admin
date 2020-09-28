@@ -90,7 +90,7 @@ class _AuthPageState extends State<AuthPage> {
                                 "Serving From",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: CustomColors.sellerGrey,
+                                  color: CustomColors.grey,
                                   fontSize: 12,
                                   fontFamily: "Georgia",
                                 ),
@@ -131,8 +131,8 @@ class _AuthPageState extends State<AuthPage> {
     return ShaderMask(
       shaderCallback: (bounds) => LinearGradient(
         colors: [
-          CustomColors.sellerGreen,
-          CustomColors.sellerBlue,
+          CustomColors.green,
+          CustomColors.blue,
         ],
       ).createShader(
         Rect.fromLTWH(0, 0, bounds.width, bounds.height),
@@ -141,7 +141,7 @@ class _AuthPageState extends State<AuthPage> {
         text,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: CustomColors.sellerWhite,
+          color: CustomColors.white,
           fontSize: size,
           fontFamily: "Georgia",
         ),
@@ -177,7 +177,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
-        color: CustomColors.sellerGreen,
+        color: CustomColors.green,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -194,14 +194,14 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                          color: CustomColors.sellerBlue,
+                          color: CustomColors.blue,
                           style: BorderStyle.solid,
                           width: 2.0),
                     ),
                     child: Icon(
                       Icons.person,
                       size: 45.0,
-                      color: CustomColors.sellerLightGrey,
+                      color: CustomColors.lightGrey,
                     ),
                   )
                 : SizedBox(
@@ -234,7 +234,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             style: TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.bold,
-              color: CustomColors.sellerBlue,
+              color: CustomColors.blue,
             ),
           ),
           Text(
@@ -242,7 +242,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             style: TextStyle(
               fontSize: 14.0,
               fontWeight: FontWeight.w500,
-              color: CustomColors.sellerBlue,
+              color: CustomColors.blue,
             ),
           ),
           Padding(
@@ -256,7 +256,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                 decoration: InputDecoration(
                   hintText:
                       AppLocalizations.of(context).translate('secret_key'),
-                  fillColor: CustomColors.sellerLightGrey,
+                  fillColor: CustomColors.lightGrey,
                   filled: true,
                 ),
               ),
@@ -274,7 +274,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                         "Fingerprint",
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                          color: CustomColors.sellerGrey,
+                          color: CustomColors.grey,
                           fontSize: 11.0,
                         ),
                       ),
@@ -293,7 +293,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                   AppLocalizations.of(context).translate('forget_key'),
                   textAlign: TextAlign.end,
                   style: TextStyle(
-                    color: CustomColors.sellerOrange,
+                    color: CustomColors.orange,
                     fontSize: 11.0,
                   ),
                 ),
@@ -309,7 +309,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
               width: 150.0,
               height: 50.0,
               decoration: BoxDecoration(
-                color: CustomColors.sellerBlue,
+                color: CustomColors.blue,
                 borderRadius: BorderRadius.circular(5.0),
               ),
               child: Center(
@@ -319,7 +319,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                   style: TextStyle(
                     fontSize: 18.0,
                     fontFamily: 'Georgia',
-                    color: CustomColors.sellerWhite,
+                    color: CustomColors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -338,11 +338,11 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                   style: TextStyle(
                     fontSize: 13.0,
                     fontFamily: 'Georgia',
-                    color: CustomColors.sellerOrange,
+                    color: CustomColors.orange,
                   ),
                 ),
                 FlatButton(
-                  splashColor: CustomColors.sellerWhite,
+                  splashColor: CustomColors.white,
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -356,7 +356,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.sellerBlue,
+                      color: CustomColors.blue,
                     ),
                   ),
                 ),

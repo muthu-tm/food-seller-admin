@@ -42,11 +42,11 @@ class LocationPickerState extends State<LocationPicker> {
         title: Text(
           AppLocalizations.of(context).translate('title_add_location'),
         ),
-        backgroundColor: CustomColors.sellerGreen,
+        backgroundColor: CustomColors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerGreen,
+        backgroundColor: CustomColors.green,
         onPressed: () {
           if (geoData == null || geoData.geoHash.isEmpty) {
             _scaffoldKey.currentState.showSnackBar(
@@ -104,7 +104,7 @@ class LocationPickerState extends State<LocationPicker> {
               right: 80,
               child: Card(
                 elevation: 5.0,
-                color: CustomColors.sellerWhite,
+                color: CustomColors.white,
                 child: TextField(
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(

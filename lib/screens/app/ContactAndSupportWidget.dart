@@ -20,18 +20,18 @@ Widget contactAndSupportDialog(context) {
             leading: Icon(
               Icons.headset_mic,
               size: 35.0,
-              color: CustomColors.sellerGreen,
+              color: CustomColors.green,
             ),
             title: Text(
               AppLocalizations.of(context).translate('help_and_support'),
               style: TextStyle(
-                  color: CustomColors.sellerPositiveGreen,
+                  color: CustomColors.positiveGreen,
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold),
             ),
           ),
           Divider(
-            color: CustomColors.sellerBlue,
+            color: CustomColors.blue,
           ),
           SizedBox(height: 5),
           ClipRRect(
@@ -46,7 +46,7 @@ Widget contactAndSupportDialog(context) {
             AppLocalizations.of(context).translate('lost_need_help'),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: CustomColors.sellerGreen,
+                color: CustomColors.green,
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold),
           ),
@@ -54,7 +54,7 @@ Widget contactAndSupportDialog(context) {
             AppLocalizations.of(context).translate('happy_to_help'),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: CustomColors.sellerPositiveGreen,
+                color: CustomColors.positiveGreen,
                 fontSize: 14.0,
                 fontWeight: FontWeight.bold),
           ),
@@ -63,7 +63,7 @@ Widget contactAndSupportDialog(context) {
             AppLocalizations.of(context).translate('contact_us'),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: CustomColors.sellerGreen,
+                color: CustomColors.green,
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold),
           ),
@@ -77,7 +77,7 @@ Widget contactAndSupportDialog(context) {
               RaisedButton.icon(
                 icon: Icon(
                   Icons.email,
-                  color: CustomColors.sellerLightGrey,
+                  color: CustomColors.lightGrey,
                 ),
                 elevation: 15.0,
                 onPressed: () {
@@ -89,12 +89,12 @@ Widget contactAndSupportDialog(context) {
                 label: Text(
                     AppLocalizations.of(context).translate('email'),
                     style: TextStyle(
-                      color: CustomColors.sellerBlue,
+                      color: CustomColors.blue,
                       fontSize: 14.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                color: CustomColors.sellerGreen,
+                color: CustomColors.green,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -105,7 +105,7 @@ Widget contactAndSupportDialog(context) {
               RaisedButton.icon(
                 icon: Icon(
                   Icons.phone,
-                  color: CustomColors.sellerLightGrey,
+                  color: CustomColors.lightGrey,
                 ),
                 elevation: 15.0,
                 onPressed: () {
@@ -114,12 +114,12 @@ Widget contactAndSupportDialog(context) {
                 label: Text(
                     AppLocalizations.of(context).translate('phone'),
                     style: TextStyle(
-                      color: CustomColors.sellerBlue,
+                      color: CustomColors.blue,
                       fontSize: 14.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                color: CustomColors.sellerGreen,
+                color: CustomColors.green,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/products.dart';
-import 'package:chipchop_seller/screens/products/AddToCartWidget.dart';
-import 'package:chipchop_seller/screens/products/CartCounterWidget.dart';
+import 'package:chipchop_seller/screens/store/AddToCartWidget.dart';
+import 'package:chipchop_seller/screens/store/CartCounterWidget.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 

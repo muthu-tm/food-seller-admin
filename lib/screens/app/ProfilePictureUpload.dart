@@ -51,7 +51,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                   ? "Profile Photo"
                   : "Store Profile",
               style: TextStyle(
-                  color: CustomColors.sellerBlack,
+                  color: CustomColors.black,
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
@@ -72,14 +72,14 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                      color: CustomColors.sellerGreen,
+                                      color: CustomColors.green,
                                       style: BorderStyle.solid,
                                       width: 2.0),
                                 ),
                                 child: Icon(
                                   Icons.person,
                                   size: 45.0,
-                                  color: CustomColors.sellerGreen,
+                                  color: CustomColors.green,
                                 ),
                               )
                             : CircleAvatar(
@@ -95,11 +95,11 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                               padding: EdgeInsets.all(5),
                               child: FlatButton(
                                 padding: EdgeInsets.all(5),
-                                color: CustomColors.sellerGreen,
+                                color: CustomColors.green,
                                 child: Text(
                                   "Select Image",
                                   style: TextStyle(
-                                      color: CustomColors.sellerBlue,
+                                      color: CustomColors.blue,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.bold),
                                   textAlign: TextAlign.start,
@@ -114,11 +114,11 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                               child: FlatButton(
                                 padding: EdgeInsets.all(5),
                                 color:
-                                    CustomColors.sellerAlertRed.withOpacity(0.5),
+                                    CustomColors.alertRed.withOpacity(0.5),
                                 child: Text(
                                   "Take Picture",
                                   style: TextStyle(
-                                      color: CustomColors.sellerBlack,
+                                      color: CustomColors.black,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.bold),
                                   textAlign: TextAlign.start,
@@ -161,11 +161,11 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                               padding: EdgeInsets.all(5),
                               child: FlatButton(
                                 padding: EdgeInsets.all(5),
-                                color: CustomColors.sellerGreen,
+                                color: CustomColors.green,
                                 child: Text(
                                   "Change",
                                   style: TextStyle(
-                                      color: CustomColors.sellerBlue,
+                                      color: CustomColors.blue,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.bold),
                                   textAlign: TextAlign.start,
@@ -181,11 +181,11 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                               padding: EdgeInsets.all(5),
                               child: FlatButton(
                                 padding: EdgeInsets.all(5),
-                                color: CustomColors.sellerGreen,
+                                color: CustomColors.green,
                                 child: Text(
                                   "Upload",
                                   style: TextStyle(
-                                      color: CustomColors.sellerBlue,
+                                      color: CustomColors.blue,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.bold),
                                   textAlign: TextAlign.start,
@@ -199,11 +199,11 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                         ),
                         Spacer(),
                         FlatButton(
-                          color: CustomColors.sellerAlertRed,
+                          color: CustomColors.alertRed,
                           child: Text(
                             "Cancel",
                             style: TextStyle(
-                                color: CustomColors.sellerWhite,
+                                color: CustomColors.white,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.bold),
                             textAlign: TextAlign.start,

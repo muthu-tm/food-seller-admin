@@ -29,7 +29,7 @@ class _CartCounterState extends State<CartCounter> {
             numOfItems.toString().padLeft(2, "0"),
             style: TextStyle(
               fontFamily: 'Georgia',
-              color: CustomColors.sellerBlue,
+              color: CustomColors.blue,
               fontSize: 17
             ),
           ),

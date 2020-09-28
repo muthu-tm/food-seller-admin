@@ -28,8 +28,8 @@ class CustomDialogs {
               FlatButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('OK'),
-                textColor: CustomColors.sellerBlue,
-                color: CustomColors.sellerGreen,
+                textColor: CustomColors.blue,
+                color: CustomColors.green,
               )
             ],
           );
@@ -57,7 +57,7 @@ class CustomDialogs {
     showDialog(
       barrierDismissible: false,
       context: context,
-      barrierColor: CustomColors.sellerLightGrey.withOpacity(0.7),
+      barrierColor: CustomColors.lightGrey.withOpacity(0.7),
       child: Container(
         alignment: Alignment.center,
         width: 50,
@@ -84,9 +84,9 @@ class CustomDialogs {
                 height: 45,
                 child: CircularProgressIndicator(
                   strokeWidth: 3,
-                  backgroundColor: CustomColors.sellerBlue,
+                  backgroundColor: CustomColors.blue,
                   valueColor:
-                      AlwaysStoppedAnimation<Color>(CustomColors.sellerGreen),
+                      AlwaysStoppedAnimation<Color>(CustomColors.green),
                 ),
               ),
             ),
@@ -107,7 +107,7 @@ class CustomDialogs {
           title: new Text(
             title,
             style: TextStyle(
-                color: CustomColors.sellerAlertRed,
+                color: CustomColors.alertRed,
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold),
             textAlign: TextAlign.start,
@@ -119,7 +119,7 @@ class CustomDialogs {
                   child: Text(
                     description,
                     style: TextStyle(
-                        color: CustomColors.sellerGreen, fontSize: 20.0),
+                        color: CustomColors.green, fontSize: 20.0),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -129,22 +129,22 @@ class CustomDialogs {
           actions: <Widget>[
             RaisedButton(
               elevation: 10.0,
-              splashColor: CustomColors.sellerBlue,
+              splashColor: CustomColors.blue,
               child: Text(
                 'NO',
                 style:
-                    TextStyle(color: CustomColors.sellerBlue, fontSize: 18.0),
+                    TextStyle(color: CustomColors.blue, fontSize: 18.0),
                 textAlign: TextAlign.center,
               ),
               onPressed: noAction,
             ),
             RaisedButton(
               elevation: 10.0,
-              splashColor: CustomColors.sellerAlertRed,
+              splashColor: CustomColors.alertRed,
               child: Text(
                 'YES',
                 style: TextStyle(
-                    color: CustomColors.sellerAlertRed, fontSize: 18.0),
+                    color: CustomColors.alertRed, fontSize: 18.0),
                 textAlign: TextAlign.center,
               ),
               onPressed: yesAction,

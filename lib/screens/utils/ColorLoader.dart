@@ -13,9 +13,9 @@ class ColorLoader extends StatefulWidget {
   final Icon dotIcon;
 
   ColorLoader(
-      {this.dotOneColor = CustomColors.sellerAlertRed,
-      this.dotTwoColor = CustomColors.sellerBlue,
-      this.dotThreeColor = CustomColors.sellerFadedPurple,
+      {this.dotOneColor = CustomColors.alertRed,
+      this.dotTwoColor = CustomColors.blue,
+      this.dotThreeColor = CustomColors.lightPurple,
       this.duration = const Duration(milliseconds: 1000),
       this.dotType = DotType.circle,
       this.dotIcon = const Icon(Icons.blur_on)});

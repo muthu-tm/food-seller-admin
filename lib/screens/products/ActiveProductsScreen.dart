@@ -19,9 +19,9 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.sellerLightGrey,
+      backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
-        backgroundColor: CustomColors.sellerGreen,
+        backgroundColor: CustomColors.green,
         title: Text("Active Products"),
       ),
       body: getProductsByStoreLocation(context),
@@ -57,7 +57,7 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                   },
                   child: Container(
                     padding: EdgeInsets.only(top: 20),
-                    color: CustomColors.sellerWhite,
+                    color: CustomColors.white,
                     height: 100,
                     alignment: Alignment.centerLeft,
                     child: Center(
@@ -102,7 +102,7 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                                     product.name,
                                     style: TextStyle(
                                       fontFamily: 'Georgia',
-                                      color: CustomColors.sellerBlue,
+                                      color: CustomColors.blue,
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -112,7 +112,7 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                                   child: Text(
                                     "${product.weight} ${product.getUnit()} - Rs. ${product.originalPrice.toString()}",
                                     style: TextStyle(
-                                      color: CustomColors.sellerBlue,
+                                      color: CustomColors.blue,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -137,7 +137,7 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                   Text(
                     "No Product Available",
                     style: TextStyle(
-                      color: CustomColors.sellerAlertRed,
+                      color: CustomColors.alertRed,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -148,7 +148,7 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                   Text(
                     "Sorry. Please Try Again Later!",
                     style: TextStyle(
-                      color: CustomColors.sellerBlue,
+                      color: CustomColors.blue,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),

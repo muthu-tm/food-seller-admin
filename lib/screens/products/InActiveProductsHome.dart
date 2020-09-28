@@ -18,9 +18,9 @@ class _InActiveProductsScreenState extends State<InActiveProductsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.sellerLightGrey,
+      backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
-        backgroundColor: CustomColors.sellerGreen,
+        backgroundColor: CustomColors.green,
         title: Text("InActive Products"),
       ),
       body: SingleChildScrollView(
@@ -52,7 +52,7 @@ class _InActiveProductsScreenState extends State<InActiveProductsScreen> {
                   },
                   child: Container(
                     padding: EdgeInsets.all(10),
-                    color: CustomColors.sellerWhite,
+                    color: CustomColors.white,
                     height: 40,
                     width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
@@ -88,7 +88,7 @@ class _InActiveProductsScreenState extends State<InActiveProductsScreen> {
                             Text(
                               product.name,
                               style: TextStyle(
-                                color: CustomColors.sellerBlue,
+                                color: CustomColors.blue,
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -110,7 +110,7 @@ class _InActiveProductsScreenState extends State<InActiveProductsScreen> {
                   Text(
                     "No Product Available",
                     style: TextStyle(
-                      color: CustomColors.sellerAlertRed,
+                      color: CustomColors.alertRed,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -121,7 +121,7 @@ class _InActiveProductsScreenState extends State<InActiveProductsScreen> {
                   Text(
                     "Sorry. Please Try Again Later!",
                     style: TextStyle(
-                      color: CustomColors.sellerBlue,
+                      color: CustomColors.blue,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),

@@ -1,6 +1,5 @@
+import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
-
-import '../utils/CustomColors.dart';
 
 class StoreSearchBar extends StatelessWidget {
   @override
@@ -19,14 +18,14 @@ class StoreSearchBar extends StatelessWidget {
               ),
               filled: true,
               prefixIcon: Icon(Icons.search),
-              fillColor: CustomColors.sellerWhite,
-              hintStyle: TextStyle(color: CustomColors.sellerGrey),
+              fillColor: CustomColors.white,
+              hintStyle: TextStyle(color: CustomColors.grey),
               hintText: "What would your like to buy?",
             ),
             autofocus: false,
           ),
           data: Theme.of(context).copyWith(
-            primaryColor: CustomColors.sellerGrey,
+            primaryColor: CustomColors.grey,
           )),
     );
   }

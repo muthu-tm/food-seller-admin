@@ -54,11 +54,11 @@ class _EditUserProfileState extends State<EditUserProfile> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).translate('edit_profile')),
-        backgroundColor: CustomColors.sellerGreen,
+        backgroundColor: CustomColors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerBlue,
+        backgroundColor: CustomColors.blue,
         onPressed: () {
           _submit();
         },
@@ -70,7 +70,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        splashColor: CustomColors.sellerWhite,
+        splashColor: CustomColors.white,
       ),
       body: Form(
         key: _formKey,
@@ -79,7 +79,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Card(
-                color: CustomColors.sellerLightGrey,
+                color: CustomColors.lightGrey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -91,7 +91,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           AppLocalizations.of(context).translate('first_name'),
                           style: TextStyle(
                               fontFamily: "Georgia",
-                              color: CustomColors.sellerGrey,
+                              color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
                         ),
@@ -105,13 +105,13 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         decoration: InputDecoration(
                           hintText: AppLocalizations.of(context)
                               .translate('first_name'),
-                          fillColor: CustomColors.sellerWhite,
+                          fillColor: CustomColors.white,
                           filled: true,
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 3.0, horizontal: 3.0),
                           border: OutlineInputBorder(
                               borderSide:
-                                  BorderSide(color: CustomColors.sellerWhite)),
+                                  BorderSide(color: CustomColors.white)),
                         ),
                         validator: (value) {
                           if (value.isEmpty) {
@@ -130,7 +130,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           AppLocalizations.of(context).translate('last_name'),
                           style: TextStyle(
                               fontFamily: "Georgia",
-                              color: CustomColors.sellerGrey,
+                              color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
                         ),
@@ -144,13 +144,13 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         decoration: InputDecoration(
                           hintText: AppLocalizations.of(context)
                               .translate('last_name'),
-                          fillColor: CustomColors.sellerWhite,
+                          fillColor: CustomColors.white,
                           filled: true,
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 3.0, horizontal: 3.0),
                           border: OutlineInputBorder(
                               borderSide:
-                                  BorderSide(color: CustomColors.sellerWhite)),
+                                  BorderSide(color: CustomColors.white)),
                         ),
                         validator: (value) {
                           if (value.isEmpty) {
@@ -170,7 +170,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           AppLocalizations.of(context).translate('email'),
                           style: TextStyle(
                               fontFamily: "Georgia",
-                              color: CustomColors.sellerGrey,
+                              color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
                         ),
@@ -183,13 +183,13 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           decoration: InputDecoration(
                             hintText: AppLocalizations.of(context)
                                 .translate('enter_email_id'),
-                            fillColor: CustomColors.sellerWhite,
+                            fillColor: CustomColors.white,
                             filled: true,
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 3.0, horizontal: 3.0),
                             border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                    color: CustomColors.sellerWhite)),
+                                    color: CustomColors.white)),
                           ),
                           validator: (email) {
                             if (email.trim().isEmpty) {
@@ -209,7 +209,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           AppLocalizations.of(context).translate('dob'),
                           style: TextStyle(
                               fontFamily: "Georgia",
-                              color: CustomColors.sellerGrey,
+                              color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
                         ),
@@ -226,19 +226,19 @@ class _EditUserProfileState extends State<EditUserProfile> {
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
                               labelStyle: TextStyle(
-                                color: CustomColors.sellerBlue,
+                                color: CustomColors.blue,
                               ),
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: 3.0, horizontal: 10.0),
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: CustomColors.sellerWhite)),
-                              fillColor: CustomColors.sellerWhite,
+                                      color: CustomColors.white)),
+                              fillColor: CustomColors.white,
                               filled: true,
                               suffixIcon: Icon(
                                 Icons.perm_contact_calendar,
                                 size: 35,
-                                color: CustomColors.sellerBlue,
+                                color: CustomColors.blue,
                               ),
                             ),
                           ),
@@ -253,7 +253,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           AppLocalizations.of(context).translate('gender'),
                           style: TextStyle(
                               fontFamily: "Georgia",
-                              color: CustomColors.sellerGrey,
+                              color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
                         ),
@@ -267,7 +267,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                             title: Text(
                               AppLocalizations.of(context).translate('male'),
                               style: TextStyle(
-                                  color: CustomColors.sellerBlue),
+                                  color: CustomColors.blue),
                             ),
                             value: "Male",
                             selected: gender.contains("Male"),
@@ -285,7 +285,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                             title: Text(
                               AppLocalizations.of(context).translate('female'),
                               style: TextStyle(
-                                  color: CustomColors.sellerBlue),
+                                  color: CustomColors.blue),
                             ),
                             value: "Female",
                             selected: gender.contains("Female"),

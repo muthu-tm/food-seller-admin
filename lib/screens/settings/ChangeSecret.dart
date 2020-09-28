@@ -26,10 +26,10 @@ class _ChangeSecretState extends State<ChangeSecret> {
       appBar: AppBar(
         title:
             Text(AppLocalizations.of(context).translate('change_secret_key')),
-        backgroundColor: CustomColors.sellerGreen,
+        backgroundColor: CustomColors.green,
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerBlue,
+        backgroundColor: CustomColors.blue,
         onPressed: () async {
           _submit();
         },
@@ -45,7 +45,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        splashColor: CustomColors.sellerWhite,
+        splashColor: CustomColors.white,
       ),
       body: Form(
         key: _formKey,
@@ -53,7 +53,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
           child: Padding(
             padding: EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
             child: Card(
-              color: CustomColors.sellerOrange.withOpacity(0.7),
+              color: CustomColors.orange.withOpacity(0.7),
               elevation: 5.0,
               child: Column(
                 children: <Widget>[
@@ -66,16 +66,16 @@ class _ChangeSecretState extends State<ChangeSecret> {
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
-                          color: CustomColors.sellerGreen,
+                          color: CustomColors.green,
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        fillColor: CustomColors.sellerWhite,
+                        fillColor: CustomColors.white,
                         filled: true,
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 3.0, horizontal: 10.0),
                         border: OutlineInputBorder(
                             borderSide:
-                                BorderSide(color: CustomColors.sellerWhite)),
+                                BorderSide(color: CustomColors.white)),
                       ),
                       autofocus: false,
                       validator: (value) {
@@ -94,16 +94,16 @@ class _ChangeSecretState extends State<ChangeSecret> {
                       obscureText: true,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
-                          color: CustomColors.sellerGreen,
+                          color: CustomColors.green,
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        fillColor: CustomColors.sellerWhite,
+                        fillColor: CustomColors.white,
                         filled: true,
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 3.0, horizontal: 10.0),
                         border: OutlineInputBorder(
                             borderSide:
-                                BorderSide(color: CustomColors.sellerWhite)),
+                                BorderSide(color: CustomColors.white)),
                       ),
                       autofocus: false,
                       validator: (value) {

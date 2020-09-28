@@ -85,13 +85,13 @@ class _AddProductState extends State<AddProduct> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: CustomColors.sellerLightGrey,
+      backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
-        backgroundColor: CustomColors.sellerGreen,
+        backgroundColor: CustomColors.green,
         title: Text("Add Products"),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerBlue,
+        backgroundColor: CustomColors.blue,
         onPressed: () async {
           await _submit();
         },
@@ -164,21 +164,21 @@ class _AddProductState extends State<AddProduct> {
   Widget getBody(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        color: CustomColors.sellerWhite,
+        color: CustomColors.white,
         child: Column(
           children: [
             ListTile(
               leading: Icon(
                 Icons.store,
                 size: 35,
-                color: CustomColors.sellerBlue,
+                color: CustomColors.blue,
               ),
               title: Text(
                 "Store",
                 style: TextStyle(
                   fontSize: 16.0,
                   fontFamily: 'Georgia',
-                  color: CustomColors.sellerBlack,
+                  color: CustomColors.black,
                 ),
               ),
             ),
@@ -202,14 +202,14 @@ class _AddProductState extends State<AddProduct> {
               leading: Icon(
                 Icons.image,
                 size: 35,
-                color: CustomColors.sellerBlue,
+                color: CustomColors.blue,
               ),
               title: Text(
                 "Add Images",
                 style: TextStyle(
                   fontSize: 16.0,
                   fontFamily: 'Georgia',
-                  color: CustomColors.sellerBlack,
+                  color: CustomColors.black,
                 ),
               ),
             ),
@@ -236,17 +236,17 @@ class _AddProductState extends State<AddProduct> {
                                 "Add Image",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: CustomColors.sellerWhite,
+                                  color: CustomColors.white,
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               decoration: BoxDecoration(
-                                color: CustomColors.sellerGrey,
+                                color: CustomColors.grey,
                                 border: Border.all(
                                     width: 1,
                                     style: BorderStyle.solid,
-                                    color: CustomColors.sellerBlue),
+                                    color: CustomColors.blue),
                               ),
                             ),
                           ),
@@ -263,13 +263,13 @@ class _AddProductState extends State<AddProduct> {
                                 "Add Image",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: CustomColors.sellerWhite,
+                                  color: CustomColors.white,
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               decoration: BoxDecoration(
-                                color: CustomColors.sellerGrey,
+                                color: CustomColors.grey,
                                 border: Border.all(
                                   width: 1,
                                   style: BorderStyle.none,
@@ -295,13 +295,13 @@ class _AddProductState extends State<AddProduct> {
                                 "Add Image",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: CustomColors.sellerWhite,
+                                  color: CustomColors.white,
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               decoration: BoxDecoration(
-                                color: CustomColors.sellerGrey,
+                                color: CustomColors.grey,
                                 border: Border.all(
                                     width: 1, style: BorderStyle.none),
                               ),
@@ -320,13 +320,13 @@ class _AddProductState extends State<AddProduct> {
                                 "Add Image",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: CustomColors.sellerWhite,
+                                  color: CustomColors.white,
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               decoration: BoxDecoration(
-                                color: CustomColors.sellerGrey,
+                                color: CustomColors.grey,
                                 border: Border.all(
                                     width: 1, style: BorderStyle.none),
                               ),
@@ -343,14 +343,14 @@ class _AddProductState extends State<AddProduct> {
               leading: Icon(
                 Icons.format_shapes,
                 size: 35,
-                color: CustomColors.sellerBlue,
+                color: CustomColors.blue,
               ),
               title: Text(
                 "Product Name",
                 style: TextStyle(
                   fontSize: 16.0,
                   fontFamily: 'Georgia',
-                  color: CustomColors.sellerBlack,
+                  color: CustomColors.black,
                 ),
               ),
             ),
@@ -363,7 +363,7 @@ class _AddProductState extends State<AddProduct> {
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                   hintText: "Ex, Rice",
-                  fillColor: CustomColors.sellerWhite,
+                  fillColor: CustomColors.white,
                   filled: true,
                 ),
                 validator: (name) {
@@ -380,14 +380,14 @@ class _AddProductState extends State<AddProduct> {
               leading: Icon(
                 Icons.description,
                 size: 35,
-                color: CustomColors.sellerBlue,
+                color: CustomColors.blue,
               ),
               title: Text(
                 "Product Details",
                 style: TextStyle(
                   fontSize: 16.0,
                   fontFamily: 'Georgia',
-                  color: CustomColors.sellerBlack,
+                  color: CustomColors.black,
                 ),
               ),
             ),
@@ -401,7 +401,7 @@ class _AddProductState extends State<AddProduct> {
                 maxLines: 8,
                 decoration: InputDecoration(
                   hintText: "Ex, Rice",
-                  fillColor: CustomColors.sellerWhite,
+                  fillColor: CustomColors.white,
                   filled: true,
                 ),
                 validator: (details) {
@@ -418,14 +418,14 @@ class _AddProductState extends State<AddProduct> {
               leading: Icon(
                 Icons.view_stream,
                 size: 35,
-                color: CustomColors.sellerBlue,
+                color: CustomColors.blue,
               ),
               title: Text(
                 "Product Type",
                 style: TextStyle(
                   fontSize: 16.0,
                   fontFamily: 'Georgia',
-                  color: CustomColors.sellerBlack,
+                  color: CustomColors.black,
                 ),
               ),
             ),
@@ -449,14 +449,14 @@ class _AddProductState extends State<AddProduct> {
               leading: Icon(
                 Icons.menu,
                 size: 35,
-                color: CustomColors.sellerBlue,
+                color: CustomColors.blue,
               ),
               title: Text(
                 "Product Category",
                 style: TextStyle(
                   fontSize: 16.0,
                   fontFamily: 'Georgia',
-                  color: CustomColors.sellerBlack,
+                  color: CustomColors.black,
                 ),
               ),
             ),
@@ -480,14 +480,14 @@ class _AddProductState extends State<AddProduct> {
               leading: Icon(
                 Icons.apps,
                 size: 35,
-                color: CustomColors.sellerBlue,
+                color: CustomColors.blue,
               ),
               title: Text(
                 "Product SubCategory",
                 style: TextStyle(
                   fontSize: 16.0,
                   fontFamily: 'Georgia',
-                  color: CustomColors.sellerBlack,
+                  color: CustomColors.black,
                 ),
               ),
             ),
@@ -524,7 +524,7 @@ class _AddProductState extends State<AddProduct> {
                   decoration: InputDecoration(
                     hintText: "Weight",
                     labelText: "Weight",
-                    fillColor: CustomColors.sellerWhite,
+                    fillColor: CustomColors.white,
                     filled: true,
                   ),
                   validator: (weight) {
@@ -569,7 +569,7 @@ class _AddProductState extends State<AddProduct> {
                   decoration: InputDecoration(
                     hintText: "Price",
                     labelText: "Price",
-                    fillColor: CustomColors.sellerWhite,
+                    fillColor: CustomColors.white,
                     filled: true,
                   ),
                   onChanged: (val) {
@@ -601,7 +601,7 @@ class _AddProductState extends State<AddProduct> {
                   decoration: InputDecoration(
                     hintText: "Offer",
                     labelText: "Offer",
-                    fillColor: CustomColors.sellerWhite,
+                    fillColor: CustomColors.white,
                     filled: true,
                   ),
                   onChanged: (val) {
@@ -632,7 +632,7 @@ class _AddProductState extends State<AddProduct> {
                     style: TextStyle(
                       fontSize: 16.0,
                       fontFamily: 'Georgia',
-                      color: CustomColors.sellerBlack,
+                      color: CustomColors.black,
                     ),
                   ),
                   Flexible(
@@ -641,7 +641,7 @@ class _AddProductState extends State<AddProduct> {
                       textAlign: TextAlign.end,
                       readOnly: true,
                       decoration: InputDecoration(
-                        fillColor: CustomColors.sellerWhite,
+                        fillColor: CustomColors.white,
                         filled: true,
                       ),
                     ),
@@ -851,7 +851,7 @@ class Search extends SearchDelegate {
                   Text(
                     "No Products Found",
                     style: TextStyle(
-                      color: CustomColors.sellerAlertRed,
+                      color: CustomColors.alertRed,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -862,7 +862,7 @@ class Search extends SearchDelegate {
                   Text(
                     "Sorry. Please Try Again Later!",
                     style: TextStyle(
-                      color: CustomColors.sellerBlue,
+                      color: CustomColors.blue,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),

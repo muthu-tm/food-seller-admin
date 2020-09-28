@@ -23,7 +23,7 @@ class SettingsHome extends StatelessWidget {
                           width: 85,
                           height: 80,
                           decoration: BoxDecoration(
-                            color: CustomColors.sellerGreen,
+                            color: CustomColors.green,
                             shape: BoxShape.rectangle,
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(40),
@@ -39,7 +39,7 @@ class SettingsHome extends StatelessWidget {
                             height: 60,
                             child: DecoratedBox(
                               decoration: BoxDecoration(
-                                color: CustomColors.sellerBlue.withOpacity(0.4),
+                                color: CustomColors.blue.withOpacity(0.4),
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
@@ -47,7 +47,7 @@ class SettingsHome extends StatelessWidget {
                                 child: Icon(
                                   Icons.person,
                                   size: 35,
-                                  color: CustomColors.sellerBlue,
+                                  color: CustomColors.blue,
                                 ),
                               ),
                             ),
@@ -63,7 +63,7 @@ class SettingsHome extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16.0,
                         fontFamily: 'Georgia',
-                        color: CustomColors.sellerBlack,
+                        color: CustomColors.black,
                       ),
                     ),
                   ),
@@ -80,7 +80,7 @@ class SettingsHome extends StatelessWidget {
               },
             ),
             Divider(
-              color: CustomColors.sellerGreen,
+              color: CustomColors.green,
               thickness: 2.0,
               height: 1,
             ),
@@ -96,7 +96,7 @@ class SettingsHome extends StatelessWidget {
                           width: 85,
                           height: 80,
                           decoration: BoxDecoration(
-                            color: CustomColors.sellerGreen,
+                            color: CustomColors.green,
                             shape: BoxShape.rectangle,
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(40),
@@ -112,7 +112,7 @@ class SettingsHome extends StatelessWidget {
                             height: 60,
                             child: DecoratedBox(
                               decoration: BoxDecoration(
-                                color: CustomColors.sellerBlue.withOpacity(0.4),
+                                color: CustomColors.blue.withOpacity(0.4),
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
@@ -120,7 +120,7 @@ class SettingsHome extends StatelessWidget {
                                 child: Icon(
                                   Icons.store,
                                   size: 35,
-                                  color: CustomColors.sellerBlue,
+                                  color: CustomColors.blue,
                                 ),
                               ),
                             ),
@@ -136,7 +136,7 @@ class SettingsHome extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16.0,
                         fontFamily: 'Georgia',
-                        color: CustomColors.sellerBlack,
+                        color: CustomColors.black,
                       ),
                     ),
                   ),
@@ -153,7 +153,7 @@ class SettingsHome extends StatelessWidget {
               },
             ),
             Divider(
-              color: CustomColors.sellerGreen,
+              color: CustomColors.green,
               thickness: 2.0,
               height: 1,
             ),
@@ -169,7 +169,7 @@ class SettingsHome extends StatelessWidget {
                           width: 85,
                           height: 80,
                           decoration: BoxDecoration(
-                            color: CustomColors.sellerGreen,
+                            color: CustomColors.green,
                             shape: BoxShape.rectangle,
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(40),
@@ -185,7 +185,7 @@ class SettingsHome extends StatelessWidget {
                             height: 60,
                             child: DecoratedBox(
                               decoration: BoxDecoration(
-                                color: CustomColors.sellerBlue.withOpacity(0.4),
+                                color: CustomColors.blue.withOpacity(0.4),
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
@@ -193,7 +193,7 @@ class SettingsHome extends StatelessWidget {
                                 child: Icon(
                                   Icons.local_offer,
                                   size: 35,
-                                  color: CustomColors.sellerBlue,
+                                  color: CustomColors.blue,
                                 ),
                               ),
                             ),
@@ -209,7 +209,7 @@ class SettingsHome extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16.0,
                         fontFamily: 'Georgia',
-                        color: CustomColors.sellerBlack,
+                        color: CustomColors.black,
                       ),
                     ),
                   ),
@@ -226,7 +226,7 @@ class SettingsHome extends StatelessWidget {
               },
             ),
             Divider(
-              color: CustomColors.sellerGreen,
+              color: CustomColors.green,
               thickness: 2.0,
               height: 1,
             ),
@@ -242,7 +242,7 @@ class SettingsHome extends StatelessWidget {
                           width: 85,
                           height: 80,
                           decoration: BoxDecoration(
-                            color: CustomColors.sellerGreen,
+                            color: CustomColors.green,
                             shape: BoxShape.rectangle,
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(40),
@@ -258,7 +258,7 @@ class SettingsHome extends StatelessWidget {
                             height: 60,
                             child: DecoratedBox(
                               decoration: BoxDecoration(
-                                color: CustomColors.sellerBlue.withOpacity(0.4),
+                                color: CustomColors.blue.withOpacity(0.4),
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
@@ -286,7 +286,7 @@ class SettingsHome extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16.0,
                         fontFamily: 'Georgia',
-                        color: CustomColors.sellerBlack,
+                        color: CustomColors.black,
                       ),
                     ),
                   ),
@@ -303,7 +303,7 @@ class SettingsHome extends StatelessWidget {
               },
             ),
             Divider(
-              color: CustomColors.sellerGreen,
+              color: CustomColors.green,
               thickness: 2.0,
               height: 1,
             ),

@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static const TextStyle optionStyle = TextStyle(
       fontSize: 30,
       fontWeight: FontWeight.bold,
-      color: CustomColors.sellerGreen);
+      color: CustomColors.green);
 
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreenStoreWidget(),
@@ -62,34 +62,34 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       bottomNavigationBar: ConvexAppBar(
-        backgroundColor: CustomColors.sellerGreen,
+        backgroundColor: CustomColors.green,
         style: TabStyle.flip,
         items: [
           TabItem(
               icon: Icon(
                 Icons.store,
-                color: CustomColors.sellerBlue,
+                color: CustomColors.blue,
                 size: 30,
               ),
               title: 'Home'),
           TabItem(
               icon: Icon(
                 Icons.add_shopping_cart,
-                color: CustomColors.sellerBlue,
+                color: CustomColors.blue,
                 size: 30,
               ),
               title: 'Products'),
           TabItem(
               icon: Icon(
                 Icons.assessment,
-                color: CustomColors.sellerBlue,
+                color: CustomColors.blue,
                 size: 30,
               ),
               title: 'Orders'),
           TabItem(
               icon: Icon(
                 Icons.settings,
-                color: CustomColors.sellerBlue,
+                color: CustomColors.blue,
                 size: 30,
               ),
               title: 'Settings'),

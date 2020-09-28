@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class AsyncWidgets {
   static asyncWaiting(
-      {dotOneColor = CustomColors.sellerAlertRed,
-      dotTwoColor = CustomColors.sellerBlue,
-      dotThreeColor = CustomColors.sellerFadedPurple}) {
+      {dotOneColor = CustomColors.alertRed,
+      dotTwoColor = CustomColors.blue,
+      dotThreeColor = CustomColors.lightPurple}) {
     return <Widget>[
       ColorLoader(
         dotOneColor: dotOneColor,
@@ -20,8 +20,8 @@ class AsyncWidgets {
         size: 18.0,
         gradient: LinearGradient(
           colors: [
-            CustomColors.sellerGreen,
-            CustomColors.sellerBlue,
+            CustomColors.green,
+            CustomColors.blue,
           ],
         ),
       ),
@@ -32,7 +32,7 @@ class AsyncWidgets {
     return <Widget>[
       Icon(
         Icons.error_outline,
-        color: CustomColors.sellerAlertRed,
+        color: CustomColors.alertRed,
         size: 60,
       ),
       Text(
@@ -40,7 +40,7 @@ class AsyncWidgets {
         style: TextStyle(
             fontSize: 17.0,
             fontWeight: FontWeight.bold,
-            color: CustomColors.sellerAlertRed),
+            color: CustomColors.alertRed),
       ),
     ];
   }

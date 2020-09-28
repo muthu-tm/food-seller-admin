@@ -40,7 +40,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: CustomColors.sellerLightGrey,
+      backgroundColor: CustomColors.lightGrey,
       body: SingleChildScrollView(
         child: _getBody(),
       ),
@@ -77,7 +77,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                     " +91",
                     style: TextStyle(
                       fontSize: 16.0,
-                      color: CustomColors.sellerGreen,
+                      color: CustomColors.green,
                     ),
                   ),
                   Expanded(
@@ -88,11 +88,11 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       keyboardType: TextInputType.number,
                       key: Key('EnterPhone-TextFormField'),
                       decoration: InputDecoration(
-                        fillColor: CustomColors.sellerWhite,
+                        fillColor: CustomColors.white,
                         filled: true,
                         suffixIcon: Icon(
                           Icons.phone_android,
-                          color: CustomColors.sellerFadedButtonGreen,
+                          color: CustomColors.lightGreen,
                           size: 35.0,
                         ),
                         hintText: AppLocalizations.of(context)
@@ -116,11 +116,11 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                 textCapitalization: TextCapitalization.sentences,
                 decoration: InputDecoration(
                   hintText: AppLocalizations.of(context).translate('name'),
-                  fillColor: CustomColors.sellerWhite,
+                  fillColor: CustomColors.white,
                   filled: true,
                   suffixIcon: Icon(
                     Icons.sentiment_satisfied,
-                    color: CustomColors.sellerFadedButtonGreen,
+                    color: CustomColors.lightGreen,
                     size: 35.0,
                   ),
                 ),
@@ -139,14 +139,14 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                 decoration: InputDecoration(
                   hintText: AppLocalizations.of(context)
                       .translate('four_digit_secret'),
-                  fillColor: CustomColors.sellerWhite,
+                  fillColor: CustomColors.white,
                   filled: true,
                   suffixIcon: IconButton(
                     icon: Icon(
                       _passwordVisible
                           ? Icons.visibility_off
                           : Icons.visibility,
-                      color: CustomColors.sellerFadedButtonGreen,
+                      color: CustomColors.lightGreen,
                       size: 35.0,
                     ),
                     onPressed: () {
@@ -164,7 +164,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(width: 5),
-              Icon(Icons.info, color: CustomColors.sellerAlertRed, size: 20.0),
+              Icon(Icons.info, color: CustomColors.alertRed, size: 20.0),
               SizedBox(width: 10.0),
               Expanded(
                 child: RichText(
@@ -173,20 +173,20 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       text: AppLocalizations.of(context)
                           .translate('we_will_send'),
                       style: TextStyle(
-                          color: CustomColors.sellerGreen,
+                          color: CustomColors.green,
                           fontWeight: FontWeight.w400)),
                   TextSpan(
                       text: AppLocalizations.of(context)
                           .translate('one_time_password'),
                       style: TextStyle(
-                          color: CustomColors.sellerAlertRed,
+                          color: CustomColors.alertRed,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w700)),
                   TextSpan(
                       text: AppLocalizations.of(context)
                           .translate('to_mobile_no'),
                       style: TextStyle(
-                          color: CustomColors.sellerGreen,
+                          color: CustomColors.green,
                           fontWeight: FontWeight.w400)),
                 ])),
               ),
@@ -202,12 +202,12 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               child: Text(
                 AppLocalizations.of(context).translate('get_otp'),
                 style: TextStyle(
-                  color: CustomColors.sellerLightGrey,
+                  color: CustomColors.lightGrey,
                   fontSize: 18.0,
                 ),
               ),
             ),
-            color: CustomColors.sellerBlue,
+            color: CustomColors.blue,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0),
             ),
@@ -222,7 +222,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   style: TextStyle(
                     fontSize: 12,
                     fontFamily: 'Georgia',
-                    color: CustomColors.sellerPositiveGreen,
+                    color: CustomColors.positiveGreen,
                   ),
                 ),
               ),
@@ -234,7 +234,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.sellerGreen,
+                    color: CustomColors.green,
                   ),
                 ),
               ),

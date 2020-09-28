@@ -17,7 +17,7 @@ Widget sideDrawer(BuildContext context) {
     child: ListView(
       children: <Widget>[
         DrawerHeader(
-          decoration: BoxDecoration(color: CustomColors.sellerGreen),
+          decoration: BoxDecoration(color: CustomColors.green),
           child: Column(
             children: <Widget>[
               Container(
@@ -29,7 +29,7 @@ Widget sideDrawer(BuildContext context) {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: CustomColors.sellerBlue,
+                            color: CustomColors.blue,
                             style: BorderStyle.solid,
                             width: 2.0,
                           ),
@@ -64,7 +64,7 @@ Widget sideDrawer(BuildContext context) {
                                 child: Icon(
                                   Icons.person,
                                   size: 45.0,
-                                  color: CustomColors.sellerLightGrey,
+                                  color: CustomColors.lightGrey,
                                 ),
                               ),
                               Text(
@@ -72,7 +72,7 @@ Widget sideDrawer(BuildContext context) {
                                     .translate('upload'),
                                 style: TextStyle(
                                   fontSize: 8.0,
-                                  color: CustomColors.sellerLightGrey,
+                                  color: CustomColors.lightGrey,
                                 ),
                               ),
                             ],
@@ -134,11 +134,11 @@ Widget sideDrawer(BuildContext context) {
                                   );
                                 },
                                 child: CircleAvatar(
-                                  backgroundColor: CustomColors.sellerBlue,
+                                  backgroundColor: CustomColors.blue,
                                   radius: 15,
                                   child: Icon(
                                     Icons.edit,
-                                    color: CustomColors.sellerGreen,
+                                    color: CustomColors.green,
                                     size: 20.0,
                                   ),
                                 ),
@@ -153,7 +153,7 @@ Widget sideDrawer(BuildContext context) {
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w500,
-                  color: CustomColors.sellerLightGrey,
+                  color: CustomColors.lightGrey,
                 ),
               ),
               Text(
@@ -161,14 +161,14 @@ Widget sideDrawer(BuildContext context) {
                 style: TextStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.w500,
-                  color: CustomColors.sellerLightGrey,
+                  color: CustomColors.lightGrey,
                 ),
               ),
             ],
           ),
         ),
         ListTile(
-          leading: Icon(Icons.home, color: CustomColors.sellerBlue),
+          leading: Icon(Icons.home, color: CustomColors.blue),
           title: Text(
             "Home",
           ),
@@ -183,10 +183,10 @@ Widget sideDrawer(BuildContext context) {
             );
           },
         ),
-        Divider(indent: 65.0, color: CustomColors.sellerBlue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ExpansionTile(
           leading:
-              Icon(Icons.supervisor_account, color: CustomColors.sellerBlue),
+              Icon(Icons.supervisor_account, color: CustomColors.blue),
           title: Text(
             "Products",
           ),
@@ -206,22 +206,22 @@ Widget sideDrawer(BuildContext context) {
           ],
         ),
         ListTile(
-          leading: Icon(Icons.assessment, color: CustomColors.sellerBlue),
+          leading: Icon(Icons.assessment, color: CustomColors.blue),
           title: Text(
             "Orders",
           ),
         ),
         ListTile(
           leading:
-              Icon(Icons.notifications_active, color: CustomColors.sellerBlue),
+              Icon(Icons.notifications_active, color: CustomColors.blue),
           title: Text(
             "Notifications",
           ),
         ),
-        Divider(indent: 65.0, color: CustomColors.sellerBlue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
           leading:
-              Icon(Icons.store_mall_directory, color: CustomColors.sellerBlue),
+              Icon(Icons.store_mall_directory, color: CustomColors.blue),
           title: Text(
             "Store settings",
           ),
@@ -236,7 +236,7 @@ Widget sideDrawer(BuildContext context) {
           },
         ),
         ListTile(
-          leading: Icon(Icons.settings, color: CustomColors.sellerBlue),
+          leading: Icon(Icons.settings, color: CustomColors.blue),
           title: Text(
             AppLocalizations.of(context).translate('profile_settings'),
           ),
@@ -250,9 +250,9 @@ Widget sideDrawer(BuildContext context) {
             );
           },
         ),
-        Divider(indent: 65.0, color: CustomColors.sellerBlue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.headset_mic, color: CustomColors.sellerBlue),
+          leading: Icon(Icons.headset_mic, color: CustomColors.blue),
           title: Text(
             AppLocalizations.of(context).translate('help_and_support'),
           ),
@@ -269,7 +269,7 @@ Widget sideDrawer(BuildContext context) {
           },
         ),
         ListTile(
-          leading: Icon(Icons.error, color: CustomColors.sellerAlertRed),
+          leading: Icon(Icons.error, color: CustomColors.alertRed),
           title: Text(
             AppLocalizations.of(context).translate('logout'),
           ),
@@ -288,7 +288,7 @@ Widget sideDrawer(BuildContext context) {
             );
           }, () => Navigator.pop(context, false)),
         ),
-        Divider(color: CustomColors.sellerBlue, thickness: 1.0),
+        Divider(color: CustomColors.blue, thickness: 1.0),
         Container(
           child: AboutListTile(
             dense: true,
@@ -314,7 +314,7 @@ Widget sideDrawer(BuildContext context) {
                 seller_app_name,
                 textAlign: TextAlign.justify,
                 style: TextStyle(
-                  color: CustomColors.sellerGreen,
+                  color: CustomColors.green,
                   fontFamily: 'Georgia',
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -332,7 +332,7 @@ Widget sideDrawer(BuildContext context) {
                   text: TextSpan(
                     text: 'ChipChop',
                     style: TextStyle(
-                      color: CustomColors.sellerBlue,
+                      color: CustomColors.blue,
                       fontFamily: 'Georgia',
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
@@ -341,7 +341,7 @@ Widget sideDrawer(BuildContext context) {
                       TextSpan(
                         text: ' Seller',
                         style: TextStyle(
-                          color: CustomColors.sellerBlue,
+                          color: CustomColors.blue,
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -356,14 +356,14 @@ Widget sideDrawer(BuildContext context) {
               ListTile(
                 leading: Icon(
                   Icons.info,
-                  color: CustomColors.sellerGreen,
+                  color: CustomColors.green,
                   size: 35.0,
                 ),
                 title: Text(
                   AppLocalizations.of(context)
                       .translate('terms_and_conditions'),
                   style: TextStyle(
-                    color: CustomColors.sellerFadedPurple,
+                    color: CustomColors.lightPurple,
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
                   ),

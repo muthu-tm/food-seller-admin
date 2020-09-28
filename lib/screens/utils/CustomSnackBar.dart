@@ -9,11 +9,11 @@ class CustomSnackBar {
         textAlign: TextAlign.center,
         style: TextStyle(
             fontSize: 16.0,
-            color: CustomColors.sellerLightGrey,
+            color: CustomColors.lightGrey,
             fontWeight: FontWeight.bold),
       ),
       duration: Duration(seconds: duration),
-      backgroundColor: CustomColors.sellerAlertRed,
+      backgroundColor: CustomColors.alertRed,
     );
   }
 
@@ -24,12 +24,12 @@ class CustomSnackBar {
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 16.0,
-          color: CustomColors.sellerLightGrey,
+          color: CustomColors.lightGrey,
           fontWeight: FontWeight.bold,
         ),
       ),
       duration: Duration(seconds: duration),
-      backgroundColor: CustomColors.sellerFadedButtonGreen,
+      backgroundColor: CustomColors.lightGreen,
     );
   }
 }

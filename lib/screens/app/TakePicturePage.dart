@@ -44,22 +44,22 @@ class _TakePicturePageState extends State<TakePicturePage> {
         title: Text(
           "Take Picture",
         ),
-        backgroundColor: CustomColors.sellerGreen,
+        backgroundColor: CustomColors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerAlertRed.withOpacity(0.7),
+        backgroundColor: CustomColors.alertRed.withOpacity(0.7),
         onPressed: () async {
           await _takePicture(context);
         },
         label: Text(
           "Capture",
           style: TextStyle(
-              color: CustomColors.sellerWhite,
+              color: CustomColors.white,
               fontSize: 14.0,
               fontWeight: FontWeight.bold),
         ),
-        icon: Icon(Icons.camera, size: 35, color: CustomColors.sellerWhite),
+        icon: Icon(Icons.camera, size: 35, color: CustomColors.white),
       ),
       body: FutureBuilder(
         future: _initializeCameraControllerFuture,

@@ -20,7 +20,7 @@ class _StoreSettingsState extends State<StoreSettings> {
       appBar: appBar(context),
       drawer: sideDrawer(context),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.sellerGreen,
+        backgroundColor: CustomColors.green,
         onPressed: () async {
           Navigator.push(
             context,
@@ -34,7 +34,7 @@ class _StoreSettingsState extends State<StoreSettings> {
         icon: Icon(
           Icons.store,
           size: 35,
-          color: CustomColors.sellerBlue,
+          color: CustomColors.blue,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -102,7 +102,7 @@ class _StoreSettingsState extends State<StoreSettings> {
                               Text(
                                 store.name,
                                 style: TextStyle(
-                                  color: CustomColors.sellerBlue,
+                                  color: CustomColors.blue,
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -125,7 +125,7 @@ class _StoreSettingsState extends State<StoreSettings> {
                   Text(
                     "No Store Available",
                     style: TextStyle(
-                      color: CustomColors.sellerAlertRed,
+                      color: CustomColors.alertRed,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -136,7 +136,7 @@ class _StoreSettingsState extends State<StoreSettings> {
                   Text(
                     "Add your Store Now!",
                     style: TextStyle(
-                      color: CustomColors.sellerBlue,
+                      color: CustomColors.blue,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),

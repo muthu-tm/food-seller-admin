@@ -67,7 +67,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
   }
 
   Widget _getBody() => Card(
-        color: CustomColors.sellerGreen,
+        color: CustomColors.green,
         elevation: 2.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -94,7 +94,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
             'ChipChop Seller',
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: CustomColors.sellerWhite,
+                color: CustomColors.white,
                 fontSize: 20.0,
                 fontWeight: FontWeight.w700),
           ),
@@ -109,18 +109,18 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                       TextSpan(
                           text: 'Please enter the ',
                           style: TextStyle(
-                              color: CustomColors.sellerWhite,
+                              color: CustomColors.white,
                               fontWeight: FontWeight.w400)),
                       TextSpan(
                           text: 'One Time Password',
                           style: TextStyle(
-                              color: CustomColors.sellerBlue,
+                              color: CustomColors.blue,
                               fontSize: 16.0,
                               fontWeight: FontWeight.w700)),
                       TextSpan(
                         text: ' sent to your mobile',
                         style: TextStyle(
-                            color: CustomColors.sellerWhite,
+                            color: CustomColors.white,
                             fontWeight: FontWeight.w400),
                       ),
                     ],
@@ -157,12 +157,12 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
               child: Text(
                 AppLocalizations.of(context).translate('verify'),
                 style: TextStyle(
-                  color: CustomColors.sellerGreen,
+                  color: CustomColors.green,
                   fontSize: 18.0,
                 ),
               ),
             ),
-            color: CustomColors.sellerBlue,
+            color: CustomColors.blue,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
           )
@@ -281,12 +281,12 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
           },
           maxLengthEnforced: false,
           textAlign: TextAlign.center,
-          cursorColor: CustomColors.sellerWhite,
+          cursorColor: CustomColors.white,
           keyboardType: TextInputType.number,
           style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.w600,
-              color: CustomColors.sellerWhite),
+              color: CustomColors.white),
         ),
       );
 }
