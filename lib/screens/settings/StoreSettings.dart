@@ -3,6 +3,7 @@ import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/app/appBar.dart';
 import 'package:chipchop_seller/screens/app/sideDrawer.dart';
 import 'package:chipchop_seller/screens/store/AddStoreHome.dart';
+import 'package:chipchop_seller/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,8 +18,10 @@ class _StoreSettingsState extends State<StoreSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context),
-      drawer: sideDrawer(context),
+      appBar: AppBar(
+        title: Text("Store Settings"),
+        backgroundColor: CustomColors.green
+      ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: CustomColors.green,
         onPressed: () async {
@@ -62,56 +65,93 @@ class _StoreSettingsState extends State<StoreSettings> {
                 Store store =
                     Store.fromJson(snapshot.data.documents[index].data);
                 return Container(
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
+                  height: 100,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          CachedNetworkImage(
-                            imageUrl: store.getStoreImages().first,
-                            imageBuilder: (context, imageProvider) => Container(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              height: 140,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10.0),
-                                ),
-                                shape: BoxShape.rectangle,
-                                image: DecorationImage(
-                                    fit: BoxFit.fill, image: imageProvider),
-                              ),
-                            ),
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) =>
-                                    CircularProgressIndicator(
-                                        value: downloadProgress.progress),
-                            errorWidget: (context, url, error) => Icon(
-                              Icons.error,
-                              size: 35,
-                            ),
-                            fadeOutDuration: Duration(seconds: 1),
-                            fadeInDuration: Duration(seconds: 2),
+                    elevation: 5,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ViewStoreScreen(store),
+                            settings: RouteSettings(name: '/store'),
                           ),
-                          Column(
-                            children: [
-                              Text(
-                                store.name,
-                                style: TextStyle(
-                                  color: CustomColors.blue,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: 10, right: 10),
+                            child: Container(
+                              height: 75,
+                              width: 75,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: CachedNetworkImage(
+                                  imageUrl: store.getStoreImages().first,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Image(
+                                    fit: BoxFit.fill,
+                                    image: imageProvider,
+                                  ),
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          Center(
+                                    child: SizedBox(
+                                      height: 50.0,
+                                      width: 50.0,
+                                      child: CircularProgressIndicator(
+                                          value: downloadProgress.progress,
+                                          valueColor: AlwaysStoppedAnimation(
+                                              CustomColors.blue),
+                                          strokeWidth: 2.0),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Icon(
+                                    Icons.error,
+                                    size: 35,
+                                  ),
+                                  fadeOutDuration: Duration(seconds: 1),
+                                  fadeInDuration: Duration(seconds: 2),
                                 ),
                               ),
-                            ],
-                          )
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  store.name,
+                                  style: TextStyle(
+                                    fontFamily: 'Georgia',
+                                    color: CustomColors.blue,
+                                    fontSize: 14.0,
+                                  ),
+                                ),
+                                SizedBox(height: 5.0),
+                                Container(
+                                  child: Text(
+                                    "Timings - ${store.activeFrom} : ${store.activeTill}",
+                                    style: TextStyle(
+                                      fontFamily: 'Georgia',
+                                      color: CustomColors.black,
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
                 );
               },
