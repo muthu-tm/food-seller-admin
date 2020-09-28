@@ -47,7 +47,7 @@ class Store extends Model {
   @JsonKey(name: 'contacts')
   List<StoreContacts> contacts;
   @JsonKey(name: 'delivery')
-  List<DeliveryDetails> deliveryDetails;
+  DeliveryDetails deliveryDetails;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)

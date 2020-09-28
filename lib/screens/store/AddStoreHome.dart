@@ -111,7 +111,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             store.address = sAddress;
             store.workingDays = workingDays;
             store.contacts = [contacts];
-            store.deliveryDetails = [DeliveryDetails()];
+            store.deliveryDetails = DeliveryDetails();
 
             StoreUserAccess userAccess = StoreUserAccess();
             userAccess.positionName = "Owner";
