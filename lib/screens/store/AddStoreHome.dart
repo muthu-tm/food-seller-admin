@@ -15,6 +15,7 @@ import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AddNewStoreHome extends StatefulWidget {
   @override
@@ -27,6 +28,13 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   Address sAddress = Address();
   String storeName = '';
   String ownedBy = '';
+  String deliverFrom;
+  String deliverTill;
+  String maxDistance = '0';
+  String deliveryCharge2 = '0.00';
+  String deliveryCharge5 = '0.00';
+  String deliveryCharge10 = '0.00';
+  String deliveryChargeMax = '0.00';
   List<String> availProducts = [];
   List<String> availProductCategories = [];
   List<ProductCategories> productCategories = [];
@@ -34,6 +42,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   List<int> workingDays = [1, 2, 3, 4, 5];
   TimeOfDay fromTime = TimeOfDay(hour: 9, minute: 0);
   TimeOfDay tillTime = TimeOfDay(hour: 18, minute: 0);
+  TimeOfDay deliverFromTime = TimeOfDay(hour: 09, minute: 00);
+  TimeOfDay deliverTillTime = TimeOfDay(hour: 18, minute: 00);
   String activeFrom;
   String activeTill;
   List<String> _days = [
@@ -51,6 +61,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
     super.initState();
     activeFrom = '${fromTime.hour}:${fromTime.minute}';
     activeTill = '${tillTime.hour}:${tillTime.minute}';
+    deliverFrom = '${deliverFromTime.hour}:${deliverFromTime.minute}';
+    deliverTill = '${deliverTillTime.hour}:${deliverTillTime.minute}';
 
     ownedBy = cachedLocalUser.firstName + cachedLocalUser.lastName;
   }
@@ -111,7 +123,19 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             store.address = sAddress;
             store.workingDays = workingDays;
             store.contacts = [contacts];
+
             store.deliveryDetails = DeliveryDetails();
+            store.deliveryDetails.deliveryFrom = this.deliverFrom;
+            store.deliveryDetails.deliveryTill = this.deliverTill;
+            store.deliveryDetails.maxDistance = int.parse(this.maxDistance);
+            store.deliveryDetails.deliveryCharges02 =
+                double.parse(this.deliveryCharge2);
+            store.deliveryDetails.deliveryCharges05 =
+                double.parse(this.deliveryCharge5);
+            store.deliveryDetails.deliveryCharges10 =
+                double.parse(this.deliveryCharge10);
+            store.deliveryDetails.deliveryChargesMax =
+                double.parse(this.deliveryChargeMax);
 
             StoreUserAccess userAccess = StoreUserAccess();
             userAccess.positionName = "Owner";
@@ -186,8 +210,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
                       border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: CustomColors.grey)),
+                          borderSide: BorderSide(color: CustomColors.grey)),
                     ),
                     validator: (name) {
                       if (name.isEmpty) {
@@ -226,8 +249,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
                       border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: CustomColors.grey)),
+                          borderSide: BorderSide(color: CustomColors.grey)),
                     ),
                     validator: (owner) {
                       if (owner.isEmpty) {
@@ -421,6 +443,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   padding: EdgeInsets.all(5),
                   child: AddressWidget("Store Address", Address(), sAddress),
                 ),
+                getDeliveryDetails(),
                 SizedBox(height: 80),
               ],
             ),
@@ -629,6 +652,267 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
     );
   }
 
+  Widget getDeliveryDetails() {
+    return Card(
+      color: CustomColors.lightGrey,
+      elevation: 5.0,
+      margin: EdgeInsets.all(5.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            height: 40,
+            alignment: Alignment.center,
+            child: Text(
+              "Delivery Details",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: "Georgia",
+                fontWeight: FontWeight.bold,
+                color: CustomColors.blue,
+              ),
+            ),
+          ),
+          Divider(
+            color: CustomColors.blue,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 15.0, top: 10, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: ListTile(
+                        title: Text("${deliverFromTime.format(context)}"),
+                        trailing: Icon(Icons.keyboard_arrow_down),
+                        onTap: () async {
+                          await _pickDeliverFromTime();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                Text(
+                  "--",
+                  style: TextStyle(
+                    fontFamily: "Georgia",
+                    color: CustomColors.green,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: ListTile(
+                    title: Text("${deliverTillTime.format(context)}"),
+                    trailing: Icon(Icons.keyboard_arrow_down),
+                    onTap: () async {
+                      await _pickDeliverTillTime();
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: TextFormField(
+                    initialValue: maxDistance,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.start,
+                    decoration: InputDecoration(
+                      labelText: "Max Distance",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      labelStyle: TextStyle(
+                        fontSize: 10.0,
+                        color: CustomColors.blue,
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: CustomColors.lightGreen)),
+                      fillColor: CustomColors.white,
+                      filled: true,
+                    ),
+                    validator: (maxDistance) {
+                      if (maxDistance.trim() != "" && maxDistance.isNotEmpty) {
+                        this.maxDistance = maxDistance;
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(left: 5)),
+                Flexible(
+                  child: TextFormField(
+                    textAlign: TextAlign.start,
+                    decoration: InputDecoration(
+                      labelText: "Delivery Options",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      labelStyle: TextStyle(
+                        fontSize: 10.0,
+                        color: CustomColors.blue,
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: CustomColors.lightGreen)),
+                      fillColor: CustomColors.white,
+                      filled: true,
+                    ),
+                    validator: (deliveryOptions) {
+                      if (deliveryOptions.trim() != "") {}
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    initialValue: deliveryCharge2,
+                    textAlign: TextAlign.start,
+                    decoration: InputDecoration(
+                      labelText: "Delivery Charge 2km",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      labelStyle: TextStyle(
+                        fontSize: 10.0,
+                        color: CustomColors.blue,
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: CustomColors.lightGreen)),
+                      fillColor: CustomColors.white,
+                      filled: true,
+                    ),
+                    validator: (delivery2Km) {
+                      if (delivery2Km.trim() != "" && delivery2Km.isNotEmpty) {
+                        this.deliveryCharge2 = delivery2Km;
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(left: 5)),
+                Flexible(
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    initialValue: deliveryCharge5,
+                    textAlign: TextAlign.start,
+                    decoration: InputDecoration(
+                      labelText: "Delivery Charge 5km",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      labelStyle: TextStyle(
+                        fontSize: 10.0,
+                        color: CustomColors.blue,
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: CustomColors.lightGreen)),
+                      fillColor: CustomColors.white,
+                      filled: true,
+                    ),
+                    validator: (delivery5Km) {
+                      if (delivery5Km.trim() != "" && delivery5Km.isNotEmpty) {
+                        this.deliveryCharge5 = delivery5Km;
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    initialValue: deliveryCharge10,
+                    textAlign: TextAlign.start,
+                    decoration: InputDecoration(
+                      labelText: "Delivery Charge 10km",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      labelStyle: TextStyle(
+                        fontSize: 10.0,
+                        color: CustomColors.blue,
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: CustomColors.lightGreen)),
+                      fillColor: CustomColors.white,
+                      filled: true,
+                    ),
+                    validator: (delivery10Km) {
+                      if (delivery10Km.trim() != "" &&
+                          delivery10Km.isNotEmpty) {
+                        this.deliveryCharge10 = delivery10Km;
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(left: 5)),
+                Flexible(
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    initialValue: deliveryChargeMax,
+                    textAlign: TextAlign.start,
+                    decoration: InputDecoration(
+                      labelText: "Delivery Charge Max",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      labelStyle: TextStyle(
+                        fontSize: 10.0,
+                        color: CustomColors.blue,
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: CustomColors.lightGreen)),
+                      fillColor: CustomColors.white,
+                      filled: true,
+                    ),
+                    validator: (deliveryMax) {
+                      if (deliveryMax.trim() != "") {
+                        this.deliveryChargeMax = deliveryMax;
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget getProductSubCategories(BuildContext context) {
     return FutureBuilder<List<ProductSubCategories>>(
       future: ProductSubCategories().getSubCategories(productCategories),
@@ -669,10 +953,10 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       categories.name,
                       style: TextStyle(
                           fontFamily: "Georgia",
-                          color:
-                              availProductSubCategories.contains(categories.uuid)
-                                  ? CustomColors.white
-                                  : CustomColors.green),
+                          color: availProductSubCategories
+                                  .contains(categories.uuid)
+                              ? CustomColors.white
+                              : CustomColors.green),
                     ),
                   ),
                 );
@@ -737,12 +1021,32 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
       });
   }
 
+  _pickDeliverFromTime() async {
+    TimeOfDay t =
+        await showTimePicker(context: context, initialTime: deliverFromTime);
+    if (t != null)
+      setState(() {
+        deliverFromTime = t;
+        deliverFrom = '${t.hour}:${t.minute}';
+      });
+  }
+
   _pickTillTime() async {
-    TimeOfDay t = await showTimePicker(context: context, initialTime: tillTime);
+    TimeOfDay t =
+        await showTimePicker(context: context, initialTime: deliverTillTime);
     if (t != null)
       setState(() {
         tillTime = t;
         activeTill = '${t.hour}:${t.minute}';
+      });
+  }
+
+  _pickDeliverTillTime() async {
+    TimeOfDay t = await showTimePicker(context: context, initialTime: tillTime);
+    if (t != null)
+      setState(() {
+        deliverTillTime = t;
+        deliverTill = '${t.hour}:${t.minute}';
       });
   }
 }

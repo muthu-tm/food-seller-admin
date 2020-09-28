@@ -149,6 +149,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                 Flexible(
                   child: TextFormField(
                     initialValue: widget.address.pincode,
+                    keyboardType: TextInputType.number,
                     textAlign: TextAlign.start,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)
