@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/store/AddStoreHome.dart';
+import 'package:chipchop_seller/screens/store/EditStoreScreen.dart';
 import 'package:chipchop_seller/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
@@ -74,7 +75,7 @@ class _StoreSettingsState extends State<StoreSettings> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ViewStoreScreen(store),
+                            builder: (context) => EditStoreScreen(store),
                             settings: RouteSettings(name: '/store/edit'),
                           ),
                         );

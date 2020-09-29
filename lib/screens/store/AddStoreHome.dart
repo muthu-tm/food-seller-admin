@@ -30,11 +30,11 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   String ownedBy = '';
   String deliverFrom;
   String deliverTill;
-  String maxDistance = '0';
-  String deliveryCharge2 = '0.00';
-  String deliveryCharge5 = '0.00';
-  String deliveryCharge10 = '0.00';
-  String deliveryChargeMax = '0.00';
+  int maxDistance = 0;
+  double deliveryCharge2 = 0.00;
+  double deliveryCharge5 = 0.00;
+  double deliveryCharge10 = 0.00;
+  double deliveryChargeMax = 0.00;
   List<String> availProducts = [];
   List<String> availProductCategories = [];
   List<ProductCategories> productCategories = [];
@@ -127,15 +127,15 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             store.deliveryDetails = DeliveryDetails();
             store.deliveryDetails.deliveryFrom = this.deliverFrom;
             store.deliveryDetails.deliveryTill = this.deliverTill;
-            store.deliveryDetails.maxDistance = int.parse(this.maxDistance);
+            store.deliveryDetails.maxDistance = this.maxDistance;
             store.deliveryDetails.deliveryCharges02 =
-                double.parse(this.deliveryCharge2);
+                this.deliveryCharge2;
             store.deliveryDetails.deliveryCharges05 =
-                double.parse(this.deliveryCharge5);
+                this.deliveryCharge5;
             store.deliveryDetails.deliveryCharges10 =
-                double.parse(this.deliveryCharge10);
+                this.deliveryCharge10;
             store.deliveryDetails.deliveryChargesMax =
-                double.parse(this.deliveryChargeMax);
+                this.deliveryChargeMax;
 
             StoreUserAccess userAccess = StoreUserAccess();
             userAccess.positionName = "Owner";
@@ -725,7 +725,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
               children: <Widget>[
                 Flexible(
                   child: TextFormField(
-                    initialValue: maxDistance,
+                    initialValue: maxDistance.toString(),
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.start,
                     decoration: InputDecoration(
@@ -745,7 +745,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     ),
                     validator: (maxDistance) {
                       if (maxDistance.trim() != "" && maxDistance.isNotEmpty) {
-                        this.maxDistance = maxDistance;
+                        this.maxDistance = int.parse(maxDistance);
                       }
                       return null;
                     },
@@ -786,7 +786,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                 Flexible(
                   child: TextFormField(
                     keyboardType: TextInputType.number,
-                    initialValue: deliveryCharge2,
+                    initialValue: deliveryCharge2.toString(),
                     textAlign: TextAlign.start,
                     decoration: InputDecoration(
                       labelText: "Delivery Charge 2km",
@@ -805,7 +805,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     ),
                     validator: (delivery2Km) {
                       if (delivery2Km.trim() != "" && delivery2Km.isNotEmpty) {
-                        this.deliveryCharge2 = delivery2Km;
+                        this.deliveryCharge2 = double.parse(delivery2Km);
                       }
                       return null;
                     },
@@ -815,7 +815,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                 Flexible(
                   child: TextFormField(
                     keyboardType: TextInputType.number,
-                    initialValue: deliveryCharge5,
+                    initialValue: deliveryCharge5.toString(),
                     textAlign: TextAlign.start,
                     decoration: InputDecoration(
                       labelText: "Delivery Charge 5km",
@@ -834,7 +834,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     ),
                     validator: (delivery5Km) {
                       if (delivery5Km.trim() != "" && delivery5Km.isNotEmpty) {
-                        this.deliveryCharge5 = delivery5Km;
+                        this.deliveryCharge5 = double.parse(delivery5Km);
                       }
                       return null;
                     },
@@ -850,7 +850,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                 Flexible(
                   child: TextFormField(
                     keyboardType: TextInputType.number,
-                    initialValue: deliveryCharge10,
+                    initialValue: deliveryCharge10.toString(),
                     textAlign: TextAlign.start,
                     decoration: InputDecoration(
                       labelText: "Delivery Charge 10km",
@@ -870,7 +870,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     validator: (delivery10Km) {
                       if (delivery10Km.trim() != "" &&
                           delivery10Km.isNotEmpty) {
-                        this.deliveryCharge10 = delivery10Km;
+                        this.deliveryCharge10 = double.parse(delivery10Km);
                       }
                       return null;
                     },
@@ -880,7 +880,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                 Flexible(
                   child: TextFormField(
                     keyboardType: TextInputType.number,
-                    initialValue: deliveryChargeMax,
+                    initialValue: deliveryChargeMax.toString(),
                     textAlign: TextAlign.start,
                     decoration: InputDecoration(
                       labelText: "Delivery Charge Max",
@@ -899,7 +899,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     ),
                     validator: (deliveryMax) {
                       if (deliveryMax.trim() != "") {
-                        this.deliveryChargeMax = deliveryMax;
+                        this.deliveryChargeMax = double.parse(deliveryMax);
                       }
                       return null;
                     },
