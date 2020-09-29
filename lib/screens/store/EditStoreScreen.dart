@@ -60,9 +60,17 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
     "Saturday"
   ];
 
+  List<int> deliveryTemp;
+  bool _isCheckedPickUp;
+  bool _isCheckedDelivery;
 
-@override
+  @override
   void initState() {
+
+    deliveryTemp = [widget.store.deliveryDetails.availableOptions[0], widget.store.deliveryDetails.availableOptions[1]];
+    _isCheckedDelivery = widget.store.deliveryDetails.availableOptions[0] == 1 ? true :false ;
+    _isCheckedPickUp = widget.store.deliveryDetails.availableOptions[1] == 2 ? true :false ;
+
     super.initState();
     activeFrom = '${fromTime.hour}:${fromTime.minute}';
     activeTill = '${tillTime.hour}:${tillTime.minute}';
@@ -74,7 +82,6 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     Widget getProductTypes(BuildContext context) {
       return StreamBuilder<QuerySnapshot>(
         stream: ProductTypes().streamProductTypes(),
@@ -382,12 +389,60 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
               ),
             ),
             Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text("Delivery from Store"),
+                        value: _isCheckedDelivery,
+                        onChanged: (val) {
+                          setState(() {
+                              _isCheckedDelivery = val;
+                              if(_isCheckedDelivery){
+                                deliveryTemp[0] = 1;
+                              } else {
+                                deliveryTemp[0] = 0;
+                              }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text("Pickup from Store"),
+                        value: _isCheckedPickUp,
+                        onChanged: (val) {
+                          setState(() {
+                              _isCheckedPickUp = val;
+                              if(_isCheckedDelivery){
+                                deliveryTemp[1] = 2;
+                              } else {
+                                deliveryTemp[1] = 0;
+                              }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+            Padding(
               padding: EdgeInsets.all(5.0),
               child: Row(
                 children: <Widget>[
                   Flexible(
                     child: TextFormField(
-                      initialValue: widget.store.deliveryDetails.maxDistance.toString(),
+                      initialValue:
+                          widget.store.deliveryDetails.maxDistance.toString(),
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.start,
                       decoration: InputDecoration(
@@ -414,31 +469,6 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                       },
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(left: 5)),
-                  Flexible(
-                    child: TextFormField(
-                      textAlign: TextAlign.start,
-                      decoration: InputDecoration(
-                        labelText: "Delivery Options",
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle: TextStyle(
-                          fontSize: 10.0,
-                          color: CustomColors.blue,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 3.0, horizontal: 10.0),
-                        border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: CustomColors.lightGreen)),
-                        fillColor: CustomColors.white,
-                        filled: true,
-                      ),
-                      validator: (deliveryOptions) {
-                        if (deliveryOptions.trim() != "") {}
-                        return null;
-                      },
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -449,7 +479,9 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                   Flexible(
                     child: TextFormField(
                       keyboardType: TextInputType.number,
-                      initialValue: widget.store.deliveryDetails.deliveryCharges02.toString(),
+                      initialValue: widget
+                          .store.deliveryDetails.deliveryCharges02
+                          .toString(),
                       textAlign: TextAlign.start,
                       decoration: InputDecoration(
                         labelText: "Delivery Charge 2km",
@@ -479,7 +511,9 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                   Flexible(
                     child: TextFormField(
                       keyboardType: TextInputType.number,
-                      initialValue: widget.store.deliveryDetails.deliveryCharges05.toString(),
+                      initialValue: widget
+                          .store.deliveryDetails.deliveryCharges05
+                          .toString(),
                       textAlign: TextAlign.start,
                       decoration: InputDecoration(
                         labelText: "Delivery Charge 5km",
@@ -515,7 +549,9 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                   Flexible(
                     child: TextFormField(
                       keyboardType: TextInputType.number,
-                      initialValue: widget.store.deliveryDetails.deliveryCharges10.toString(),
+                      initialValue: widget
+                          .store.deliveryDetails.deliveryCharges10
+                          .toString(),
                       textAlign: TextAlign.start,
                       decoration: InputDecoration(
                         labelText: "Delivery Charge 10km",
@@ -545,7 +581,9 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                   Flexible(
                     child: TextFormField(
                       keyboardType: TextInputType.number,
-                      initialValue: widget.store.deliveryDetails.deliveryChargesMax.toString(),
+                      initialValue: widget
+                          .store.deliveryDetails.deliveryChargesMax
+                          .toString(),
                       textAlign: TextAlign.start,
                       decoration: InputDecoration(
                         labelText: "Delivery Charge Max",

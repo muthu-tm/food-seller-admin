@@ -56,9 +56,17 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
     "Saturday"
   ];
 
+  List<int> deliveryTemp = [1,2];
+  bool _isCheckedDelivery;
+  bool _isCheckedPickUp;
+
   @override
   void initState() {
     super.initState();
+
+  _isCheckedDelivery = true;
+  _isCheckedPickUp = true;
+
     activeFrom = '${fromTime.hour}:${fromTime.minute}';
     activeTill = '${tillTime.hour}:${tillTime.minute}';
     deliverFrom = '${deliverFromTime.hour}:${deliverFromTime.minute}';
@@ -128,14 +136,12 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             store.deliveryDetails.deliveryFrom = this.deliverFrom;
             store.deliveryDetails.deliveryTill = this.deliverTill;
             store.deliveryDetails.maxDistance = this.maxDistance;
-            store.deliveryDetails.deliveryCharges02 =
-                this.deliveryCharge2;
-            store.deliveryDetails.deliveryCharges05 =
-                this.deliveryCharge5;
-            store.deliveryDetails.deliveryCharges10 =
-                this.deliveryCharge10;
-            store.deliveryDetails.deliveryChargesMax =
-                this.deliveryChargeMax;
+            store.deliveryDetails.deliveryCharges02 = this.deliveryCharge2;
+            store.deliveryDetails.deliveryCharges05 = this.deliveryCharge5;
+            store.deliveryDetails.deliveryCharges10 = this.deliveryCharge10;
+            store.deliveryDetails.deliveryChargesMax = this.deliveryChargeMax;
+            store.deliveryDetails.availableOptions = this.deliveryTemp;
+
 
             StoreUserAccess userAccess = StoreUserAccess();
             userAccess.positionName = "Owner";
@@ -720,6 +726,53 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             ),
           ),
           Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text("Delivery from Store"),
+                        value: _isCheckedDelivery,
+                        onChanged: (val) {
+                          setState(() {
+                              _isCheckedDelivery = val;
+                              if(_isCheckedDelivery){
+                                deliveryTemp[0] = 1;
+                              } else {
+                                deliveryTemp[0] = 0;
+                              }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text("Pickup from Store"),
+                        value: _isCheckedPickUp,
+                        onChanged: (val) {
+                          setState(() {
+                              _isCheckedPickUp = val;
+                              if(_isCheckedPickUp){
+                                deliveryTemp[1] = 2;
+                              } else {
+                                deliveryTemp[1] = 0;
+                              }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
             padding: EdgeInsets.all(5.0),
             child: Row(
               children: <Widget>[
@@ -747,31 +800,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       if (maxDistance.trim() != "" && maxDistance.isNotEmpty) {
                         this.maxDistance = int.parse(maxDistance);
                       }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(padding: EdgeInsets.only(left: 5)),
-                Flexible(
-                  child: TextFormField(
-                    textAlign: TextAlign.start,
-                    decoration: InputDecoration(
-                      labelText: "Delivery Options",
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      labelStyle: TextStyle(
-                        fontSize: 10.0,
-                        color: CustomColors.blue,
-                      ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
-                      border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: CustomColors.lightGreen)),
-                      fillColor: CustomColors.white,
-                      filled: true,
-                    ),
-                    validator: (deliveryOptions) {
-                      if (deliveryOptions.trim() != "") {}
                       return null;
                     },
                   ),
