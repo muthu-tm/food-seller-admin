@@ -1,22 +1,27 @@
+import 'dart:math';
+
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import './model.dart';
+import '../../services/controllers/user/user_service.dart';
 import './order_amount.dart';
 import './order_delivery.dart';
 import './order_product.dart';
+import 'model.dart';
+import 'user.dart';
 part 'order.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class Order extends Model {
-  static CollectionReference _orderCollRef = Model.db.collection("orders");
-
+class Order {
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
+  @JsonKey(name: 'order_id', nullable: false)
+  String orderID;
   @JsonKey(name: 'store_uuid', nullable: false)
   String storeID;
   @JsonKey(name: 'user_number', nullable: false)
-  int userNumber;
+  String userNumber;
   @JsonKey(name: 'total_products', nullable: false)
   int totalProducts;
   @JsonKey(name: 'products', nullable: false)
@@ -25,8 +30,6 @@ class Order extends Model {
   List<String> orderImages;
   @JsonKey(name: 'written_orders', defaultValue: "")
   String writtenOrders;
-  @JsonKey(name: 'delivery_contact', nullable: false)
-  int deliveryContact;
   @JsonKey(name: 'customer_notes', defaultValue: "")
   String customerNotes;
   @JsonKey(name: 'status', defaultValue: 0)
@@ -54,15 +57,26 @@ class Order extends Model {
   Map<String, dynamic> toJson() => _$OrderToJson(this);
 
   CollectionReference getCollectionRef() {
-    return _orderCollRef;
+    return User().getDocumentRef(cachedLocalUser.getID()).collection("orders");
   }
 
-  DocumentReference getDocumentReference() {
-    return _orderCollRef.document(getID());
+  Query getGroupQuery() {
+    return Model.db.collectionGroup('orders');
+  }
+
+  DocumentReference getDocumentReference(String id) {
+    return getCollectionRef().document(id);
   }
 
   String getID() {
     return this.uuid;
+  }
+
+  String generateOrderID() {
+    return DateFormat('ddMMyy').format(this.createdAt) +
+        "-" +
+        Random(100).nextInt(1000).toString() +
+        this.totalProducts.toString();
   }
 
   String getStatus() {
@@ -85,12 +99,42 @@ class Order extends Model {
     this.createdAt = DateTime.now();
     this.updatedAt = DateTime.now();
     this.status = 0;
+    this.orderID = generateOrderID();
 
     DocumentReference docRef = this.getCollectionRef().document();
     this.uuid = docRef.documentID;
 
-    await super.add(this.toJson());
-
+    await docRef.setData(this.toJson());
     return this;
+  }
+
+  Stream<QuerySnapshot> streamOrders(String id) {
+    return getGroupQuery()
+        .where('store_uuid', isEqualTo: id)
+        .orderBy('created_at', descending: true)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> streamOrderByID(String userID, String storeID, String orderID) {
+    return getGroupQuery()
+        .where('store_uuid', isEqualTo: storeID)
+        .where('user_number', isEqualTo: userID)
+        .where('uuid', isEqualTo: orderID)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> streamOrdersByStatus(String storeID, List<int> status) {
+    if (status.isEmpty) {
+      return getGroupQuery()
+          .where('store_uuid', isEqualTo: storeID)
+          .orderBy('created_at', descending: true)
+          .snapshots();
+    } else {
+      return getGroupQuery()
+          .where('store_uuid', isEqualTo: storeID)
+          .where('status', whereIn: status)
+          .orderBy('created_at', descending: true)
+          .snapshots();
+    }
   }
 }

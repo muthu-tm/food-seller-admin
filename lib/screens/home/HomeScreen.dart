@@ -1,6 +1,7 @@
 import 'package:chipchop_seller/screens/app/appBar.dart';
 import 'package:chipchop_seller/screens/app/sideDrawer.dart';
 import 'package:chipchop_seller/screens/home/HomeScreenStoreWidget.dart';
+import 'package:chipchop_seller/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_seller/screens/products/ProductsHome.dart';
 import 'package:chipchop_seller/screens/settings/SettingsHome.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
@@ -18,18 +19,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  static const TextStyle optionStyle = TextStyle(
-      fontSize: 30,
-      fontWeight: FontWeight.bold,
-      color: CustomColors.green);
-
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreenStoreWidget(),
     ProductsHome(),
-    Text(
-      'TODO: Orders',
-      style: optionStyle,
-    ),
+    OrdersHomeScreen("2RDH3xSNLY8aB9OM0PlQ"),
     SettingsHome(),
   ];
 
