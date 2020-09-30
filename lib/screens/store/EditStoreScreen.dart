@@ -13,7 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../app_localizations.dart';
-import 'LocationPicker.dart';
+import 'EditLocationPicker.dart';
 
 class EditStoreScreen extends StatefulWidget {
   final Store store;
@@ -822,7 +822,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => LocationPicker(widget.store),
+                builder: (context) => EditLocationPicker(widget.store),
                 settings: RouteSettings(name: '/settings/store/add/location'),
               ),
             );
@@ -832,7 +832,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
           }
         },
         label: Text(
-          AppLocalizations.of(context).translate('button_next'),
+          "Update Location",
         ),
       ),
       body: Form(
