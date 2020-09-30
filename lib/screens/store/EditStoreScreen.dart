@@ -3,7 +3,6 @@ import 'package:chipchop_seller/db/models/product_categories.dart';
 import 'package:chipchop_seller/db/models/product_sub_categories.dart';
 import 'package:chipchop_seller/db/models/product_types.dart';
 import 'package:chipchop_seller/db/models/store.dart';
-import 'package:chipchop_seller/db/models/store_contacts.dart';
 import 'package:chipchop_seller/db/models/store_user_access.dart';
 import 'package:chipchop_seller/screens/utils/AddressWidget.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
@@ -44,10 +43,12 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   List<ProductCategories> productCategories = [];
   List<String> availProductSubCategories = [];
   List<int> workingDays = [1, 2, 3, 4, 5];
-  TimeOfDay fromTime = TimeOfDay(hour: 9, minute: 0);
-  TimeOfDay tillTime = TimeOfDay(hour: 18, minute: 0);
-  TimeOfDay deliverFromTime = TimeOfDay(hour: 09, minute: 00);
-  TimeOfDay deliverTillTime = TimeOfDay(hour: 18, minute: 00);
+
+  TimeOfDay fromTime;
+  TimeOfDay tillTime;
+  TimeOfDay deliverFromTime;
+  TimeOfDay deliverTillTime;
+
   String activeFrom;
   String activeTill;
   List<String> _days = [
@@ -66,12 +67,35 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
 
   @override
   void initState() {
-
-    deliveryTemp = [widget.store.deliveryDetails.availableOptions[0], widget.store.deliveryDetails.availableOptions[1]];
-    _isCheckedDelivery = widget.store.deliveryDetails.availableOptions[0] == 1 ? true :false ;
-    _isCheckedPickUp = widget.store.deliveryDetails.availableOptions[1] == 2 ? true :false ;
-
     super.initState();
+
+    deliveryTemp = [
+      widget.store.deliveryDetails.availableOptions[0],
+      widget.store.deliveryDetails.availableOptions[1]
+    ];
+    _isCheckedDelivery =
+        widget.store.deliveryDetails.availableOptions[0] == 1 ? true : false;
+    _isCheckedPickUp =
+        widget.store.deliveryDetails.availableOptions[1] == 2 ? true : false;
+
+    fromTime = TimeOfDay(
+        hour: int.parse(widget.store.activeFrom.split(":")[0]),
+        minute: int.parse(widget.store.activeFrom.split(":")[1]));
+    tillTime = TimeOfDay(
+        hour: int.parse(widget.store.activeTill.split(":")[0]),
+        minute: int.parse(widget.store.activeTill.split(":")[1]));
+
+    deliverFromTime = TimeOfDay(
+        hour:
+            int.parse(widget.store.deliveryDetails.deliveryFrom.split(":")[0]),
+        minute:
+            int.parse(widget.store.deliveryDetails.deliveryFrom.split(":")[1]));
+    deliverTillTime = TimeOfDay(
+        hour:
+            int.parse(widget.store.deliveryDetails.deliveryTill.split(":")[0]),
+        minute:
+            int.parse(widget.store.deliveryDetails.deliveryTill.split(":")[1]));
+
     activeFrom = '${fromTime.hour}:${fromTime.minute}';
     activeTill = '${tillTime.hour}:${tillTime.minute}';
     deliverFrom = '${deliverFromTime.hour}:${deliverFromTime.minute}';
@@ -190,9 +214,19 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
         });
     }
 
-    _pickTillTime() async {
+    _pickDeliverTillTime() async {
       TimeOfDay t =
           await showTimePicker(context: context, initialTime: deliverTillTime);
+      if (t != null)
+        setState(() {
+          deliverTillTime = t;
+          deliverTill = '${t.hour}:${t.minute}';
+        });
+    }
+
+    _pickTillTime() async {
+      TimeOfDay t =
+          await showTimePicker(context: context, initialTime: tillTime);
       if (t != null)
         setState(() {
           tillTime = t;
@@ -207,16 +241,6 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
         setState(() {
           fromTime = t;
           activeFrom = '${t.hour}:${t.minute}';
-        });
-    }
-
-    _pickDeliverTillTime() async {
-      TimeOfDay t =
-          await showTimePicker(context: context, initialTime: tillTime);
-      if (t != null)
-        setState(() {
-          deliverTillTime = t;
-          deliverTill = '${t.hour}:${t.minute}';
         });
     }
 
@@ -389,52 +413,52 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
               ),
             ),
             Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Row(
-              children: [
-                Flexible(
-                  child: Column(
-                    children: [
-                      CheckboxListTile(
-                        title: Text("Delivery from Store"),
-                        value: _isCheckedDelivery,
-                        onChanged: (val) {
-                          setState(() {
+              padding: const EdgeInsets.all(5.0),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: Column(
+                      children: [
+                        CheckboxListTile(
+                          title: Text("Delivery from Store"),
+                          value: _isCheckedDelivery,
+                          onChanged: (val) {
+                            setState(() {
                               _isCheckedDelivery = val;
-                              if(_isCheckedDelivery){
+                              if (_isCheckedDelivery) {
                                 deliveryTemp[0] = 1;
                               } else {
                                 deliveryTemp[0] = 0;
                               }
-                          });
-                        },
-                      )
-                    ],
+                            });
+                          },
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Flexible(
-                  child: Column(
-                    children: [
-                      CheckboxListTile(
-                        title: Text("Pickup from Store"),
-                        value: _isCheckedPickUp,
-                        onChanged: (val) {
-                          setState(() {
+                  Flexible(
+                    child: Column(
+                      children: [
+                        CheckboxListTile(
+                          title: Text("Pickup from Store"),
+                          value: _isCheckedPickUp,
+                          onChanged: (val) {
+                            setState(() {
                               _isCheckedPickUp = val;
-                              if(_isCheckedDelivery){
+                              if (_isCheckedDelivery) {
                                 deliveryTemp[1] = 2;
                               } else {
                                 deliveryTemp[1] = 0;
                               }
-                          });
-                        },
-                      )
-                    ],
+                            });
+                          },
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
             Padding(
               padding: EdgeInsets.all(5.0),
               child: Row(
@@ -1019,7 +1043,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                           },
                           child: Container(
                             padding: EdgeInsets.all(10),
-                            color: workingDays.contains(index)
+                            color: widget.store.workingDays.contains(index)
                                 ? CustomColors.blue
                                 : CustomColors.white,
                             height: 40,
@@ -1029,7 +1053,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                               _d,
                               style: TextStyle(
                                   fontFamily: "Georgia",
-                                  color: workingDays.contains(index)
+                                  color: widget.store.workingDays.contains(index)
                                       ? CustomColors.white
                                       : CustomColors.green),
                             ),
