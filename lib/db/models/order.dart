@@ -115,11 +115,11 @@ class Order {
         .snapshots();
   }
 
-  Stream<QuerySnapshot> streamOrderByID(String userID, String storeID, String orderID) {
+  Stream<QuerySnapshot> streamOrderByID(String userID, String storeID, String uuid) {
     return getGroupQuery()
         .where('store_uuid', isEqualTo: storeID)
         .where('user_number', isEqualTo: userID)
-        .where('uuid', isEqualTo: orderID)
+        .where('uuid', isEqualTo: uuid)
         .snapshots();
   }
 
