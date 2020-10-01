@@ -184,18 +184,26 @@ class _AddProductState extends State<AddProduct> {
             ),
             ListTile(
               leading: Text(""),
-              title: DropdownButton<String>(
-                isExpanded: true,
-                items: _stores.entries.map(
-                  (f) {
-                    return DropdownMenuItem<String>(
-                      value: f.key,
-                      child: Text(f.value),
-                    );
-                  },
-                ).toList(),
-                onChanged: onStoreDropdownItem,
-                value: _selectedStore,
+              title: Container(
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all()),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    items: _stores.entries.map(
+                      (f) {
+                        return DropdownMenuItem<String>(
+                          value: f.key,
+                          child: Text(f.value),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: onStoreDropdownItem,
+                    value: _selectedStore,
+                  ),
+                ),
               ),
             ),
             ListTile(
@@ -362,6 +370,8 @@ class _AddProductState extends State<AddProduct> {
                 autofocus: false,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: CustomColors.lightGreen)),
                   hintText: "Ex, Rice",
                   fillColor: CustomColors.white,
                   filled: true,
@@ -392,7 +402,7 @@ class _AddProductState extends State<AddProduct> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 60.0),
+              padding: EdgeInsets.fromLTRB(60.0, 0, 10, 0),
               child: TextFormField(
                 initialValue: shortDetails,
                 textAlign: TextAlign.start,
@@ -400,6 +410,8 @@ class _AddProductState extends State<AddProduct> {
                 keyboardType: TextInputType.text,
                 maxLines: 8,
                 decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: CustomColors.lightGreen)),
                   hintText: "Ex, Rice",
                   fillColor: CustomColors.white,
                   filled: true,
@@ -431,18 +443,26 @@ class _AddProductState extends State<AddProduct> {
             ),
             ListTile(
               leading: Text(""),
-              title: DropdownButton<String>(
-                isExpanded: true,
-                items: _types.entries.map(
-                  (f) {
-                    return DropdownMenuItem<String>(
-                      value: f.key,
-                      child: Text(f.value),
-                    );
-                  },
-                ).toList(),
-                onChanged: onTypesDropdownItem,
-                value: _selectedType,
+              title: Container(
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all()),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    items: _types.entries.map(
+                      (f) {
+                        return DropdownMenuItem<String>(
+                          value: f.key,
+                          child: Text(f.value),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: onTypesDropdownItem,
+                    value: _selectedType,
+                  ),
+                ),
               ),
             ),
             ListTile(
@@ -462,18 +482,26 @@ class _AddProductState extends State<AddProduct> {
             ),
             ListTile(
               leading: Text(""),
-              title: DropdownButton<String>(
-                isExpanded: true,
-                items: _categories.entries.map(
-                  (f) {
-                    return DropdownMenuItem<String>(
-                      value: f.key,
-                      child: Text(f.value),
-                    );
-                  },
-                ).toList(),
-                onChanged: onCategoryDropdownItem,
-                value: _selectedCategory,
+              title: Container(
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all()),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    items: _categories.entries.map(
+                      (f) {
+                        return DropdownMenuItem<String>(
+                          value: f.key,
+                          child: Text(f.value),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: onCategoryDropdownItem,
+                    value: _selectedCategory,
+                  ),
+                ),
               ),
             ),
             ListTile(
@@ -493,136 +521,170 @@ class _AddProductState extends State<AddProduct> {
             ),
             ListTile(
               leading: Text(""),
-              title: DropdownButton<String>(
-                isExpanded: true,
-                items: _subcategories.entries.map(
-                  (f) {
-                    return DropdownMenuItem<String>(
-                      value: f.key,
-                      child: Text(f.value),
-                    );
-                  },
-                ).toList(),
-                onChanged: (uuid) {
-                  setState(
-                    () {
-                      _selectedSubCategory = uuid;
+              title: Container(
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all()),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    items: _subcategories.entries.map(
+                      (f) {
+                        return DropdownMenuItem<String>(
+                          value: f.key,
+                          child: Text(f.value),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (uuid) {
+                      setState(
+                        () {
+                          _selectedSubCategory = uuid;
+                        },
+                      );
                     },
-                  );
-                },
-                value: _selectedSubCategory,
+                    value: _selectedSubCategory,
+                  ),
+                ),
               ),
             ),
             Padding(padding: EdgeInsets.all(5)),
-            Row(children: [
-              Expanded(
-                child: TextFormField(
-                  initialValue: weight.toString(),
-                  textAlign: TextAlign.start,
-                  autofocus: false,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    hintText: "Weight",
-                    labelText: "Weight",
-                    fillColor: CustomColors.white,
-                    filled: true,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(children: [
+                Flexible(
+                  child: TextFormField(
+                    initialValue: weight.toString(),
+                    textAlign: TextAlign.start,
+                    autofocus: false,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: CustomColors.lightGreen)),
+                      hintText: "Weight",
+                      labelText: "Weight",
+                      fillColor: CustomColors.white,
+                      filled: true,
+                    ),
+                    validator: (weight) {
+                      if (weight.isEmpty) {
+                        return "Must not be empty";
+                      } else {
+                        this.weight = double.parse(weight);
+                        return null;
+                      }
+                    },
                   ),
-                  validator: (weight) {
-                    if (weight.isEmpty) {
-                      return "Must not be empty";
-                    } else {
-                      this.weight = double.parse(weight);
-                      return null;
-                    }
-                  },
                 ),
-              ),
-              Flexible(
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  hint: Text("Unit"),
-                  items: _units.entries.map((f) {
-                    return DropdownMenuItem<String>(
-                      value: f.key,
-                      child: Text(f.value),
-                    );
-                  }).toList(),
-                  onChanged: (unit) {
-                    setState(
-                      () {
-                        _selectedUnit = unit;
-                        this.unit = int.parse(unit);
-                      },
-                    );
-                  },
-                  value: _selectedUnit,
-                ),
-              ),
-            ]),
-            Row(children: [
-              Expanded(
-                child: TextFormField(
-                  initialValue: originalPrice.toString(),
-                  textAlign: TextAlign.start,
-                  autofocus: false,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    hintText: "Price",
-                    labelText: "Price",
-                    fillColor: CustomColors.white,
-                    filled: true,
+                Padding(padding: EdgeInsets.only(left: 15)),
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        hint: Text("Unit"),
+                        items: _units.entries.map((f) {
+                          return DropdownMenuItem<String>(
+                            value: f.key,
+                            child: Text(f.value),
+                          );
+                        }).toList(),
+                        onChanged: (unit) {
+                          setState(
+                            () {
+                              _selectedUnit = unit;
+                              this.unit = int.parse(unit);
+                            },
+                          );
+                        },
+                        value: _selectedUnit,
+                      ),
+                    ),
                   ),
-                  onChanged: (val) {
-                    if (offer > 0) {
-                      priceController.text =
-                          (double.parse(val) - offer).toString();
-                    } else {
-                      priceController.text = val;
-                    }
+                ),
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(children: [
+                Expanded(
+                  child: TextFormField(
+                    initialValue: originalPrice.toString(),
+                    textAlign: TextAlign.start,
+                    autofocus: false,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: CustomColors.lightGreen)),
+                      hintText: "Price",
+                      labelText: "Price",
+                      fillColor: CustomColors.white,
+                      filled: true,
+                    ),
+                    onChanged: (val) {
+                      if (offer > 0) {
+                        priceController.text =
+                            (double.parse(val) - offer).toString();
+                      } else {
+                        priceController.text = val;
+                      }
 
-                    this.originalPrice = double.parse(val);
-                  },
-                  validator: (price) {
-                    if (price.isEmpty) {
-                      return "Must not be empty";
-                    } else {
-                      this.originalPrice = double.parse(price);
-                      return null;
-                    }
-                  },
-                ),
-              ),
-              Flexible(
-                child: TextFormField(
-                  initialValue: offer.toString(),
-                  textAlign: TextAlign.start,
-                  autofocus: false,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    hintText: "Offer",
-                    labelText: "Offer",
-                    fillColor: CustomColors.white,
-                    filled: true,
+                      this.originalPrice = double.parse(val);
+                    },
+                    validator: (price) {
+                      if (price.isEmpty) {
+                        return "Must not be empty";
+                      } else {
+                        this.originalPrice = double.parse(price);
+                        return null;
+                      }
+                    },
                   ),
-                  onChanged: (val) {
-                    if (originalPrice <= 0) {
-                      priceController.text =
-                          (originalPrice - double.parse(val)).toString();
-                    } else {
-                      priceController.text = "0.00";
-                    }
-                  },
-                  validator: (offer) {
-                    if (offer.isEmpty) {
-                      return "Must not be empty";
-                    } else {
-                      this.offer = double.parse(offer);
-                      return null;
-                    }
-                  },
                 ),
-              ),
-            ]),
+                Padding(padding: EdgeInsets.only(left: 5)),
+                Flexible(
+                  child: TextFormField(
+                    initialValue: offer.toString(),
+                    textAlign: TextAlign.start,
+                    autofocus: false,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: CustomColors.lightGreen)),
+                      hintText: "Offer",
+                      labelText: "Offer",
+                      fillColor: CustomColors.white,
+                      filled: true,
+                    ),
+                    onChanged: (val) {
+                      if (originalPrice <= 0) {
+                        priceController.text =
+                            (originalPrice - double.parse(val)).toString();
+                      } else {
+                        priceController.text = "0.00";
+                      }
+                    },
+                    validator: (offer) {
+                      if (offer.isEmpty) {
+                        return "Must not be empty";
+                      } else {
+                        this.offer = double.parse(offer);
+                        return null;
+                      }
+                    },
+                  ),
+                ),
+              ]),
+            ),
             Padding(
               padding: EdgeInsets.all(5.0),
               child: Row(
@@ -635,12 +697,16 @@ class _AddProductState extends State<AddProduct> {
                       color: CustomColors.black,
                     ),
                   ),
+                  Padding(padding: EdgeInsets.only(left: 5)),
                   Flexible(
                     child: TextFormField(
                       controller: priceController,
                       textAlign: TextAlign.end,
                       readOnly: true,
                       decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: CustomColors.lightGreen)),
                         fillColor: CustomColors.white,
                         filled: true,
                       ),
