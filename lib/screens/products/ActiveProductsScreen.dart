@@ -38,9 +38,10 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
           if (snapshot.data.documents.isNotEmpty) {
             children = GridView.count(
               crossAxisCount: 2,
-              crossAxisSpacing: 10,
+              crossAxisSpacing: 5,
               shrinkWrap: true,
-              mainAxisSpacing: 10,
+              mainAxisSpacing: 5,
+              padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
               children: List.generate(snapshot.data.documents.length, (index) {
                 Products product =
                     Products.fromJson(snapshot.data.documents[index].data);
@@ -56,8 +57,13 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.only(top: 20),
-                    color: CustomColors.white,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                      color: CustomColors.white,
+                    ),
+                    padding: EdgeInsets.only(top: 5),
                     height: 100,
                     alignment: Alignment.centerLeft,
                     child: Center(
