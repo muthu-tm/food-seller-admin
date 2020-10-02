@@ -16,9 +16,10 @@ class _ProductsHomeState extends State<ProductsHome> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        height: MediaQuery.of(context).size.height,
         color: CustomColors.lightGrey,
-        child: getStores(context),
+        child: SingleChildScrollView(
+          child: getStores(context),
+        ),
       ),
     );
   }
@@ -63,27 +64,20 @@ class _ProductsHomeState extends State<ProductsHome> {
                               ),
                             ),
                           ),
-                          Divider(color: CustomColors.blue),
-                          TextFormField(
-                            textAlign: TextAlign.center,
-                            autofocus: false,
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              hintText: "Search & Load from existing Products",
-                              fillColor: CustomColors.white,
-                              filled: true,
-                              suffixIcon: Icon(
-                                Icons.search,
-                                color: CustomColors.blue,
-                                size: 35.0,
-                              ),
-                            ),
+                          ListTile(
                             onTap: () {
                               showSearch(context: context, delegate: Search());
                             },
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(10),
+                            leading: Text(""),
+                            title: Text(
+                              "Search & Load from existing Products",
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                fontFamily: 'Georgia',
+                                color: CustomColors.black,
+                              ),
+                            ),
+                            trailing: Icon(Icons.arrow_forward_ios),
                           ),
                           Text(
                             "OR",
@@ -94,13 +88,8 @@ class _ProductsHomeState extends State<ProductsHome> {
                               color: CustomColors.grey,
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                          ),
-                          RaisedButton.icon(
-                            padding: EdgeInsets.all(5),
-                            color: CustomColors.blue,
-                            onPressed: () {
+                          ListTile(
+                            onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -110,19 +99,16 @@ class _ProductsHomeState extends State<ProductsHome> {
                                 ),
                               );
                             },
-                            icon: Icon(
-                              Icons.add_circle,
-                              size: 30,
-                              color: CustomColors.green,
-                            ),
-                            label: Text(
+                            leading: Text(""),
+                            title: Text(
                               "Add Custom Product",
                               style: TextStyle(
-                                fontSize: 16.0,
+                                fontSize: 14.0,
                                 fontFamily: 'Georgia',
-                                color: CustomColors.lightGrey,
+                                color: CustomColors.black,
                               ),
                             ),
+                            trailing: Icon(Icons.arrow_forward_ios),
                           ),
                         ],
                       ),
@@ -157,11 +143,9 @@ class _ProductsHomeState extends State<ProductsHome> {
                             itemBuilder: (BuildContext context, int index) {
                               Store store = snapshot.data[index];
                               return ListTile(
-                                leading: Icon(Icons.store,
-                                    color: CustomColors.blue),
-                                title: Text(
-                                  store.name
-                                ),
+                                leading:
+                                    Icon(Icons.store, color: CustomColors.blue),
+                                title: Text(store.name),
                                 trailing: Icon(
                                   Icons.keyboard_arrow_right,
                                   size: 35,
@@ -214,8 +198,8 @@ class _ProductsHomeState extends State<ProductsHome> {
                             itemBuilder: (BuildContext context, int index) {
                               Store store = snapshot.data[index];
                               return ListTile(
-                                leading: Icon(Icons.store,
-                                    color: CustomColors.blue),
+                                leading:
+                                    Icon(Icons.store, color: CustomColors.blue),
                                 title: Text(
                                   store.name,
                                 ),
