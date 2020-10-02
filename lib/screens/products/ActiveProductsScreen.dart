@@ -40,7 +40,7 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
           if (snapshot.data.documents.isNotEmpty) {
             children = GridView.count(
               crossAxisCount: 2,
-              crossAxisSpacing: 10,
+              crossAxisSpacing: 5,
               shrinkWrap: true,
               mainAxisSpacing: 10,
               childAspectRatio: 0.78,
