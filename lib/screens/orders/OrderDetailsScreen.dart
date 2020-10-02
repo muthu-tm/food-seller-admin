@@ -4,6 +4,7 @@ import 'package:chipchop_seller/screens/orders/OrderChatScreen.dart';
 import 'package:chipchop_seller/screens/products/ProductDetailsScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../db/models/order.dart';
 import '../../services/utils/DateUtils.dart';
@@ -211,6 +212,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       ],
                     ),
                   ),
+                ),
+                ListTile(
+                  leading: Icon(
+                    FontAwesomeIcons.shoppingBasket,
+                    color: CustomColors.blueGreen,
+                  ),
+                  title: Text("Products"),
                 ),
                 Container(
                   child: ListView.builder(
