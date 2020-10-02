@@ -19,6 +19,12 @@ class ViewStoreScreen extends StatelessWidget {
         backgroundColor: CustomColors.green,
         title: Text(store.name),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: CustomColors.blue,
+        onPressed: () {},
+        label: Text("Order NOW"),
+        icon: Icon(FontAwesomeIcons.solidSmile),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -47,65 +53,6 @@ class ViewStoreScreen extends StatelessWidget {
           ],
         ),
       ),
-      persistentFooterButtons: [
-        Container(
-          height: 80,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 5.0),
-                    child: Icon(
-                      FontAwesomeIcons.smile,
-                      color: CustomColors.positiveGreen,
-                    ),
-                  ),
-                  Text(
-                    "Order NOW!",
-                    style: TextStyle(
-                      fontFamily: 'Georgia',
-                      color: CustomColors.blue,
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 5.0),
-                    child: RaisedButton(
-                      color: CustomColors.lightGreen,
-                      onPressed: () {
-                      },
-                      child: Text("From Cart"),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 5.0),
-                    child: RaisedButton(
-                      color: CustomColors.lightBlue,
-                      onPressed: () {},
-                      child: Text("Type Order"),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 5.0),
-                    child: RaisedButton(
-                      color: CustomColors.lightGreen,
-                      onPressed: () {},
-                      child: Text("Capture Order"),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        )
-      ],
     );
   }
 

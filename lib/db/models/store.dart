@@ -124,9 +124,17 @@ class Store extends Model {
 
     DocumentReference docRef = this.getCollectionRef().document();
     this.uuid = docRef.documentID;
-    bWrite.setData(docRef, this.toJson());
-    await bWrite.commit();
-    return this;
+    try {
+      bWrite.setData(docRef, this.toJson());
+      cachedLocalUser.stores.add(this.uuid);
+      bWrite.updateData(cachedLocalUser.getDocumentReference(),
+          {'stores': cachedLocalUser.stores});
+      await bWrite.commit();
+      return this;
+    } catch (err) {
+      cachedLocalUser.stores.remove(this.uuid);
+      throw err;
+    }
   }
 
   Stream<QuerySnapshot> streamStoresForUser() {

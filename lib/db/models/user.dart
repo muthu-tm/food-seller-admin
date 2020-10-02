@@ -17,6 +17,8 @@ class User extends Model {
   String firstName;
   @JsonKey(name: 'last_name', defaultValue: "")
   String lastName;
+  @JsonKey(name: 'stores', defaultValue: "")
+  List<String> stores;
   @JsonKey(name: 'mobile_number', nullable: false)
   int mobileNumber;
   @JsonKey(name: 'country_code', nullable: false)

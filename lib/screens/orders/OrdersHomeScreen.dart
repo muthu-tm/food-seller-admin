@@ -7,9 +7,9 @@ import '../utils/AsyncWidgets.dart';
 import '../utils/CustomColors.dart';
 
 class OrdersHomeScreen extends StatefulWidget {
-  OrdersHomeScreen(this.storeID);
+  OrdersHomeScreen(this.stores);
 
-  final String storeID;
+  final List<String> stores;
   @override
   _OrdersHomeScreenState createState() => _OrdersHomeScreenState();
 }
@@ -77,7 +77,7 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
   Widget getBody(BuildContext context) {
     return StreamBuilder(
       stream: Order().streamOrdersByStatus(
-          widget.storeID, filterBy == "0" ? [] : [int.parse(filterBy)]),
+          widget.stores, filterBy == "0" ? [] : [int.parse(filterBy)]),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget child;
 

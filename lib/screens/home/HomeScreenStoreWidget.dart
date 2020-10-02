@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/screens/store/ViewStoreScreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../db/models/store.dart';
@@ -8,13 +9,13 @@ import '../utils/CustomColors.dart';
 class HomeScreenStoreWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: Store().getStoresForUser(),
-        builder: (context, AsyncSnapshot<List<Store>> snapshot) {
+    return StreamBuilder(
+        stream: Store().streamStoresForUser(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           Widget child;
 
           if (snapshot.hasData) {
-            if (snapshot.data.length == 0) {
+            if (snapshot.data.documents.length == 0) {
               child = Container(
                 child: Text(
                   "No stores",
@@ -23,13 +24,14 @@ class HomeScreenStoreWidget extends StatelessWidget {
               );
             } else {
               child = Container(
-                height: (snapshot.data.length * 150).toDouble(),
+                height: (snapshot.data.documents.length * 150).toDouble(),
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   primary: true,
-                  itemCount: snapshot.data.length,
+                  itemCount: snapshot.data.documents.length,
                   itemBuilder: (BuildContext context, int index) {
-                    Store store = snapshot.data[index];
+                    Store store =
+                        Store.fromJson(snapshot.data.documents[index].data);
 
                     return Container(
                       height: 100,

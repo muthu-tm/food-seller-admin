@@ -5,8 +5,10 @@ import 'package:chipchop_seller/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_seller/screens/products/ProductsHome.dart';
 import 'package:chipchop_seller/screens/settings/SettingsHome.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen([this.selectedIndex = 0]);
@@ -22,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreenStoreWidget(),
     ProductsHome(),
-    OrdersHomeScreen("2RDH3xSNLY8aB9OM0PlQ"),
+    OrdersHomeScreen(cachedLocalUser.stores),
     SettingsHome(),
   ];
 
@@ -60,21 +62,21 @@ class _HomeScreenState extends State<HomeScreen> {
         items: [
           TabItem(
               icon: Icon(
-                Icons.store,
+                FontAwesomeIcons.storeAlt,
                 color: CustomColors.blue,
                 size: 30,
               ),
               title: 'Home'),
           TabItem(
               icon: Icon(
-                Icons.add_shopping_cart,
+                FontAwesomeIcons.shoppingBasket,
                 color: CustomColors.blue,
                 size: 30,
               ),
               title: 'Products'),
           TabItem(
               icon: Icon(
-                Icons.assessment,
+                FontAwesomeIcons.shippingFast,
                 color: CustomColors.blue,
                 size: 30,
               ),

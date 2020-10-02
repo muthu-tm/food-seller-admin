@@ -7,6 +7,10 @@ User _$UserFromJson(Map<String, dynamic> json) {
     ..countryCode = json['country_code'] as int ?? 91
     ..firstName = json['first_name'] as String ?? ''
     ..lastName = json['last_name'] as String ?? ''
+    ..stores = (json['stores'] as List)
+            ?.map((e) => e == null ? null : e as String)
+            ?.toList() ??
+        []
     ..emailID = json['emailID'] as String ?? ''
     ..password = json['password'] as String
     ..gender = json['gender'] as String ?? ''
@@ -46,6 +50,7 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'guid': instance.guid,
       'first_name': instance.firstName ?? '',
       'last_name': instance.lastName ?? '',
+      'stores': instance.stores == null ? [] : instance.stores,
       'mobile_number': instance.mobileNumber,
       'country_code': instance.countryCode,
       'emailID': instance.emailID ?? '',
