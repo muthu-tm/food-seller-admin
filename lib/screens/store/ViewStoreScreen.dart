@@ -16,8 +16,19 @@ class ViewStoreScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
+        title: Text(
+          store.name,
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.white,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
         backgroundColor: CustomColors.green,
-        title: Text(store.name),
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: CustomColors.blue,

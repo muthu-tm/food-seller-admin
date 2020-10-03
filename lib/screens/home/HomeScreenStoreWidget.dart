@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chipchop_seller/screens/store/CustomersChatScreen.dart';
 import 'package:chipchop_seller/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_seller/screens/utils/url_launcher_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,10 +26,10 @@ class HomeScreenStoreWidget extends StatelessWidget {
               );
             } else {
               child = Container(
-                height: (snapshot.data.documents.length * 150).toDouble(),
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   primary: true,
+                  shrinkWrap: true,
                   itemCount: snapshot.data.documents.length,
                   itemBuilder: (BuildContext context, int index) {
                     Store store =
@@ -59,7 +60,7 @@ class HomeScreenStoreWidget extends StatelessWidget {
                                 children: <Widget>[
                                   Padding(
                                     padding: EdgeInsets.only(
-                                    left: 10, right: 10, top: 5),
+                                        left: 10, right: 10, top: 5),
                                     child: Container(
                                       height: 75,
                                       width: 75,
@@ -175,14 +176,15 @@ class HomeScreenStoreWidget extends StatelessWidget {
                                   ),
                                   FlatButton.icon(
                                     onPressed: () {
-                                      // Navigator.pushReplacement(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) => AddLocation(),
-                                      //     settings:
-                                      //         RouteSettings(name: '/location/add'),
-                                      //   ),
-                                      // );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              CustomersChatScreen(store.uuid),
+                                          settings: RouteSettings(
+                                              name: '/store/chats'),
+                                        ),
+                                      );
                                     },
                                     label: Text(
                                       "Chat",

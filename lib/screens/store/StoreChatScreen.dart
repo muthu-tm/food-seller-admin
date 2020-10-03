@@ -15,24 +15,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/controllers/user/user_service.dart';
 import '../utils/CustomColors.dart';
 
-class OrderChatScreen extends StatefulWidget {
-  final String orderUUID;
-  final String userID;
+class StoreChatScreen extends StatefulWidget {
+  final String storeID;
+  final String custID;
 
-  OrderChatScreen({Key key, @required this.orderUUID, @required this.userID})
+  StoreChatScreen({Key key, @required this.storeID, @required this.custID})
       : super(key: key);
 
   @override
-  State createState() =>
-      OrderChatScreenState(orderUUID: orderUUID, userID: userID);
+  State createState() => StoreChatScreenState(storeID: storeID, custID: custID);
 }
 
-class OrderChatScreenState extends State<OrderChatScreen> {
-  OrderChatScreenState(
-      {Key key, @required this.orderUUID, @required this.userID});
+class StoreChatScreenState extends State<StoreChatScreen> {
+  StoreChatScreenState(
+      {Key key, @required this.storeID, @required this.custID});
 
-  String orderUUID;
-  String userID;
+  String storeID;
+  String custID;
 
   List<DocumentSnapshot> listMessage = new List.from([]);
   int _limit = 20;
@@ -117,8 +116,8 @@ class OrderChatScreenState extends State<OrderChatScreen> {
       ChatTemplate oc = ChatTemplate();
       oc.content = content;
       oc.messageType = type;
-      oc.senderType = 1; // Seller
-      await oc.orderChatCreate(userID, orderUUID);
+      oc.senderType = 1; // Customer
+      await oc.storeChatCreate(storeID, custID);
 
       listScrollController.animateTo(0.0,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
@@ -131,7 +130,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   }
 
   Widget buildItem(int index, DocumentSnapshot document) {
-    if (document.data['sender_type'] == 1) {
+    if (document.data['sender_type'] == 0) {
       // Right (my message)
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -373,17 +372,34 @@ class OrderChatScreenState extends State<OrderChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: Stack(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Chat",
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.white,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        backgroundColor: CustomColors.green,
+      ),
+      body: Stack(
         children: <Widget>[
-          Container(
-            child: Column(
-              children: <Widget>[
-                // List of messages
-                buildListMessage(),
-                // Input content
-                buildInput(),
-              ],
+          SingleChildScrollView(
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  // List of messages
+                  buildListMessage(),
+                  // Input content
+                  buildInput(),
+                ],
+              ),
             ),
           ),
 
@@ -391,7 +407,6 @@ class OrderChatScreenState extends State<OrderChatScreen> {
           buildLoading()
         ],
       ),
-      onWillPop: onBackPress,
     );
   }
 
@@ -471,14 +486,12 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   Widget buildListMessage() {
     return Container(
       child: StreamBuilder(
-        stream: ChatTemplate()
-            .streamOrderChats(widget.userID, widget.orderUUID, _limit),
+        stream: ChatTemplate().streamStoreChats(storeID, custID, _limit),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(
-                valueColor:
-                    AlwaysStoppedAnimation<Color>(CustomColors.lightGrey),
+                valueColor: AlwaysStoppedAnimation<Color>(CustomColors.grey),
               ),
             );
           } else {
