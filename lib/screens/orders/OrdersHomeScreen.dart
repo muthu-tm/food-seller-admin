@@ -141,7 +141,7 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => OrderDetailsScreen(
-                                order.userNumber, order.storeID, order.uuid),
+                                order.userNumber, order.storeID, order),
                             settings: RouteSettings(name: '/orders/details'),
                           ),
                         );

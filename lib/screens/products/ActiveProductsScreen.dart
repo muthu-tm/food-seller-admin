@@ -23,14 +23,27 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
     return Scaffold(
       backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
+        title: Text(
+          "Active Products",
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.white,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
         backgroundColor: CustomColors.green,
-        title: Text("Active Products"),
       ),
-      body: getProductsByStoreLocation(context),
+      body: SingleChildScrollView(
+        child: getProducts(context),
+      )
     );
   }
 
-  Widget getProductsByStoreLocation(BuildContext context) {
+  Widget getProducts(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: Products().streamAvailableProducts(widget.store.uuid),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -64,8 +77,7 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                           tag: "${product.uuid}",
                           child: CachedNetworkImage(
                             imageUrl: product.getProductImage(),
-                            imageBuilder: (context, imageProvider) =>
-                                Container(
+                            imageBuilder: (context, imageProvider) => Container(
                               width: 125,
                               height: 100,
                               decoration: BoxDecoration(
@@ -165,33 +177,35 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
               }),
             );
           } else {
-            children = Container(
-              height: 90,
-              child: Column(
-                children: <Widget>[
-                  Spacer(),
-                  Text(
-                    "No Product Available",
-                    style: TextStyle(
-                      color: CustomColors.alertRed,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
+            children = Center(
+              child: Container(
+                height: 90,
+                child: Column(
+                  children: <Widget>[
+                    Spacer(),
+                    Text(
+                      "No Product Available",
+                      style: TextStyle(
+                        color: CustomColors.alertRed,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Spacer(
-                    flex: 2,
-                  ),
-                  Text(
-                    "Sorry. Please Try Again Later!",
-                    style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
+                    Spacer(
+                      flex: 2,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Spacer(),
-                ],
+                    Text(
+                      "Sorry. Please Try Again Later!",
+                      style: TextStyle(
+                        color: CustomColors.blue,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Spacer(),
+                  ],
+                ),
               ),
             );
           }

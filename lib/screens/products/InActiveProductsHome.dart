@@ -21,18 +21,28 @@ class _InActiveProductsScreenState extends State<InActiveProductsScreen> {
       backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
         backgroundColor: CustomColors.green,
-        title: Text("InActive Products"),
+        title: Text(
+          "InActive Products",
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.white,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: SingleChildScrollView(
-        child: getProductsByStoreLocation(context),
+        child: getProducts(context),
       ),
     );
   }
 
-  Widget getProductsByStoreLocation(BuildContext context) {
+  Widget getProducts(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream:
-          Products().streamUnAvailableProducts(widget.store.uuid),
+      stream: Products().streamUnAvailableProducts(widget.store.uuid),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget children;
 
@@ -102,33 +112,35 @@ class _InActiveProductsScreenState extends State<InActiveProductsScreen> {
               },
             );
           } else {
-            children = Container(
-              height: 90,
-              child: Column(
-                children: <Widget>[
-                  Spacer(),
-                  Text(
-                    "No Product Available",
-                    style: TextStyle(
-                      color: CustomColors.alertRed,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
+            children = Center(
+              child: Container(
+                height: 90,
+                child: Column(
+                  children: <Widget>[
+                    Spacer(),
+                    Text(
+                      "No Product Available",
+                      style: TextStyle(
+                        color: CustomColors.alertRed,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Spacer(
-                    flex: 2,
-                  ),
-                  Text(
-                    "Sorry. Please Try Again Later!",
-                    style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
+                    Spacer(
+                      flex: 2,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Spacer(),
-                ],
+                    Text(
+                      "Sorry. Please Try Again Later!",
+                      style: TextStyle(
+                        color: CustomColors.blue,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Spacer(),
+                  ],
+                ),
               ),
             );
           }

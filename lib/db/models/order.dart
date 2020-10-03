@@ -33,7 +33,7 @@ class Order {
   @JsonKey(name: 'customer_notes', defaultValue: "")
   String customerNotes;
   @JsonKey(name: 'status', defaultValue: 0)
-  int status;
+  int status; // 0 - Ordered,
   @JsonKey(name: 'is_returnable', defaultValue: false)
   bool isReturnable;
   @JsonKey(name: 'return_days', defaultValue: false)
@@ -95,6 +95,20 @@ class Order {
     }
   }
 
+  String getDeliveryType() {
+    if (this.delivery.deliveryType == 0) {
+      return "Pickup from Store";
+    } else if (this.delivery.deliveryType == 1) {
+      return "Instant Delivery";
+    } else if (this.delivery.deliveryType == 2) {
+      return "Same-Day Delivery";
+    } else if (this.delivery.deliveryType == 3) {
+      return "Scheduled Delivery";
+    } else {
+      return "Pickup from Store";
+    }
+  }
+
   Future<Order> create() async {
     this.createdAt = DateTime.now();
     this.updatedAt = DateTime.now();
@@ -115,7 +129,8 @@ class Order {
         .snapshots();
   }
 
-  Stream<QuerySnapshot> streamOrderByID(String userID, String storeID, String uuid) {
+  Stream<QuerySnapshot> streamOrderByID(
+      String userID, String storeID, String uuid) {
     return getGroupQuery()
         .where('store_uuid', isEqualTo: storeID)
         .where('user_number', isEqualTo: userID)
@@ -123,7 +138,8 @@ class Order {
         .snapshots();
   }
 
-  Stream<QuerySnapshot> streamOrdersByStatus(List<String> stores, List<int> status) {
+  Stream<QuerySnapshot> streamOrdersByStatus(
+      List<String> stores, List<int> status) {
     if (status.isEmpty) {
       return getGroupQuery()
           .where('store_uuid', whereIn: stores)

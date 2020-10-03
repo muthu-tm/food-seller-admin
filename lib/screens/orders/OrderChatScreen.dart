@@ -125,8 +125,8 @@ class OrderChatScreenState extends State<OrderChatScreen> {
     } else {
       Fluttertoast.showToast(
           msg: 'Nothing to send',
-          backgroundColor: Colors.black,
-          textColor: Colors.red);
+          backgroundColor: Colors.grey,
+          textColor: Colors.white);
     }
   }
 
