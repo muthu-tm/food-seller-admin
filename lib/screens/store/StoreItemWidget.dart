@@ -48,6 +48,36 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                             selectedItem = 1;
                           });
                         },
+                        child: Icon(
+                          Icons.category,
+                          color: Color(0xFFAB436B),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "Categories",
+                      style: TextStyle(
+                          color: CustomColors.black, fontFamily: 'Georgia'),
+                    )
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                          color: CustomColors.white),
+                      child: RawMaterialButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedItem = 2;
+                          });
+                        },
                         child: Icon(FontAwesomeIcons.shoppingBasket,
                             color: CustomColors.blue),
                       ),
@@ -73,7 +103,7 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                       child: RawMaterialButton(
                         onPressed: () {
                           setState(() {
-                            selectedItem = 2;
+                            selectedItem = 3;
                           });
                         },
                         child: Icon(
@@ -103,7 +133,7 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                       child: RawMaterialButton(
                         onPressed: () {
                           setState(() {
-                            selectedItem = 3;
+                            selectedItem = 4;
                           });
                         },
                         child: Icon(
@@ -114,36 +144,6 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                     ),
                     Text(
                       "Flash Sale",
-                      style: TextStyle(
-                          color: CustomColors.black, fontFamily: 'Georgia'),
-                    )
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
-                          ),
-                          color: CustomColors.white),
-                      child: RawMaterialButton(
-                        onPressed: () {
-                          setState(() {
-                            selectedItem = 4;
-                          });
-                        },
-                        child: Icon(
-                          Icons.category,
-                          color: Color(0xFFAB436B),
-                        ),
-                      ),
-                    ),
-                    Text(
-                      "Categories",
                       style: TextStyle(
                           color: CustomColors.black, fontFamily: 'Georgia'),
                     )
@@ -191,25 +191,25 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
           selectedItem == 1
               ? Expanded(
                   child: Container(
-                    child: StoreProductWidget(widget.store.uuid),
+                    child: StoreCategoryWidget(widget.store),
                   ),
                 )
               : selectedItem == 2
                   ? Expanded(
                       child: Container(
-                        child: StorePopulartWidget(widget.store.uuid),
+                        child: StoreProductWidget(widget.store.uuid),
                       ),
                     )
                   : selectedItem == 3
                       ? Expanded(
                           child: Container(
-                            child: StoreFlashSaleWidget(widget.store.uuid),
+                            child: StorePopulartWidget(widget.store.uuid),
                           ),
                         )
                       : selectedItem == 4
                           ? Expanded(
                               child: Container(
-                                child: StoreCategoryWidget(widget.store),
+                                child: StoreFlashSaleWidget(widget.store.uuid),
                               ),
                             )
                           : Expanded(

@@ -68,7 +68,16 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
               ),
             ),
           ),
-          getBody(context),
+          widget.stores.isEmpty
+              ? Container(
+                  child: Text(
+                  "TODO",
+                  style: TextStyle(
+                      color: CustomColors.blueGreen,
+                      fontSize: 16,
+                      fontFamily: "Georgia"),
+                ))
+              : getBody(context)
         ],
       ),
     );

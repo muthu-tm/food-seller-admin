@@ -56,16 +56,20 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
     "Saturday"
   ];
 
-  List<int> deliveryTemp = [1,2];
-  bool _isCheckedDelivery;
+  List<int> deliveryTemp = [0, 1, 2, 3];
   bool _isCheckedPickUp;
+  bool _isCheckedInstant;
+  bool _isCheckedSameDay;
+  bool _isCheckedScheduled;
 
   @override
   void initState() {
     super.initState();
 
-  _isCheckedDelivery = true;
-  _isCheckedPickUp = true;
+    _isCheckedPickUp = true;
+    _isCheckedInstant = true;
+    _isCheckedSameDay = true;
+    _isCheckedScheduled = true;
 
     activeFrom = '${fromTime.hour}:${fromTime.minute}';
     activeTill = '${tillTime.hour}:${tillTime.minute}';
@@ -115,8 +119,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             Store store = Store();
             StoreContacts contacts = StoreContacts();
             contacts.contactName = cachedLocalUser.firstName;
-            contacts.contactNumber = cachedLocalUser.mobileNumber;
-            contacts.countryCode = cachedLocalUser.countryCode;
+            contacts.contactNumber = cachedLocalUser.getID();
             contacts.isActive = true;
             contacts.isVerfied = true;
 
@@ -142,13 +145,13 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             store.deliveryDetails.deliveryChargesMax = this.deliveryChargeMax;
             store.deliveryDetails.availableOptions = this.deliveryTemp;
 
-
             StoreUserAccess userAccess = StoreUserAccess();
             userAccess.positionName = "Owner";
             userAccess.userNumber = cachedLocalUser.getIntID();
             userAccess.accessLevel = [0];
             store.users = [cachedLocalUser.getIntID()];
             store.usersAccess = [userAccess];
+            store.isActive = false;
 
             Navigator.push(
               context,
@@ -733,16 +736,16 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   child: Column(
                     children: [
                       CheckboxListTile(
-                        title: Text("Delivery from Store"),
-                        value: _isCheckedDelivery,
+                        title: Text("Pickup from Store"),
+                        value: _isCheckedPickUp,
                         onChanged: (val) {
                           setState(() {
-                              _isCheckedDelivery = val;
-                              if(_isCheckedDelivery){
-                                deliveryTemp[0] = 1;
-                              } else {
-                                deliveryTemp[0] = 0;
-                              }
+                            _isCheckedPickUp = val;
+                            if (_isCheckedPickUp) {
+                              deliveryTemp.add(0);
+                            } else {
+                              deliveryTemp.remove(0);
+                            }
                           });
                         },
                       )
@@ -753,16 +756,63 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   child: Column(
                     children: [
                       CheckboxListTile(
-                        title: Text("Pickup from Store"),
-                        value: _isCheckedPickUp,
+                        title: Text("Instant Delivery from Store"),
+                        value: _isCheckedInstant,
                         onChanged: (val) {
                           setState(() {
-                              _isCheckedPickUp = val;
-                              if(_isCheckedPickUp){
-                                deliveryTemp[1] = 2;
-                              } else {
-                                deliveryTemp[1] = 0;
-                              }
+                            _isCheckedInstant = val;
+                            if (_isCheckedInstant) {
+                              deliveryTemp.add(1);
+                            } else {
+                              deliveryTemp.remove(1);
+                            }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text("Same-Day Delivery from Store"),
+                        value: _isCheckedSameDay,
+                        onChanged: (val) {
+                          setState(() {
+                            _isCheckedSameDay = val;
+                            if (_isCheckedSameDay) {
+                              deliveryTemp.add(0);
+                            } else {
+                              deliveryTemp.remove(0);
+                            }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text("Scheduled Delivery from Store"),
+                        value: _isCheckedScheduled,
+                        onChanged: (val) {
+                          setState(() {
+                            _isCheckedScheduled = val;
+                            if (_isCheckedScheduled) {
+                              deliveryTemp.add(1);
+                            } else {
+                              deliveryTemp.remove(1);
+                            }
                           });
                         },
                       )
