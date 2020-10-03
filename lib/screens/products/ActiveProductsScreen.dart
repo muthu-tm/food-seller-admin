@@ -42,14 +42,20 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
               crossAxisCount: 2,
               crossAxisSpacing: 5,
               shrinkWrap: true,
-              mainAxisSpacing: 10,
+              mainAxisSpacing: 5,
+              padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
               childAspectRatio: 0.78,
               children: List.generate(snapshot.data.documents.length, (index) {
                 Products product =
                     Products.fromJson(snapshot.data.documents[index].data);
                 return Container(
-                  padding: EdgeInsets.only(top: 20),
-                  color: CustomColors.white,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                    color: CustomColors.white,
+                  ),
+                  padding: EdgeInsets.only(top: 5),
                   height: 100,
                   alignment: Alignment.centerLeft,
                   child: Center(
@@ -59,8 +65,7 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                           tag: "${product.uuid}",
                           child: CachedNetworkImage(
                             imageUrl: product.getProductImage(),
-                            imageBuilder: (context, imageProvider) =>
-                                Container(
+                            imageBuilder: (context, imageProvider) => Container(
                               width: 125,
                               height: 105,
                               decoration: BoxDecoration(
