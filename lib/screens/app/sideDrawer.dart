@@ -3,6 +3,8 @@ import 'package:chipchop_seller/screens/Home/AuthPage.dart';
 import 'package:chipchop_seller/screens/app/ContactAndSupportWidget.dart';
 import 'package:chipchop_seller/screens/app/ProfilePictureUpload.dart';
 import 'package:chipchop_seller/screens/home/HomeScreen.dart';
+import 'package:chipchop_seller/screens/orders/OrdersHomeScreen.dart';
+import 'package:chipchop_seller/screens/products/ProductsHome.dart';
 import 'package:chipchop_seller/screens/settings/UserProfileSettings.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
@@ -10,6 +12,7 @@ import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:chipchop_seller/services/utils/hash_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../app_localizations.dart';
 
 Widget sideDrawer(BuildContext context) {
@@ -184,57 +187,55 @@ Widget sideDrawer(BuildContext context) {
           },
         ),
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
-        ExpansionTile(
-          leading:
-              Icon(Icons.supervisor_account, color: CustomColors.blue),
-          title: Text(
-            "Products",
-          ),
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                "Add Product",
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-            ListTile(
-              title: Text(
-                "View Product",
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-          ],
-        ),
         ListTile(
+          onTap: () async {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(1),
+                settings: RouteSettings(name: '/products'),
+              ),
+            );
+          },
+          leading:
+              Icon(FontAwesomeIcons.shoppingBasket, color: CustomColors.blue),
+          title: Text(
+            "Product",
+          ),
+        ),
+        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
+        ListTile(
+          onTap: () async {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(2),
+                settings: RouteSettings(name: '/orders'),
+              ),
+            );
+          },
           leading: Icon(Icons.assessment, color: CustomColors.blue),
           title: Text(
             "Orders",
           ),
         ),
-        ListTile(
-          leading:
-              Icon(Icons.notifications_active, color: CustomColors.blue),
-          title: Text(
-            "Notifications",
-          ),
-        ),
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
-          leading:
-              Icon(Icons.store_mall_directory, color: CustomColors.blue),
+          leading: Icon(Icons.store_mall_directory, color: CustomColors.blue),
           title: Text(
             "Store settings",
           ),
           onTap: () async {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => HomeScreen(4),
+                builder: (context) => HomeScreen(3),
                 settings: RouteSettings(name: '/settings/store'),
               ),
             );
           },
         ),
+        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
           leading: Icon(Icons.settings, color: CustomColors.blue),
           title: Text(
@@ -268,6 +269,7 @@ Widget sideDrawer(BuildContext context) {
             );
           },
         ),
+        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
           leading: Icon(Icons.error, color: CustomColors.alertRed),
           title: Text(
