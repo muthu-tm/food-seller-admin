@@ -133,7 +133,7 @@ class _AddProductState extends State<AddProduct> {
         _p.name = pName;
         _p.shortDetails = shortDetails;
         _p.productImages = [""];
-        _p.currentPrice = originalPrice - offer;
+        _p.currentPrice = double.parse(priceController.text);
         _p.originalPrice = originalPrice;
         _p.offer = offer;
         _p.isAvailable = true;
@@ -666,7 +666,7 @@ class _AddProductState extends State<AddProduct> {
                       filled: true,
                     ),
                     onChanged: (val) {
-                      if (originalPrice <= 0) {
+                      if (originalPrice >= 0) {
                         priceController.text =
                             (originalPrice - double.parse(val)).toString();
                       } else {
@@ -777,7 +777,7 @@ class _AddProductState extends State<AddProduct> {
     }
 
     List<ProductCategories> categories =
-        await ProductTypes().getCategories(uuid);
+        await ProductCategories().getCategoriesForTypes([uuid]);
     Map<String, String> cList = Map();
     if (categories.length > 0) {
       categories.forEach(

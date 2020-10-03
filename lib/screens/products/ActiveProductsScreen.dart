@@ -44,7 +44,6 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
               shrinkWrap: true,
               mainAxisSpacing: 5,
               padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-              childAspectRatio: 0.78,
               children: List.generate(snapshot.data.documents.length, (index) {
                 Products product =
                     Products.fromJson(snapshot.data.documents[index].data);
@@ -65,9 +64,10 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                           tag: "${product.uuid}",
                           child: CachedNetworkImage(
                             imageUrl: product.getProductImage(),
-                            imageBuilder: (context, imageProvider) => Container(
+                            imageBuilder: (context, imageProvider) =>
+                                Container(
                               width: 125,
-                              height: 105,
+                              height: 100,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10.0),
