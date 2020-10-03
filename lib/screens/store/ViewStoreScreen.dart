@@ -39,6 +39,7 @@ class ViewStoreScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
+            StoreSearchBar(),
             Padding(
               padding: EdgeInsets.only(left: 10, right: 10),
               child: Container(
@@ -57,7 +58,6 @@ class ViewStoreScreen extends StatelessWidget {
                 ),
               ),
             ),
-            StoreSearchBar(),
             Expanded(
               child: StoreItemWidget(store),
             ),
