@@ -73,12 +73,12 @@ class ChatTemplate {
         .setData(this.toJson());
   }
 
-  Stream<QuerySnapshot> streamStoreCustomers(String storeID) {
+  Future<QuerySnapshot> streamStoreCustomers(String storeID) {
     return Model.db
         .collection("stores")
         .document(storeID)
         .collection("customers")
-        .snapshots();
+        .getDocuments();
   }
 
   Stream<QuerySnapshot> streamStoreChats(

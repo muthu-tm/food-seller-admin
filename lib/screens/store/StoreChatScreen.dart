@@ -116,7 +116,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
       ChatTemplate oc = ChatTemplate();
       oc.content = content;
       oc.messageType = type;
-      oc.senderType = 1; // Customer
+      oc.senderType = 1; // Seller
       await oc.storeChatCreate(storeID, custID);
 
       listScrollController.animateTo(0.0,
@@ -130,7 +130,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
   }
 
   Widget buildItem(int index, DocumentSnapshot document) {
-    if (document.data['sender_type'] == 0) {
+    if (document.data['sender_type'] == 1) {
       // Right (my message)
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,

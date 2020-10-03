@@ -1,5 +1,6 @@
 import 'package:chipchop_seller/db/models/chat_temp.dart';
 import 'package:chipchop_seller/screens/store/StoreChatScreen.dart';
+import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -26,8 +27,8 @@ class CustomersChatScreen extends StatelessWidget {
         ),
         backgroundColor: CustomColors.green,
       ),
-      body: StreamBuilder(
-          stream: ChatTemplate().streamStoreCustomers(storeID),
+      body: FutureBuilder(
+          future: ChatTemplate().streamStoreCustomers(storeID),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             Widget child;
 
@@ -64,11 +65,25 @@ class CustomersChatScreen extends StatelessWidget {
                               ),
                             );
                           },
-                          leading: Icon(Icons.person),
-                          title:
-                              Text(snapshot.data.documents[index].data['name']),
-                          subtitle:
-                              Text(snapshot.data.documents[index].documentID),
+                          leading: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                            color: CustomColors.grey,
+                              borderRadius: BorderRadius.circular(40.0),
+                            ),
+                            child: Icon(
+                              Icons.person,
+                              color: CustomColors.blueGreen,
+                            ),
+                          ),
+                          title: Text(
+                            snapshot.data.documents[index].data['first_name'],
+                          ),
+                          subtitle: Text(
+                            snapshot
+                                .data.documents[index].data['contact_nunmber'],
+                          ),
                         ),
                       );
                     },
@@ -77,16 +92,14 @@ class CustomersChatScreen extends StatelessWidget {
               }
             } else if (snapshot.hasError) {
               child = Container(
-                child: Text(
-                  "Error...",
-                  style: TextStyle(color: CustomColors.black),
+                child:  Column(
+                  children: AsyncWidgets.asyncError()
                 ),
               );
             } else {
               child = Container(
-                child: Text(
-                  "Loading...",
-                  style: TextStyle(color: CustomColors.black),
+                child: Column(
+                  children: AsyncWidgets.asyncWaiting()
                 ),
               );
             }
