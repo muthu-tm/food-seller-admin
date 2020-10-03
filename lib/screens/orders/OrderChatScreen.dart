@@ -132,7 +132,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   }
 
   Widget buildItem(int index, DocumentSnapshot document) {
-    if (document.data['from'] == cachedLocalUser.getID()) {
+    if (document.data['sender_type'] == 1) {
       // Right (my message)
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
