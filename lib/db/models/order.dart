@@ -56,16 +56,16 @@ class Order {
   factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
   Map<String, dynamic> toJson() => _$OrderToJson(this);
 
-  CollectionReference getCollectionRef() {
-    return User().getDocumentRef(cachedLocalUser.getID()).collection("orders");
+  CollectionReference getCollectionRef(String buyerID) {
+    return Model.db.collection('buyers').document(buyerID).collection("orders");
   }
 
   Query getGroupQuery() {
     return Model.db.collectionGroup('orders');
   }
 
-  DocumentReference getDocumentReference(String id) {
-    return getCollectionRef().document(id);
+  DocumentReference getDocumentReference(String buyerID, String id) {
+    return getCollectionRef(buyerID).document(id);
   }
 
   String getID() {
@@ -109,17 +109,16 @@ class Order {
     }
   }
 
-  Future<Order> create() async {
-    this.createdAt = DateTime.now();
-    this.updatedAt = DateTime.now();
-    this.status = 0;
-    this.orderID = generateOrderID();
-
-    DocumentReference docRef = this.getCollectionRef().document();
-    this.uuid = docRef.documentID;
-
-    await docRef.setData(this.toJson());
-    return this;
+  Future<void> updateDeliveryDetails(
+      String buyerID, int status, DateTime eDelivery, String number) async {
+    await this.getCollectionRef(buyerID).document(this.uuid).updateData(
+      {
+        'status': status,
+        'updated_at': DateTime.now(),
+        'delivery.expected_at': eDelivery.millisecondsSinceEpoch,
+        'delivery.delivery_contact': number
+      },
+    );
   }
 
   Stream<QuerySnapshot> streamOrders(String id) {

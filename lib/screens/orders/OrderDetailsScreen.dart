@@ -2,9 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/screens/orders/OrderChatScreen.dart';
 import 'package:chipchop_seller/screens/products/ProductDetailsScreen.dart';
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 import '../../db/models/order.dart';
 import '../../services/utils/DateUtils.dart';
@@ -26,6 +31,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   TextEditingController _date = TextEditingController();
   DateTime selectedDate;
+  String dContact = cachedLocalUser.getID();
+
+  final format = DateFormat("dd-MMM-yyyy HH:mm");
 
   Map<String, String> _orderStatus = {
     "0": "Ordered",
@@ -44,6 +52,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     super.initState();
 
     _currentStatus = widget.order.status.toString();
+    if (widget.order.delivery.deliveryContact != null)
+      dContact = widget.order.delivery.deliveryContact;
     selectedDate = widget.order.delivery.expectedAt == null
         ? null
         : DateTime.fromMillisecondsSinceEpoch(widget.order.delivery.expectedAt);
@@ -321,40 +331,99 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       ),
                       ListTile(
                         leading: Text(""),
-                        title: GestureDetector(
-                          onTap: () => _selectPaymentDate(context),
-                          child: AbsorbPointer(
-                            child: TextFormField(
-                              controller: _date,
-                              keyboardType: TextInputType.datetime,
-                              decoration: InputDecoration(
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.always,
-                                labelStyle: TextStyle(
-                                  fontSize: 10,
-                                  color: CustomColors.blue,
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 3.0, horizontal: 10.0),
-                                border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: CustomColors.white),
-                                ),
-                                fillColor: CustomColors.white,
-                                filled: true,
-                                suffixIcon: Icon(
-                                  Icons.date_range,
-                                  size: 35,
-                                  color: CustomColors.blue,
-                                ),
-                              ),
+                        title: DateTimeField(
+                          decoration: InputDecoration(
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            suffixIcon: Icon(Icons.date_range,
+                                color: CustomColors.blue, size: 30),
+                            labelText: "DateTime",
+                            labelStyle: TextStyle(
+                              fontSize: 12,
+                              color: CustomColors.blue,
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 3.0, horizontal: 10.0),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: CustomColors.white),
                             ),
                           ),
+                          format: format,
+                          initialValue: order.delivery.expectedAt != null
+                              ? DateTime.fromMillisecondsSinceEpoch(
+                                  order.delivery.expectedAt)
+                              : null,
+                          onShowPicker: (context, currentValue) async {
+                            final date = await showDatePicker(
+                              context: context,
+                              firstDate: DateTime.now(),
+                              initialDate: currentValue ?? DateTime.now(),
+                              lastDate: DateTime.now().add(
+                                Duration(days: 30),
+                              ),
+                            );
+
+                            if (date != null) {
+                              final time = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.fromDateTime(
+                                    currentValue ?? DateTime.now()),
+                              );
+                              selectedDate = DateTimeField.combine(date, time);
+                              return selectedDate;
+                            } else {
+                              return currentValue;
+                            }
+                          },
+                        ),
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          Icons.phone_android,
+                          size: 35,
+                          color: CustomColors.blueGreen,
+                        ),
+                        title: TextFormField(
+                          initialValue: dContact,
+                          textAlign: TextAlign.start,
+                          autofocus: false,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: CustomColors.lightGreen),
+                            ),
+                            labelText: "Delivery - Contact Numer",
+                            labelStyle: TextStyle(
+                              fontSize: 12,
+                              color: CustomColors.blue,
+                            ),
+                          ),
+                          onChanged: (val) {
+                            dContact = val;
+                          },
                         ),
                       ),
                       RaisedButton.icon(
                         color: CustomColors.blueGreen,
-                        onPressed: () {},
+                        onPressed: () async {
+                          try {
+                            await order.updateDeliveryDetails(
+                                order.userNumber,
+                                int.parse(_currentStatus),
+                                selectedDate,
+                                dContact);
+                            Fluttertoast.showToast(
+                                msg: 'Updated Delivery Details',
+                                backgroundColor: CustomColors.grey,
+                                textColor: CustomColors.white);
+                          } catch (err) {
+                            print(err);
+                            Fluttertoast.showToast(
+                                msg: 'Error, Unable to Update Details',
+                                backgroundColor: CustomColors.alertRed,
+                                textColor: CustomColors.white);
+                          }
+                        },
                         icon: Icon(
                           Icons.edit,
                           color: CustomColors.lightGrey,
