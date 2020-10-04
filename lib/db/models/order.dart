@@ -138,8 +138,8 @@ class Order {
   }
 
   Stream<QuerySnapshot> streamOrdersByStatus(
-      List<String> stores, List<int> status) {
-    if (status.isEmpty) {
+      List<String> stores, int status) {
+    if (status == null ) {
       return getGroupQuery()
           .where('store_uuid', whereIn: stores)
           .orderBy('created_at', descending: true)
@@ -147,7 +147,7 @@ class Order {
     } else {
       return getGroupQuery()
           .where('store_uuid', whereIn: stores)
-          .where('status', whereIn: status)
+          .where('status', isEqualTo: status)
           .orderBy('created_at', descending: true)
           .snapshots();
     }
