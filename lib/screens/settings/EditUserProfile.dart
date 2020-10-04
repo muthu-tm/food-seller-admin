@@ -53,8 +53,16 @@ class _EditUserProfileState extends State<EditUserProfile> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).translate('edit_profile')),
         backgroundColor: CustomColors.green,
+        title: Text(
+          AppLocalizations.of(context).translate('edit_profile'),
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
@@ -188,8 +196,8 @@ class _EditUserProfileState extends State<EditUserProfile> {
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 3.0, horizontal: 3.0),
                             border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: CustomColors.white)),
+                                borderSide:
+                                    BorderSide(color: CustomColors.white)),
                           ),
                           validator: (email) {
                             if (email.trim().isEmpty) {
@@ -231,8 +239,8 @@ class _EditUserProfileState extends State<EditUserProfile> {
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: 3.0, horizontal: 10.0),
                               border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white)),
+                                  borderSide:
+                                      BorderSide(color: CustomColors.white)),
                               fillColor: CustomColors.white,
                               filled: true,
                               suffixIcon: Icon(
@@ -266,8 +274,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           child: RadioListTile(
                             title: Text(
                               AppLocalizations.of(context).translate('male'),
-                              style: TextStyle(
-                                  color: CustomColors.blue),
+                              style: TextStyle(color: CustomColors.blue),
                             ),
                             value: "Male",
                             selected: gender.contains("Male"),
@@ -284,8 +291,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           child: RadioListTile(
                             title: Text(
                               AppLocalizations.of(context).translate('female'),
-                              style: TextStyle(
-                                  color: CustomColors.blue),
+                              style: TextStyle(color: CustomColors.blue),
                             ),
                             value: "Female",
                             selected: gender.contains("Female"),

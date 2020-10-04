@@ -24,9 +24,16 @@ class _ChangeSecretState extends State<ChangeSecret> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title:
-            Text(AppLocalizations.of(context).translate('change_secret_key')),
         backgroundColor: CustomColors.green,
+        title: Text(
+          AppLocalizations.of(context).translate('change_secret_key'),
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: CustomColors.blue,
@@ -53,7 +60,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
           child: Padding(
             padding: EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
             child: Card(
-              color: CustomColors.orange.withOpacity(0.7),
+              color: CustomColors.grey,
               elevation: 5.0,
               child: Column(
                 children: <Widget>[
@@ -74,8 +81,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 3.0, horizontal: 10.0),
                         border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: CustomColors.white)),
+                            borderSide: BorderSide(color: CustomColors.white)),
                       ),
                       autofocus: false,
                       validator: (value) {
@@ -102,8 +108,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 3.0, horizontal: 10.0),
                         border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: CustomColors.white)),
+                            borderSide: BorderSide(color: CustomColors.white)),
                       ),
                       autofocus: false,
                       validator: (value) {

@@ -285,10 +285,9 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 15.0, top: 10, right: 10),
+                  padding: EdgeInsets.only(left: 10.0, top: 10, right: 10),
                   child: Container(
-                    height: 300,
-                    color: CustomColors.grey,
+                    height: 200,
                     child: getProductTypes(context),
                   ),
                 ),
@@ -310,7 +309,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   padding: EdgeInsets.only(left: 15.0, top: 10, right: 10),
                   child: Container(
                     height: 300,
-                    color: CustomColors.grey,
                     child: getProductCategories(context),
                   ),
                 ),
@@ -332,7 +330,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   padding: EdgeInsets.only(left: 15.0, top: 10, right: 10),
                   child: Container(
                     height: 300,
-                    color: CustomColors.grey,
                     child: getProductSubCategories(context),
                   ),
                 ),
@@ -609,34 +606,21 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
               },
             );
           } else {
-            children = Container(
-              height: 90,
-              child: Column(
-                children: <Widget>[
-                  Spacer(),
-                  Text(
-                    "No Product Categories Available",
+            children = Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    "Select any Product Type",
                     style: TextStyle(
                       color: CustomColors.alertRed,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Spacer(
-                    flex: 2,
-                  ),
-                  Text(
-                    "Sorry. Please Try Again Later!",
-                    style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Spacer(),
-                ],
-              ),
+                ),
+              ],
             );
           }
         } else if (snapshot.hasError) {
@@ -1038,32 +1022,19 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
               },
             );
           } else {
-            children = Container(
-              height: 90,
+            children = Padding(
+              padding: const EdgeInsets.all(10.0),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Spacer(),
                   Text(
-                    "No Product SubCategories Available",
+                    "Select any Product Category",
                     style: TextStyle(
                       color: CustomColors.alertRed,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Spacer(
-                    flex: 2,
-                  ),
-                  Text(
-                    "Sorry. Please Try Again Later!",
-                    style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Spacer(),
                 ],
               ),
             );

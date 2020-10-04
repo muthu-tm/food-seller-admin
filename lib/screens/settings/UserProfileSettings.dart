@@ -26,8 +26,16 @@ class _UserSettingState extends State<UserSetting> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).translate('profile_settings')),
         backgroundColor: CustomColors.green,
+        title: Text(
+          AppLocalizations.of(context).translate('profile_settings'),
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
@@ -85,18 +93,18 @@ class _UserSettingState extends State<UserSetting> {
                 Text(
                     "Deactivating account won't remove your Finance Data.\n\nIf you wish to clean all, Deactivate your finance first, please!"),
                 Card(
-                    child: TextFormField(
-                      textAlign: TextAlign.center,
-                      obscureText: true,
-                      autofocus: false,
-                      controller: _pController,
-                      decoration: InputDecoration(
-                        hintText: 'Secret KEY',
-                        fillColor: CustomColors.lightGrey,
-                        filled: true,
-                      ),
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    obscureText: true,
+                    autofocus: false,
+                    controller: _pController,
+                    decoration: InputDecoration(
+                      hintText: 'Secret KEY',
+                      fillColor: CustomColors.lightGrey,
+                      filled: true,
                     ),
                   ),
+                ),
               ],
             ),
           ),
