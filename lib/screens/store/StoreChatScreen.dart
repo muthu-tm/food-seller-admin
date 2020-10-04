@@ -488,7 +488,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
     return Container(
       child: StreamBuilder(
         stream: ChatTemplate().streamStoreChats(storeID, custID, _limit),
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(
@@ -496,6 +496,16 @@ class StoreChatScreenState extends State<StoreChatScreen> {
               ),
             );
           } else {
+            if (snapshot.data.documents.isEmpty) {
+              return Container(
+                  alignment: AlignmentDirectional.center,
+                  height: 200,
+                  child: Text(
+                    "No Chats Found",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: CustomColors.grey, fontSize: 16),
+                  ));
+            }
             listMessage.addAll(snapshot.data.documents);
             return ListView.builder(
               padding: EdgeInsets.all(10.0),

@@ -378,6 +378,9 @@ class OrderChatScreenState extends State<OrderChatScreen> {
       child: Stack(
         children: <Widget>[
           Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: CustomColors.blueGreen),
+            ),
             child: Column(
               children: <Widget>[
                 // List of messages
@@ -474,7 +477,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
       child: StreamBuilder(
         stream: ChatTemplate()
             .streamOrderChats(widget.buyerID, widget.orderUUID, _limit),
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(
@@ -483,6 +486,16 @@ class OrderChatScreenState extends State<OrderChatScreen> {
               ),
             );
           } else {
+            if (snapshot.data.documents.isEmpty) {
+              return Container(
+                  alignment: AlignmentDirectional.center,
+                  height: 200,
+                  child: Text(
+                    "No Chats Found",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: CustomColors.grey, fontSize: 16),
+                  ));
+            }
             listMessage.addAll(snapshot.data.documents);
             return ListView.builder(
               padding: EdgeInsets.all(10.0),
