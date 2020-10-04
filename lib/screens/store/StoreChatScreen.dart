@@ -376,7 +376,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Chat",
+          "Chat - ${widget.custID}",
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
         ),
