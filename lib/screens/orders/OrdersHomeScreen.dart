@@ -199,24 +199,6 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                                     fontSize: 14,
                                     fontFamily: "Georgia"),
                               ),
-                              trailing: Container(
-                                padding: EdgeInsets.only(
-                                    left: 8, right: 8, top: 4, bottom: 4),
-                                decoration: BoxDecoration(
-                                  color:
-                                      CustomColors.lightPurple.withOpacity(0.5),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(5),
-                                  ),
-                                ),
-                                child: Text(
-                                  order.delivery.userLocation.locationName,
-                                  style: TextStyle(
-                                      color: CustomColors.black,
-                                      fontSize: 12,
-                                      fontFamily: "Georgia"),
-                                ),
-                              ),
                             ),
                             Padding(
                               padding: EdgeInsets.only(left: 70.0, bottom: 10),
@@ -233,10 +215,53 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    SizedBox(
+                                      height: 6,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(5),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            order
+                                                .delivery.userLocation.userName,
+                                            style: TextStyle(
+                                                color: CustomColors.blue,
+                                                fontSize: 14),
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.only(
+                                              left: 8,
+                                              right: 8,
+                                              top: 4,
+                                              bottom: 4),
+                                          decoration: BoxDecoration(
+                                            color: CustomColors.purple,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(5),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            order.delivery.userLocation
+                                                .locationName,
+                                            style: TextStyle(
+                                                color: CustomColors.white,
+                                                fontSize: 10),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                     createAddressText(
                                         order.delivery.userLocation.address
                                             .street,
-                                        16),
+                                        6),
                                     createAddressText(
                                         order
                                             .delivery.userLocation.address.city,
@@ -245,6 +270,28 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                                         order.delivery.userLocation.address
                                             .pincode,
                                         6),
+                                    SizedBox(
+                                      height: 6,
+                                    ),
+                                    RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: "LandMark : ",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: CustomColors.blue),
+                                          ),
+                                          TextSpan(
+                                            text: order.delivery.userLocation
+                                                .address.landmark,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 12),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                     SizedBox(
                                       height: 6,
                                     ),
