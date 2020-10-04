@@ -232,13 +232,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       Radius.circular(10.0),
                                     ),
                                     color: CustomColors.white),
-                                child: Icon(FontAwesomeIcons.shippingFast,
-                                    size: 35, color: CustomColors.blue),
+                                child: Icon(
+                                    widget.product.isDeliverable
+                                        ? FontAwesomeIcons.shippingFast
+                                        : Icons.transfer_within_a_station,
+                                    size: 35,
+                                    color: CustomColors.blue),
                               ),
                               Text(
                                 widget.product.isDeliverable
                                     ? "Home Delivery"
-                                    : "No Delivery",
+                                    : "Self Pickup",
                                 style: TextStyle(
                                     color: CustomColors.black,
                                     fontFamily: 'Georgia'),
@@ -261,13 +265,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       ? Icons.sentiment_very_satisfied
                                       : Icons.sentiment_dissatisfied,
                                   size: 35,
-                                  color: CustomColors.green,
+                                  color: widget.product.isAvailable ? CustomColors.green : CustomColors.alertRed,
                                 ),
                               ),
                               Text(
                                 widget.product.isAvailable
                                     ? "In Stock"
-                                    : "No Stock",
+                                    : "Out Of Stock",
                                 style: TextStyle(
                                     color: CustomColors.black,
                                     fontFamily: 'Georgia'),
