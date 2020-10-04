@@ -44,95 +44,83 @@ class HomeScreenStoreWidget extends StatelessWidget {
                         elevation: 5,
                         child: Column(
                           children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        ViewStoreScreen(store),
-                                    settings: RouteSettings(name: '/store'),
-                                  ),
-                                );
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 10, right: 10, top: 5),
-                                    child: Container(
-                                      height: 75,
-                                      width: 75,
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              store.getStoreImages().first,
-                                          imageBuilder:
-                                              (context, imageProvider) => Image(
-                                            fit: BoxFit.fill,
-                                            image: imageProvider,
-                                          ),
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              Center(
-                                            child: SizedBox(
-                                              height: 50.0,
-                                              width: 50.0,
-                                              child: CircularProgressIndicator(
-                                                  value:
-                                                      downloadProgress.progress,
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation(
-                                                          CustomColors.blue),
-                                                  strokeWidth: 2.0),
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(
-                                            Icons.error,
-                                            size: 35,
-                                          ),
-                                          fadeOutDuration: Duration(seconds: 1),
-                                          fadeInDuration: Duration(seconds: 2),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 10, right: 10, top: 5),
+                                  child: Container(
+                                    height: 75,
+                                    width: 75,
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(10.0),
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            store.getStoreImages().first,
+                                        imageBuilder:
+                                            (context, imageProvider) => Image(
+                                          fit: BoxFit.fill,
+                                          image: imageProvider,
                                         ),
+                                        progressIndicatorBuilder: (context,
+                                                url, downloadProgress) =>
+                                            Center(
+                                          child: SizedBox(
+                                            height: 50.0,
+                                            width: 50.0,
+                                            child: CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation(
+                                                        CustomColors.blue),
+                                                strokeWidth: 2.0),
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(
+                                          Icons.error,
+                                          size: 35,
+                                        ),
+                                        fadeOutDuration: Duration(seconds: 1),
+                                        fadeInDuration: Duration(seconds: 2),
                                       ),
                                     ),
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.all(5),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          store.name,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(5),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        store.name,
+                                        style: TextStyle(
+                                          fontFamily: 'Georgia',
+                                          color: CustomColors.blue,
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5.0),
+                                      Container(
+                                        child: Text(
+                                          "Timings - ${store.activeFrom} : ${store.activeTill}",
                                           style: TextStyle(
                                             fontFamily: 'Georgia',
-                                            color: CustomColors.blue,
+                                            color: CustomColors.black,
                                             fontSize: 14.0,
                                           ),
                                         ),
-                                        SizedBox(height: 5.0),
-                                        Container(
-                                          child: Text(
-                                            "Timings - ${store.activeFrom} : ${store.activeTill}",
-                                            style: TextStyle(
-                                              fontFamily: 'Georgia',
-                                              color: CustomColors.black,
-                                              fontSize: 14.0,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                             SizedBox(
                               height: 5,
@@ -150,16 +138,23 @@ class HomeScreenStoreWidget extends StatelessWidget {
                                   ),
                                   FlatButton.icon(
                                     onPressed: () async {
-                                      await UrlLauncherUtils.makePhoneCall(
-                                          store.contacts.first.contactNumber);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ViewStoreScreen(store),
+                                          settings:
+                                              RouteSettings(name: '/store'),
+                                        ),
+                                      );
                                     },
                                     label: Text(
-                                      "Contact",
+                                      "View",
                                       style: TextStyle(
                                           fontSize: 14,
                                           color: CustomColors.blueGreen),
                                     ),
-                                    icon: Icon(Icons.call_end),
+                                    icon: Icon(Icons.remove_red_eye),
                                     splashColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                   ),
