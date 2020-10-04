@@ -55,7 +55,7 @@ class StoreCategoryWidget extends StatelessWidget {
                         );
                       },
                       child: Container(
-                        padding: EdgeInsets.all(10),
+                        padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
                             Radius.circular(10.0),
@@ -65,13 +65,14 @@ class StoreCategoryWidget extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: Center(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               CachedNetworkImage(
                                 imageUrl: _c.getCategoryImage(),
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
-                                  width: 75,
-                                  height: 75,
+                                  width: 90,
+                                  height: 65,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(10.0),
@@ -100,6 +101,7 @@ class StoreCategoryWidget extends StatelessWidget {
                                   _c.name,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: CustomColors.black,
                                       fontFamily: 'Roboto-Light.ttf',
