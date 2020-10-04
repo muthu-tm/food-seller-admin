@@ -38,10 +38,14 @@ class Order {
   bool isReturnable;
   @JsonKey(name: 'return_days', defaultValue: false)
   int returnDays;
-  @JsonKey(name: 'returned_at', nullable: true)
-  int returnedAt;
+  @JsonKey(name: 'confirmed_at', nullable: true)
+  int confirmedAt;
+  @JsonKey(name: 'dispatched_at', nullable: true)
+  int dispatchedAt;
   @JsonKey(name: 'cancelled_at', nullable: true)
   int cancelledAt;
+  @JsonKey(name: 'returned_at', nullable: true)
+  int returnedAt;
   @JsonKey(name: 'delivery')
   OrderDelivery delivery;
   @JsonKey(name: 'amount')
@@ -90,8 +94,10 @@ class Order {
       return "Cancelled By Store";
     } else if (this.status == 4) {
       return "DisPatched";
-    } else {
+    } else if (this.status == 5) {
       return "Delivered";
+    } else {
+      return "Returned";
     }
   }
 
@@ -111,12 +117,27 @@ class Order {
 
   Future<void> updateDeliveryDetails(
       String buyerID, int status, DateTime eDelivery, String number) async {
+    String field = "confirmed_at";
+
+    if (status == 1) {
+      field = "confirmed_at";
+    } else if (status == 2 || status == 3) {
+      field = "cancelled_at";
+    } else if (status == 4) {
+      field = "dispatched_at";
+    } else if (status == 5) {
+      field = "delivery.delivered_at";
+    } else {
+      field = "returned_at";
+    }
+
     await this.getCollectionRef(buyerID).document(this.uuid).updateData(
       {
         'status': status,
         'updated_at': DateTime.now(),
         'delivery.expected_at': eDelivery.millisecondsSinceEpoch,
-        'delivery.delivery_contact': number
+        'delivery.delivery_contact': number,
+        field: DateTime.now().millisecondsSinceEpoch
       },
     );
   }
@@ -137,9 +158,8 @@ class Order {
         .snapshots();
   }
 
-  Stream<QuerySnapshot> streamOrdersByStatus(
-      List<String> stores, int status) {
-    if (status == null ) {
+  Stream<QuerySnapshot> streamOrdersByStatus(List<String> stores, int status) {
+    if (status == null) {
       return getGroupQuery()
           .where('store_uuid', whereIn: stores)
           .orderBy('created_at', descending: true)
