@@ -37,7 +37,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   double deliveryChargeMax = 0.00;
   List<String> availProducts = [];
   List<String> availProductCategories = [];
-  List<ProductCategories> productCategories = [];
   List<String> availProductSubCategories = [];
   List<int> workingDays = [1, 2, 3, 4, 5];
   TimeOfDay fromTime = TimeOfDay(hour: 9, minute: 0);
@@ -581,12 +580,10 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     if (availProductCategories.contains(categories.uuid)) {
                       setState(() {
                         availProductCategories.remove(categories.uuid);
-                        productCategories.remove(categories);
                       });
                     } else {
                       setState(() {
                         availProductCategories.add(categories.uuid);
-                        productCategories.add(categories);
                       });
                     }
                   },
@@ -993,7 +990,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
 
   Widget getProductSubCategories(BuildContext context) {
     return FutureBuilder<List<ProductSubCategories>>(
-      future: ProductSubCategories().getSubCategories(productCategories),
+      future: ProductSubCategories().getSubCategories(availProductCategories),
       builder: (BuildContext context,
           AsyncSnapshot<List<ProductSubCategories>> snapshot) {
         Widget children;

@@ -52,7 +52,7 @@ class ProductSubCategories extends Model {
   }
 
   Future<List<ProductSubCategories>> getSubCategories(
-      List<ProductCategories> categories) async {
+      List<String> categories) async {
     // handle empty params
     if (categories.isEmpty) return [];
 
@@ -60,7 +60,7 @@ class ProductSubCategories extends Model {
 
     for (var i = 0; i < categories.length; i++) {
       QuerySnapshot snap = await getCollectionRef()
-          .where('category_uuid', arrayContains: categories[i].uuid)
+          .where('category_uuid', arrayContains: categories[i])
           .getDocuments();
       if (snap.documents.isEmpty)
         continue;
