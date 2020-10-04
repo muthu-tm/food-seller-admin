@@ -14,6 +14,8 @@ class Address {
   String country;
   @JsonKey(name: 'pincode', defaultValue: '')
   String pincode;
+  @JsonKey(name: 'landmark', defaultValue: '')
+  String landmark;
 
   Address();
 
