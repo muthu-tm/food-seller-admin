@@ -68,7 +68,6 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                     color: CustomColors.white,
                   ),
                   padding: EdgeInsets.only(top: 5),
-                  height: 100,
                   alignment: Alignment.centerLeft,
                   child: Center(
                     child: Column(
@@ -79,7 +78,7 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                             imageUrl: product.getProductImage(),
                             imageBuilder: (context, imageProvider) => Container(
                               width: 125,
-                              height: 100,
+                              height: 75,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10.0),
@@ -112,7 +111,7 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                                   style: TextStyle(
                                     fontFamily: 'Georgia',
                                     color: CustomColors.blue,
-                                    fontSize: 16.0,
+                                    fontSize: 14.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -122,7 +121,7 @@ class _ActiveProductsScreenState extends State<ActiveProductsScreen> {
                                   "${product.weight} ${product.getUnit()} - Rs. ${product.originalPrice.toString()}",
                                   style: TextStyle(
                                     color: CustomColors.blue,
-                                    fontSize: 14.0,
+                                    fontSize: 13.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
