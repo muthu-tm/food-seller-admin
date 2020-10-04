@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:chipchop_seller/db/models/products.dart';
-import 'package:chipchop_seller/screens/products/AddToCartWidget.dart';
-import 'package:chipchop_seller/screens/products/CartCounterWidget.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../db/models/products.dart';
 import '../utils/CustomColors.dart';
@@ -21,151 +21,342 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.green,
+      backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
         backgroundColor: CustomColors.green,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.pop(context),
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
+            icon: Icon(Icons.shopping_cart),
             onPressed: () {},
           ),
         ],
       ),
-      body: getBody(context, widget.product),
+      body: getBody(context),
+      bottomNavigationBar: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height / 11,
+        child: Container(
+          padding: EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            border: Border.all(width: 0.5, color: Colors.black12),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  SizedBox(
+                    child: Divider(
+                      color: Colors.black26,
+                      height: 4,
+                    ),
+                    height: 24,
+                  ),
+                  widget.product.offer > 0
+                      ? Text(
+                          '₹ ${widget.product.originalPrice.toString()}',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 18,
+                              decoration: TextDecoration.lineThrough),
+                        )
+                      : Container(),
+                  SizedBox(
+                    width: 6,
+                  ),
+                  Text(
+                    '₹ ${widget.product.currentPrice.toString()}',
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700),
+                  )
+                ],
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              RaisedButton(
+                onPressed: () {},
+                textColor: Colors.white,
+                padding: const EdgeInsets.all(0.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 2.9,
+                  height: 60,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: <Color>[
+                        CustomColors.blueGreen,
+                        CustomColors.green,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Icon(
+                        Icons.add_shopping_cart,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        "Buy Now",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  Widget getBody(BuildContext context, Products product) {
-    Size size = MediaQuery.of(context).size;
+  Widget getBody(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          Stack(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(top: size.height * 0.3),
-                padding: EdgeInsets.only(
-                  top: 15,
-                  left: 15,
-                  right: 15,
+      child: Container(
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Container(
+                height: 150.0,
+                width: double.infinity,
+                child: Carousel(
+                  images: getImages(),
+                  dotSize: 5.0,
+                  dotSpacing: 20.0,
+                  dotColor: CustomColors.blue,
+                  indicatorBgPadding: 5.0,
+                  dotBgColor: CustomColors.black.withOpacity(0.2),
+                  borderRadius: true,
+                  radius: Radius.circular(20),
+                  noRadiusForIndicator: true,
                 ),
-                decoration: BoxDecoration(
-                  color: CustomColors.lightGrey,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                child: Text(
+                  widget.product.name,
+                  style: TextStyle(
+                      color: CustomColors.blue,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700),
                 ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Container(
+                color: CustomColors.grey,
                 child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      child: Container(
-                        height: 200,
-                        child: Text(
-                          product.shortDetails,
-                          style: TextStyle(
-                              height: 1.5, color: CustomColors.black, fontFamily: 'Georgia'),
+                  children: [
+                    ListTile(
+                      leading: Icon(
+                        Icons.widgets,
+                        size: 35,
+                        color: CustomColors.blueGreen,
+                      ),
+                      title: Text(
+                        "Quantity",
+                        style: TextStyle(
+                          color: CustomColors.blue,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      trailing: Text(
+                        "${widget.product.weight} ${widget.product.getUnit()}",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          color: CustomColors.black,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        CartCounter(),
-                        Container(
-                          height: 32,
-                          width: 32,
-                          child: Icon(
-                            Icons.favorite_border,
-                            size: 35,
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 5),
-                    AddToCart(product: product)
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      product.name,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          .copyWith(color: Colors.white),
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      children: <Widget>[
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(text: "Price\n"),
-                              TextSpan(
-                                text: "${product.currentPrice}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline4
-                                    .copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Hero(
-                            tag: "${product.uuid}",
-                            child: CachedNetworkImage(
-                              imageUrl: product.getProductImage(),
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                width: 150,
-                                height: 125,
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                width: 50,
+                                height: 50,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10.0),
-                                  ),
-                                  shape: BoxShape.rectangle,
-                                  image: DecorationImage(
-                                      fit: BoxFit.fill, image: imageProvider),
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                    color: CustomColors.white),
+                                child: Icon(
+                                  Icons.update,
+                                  size: 35,
+                                  color: Color(0xFFAB436B),
                                 ),
                               ),
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) =>
-                                      CircularProgressIndicator(
-                                          value: downloadProgress.progress),
-                              errorWidget: (context, url, error) => Icon(
-                                Icons.error,
-                                size: 35,
-                              ),
-                              fadeOutDuration: Duration(seconds: 1),
-                              fadeInDuration: Duration(seconds: 2),
-                            ),
+                              Text(
+                                widget.product.isReturnable
+                                    ? "Returnable"
+                                    : "Not Returnable",
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontFamily: 'Georgia'),
+                              )
+                            ],
                           ),
-                        )
-                      ],
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                    color: CustomColors.white),
+                                child: Icon(FontAwesomeIcons.shippingFast,
+                                    size: 35, color: CustomColors.blue),
+                              ),
+                              Text(
+                                widget.product.isDeliverable
+                                    ? "Home Delivery"
+                                    : "No Delivery",
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontFamily: 'Georgia'),
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                    color: CustomColors.white),
+                                child: Icon(
+                                  widget.product.isAvailable
+                                      ? Icons.sentiment_very_satisfied
+                                      : Icons.sentiment_dissatisfied,
+                                  size: 35,
+                                  color: CustomColors.green,
+                                ),
+                              ),
+                              Text(
+                                widget.product.isAvailable
+                                    ? "In Stock"
+                                    : "No Stock",
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontFamily: 'Georgia'),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
               ),
-            ],
-          )
-        ],
+            ),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Container(
+                color: CustomColors.white,
+                padding: EdgeInsets.all(10),
+                alignment: Alignment.topLeft,
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(
+                        Icons.description,
+                        size: 35,
+                        color: CustomColors.blueGreen,
+                      ),
+                      title: Text(
+                        "Description",
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: CustomColors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Georgia'),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Text(""),
+                      title: Text(
+                        widget.product.shortDetails,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: CustomColors.black,
+                            fontFamily: 'Georgia'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  List<Widget> getImages() {
+    List<Widget> images = [];
+
+    for (var item in widget.product.getProductImages()) {
+      images.add(
+        CachedNetworkImage(
+          imageUrl: item,
+          imageBuilder: (context, imageProvider) => Image(
+            height: 150,
+            width: double.infinity,
+            fit: BoxFit.contain,
+            image: imageProvider,
+          ),
+          progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+            child: SizedBox(
+              height: 50.0,
+              width: 50.0,
+              child: CircularProgressIndicator(
+                  value: downloadProgress.progress,
+                  valueColor: AlwaysStoppedAnimation(CustomColors.blue),
+                  strokeWidth: 2.0),
+            ),
+          ),
+          errorWidget: (context, url, error) => Icon(
+            Icons.error,
+            size: 35,
+          ),
+          fadeOutDuration: Duration(seconds: 1),
+          fadeInDuration: Duration(seconds: 2),
+        ),
+      );
+    }
+    return images;
   }
 }

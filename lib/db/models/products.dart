@@ -34,6 +34,8 @@ class Products extends Model {
   double offer;
   @JsonKey(name: 'current_price')
   double currentPrice;
+  @JsonKey(name: 'is_returnable', defaultValue: false)
+  bool isReturnable;
   @JsonKey(name: 'is_available')
   bool isAvailable;
   @JsonKey(name: 'is_deliverable')
@@ -66,6 +68,28 @@ class Products extends Model {
       return "milli litre";
     } else {
       return "Count";
+    }
+  }
+
+  List<String> getProductImages() {
+    if (this.productImages.isEmpty) {
+      return [
+        no_image_placeholder.replaceFirst(
+            firebase_storage_path, image_kit_path + ik_medium_size)
+      ];
+    } else {
+      if (this.productImages.first != null && this.productImages.first != "") {
+        List<String> images = [];
+        for (var img in this.productImages) {
+          images.add(img.replaceFirst(
+              firebase_storage_path, image_kit_path + ik_medium_size));
+        }
+        return images;
+      } else
+        return [
+          no_image_placeholder.replaceFirst(
+              firebase_storage_path, image_kit_path + ik_medium_size)
+        ];
     }
   }
 
@@ -144,6 +168,17 @@ class Products extends Model {
     try {
       return getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)
+          .snapshots();
+    } catch (err) {
+      throw err;
+    }
+  }
+
+    Stream<QuerySnapshot> streamProductsForCategory(String storeID, String categoryID) {
+    try {
+      return getCollectionRef()
+          .where('store_uuid', isEqualTo: storeID)
+          .where('product_category', isEqualTo: categoryID)
           .snapshots();
     } catch (err) {
       throw err;
