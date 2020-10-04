@@ -182,7 +182,7 @@ class HomeScreenStoreWidget extends StatelessWidget {
                                       );
                                     },
                                     label: Text(
-                                      "Chat",
+                                      "Chats",
                                       style: TextStyle(
                                           fontSize: 14,
                                           color: CustomColors.blueGreen),
