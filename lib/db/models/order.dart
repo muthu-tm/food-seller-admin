@@ -4,12 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../services/controllers/user/user_service.dart';
 import './order_amount.dart';
 import './order_delivery.dart';
 import './order_product.dart';
 import 'model.dart';
-import 'user.dart';
 part 'order.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -138,6 +136,19 @@ class Order {
         'delivery.expected_at': eDelivery.millisecondsSinceEpoch,
         'delivery.delivery_contact': number,
         field: DateTime.now().millisecondsSinceEpoch
+      },
+    );
+  }
+
+  Future<void> updateAmountDetails(
+      String buyerID, double oAmount, double dAmount, double rAmount) async {
+    await this.getCollectionRef(buyerID).document(this.uuid).updateData(
+      {
+        'updated_at': DateTime.now(),
+        'amount.order_amount': oAmount,
+        'amount.delivery_charge': dAmount,
+        'delivery.delivery_charge': dAmount,
+        'amount.paid_amount': rAmount
       },
     );
   }

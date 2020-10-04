@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/products.dart';
+import 'package:chipchop_seller/screens/orders/OrderAmountWidget.dart';
 import 'package:chipchop_seller/screens/orders/OrderChatScreen.dart';
 import 'package:chipchop_seller/screens/products/ProductDetailsScreen.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
@@ -160,283 +161,291 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         fontFamily: "Georgia"),
                   ),
                 ),
-                Container(
-                  color: CustomColors.grey,
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading: Icon(
-                          Icons.shopping_basket,
-                          color: CustomColors.blueGreen,
-                        ),
-                        title: Text(
-                          "Status",
-                          style: TextStyle(
-                              color: CustomColors.black,
-                              fontSize: 17,
-                              fontFamily: "Georgia"),
-                        ),
-                      ),
-                      ListTile(
-                        leading: Text(""),
-                        title: Container(
-                          padding:
-                              const EdgeInsets.only(left: 10.0, right: 10.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all()),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              items: _orderStatus.entries.map((f) {
-                                return DropdownMenuItem<String>(
-                                  value: f.key,
-                                  child: Text(f.value),
-                                );
-                              }).toList(),
-                              onChanged: (unit) {
-                                setState(
-                                  () {
-                                    _currentStatus = unit;
-                                  },
-                                );
-                              },
-                              value: _currentStatus,
-                            ),
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Container(
+                    color: CustomColors.grey,
+                    child: Column(
+                      children: [
+                        ListTile(
+                          leading: Icon(
+                            Icons.shopping_basket,
+                            color: CustomColors.blueGreen,
                           ),
-                        ),
-                      ),
-                      order.delivery.deliveryType != 3
-                          ? ListTile(
-                              leading: Icon(
-                                Icons.local_shipping,
-                                size: 35,
-                                color: CustomColors.blueGreen,
-                              ),
-                              title: Text(
-                                "Delivery",
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontSize: 16,
-                                    fontFamily: "Georgia"),
-                              ),
-                              trailing: Text(
-                                order.getDeliveryType(),
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontSize: 16,
-                                    fontFamily: "Georgia"),
-                              ),
-                            )
-                          : ListTile(
-                              leading: Icon(
-                                Icons.local_shipping,
-                                size: 35,
-                                color: CustomColors.blueGreen,
-                              ),
-                              title: Text(
-                                "Delivery At",
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontSize: 16,
-                                    fontFamily: "Georgia"),
-                              ),
-                              trailing: Text(
-                                DateUtils.formatDateTime(
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      order.delivery.scheduledDate),
-                                ),
-                              )),
-                      ListTile(
-                        leading: Text(""),
-                        title: Text(
-                          "Address",
-                        ),
-                        trailing: Container(
-                          padding: EdgeInsets.only(
-                              left: 8, right: 8, top: 4, bottom: 4),
-                          decoration: BoxDecoration(
-                            color: CustomColors.lightPurple.withOpacity(0.5),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5),
-                            ),
-                          ),
-                          child: Text(
-                            order.delivery.userLocation.locationName,
+                          title: Text(
+                            "Status",
                             style: TextStyle(
                                 color: CustomColors.black,
-                                fontSize: 12,
+                                fontSize: 17,
                                 fontFamily: "Georgia"),
                           ),
                         ),
-                      ),
-                      ListTile(
-                        leading: Text(""),
-                        title: Container(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          padding: EdgeInsets.only(right: 10, left: 10),
-                          decoration: BoxDecoration(
-                            color: CustomColors.lightGrey,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5),
+                        ListTile(
+                          leading: Text(""),
+                          title: Container(
+                            padding:
+                                const EdgeInsets.only(left: 10.0, right: 10.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all()),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                items: _orderStatus.entries.map((f) {
+                                  return DropdownMenuItem<String>(
+                                    value: f.key,
+                                    child: Text(f.value),
+                                  );
+                                }).toList(),
+                                onChanged: (unit) {
+                                  setState(
+                                    () {
+                                      _currentStatus = unit;
+                                    },
+                                  );
+                                },
+                                value: _currentStatus,
+                              ),
                             ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              createAddressText(
-                                  order.delivery.userLocation.address.street,
-                                  16),
-                              createAddressText(
-                                  order.delivery.userLocation.address.city, 6),
-                              createAddressText(
-                                  order.delivery.userLocation.address.pincode,
-                                  6),
-                              SizedBox(
-                                height: 6,
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "Mobile : ",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: CustomColors.blue),
-                                    ),
-                                    TextSpan(
-                                      text: order
-                                          .delivery.userLocation.userNumber,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 12),
-                                    ),
-                                  ],
+                        ),
+                        order.delivery.deliveryType != 3
+                            ? ListTile(
+                                leading: Icon(
+                                  Icons.local_shipping,
+                                  size: 35,
+                                  color: CustomColors.blueGreen,
                                 ),
+                                title: Text(
+                                  "Delivery",
+                                  style: TextStyle(
+                                      color: CustomColors.black,
+                                      fontSize: 16,
+                                      fontFamily: "Georgia"),
+                                ),
+                                trailing: Text(
+                                  order.getDeliveryType(),
+                                  style: TextStyle(
+                                      color: CustomColors.black,
+                                      fontSize: 16,
+                                      fontFamily: "Georgia"),
+                                ),
+                              )
+                            : ListTile(
+                                leading: Icon(
+                                  Icons.local_shipping,
+                                  size: 35,
+                                  color: CustomColors.blueGreen,
+                                ),
+                                title: Text(
+                                  "Delivery At",
+                                  style: TextStyle(
+                                      color: CustomColors.black,
+                                      fontSize: 16,
+                                      fontFamily: "Georgia"),
+                                ),
+                                trailing: Text(
+                                  DateUtils.formatDateTime(
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                        order.delivery.scheduledDate),
+                                  ),
+                                )),
+                        ListTile(
+                          leading: Text(""),
+                          title: Text(
+                            "Address",
+                          ),
+                          trailing: Container(
+                            padding: EdgeInsets.only(
+                                left: 8, right: 8, top: 4, bottom: 4),
+                            decoration: BoxDecoration(
+                              color: CustomColors.lightPurple.withOpacity(0.5),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
                               ),
-                              SizedBox(
-                                height: 16,
-                              ),
-                            ],
+                            ),
+                            child: Text(
+                              order.delivery.userLocation.locationName,
+                              style: TextStyle(
+                                  color: CustomColors.black,
+                                  fontSize: 12,
+                                  fontFamily: "Georgia"),
+                            ),
                           ),
                         ),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          FontAwesomeIcons.shippingFast,
-                          color: CustomColors.blueGreen,
-                        ),
-                        title: Text(
-                          "Expected Delivery Time",
-                        ),
-                      ),
-                      ListTile(
-                        leading: Text(""),
-                        title: DateTimeField(
-                          decoration: InputDecoration(
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            suffixIcon: Icon(Icons.date_range,
-                                color: CustomColors.blue, size: 30),
-                            labelText: "DateTime",
-                            labelStyle: TextStyle(
-                              fontSize: 12,
-                              color: CustomColors.blue,
+                        ListTile(
+                          leading: Text(""),
+                          title: Container(
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            padding: EdgeInsets.only(right: 10, left: 10),
+                            decoration: BoxDecoration(
+                              color: CustomColors.lightGrey,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
+                              ),
                             ),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 3.0, horizontal: 10.0),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(color: CustomColors.white),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                createAddressText(
+                                    order.delivery.userLocation.address.street,
+                                    16),
+                                createAddressText(
+                                    order.delivery.userLocation.address.city,
+                                    6),
+                                createAddressText(
+                                    order.delivery.userLocation.address.pincode,
+                                    6),
+                                SizedBox(
+                                  height: 6,
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: "Mobile : ",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: CustomColors.blue),
+                                      ),
+                                      TextSpan(
+                                        text: order
+                                            .delivery.userLocation.userNumber,
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                              ],
                             ),
                           ),
-                          format: format,
-                          initialValue: order.delivery.expectedAt != null
-                              ? DateTime.fromMillisecondsSinceEpoch(
-                                  order.delivery.expectedAt)
-                              : null,
-                          onShowPicker: (context, currentValue) async {
-                            final date = await showDatePicker(
-                              context: context,
-                              firstDate: DateTime.now(),
-                              initialDate: currentValue ?? DateTime.now(),
-                              lastDate: DateTime.now().add(
-                                Duration(days: 30),
+                        ),
+                        ListTile(
+                          leading: Icon(
+                            FontAwesomeIcons.shippingFast,
+                            color: CustomColors.blueGreen,
+                          ),
+                          title: Text(
+                            "Expected Delivery Time",
+                          ),
+                        ),
+                        ListTile(
+                          leading: Text(""),
+                          title: DateTimeField(
+                            decoration: InputDecoration(
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              suffixIcon: Icon(Icons.date_range,
+                                  color: CustomColors.blue, size: 30),
+                              labelText: "DateTime",
+                              labelStyle: TextStyle(
+                                fontSize: 12,
+                                color: CustomColors.blue,
                               ),
-                            );
-
-                            if (date != null) {
-                              final time = await showTimePicker(
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 3.0, horizontal: 10.0),
+                              border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: CustomColors.white),
+                              ),
+                            ),
+                            format: format,
+                            initialValue: order.delivery.expectedAt != null
+                                ? DateTime.fromMillisecondsSinceEpoch(
+                                    order.delivery.expectedAt)
+                                : null,
+                            onShowPicker: (context, currentValue) async {
+                              final date = await showDatePicker(
                                 context: context,
-                                initialTime: TimeOfDay.fromDateTime(
-                                    currentValue ?? DateTime.now()),
+                                firstDate: DateTime.now(),
+                                initialDate: currentValue ?? DateTime.now(),
+                                lastDate: DateTime.now().add(
+                                  Duration(days: 30),
+                                ),
                               );
-                              selectedDate = DateTimeField.combine(date, time);
-                              return selectedDate;
-                            } else {
-                              return currentValue;
+
+                              if (date != null) {
+                                final time = await showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay.fromDateTime(
+                                      currentValue ?? DateTime.now()),
+                                );
+                                selectedDate =
+                                    DateTimeField.combine(date, time);
+                                return selectedDate;
+                              } else {
+                                return currentValue;
+                              }
+                            },
+                          ),
+                        ),
+                        ListTile(
+                          leading: Icon(
+                            Icons.phone_android,
+                            size: 35,
+                            color: CustomColors.blueGreen,
+                          ),
+                          title: TextFormField(
+                            initialValue: dContact,
+                            textAlign: TextAlign.start,
+                            autofocus: false,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: CustomColors.lightGreen),
+                              ),
+                              labelText: "Delivery - Contact Numer",
+                              labelStyle: TextStyle(
+                                fontSize: 12,
+                                color: CustomColors.blue,
+                              ),
+                            ),
+                            onChanged: (val) {
+                              dContact = val;
+                            },
+                          ),
+                        ),
+                        RaisedButton.icon(
+                          color: CustomColors.blueGreen,
+                          onPressed: () async {
+                            try {
+                              await order.updateDeliveryDetails(
+                                  order.userNumber,
+                                  int.parse(_currentStatus),
+                                  selectedDate,
+                                  dContact);
+                              Fluttertoast.showToast(
+                                  msg: 'Updated Delivery Details',
+                                  backgroundColor: CustomColors.grey,
+                                  textColor: CustomColors.white);
+                            } catch (err) {
+                              print(err);
+                              Fluttertoast.showToast(
+                                  msg: 'Error, Unable to Update Details',
+                                  backgroundColor: CustomColors.alertRed,
+                                  textColor: CustomColors.white);
                             }
                           },
-                        ),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.phone_android,
-                          size: 35,
-                          color: CustomColors.blueGreen,
-                        ),
-                        title: TextFormField(
-                          initialValue: dContact,
-                          textAlign: TextAlign.start,
-                          autofocus: false,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: CustomColors.lightGreen),
-                            ),
-                            labelText: "Delivery - Contact Numer",
-                            labelStyle: TextStyle(
-                              fontSize: 12,
-                              color: CustomColors.blue,
-                            ),
+                          icon: Icon(
+                            Icons.edit,
+                            color: CustomColors.lightGrey,
                           ),
-                          onChanged: (val) {
-                            dContact = val;
-                          },
-                        ),
-                      ),
-                      RaisedButton.icon(
-                        color: CustomColors.blueGreen,
-                        onPressed: () async {
-                          try {
-                            await order.updateDeliveryDetails(
-                                order.userNumber,
-                                int.parse(_currentStatus),
-                                selectedDate,
-                                dContact);
-                            Fluttertoast.showToast(
-                                msg: 'Updated Delivery Details',
-                                backgroundColor: CustomColors.grey,
-                                textColor: CustomColors.white);
-                          } catch (err) {
-                            print(err);
-                            Fluttertoast.showToast(
-                                msg: 'Error, Unable to Update Details',
-                                backgroundColor: CustomColors.alertRed,
-                                textColor: CustomColors.white);
-                          }
-                        },
-                        icon: Icon(
-                          Icons.edit,
-                          color: CustomColors.lightGrey,
-                        ),
-                        label: Text(
-                          "Update",
-                          style: TextStyle(
-                              color: CustomColors.lightGrey, fontSize: 14),
-                        ),
-                      )
-                    ],
+                          label: Text(
+                            "Update",
+                            style: TextStyle(
+                                color: CustomColors.lightGrey, fontSize: 14),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
+                OrderAmountWidget(order),
                 ListTile(
                   leading: Icon(
                     FontAwesomeIcons.shoppingBasket,
