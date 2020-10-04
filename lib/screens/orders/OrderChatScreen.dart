@@ -17,22 +17,22 @@ import '../utils/CustomColors.dart';
 
 class OrderChatScreen extends StatefulWidget {
   final String orderUUID;
-  final String userID;
+  final String buyerID;
 
-  OrderChatScreen({Key key, @required this.orderUUID, @required this.userID})
+  OrderChatScreen({Key key, @required this.orderUUID, @required this.buyerID})
       : super(key: key);
 
   @override
   State createState() =>
-      OrderChatScreenState(orderUUID: orderUUID, userID: userID);
+      OrderChatScreenState(orderUUID: orderUUID, buyerID: buyerID);
 }
 
 class OrderChatScreenState extends State<OrderChatScreen> {
   OrderChatScreenState(
-      {Key key, @required this.orderUUID, @required this.userID});
+      {Key key, @required this.orderUUID, @required this.buyerID});
 
   String orderUUID;
-  String userID;
+  String buyerID;
 
   List<DocumentSnapshot> listMessage = new List.from([]);
   int _limit = 20;
@@ -92,8 +92,9 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   Future uploadFile() async {
     try {
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      String filePath = 'order_chats/$buyerID/$fileName.png';
       StorageReference reference =
-          FirebaseStorage.instance.ref().child(fileName);
+          FirebaseStorage.instance.ref().child(filePath);
       StorageUploadTask uploadTask = reference.putFile(imageFile);
       StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
       String imageUrl = await storageTaskSnapshot.ref.getDownloadURL();
@@ -118,7 +119,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
       oc.content = content;
       oc.messageType = type;
       oc.senderType = 1; // Seller
-      await oc.orderChatCreate(userID, orderUUID);
+      await oc.orderChatCreate(buyerID, orderUUID);
 
       listScrollController.animateTo(0.0,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
@@ -472,7 +473,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
     return Container(
       child: StreamBuilder(
         stream: ChatTemplate()
-            .streamOrderChats(widget.userID, widget.orderUUID, _limit),
+            .streamOrderChats(widget.buyerID, widget.orderUUID, _limit),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(

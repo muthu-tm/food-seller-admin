@@ -18,9 +18,9 @@ import '../utils/AsyncWidgets.dart';
 import '../utils/CustomColors.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
-  OrderDetailsScreen(this.userID, this.storeID, this.order);
+  OrderDetailsScreen(this.buyerID, this.storeID, this.order);
 
-  final String userID;
+  final String buyerID;
   final String storeID;
   final Order order;
   @override
@@ -92,7 +92,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: OrderChatScreen(
-                    userID: widget.userID,
+                    buyerID: widget.buyerID,
                     orderUUID: widget.order.uuid,
                   ),
                 ),
@@ -114,7 +114,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   Widget getBody(BuildContext context) {
     return StreamBuilder(
       stream: Order()
-          .streamOrderByID(widget.userID, widget.storeID, widget.order.uuid),
+          .streamOrderByID(widget.buyerID, widget.storeID, widget.order.uuid),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget child;
 
