@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/store.dart';
-import 'package:chipchop_seller/screens/store/AddStoreHome.dart';
 import 'package:chipchop_seller/screens/store/EditStoreScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/screens/utils/AddStoreWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -31,24 +31,7 @@ class _StoreSettingsState extends State<StoreSettings> {
         ),
         backgroundColor: CustomColors.green,
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.green,
-        onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddNewStoreHome(),
-              settings: RouteSettings(name: '/settings/store'),
-            ),
-          );
-        },
-        label: Text("Add New Store"),
-        icon: Icon(
-          Icons.store,
-          size: 35,
-          color: CustomColors.blue,
-        ),
-      ),
+      floatingActionButton: AddStoreWidget(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: SingleChildScrollView(
           child: Container(
@@ -166,33 +149,35 @@ class _StoreSettingsState extends State<StoreSettings> {
               },
             );
           } else {
-            children = Container(
-              height: 90,
-              child: Column(
-                children: <Widget>[
-                  Spacer(),
-                  Text(
-                    "No Store Available",
-                    style: TextStyle(
-                      color: CustomColors.alertRed,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
+            children = Center(
+              child: Container(
+                height: 90,
+                child: Column(
+                  children: <Widget>[
+                    Spacer(),
+                    Text(
+                      "No Store Available",
+                      style: TextStyle(
+                        color: CustomColors.alertRed,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Spacer(
-                    flex: 2,
-                  ),
-                  Text(
-                    "Add your Store Now!",
-                    style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
+                    Spacer(
+                      flex: 2,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Spacer(),
-                ],
+                    Text(
+                      "Add your Store Now!",
+                      style: TextStyle(
+                        color: CustomColors.blue,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Spacer(),
+                  ],
+                ),
               ),
             );
           }

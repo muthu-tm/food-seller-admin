@@ -2,8 +2,10 @@ import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/products/ActiveProductsScreen.dart';
 import 'package:chipchop_seller/screens/products/AddProducts.dart';
 import 'package:chipchop_seller/screens/products/InActiveProductsHome.dart';
+import 'package:chipchop_seller/screens/utils/AddStoreWidget.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/screens/utils/NoStoresWidget.dart';
 import 'package:flutter/material.dart';
 
 class ProductsHome extends StatefulWidget {
@@ -230,36 +232,7 @@ class _ProductsHomeState extends State<ProductsHome> {
               ),
             );
           } else {
-            children = Container(
-              color: CustomColors.white,
-              height: 90,
-              child: Column(
-                children: <Widget>[
-                  Spacer(),
-                  Text(
-                    "No Store Available",
-                    style: TextStyle(
-                      color: CustomColors.alertRed,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(
-                    flex: 2,
-                  ),
-                  Text(
-                    "Add your Store Now!",
-                    style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Spacer(),
-                ],
-              ),
-            );
+            children = NoStoresWidget();
           }
         } else if (snapshot.hasError) {
           children = Center(

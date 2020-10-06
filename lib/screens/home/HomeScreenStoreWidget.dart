@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/screens/store/CustomersChatScreen.dart';
 import 'package:chipchop_seller/screens/store/ViewStoreScreen.dart';
-import 'package:chipchop_seller/screens/utils/url_launcher_utils.dart';
+import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
+import 'package:chipchop_seller/screens/utils/NoStoresWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -18,12 +19,7 @@ class HomeScreenStoreWidget extends StatelessWidget {
 
           if (snapshot.hasData) {
             if (snapshot.data.documents.length == 0) {
-              child = Container(
-                child: Text(
-                  "No stores",
-                  style: TextStyle(color: CustomColors.black),
-                ),
-              );
+              child = NoStoresWidget();
             } else {
               child = Container(
                 child: ListView.builder(
@@ -54,19 +50,17 @@ class HomeScreenStoreWidget extends StatelessWidget {
                                     height: 75,
                                     width: 75,
                                     child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(10.0),
+                                      borderRadius: BorderRadius.circular(10.0),
                                       child: CachedNetworkImage(
-                                        imageUrl:
-                                            store.getStoreImages().first,
+                                        imageUrl: store.getStoreImages().first,
                                         imageBuilder:
                                             (context, imageProvider) => Image(
                                           fit: BoxFit.fill,
                                           image: imageProvider,
                                         ),
-                                        progressIndicatorBuilder: (context,
-                                                url, downloadProgress) =>
-                                            Center(
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                Center(
                                           child: SizedBox(
                                             height: 50.0,
                                             width: 50.0,
@@ -93,8 +87,7 @@ class HomeScreenStoreWidget extends StatelessWidget {
                                 Container(
                                   padding: EdgeInsets.all(5),
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
@@ -206,17 +199,15 @@ class HomeScreenStoreWidget extends StatelessWidget {
               );
             }
           } else if (snapshot.hasError) {
-            child = Container(
-              child: Text(
-                "Error...",
-                style: TextStyle(color: CustomColors.black),
+            child = Center(
+              child: Column(
+                children: AsyncWidgets.asyncError(),
               ),
             );
           } else {
-            child = Container(
-              child: Text(
-                "Loading...",
-                style: TextStyle(color: CustomColors.black),
+            child = Center(
+              child: Column(
+                children: AsyncWidgets.asyncWaiting(),
               ),
             );
           }
