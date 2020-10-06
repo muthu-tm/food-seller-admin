@@ -85,12 +85,21 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context).translate('create_new_store'),
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.white,
+          ),
+          onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: CustomColors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.blue,
+        backgroundColor: CustomColors.blueGreen,
         onPressed: () {
           final FormState form = _formKey.currentState;
 
@@ -167,6 +176,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
         label: Text(
           AppLocalizations.of(context).translate('button_next'),
         ),
+        icon: Icon(Icons.arrow_forward_ios),
       ),
       body: Form(
         key: _formKey,

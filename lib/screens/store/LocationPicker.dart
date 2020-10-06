@@ -5,6 +5,7 @@ import 'package:chipchop_seller/screens/home/HomeScreen.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -32,6 +33,8 @@ class LocationPickerState extends State<LocationPicker> {
   void initState() {
     super.initState();
     this.searchKey = widget.store.address.pincode;
+
+    _searchAndNavigate();
   }
 
   @override
@@ -41,12 +44,21 @@ class LocationPickerState extends State<LocationPicker> {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context).translate('title_add_location'),
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.white,
+          ),
+          onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: CustomColors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.blueGreen,
         onPressed: () {
           if (geoData == null || geoData.geoHash.isEmpty) {
             _scaffoldKey.currentState.showSnackBar(
@@ -143,14 +155,17 @@ class LocationPickerState extends State<LocationPicker> {
       mapController.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
-            zoom: 11,
+            zoom: 12,
             target:
                 LatLng(marks[0].position.latitude, marks[0].position.longitude),
           ),
         ),
       );
     } catch (e) {
-      print(e.toString());
+      Fluttertoast.showToast(
+          msg: 'Error, Unable to find matching address',
+          backgroundColor: CustomColors.alertRed,
+          textColor: Colors.white);
     }
   }
 
