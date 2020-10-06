@@ -1,3 +1,4 @@
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_seller/db/models/model.dart';
@@ -228,5 +229,22 @@ class Products extends Model {
     } catch (err) {
       throw err;
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getByNameRange(
+      String searchKey) async {
+    QuerySnapshot snap = await getCollectionRef()
+        .where('store_uuid', whereIn: cachedLocalUser.stores)
+        .where('keywords', arrayContains: searchKey)
+        .getDocuments();
+
+    List<Map<String, dynamic>> pList = [];
+    if (snap.documents.isNotEmpty) {
+      snap.documents.forEach((p) {
+        pList.add(p.data);
+      });
+    }
+
+    return pList;
   }
 }

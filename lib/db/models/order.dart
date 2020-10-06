@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -182,5 +183,21 @@ class Order {
           .orderBy('created_at', descending: true)
           .snapshots();
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getByOrderID(String id) async {
+    QuerySnapshot snap = await getGroupQuery()
+        .where('store_uuid', whereIn: cachedLocalUser.stores)
+        .where('order_id', isEqualTo: id)
+        .getDocuments();
+
+    List<Map<String, dynamic>> oList = [];
+    if (snap.documents.isNotEmpty) {
+      snap.documents.forEach((order) {
+        oList.add(order.data);
+      });
+    }
+
+    return oList;
   }
 }
