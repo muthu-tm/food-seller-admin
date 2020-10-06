@@ -17,8 +17,19 @@ class _StoreSettingsState extends State<StoreSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Store Settings"),
-        backgroundColor: CustomColors.green
+        title: Text(
+          "Store Settings",
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.white,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        backgroundColor: CustomColors.green,
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: CustomColors.green,
