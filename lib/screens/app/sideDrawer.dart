@@ -3,8 +3,7 @@ import 'package:chipchop_seller/screens/Home/AuthPage.dart';
 import 'package:chipchop_seller/screens/app/ContactAndSupportWidget.dart';
 import 'package:chipchop_seller/screens/app/ProfilePictureUpload.dart';
 import 'package:chipchop_seller/screens/home/HomeScreen.dart';
-import 'package:chipchop_seller/screens/orders/OrdersHomeScreen.dart';
-import 'package:chipchop_seller/screens/products/ProductsHome.dart';
+import 'package:chipchop_seller/screens/settings/StoreSettings.dart';
 import 'package:chipchop_seller/screens/settings/UserProfileSettings.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
@@ -189,7 +188,7 @@ Widget sideDrawer(BuildContext context) {
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
           onTap: () async {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => HomeScreen(1),
@@ -206,7 +205,7 @@ Widget sideDrawer(BuildContext context) {
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
           onTap: () async {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => HomeScreen(2),
@@ -226,10 +225,10 @@ Widget sideDrawer(BuildContext context) {
             "Store settings",
           ),
           onTap: () async {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => HomeScreen(3),
+                builder: (context) => StoreSettings(),
                 settings: RouteSettings(name: '/settings/store'),
               ),
             );
