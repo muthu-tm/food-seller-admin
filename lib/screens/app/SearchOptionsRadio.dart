@@ -9,13 +9,14 @@ class SearchOptionsRadio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
+    return Card(
+      elevation: 3.0,
       child: Container(
         height: 40.0,
         width: MediaQuery.of(context).size.width * 0.33,
-        child: new Center(
-          child: new Text(_item.buttonText,
-              style: new TextStyle(
+        child: Center(
+          child: Text(_item.buttonText,
+              style: TextStyle(
                   fontFamily: "Georgia",
                   color: _item.isSelected
                       ? CustomColors.white
@@ -23,14 +24,14 @@ class SearchOptionsRadio extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: 16.0)),
         ),
-        decoration: new BoxDecoration(
+        decoration: BoxDecoration(
           color: _item.isSelected ? _color : CustomColors.lightGrey,
-          border: new Border.all(
+          border: Border.all(
               width: 1.0,
               color: _item.isSelected
                   ? CustomColors.blueGreen
                   : CustomColors.grey),
-          borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+          borderRadius: BorderRadius.circular(5.0),
         ),
       ),
     );
