@@ -7,6 +7,7 @@ import 'package:chipchop_seller/screens/settings/SettingsHome.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -19,6 +20,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
   int _selectedIndex = 0;
 
   static List<Widget> _widgetOptions = <Widget>[
@@ -38,6 +41,49 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     this._selectedIndex = widget.selectedIndex;
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: ListTile(
+              title: Text(
+                message['notification']['title'],
+                style: TextStyle(
+                    color: CustomColors.green,
+                    fontSize: 16.0,
+                    fontFamily: 'Georgia',
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.start,
+              ),
+              subtitle: Text(
+                message['notification']['body'],
+                style: TextStyle(
+                    fontSize: 14.0,
+                    fontFamily: 'Georgia',
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('OK'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        // _navigateToItemDetail(message);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        // _navigateToItemDetail(message);
+      },
+    );
   }
 
   @override

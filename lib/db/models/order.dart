@@ -43,6 +43,10 @@ class Order {
   int dispatchedAt;
   @JsonKey(name: 'cancelled_at', nullable: true)
   int cancelledAt;
+  @JsonKey(name: 'return_requested_at', nullable: true)
+  int returnRequestedAt;
+  @JsonKey(name: 'return_cancelled_at', nullable: true)
+  int returnCancelledAt;
   @JsonKey(name: 'returned_at', nullable: true)
   int returnedAt;
   @JsonKey(name: 'delivery')
@@ -95,6 +99,10 @@ class Order {
       return "DisPatched";
     } else if (this.status == 5) {
       return "Delivered";
+    } else if (this.status == 6) {
+      return "Return Requested";
+    } else if (this.status == 7) {
+      return "Return Cancelled";
     } else {
       return "Returned";
     }

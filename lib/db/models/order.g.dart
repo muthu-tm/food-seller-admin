@@ -23,6 +23,8 @@ Order _$OrderFromJson(Map<String, dynamic> json) {
     ..confirmedAt = json['confirmed_at'] as int
     ..dispatchedAt = json['dispatched_at'] as int
     ..cancelledAt = json['cancelled_at'] as int
+    ..returnRequestedAt = json['return_requested_at'] as int
+    ..returnCancelledAt = json['return_cancelled_at'] as int
     ..returnedAt = json['returned_at'] as int
     ..amount = json['amount'] == null
         ? new OrderAmount()
@@ -60,6 +62,8 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'confirmed_at': instance.confirmedAt,
       'dispatched_at': instance.dispatchedAt,
       'cancelled_at': instance.cancelledAt,
+      'return_requested_at': instance.returnRequestedAt,
+      'return_cancelled_at': instance.returnCancelledAt,
       'returned_at': instance.returnedAt,
       'amount': instance.amount?.toJson(),
       'delivery': instance.delivery?.toJson(),
