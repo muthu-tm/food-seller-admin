@@ -14,6 +14,8 @@ import 'package:chipchop_seller/services/controllers/auth/auth_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:chipchop_seller/app_localizations.dart';
 
+// ENTER MOBILE NUMBER TO SEND OTP to LOGIN SCREEN
+
 class LoginPage extends StatefulWidget {
   LoginPage(this.isNewScaffold, this._scaffoldKey);
 
@@ -54,213 +56,235 @@ class _LoginPageState extends State<LoginPage> {
         ? Scaffold(
             key: _scaffoldKey,
             backgroundColor: CustomColors.lightGrey,
-            body: Center(
-              child: SingleChildScrollView(
-                child: _getBody(),
+            body: Container(
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: SingleChildScrollView(child: _getBody())))
+        : Container(
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
             ),
-          )
-        : Center(
-            child: SingleChildScrollView(
-              child: _getBody(),
-            ),
-          );
+            child: SingleChildScrollView(child: _getBody()));
   }
 
   Widget _getBody() {
-    return SafeArea(
-      child: Column(
-        children: <Widget>[
-          Card(
-            color: CustomColors.green,
-            elevation: 2.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0)),
-            child: SizedBox(
-              height: 350,
-              width: MediaQuery.of(context).size.width * 0.85,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: ClipRRect(
-                      child: Image.asset(
-                        "images/icons/logo.png",
-                        height: 80,
-                        width: 80,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
-                    child: Card(
-                      child: TextFormField(
-                        textAlign: TextAlign.center,
-                        controller: _nController,
-                        autofocus: false,
-                        keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
-                          prefixText: " +91 ",
-                          prefixStyle: TextStyle(
-                            fontSize: 16.0,
-                            color: CustomColors.green,
-                          ),
-                          hintText: AppLocalizations.of(context)
-                              .translate('mobile_number'),
-                          fillColor: CustomColors.white,
-                          filled: true,
-                          suffixIcon: Icon(
-                            Icons.phone_android,
-                            color: CustomColors.lightGreen,
-                            size: 35.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Icon(
-                        Icons.info,
-                        color: CustomColors.white,
-                        size: 20.0,
-                      ),
-                      SizedBox(width: 5.0),
-                      Expanded(
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: AppLocalizations.of(context)
-                                    .translate('we_will_send'),
-                                style: TextStyle(
-                                    color: CustomColors.white,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              TextSpan(
-                                text: AppLocalizations.of(context)
-                                    .translate('one_time_password'),
-                                style: TextStyle(
-                                    color: CustomColors.alertRed,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              TextSpan(
-                                text: AppLocalizations.of(context)
-                                    .translate('to_mobile_no'),
-                                style: TextStyle(
-                                    color: CustomColors.white,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(padding: EdgeInsets.all(10.0)),
-                  InkWell(
-                    onTap: () {
-                      _submit();
-                    },
-                    child: Container(
-                      width: 150.0,
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        color: CustomColors.blue,
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Center(
-                        child: Text(
-                          AppLocalizations.of(context).translate('get_otp'),
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: CustomColors.green,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(padding: EdgeInsets.all(10.0)),
-                ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        SizedBox(height: MediaQuery.of(context).size.height*0.150,),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(5),
+              child: ClipRRect(
+                child: Image.asset(
+                  "images/icons/logo.png",
+                  height: 80,
+                  width: 80,
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          Container(
-            child: Row(
-              children: <Widget>[
-                Text(
-                  AppLocalizations.of(context).translate('no_account'),
-                  style: TextStyle(
-                    fontSize: 13.0,
-                    fontFamily: 'Georgia',
-                    color: CustomColors.alertRed,
-                    fontWeight: FontWeight.bold,
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: Text(
+                "Welcome Back",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: 10, bottom: 15.0, left: 20.0, right: 20.0),
+              child: TextFormField(
+                textAlign: TextAlign.start,
+                controller: _nController,
+                autofocus: false,
+                keyboardType: TextInputType.phone,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(10)
+                ],
+                decoration: InputDecoration(
+                  prefix: Text('+91'),
+                  prefixIcon: Icon(
+                    Icons.phone,
+                    color: CustomColors.lightGreen,
+                    size: 30.0,
+                  ),
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 75,
+                  ),
+                  hintText:
+                      AppLocalizations.of(context).translate('mobile_number'),
+                  fillColor: CustomColors.white,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      width: 0,
+                      style: BorderStyle.none,
+                    ),
                   ),
                 ),
-                FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => MobileSignInPage(),
-                        settings: RouteSettings(name: '/signup'),
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SizedBox(width: 5),
+                Icon(
+                  Icons.info,
+                  color: CustomColors.alertRed,
+                  size: 20.0,
+                ),
+                SizedBox(width: 5.0),
+                Center(
+                  child: Flexible(
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: AppLocalizations.of(context)
+                                .translate('we_will_send'),
+                            style: TextStyle(
+                                color: CustomColors.blue,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          TextSpan(
+                            text: AppLocalizations.of(context)
+                                .translate('one_time_password'),
+                            style: TextStyle(
+                                color: CustomColors.alertRed,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          TextSpan(
+                            text: AppLocalizations.of(context)
+                                .translate('to_mobile_no'),
+                            style: TextStyle(
+                                color: CustomColors.blue,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                  child: Text(
-                    AppLocalizations.of(context).translate('sign_up'),
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: CustomColors.green,
-                      fontSize: 18.0,
                     ),
                   ),
                 ),
               ],
-              mainAxisAlignment: MainAxisAlignment.end,
             ),
-          ),
-          SizedBox(
-            height: 30.0,
-          ),
-          Align(
-            alignment: FractionalOffset.bottomCenter,
-            child: FlatButton.icon(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  routeSettings: RouteSettings(name: "/home/help"),
-                  builder: (context) {
-                    return Center(
-                      child: contactAndSupportDialog(context),
-                    );
-                  },
-                );
-              },
-              icon: Icon(
-                Icons.info,
-                color: CustomColors.green,
-              ),
-              label: Text(
-                AppLocalizations.of(context).translate('help_support'),
-                style: TextStyle(
-                  fontFamily: 'Georgia',
-                  fontWeight: FontWeight.bold,
-                  color: CustomColors.green,
-                  fontSize: 16.0,
+            Padding(padding: EdgeInsets.all(10.0)),
+            SizedBox(
+              height: 35,
+              width: 125,
+              child: RaisedButton(
+                color: CustomColors.alertRed,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                onPressed: () {
+                  _submit();
+                },
+                child: Center(
+                  child: Text(
+                    AppLocalizations.of(context).translate('get_otp'),
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      color: CustomColors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ),
+          ],
+        ),
+        SizedBox(
+          height: 10.0,
+        ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                AppLocalizations.of(context).translate('no_account'),
+                style: TextStyle(
+                  fontSize: 13.0,
+                  fontFamily: 'Georgia',
+                  color: CustomColors.alertRed,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => MobileSignInPage(),
+                      settings: RouteSettings(name: '/signup'),
+                    ),
+                  );
+                },
+                child: Text(
+                  AppLocalizations.of(context).translate('sign_up'),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: CustomColors.blue,
+                    fontSize: 18.0,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+        SizedBox(
+          height: 10.0,
+        ),
+        Align(
+          alignment: FractionalOffset.bottomCenter,
+          child: FlatButton.icon(
+            onPressed: () {
+              showDialog(
+                context: context,
+                routeSettings: RouteSettings(name: "/home/help"),
+                builder: (context) {
+                  return Center(
+                    child: contactAndSupportDialog(context),
+                  );
+                },
+              );
+            },
+            icon: Icon(
+              Icons.info,
+              color: CustomColors.blue,
+            ),
+            label: Text(
+              AppLocalizations.of(context).translate('help_support'),
+              style: TextStyle(
+                fontFamily: 'Georgia',
+                fontWeight: FontWeight.bold,
+                color: CustomColors.blue,
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -380,6 +404,7 @@ class _LoginPageState extends State<LoginPage> {
             _user.countryCode,
             _user.password,
             _user.firstName,
+            _user.lastName,
             _smsVerificationCode),
       ),
     );
