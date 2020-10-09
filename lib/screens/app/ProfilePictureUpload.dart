@@ -47,9 +47,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
           children: <Widget>[
             Spacer(),
             Text(
-              widget.type == 0
-                  ? "Profile Photo"
-                  : "Store Profile",
+              widget.type == 0 ? "Profile Photo" : "Store Profile",
               style: TextStyle(
                   color: CustomColors.black,
                   fontSize: 20.0,
@@ -113,8 +111,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                               padding: EdgeInsets.all(5),
                               child: FlatButton(
                                 padding: EdgeInsets.all(5),
-                                color:
-                                    CustomColors.alertRed.withOpacity(0.5),
+                                color: CustomColors.alertRed.withOpacity(0.5),
                                 child: Text(
                                   "Take Picture",
                                   style: TextStyle(
@@ -126,7 +123,8 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                                 onPressed: () async {
                                   String tempPath =
                                       (await getTemporaryDirectory()).path;
-                                  String filePath = '$tempPath/chipchop_image.png';
+                                  String filePath =
+                                      '$tempPath/chipchop_image.png';
                                   if (File(filePath).existsSync())
                                     await File(filePath).delete();
                                   await _showCamera(filePath);
@@ -256,9 +254,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
       CustomDialogs.actionWaiting(context);
       await Uploader().uploadImage(
         widget.type,
-        widget.type == 0
-            ? seller_profile_folder
-            : store_profile_folder,
+        widget.type == 0 ? seller_profile_folder : store_profile_folder,
         imageFile,
         widget.fileName,
         widget.id,
@@ -278,41 +274,40 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
       );
     }
   }
+}
 
-  Future<File> fixExifRotation(String imagePath) async {
-    final originalFile = File(imagePath);
-    try {
-      List<int> imageBytes = await originalFile.readAsBytes();
-      final originalImage = img.decodeImage(imageBytes);
+Future<File> fixExifRotation(String imagePath) async {
+  final originalFile = File(imagePath);
+  try {
+    List<int> imageBytes = await originalFile.readAsBytes();
+    final originalImage = img.decodeImage(imageBytes);
 
-      final height = originalImage.height;
-      final width = originalImage.width;
+    final height = originalImage.height;
+    final width = originalImage.width;
 
-      if (height >= width) {
-        return originalFile;
-      }
-      final exifData = await readExifFromBytes(imageBytes);
-      img.Image fixedImage;
-
-      print(
-          'Rotating image necessary' + exifData['Image Orientation'].printable);
-      if (exifData['Image Orientation'].printable.contains('90 CW') ||
-          exifData['Image Orientation'].printable.contains('Horizontal')) {
-        fixedImage = img.copyRotate(originalImage, 90);
-      } else if (exifData['Image Orientation'].printable.contains('180')) {
-        fixedImage = img.copyRotate(originalImage, -90);
-      } else if (exifData['Image Orientation'].printable.contains('CCW')) {
-        fixedImage = img.copyRotate(originalImage, 180);
-      } else {
-        fixedImage = img.copyRotate(originalImage, 0);
-      }
-
-      final fixedFile =
-          await originalFile.writeAsBytes(img.encodePng(fixedImage));
-
-      return fixedFile;
-    } catch (err) {
+    if (height >= width) {
       return originalFile;
     }
+    final exifData = await readExifFromBytes(imageBytes);
+    img.Image fixedImage;
+
+    print('Rotating image necessary' + exifData['Image Orientation'].printable);
+    if (exifData['Image Orientation'].printable.contains('90 CW') ||
+        exifData['Image Orientation'].printable.contains('Horizontal')) {
+      fixedImage = img.copyRotate(originalImage, 90);
+    } else if (exifData['Image Orientation'].printable.contains('180')) {
+      fixedImage = img.copyRotate(originalImage, -90);
+    } else if (exifData['Image Orientation'].printable.contains('CCW')) {
+      fixedImage = img.copyRotate(originalImage, 180);
+    } else {
+      fixedImage = img.copyRotate(originalImage, 0);
+    }
+
+    final fixedFile =
+        await originalFile.writeAsBytes(img.encodePng(fixedImage));
+
+    return fixedFile;
+  } catch (err) {
+    return originalFile;
   }
 }
