@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/chat_temp.dart';
+import 'package:chipchop_seller/screens/app/ProfilePictureUpload.dart';
+import 'package:chipchop_seller/screens/app/TakePicturePage.dart';
 import 'package:chipchop_seller/screens/orders/ChatImageView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,6 +13,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:camera/camera.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../services/controllers/user/user_service.dart';
 import '../utils/CustomColors.dart';
@@ -432,17 +436,34 @@ class StoreChatScreenState extends State<StoreChatScreen> {
     return Container(
       child: Row(
         children: <Widget>[
-          // Button send image
-          Material(
+          InkWell(
+            onTap: () async {
+              String tempPath = (await getTemporaryDirectory()).path;
+              String filePath = '$tempPath/chipchop_image.png';
+              if (File(filePath).existsSync()) await File(filePath).delete();
+              await _showCamera(filePath);
+            },
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 1.0),
-              child: IconButton(
-                icon: Icon(Icons.image),
-                onPressed: getImage,
+              padding: EdgeInsets.all(5),
+              child: Icon(
+                Icons.camera_alt,
+                size: 25,
                 color: CustomColors.blueGreen,
               ),
+              color: CustomColors.white,
             ),
-            color: Colors.white,
+          ),
+          InkWell(
+            onTap: getImage,
+            child: Container(
+              padding: EdgeInsets.all(5),
+              child: Icon(
+                Icons.image,
+                size: 25,
+                color: CustomColors.blueGreen,
+              ),
+              color: CustomColors.white,
+            ),
           ),
 
           // Edit text
@@ -463,16 +484,13 @@ class StoreChatScreenState extends State<StoreChatScreen> {
           ),
 
           // Button send message
-          Material(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 8.0),
-              child: IconButton(
-                icon: Icon(Icons.send),
-                onPressed: () => onSendMessage(textEditingController.text, 0),
-                color: CustomColors.blueGreen,
-              ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 8.0),
+            child: IconButton(
+              icon: Icon(Icons.send),
+              onPressed: () => onSendMessage(textEditingController.text, 0),
+              color: CustomColors.blueGreen,
             ),
-            color: Colors.white,
           ),
         ],
       ),
@@ -482,6 +500,28 @@ class StoreChatScreenState extends State<StoreChatScreen> {
           border: Border(top: BorderSide(color: CustomColors.grey, width: 0.5)),
           color: Colors.white),
     );
+  }
+
+  Future<void> _showCamera(String filePath) async {
+    List<CameraDescription> cameras = await availableCameras();
+    CameraDescription camera = cameras.first;
+
+    var result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TakePicturePage(
+          camera: camera,
+          path: filePath,
+        ),
+      ),
+    );
+    if (result != null) {
+      setState(() {
+        isLoading = true;
+      });
+      imageFile = await fixExifRotation(result.toString());
+      uploadFile();
+    }
   }
 
   Widget buildListMessage() {
