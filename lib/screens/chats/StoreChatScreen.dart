@@ -22,8 +22,9 @@ import '../utils/CustomColors.dart';
 class StoreChatScreen extends StatefulWidget {
   final String storeID;
   final String custID;
+  final String custName;
 
-  StoreChatScreen({Key key, @required this.storeID, @required this.custID})
+  StoreChatScreen({Key key, @required this.storeID, @required this.custID, @required this.custName})
       : super(key: key);
 
   @override
@@ -380,14 +381,14 @@ class StoreChatScreenState extends State<StoreChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Chat - ${widget.custID}",
+          "Chat - ${widget.custName}",
           textAlign: TextAlign.start,
-          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+          style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
-            color: CustomColors.white,
+            color: CustomColors.black,
           ),
           onPressed: () => Navigator.pop(context),
         ),

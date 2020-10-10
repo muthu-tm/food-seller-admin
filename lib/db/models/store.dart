@@ -48,6 +48,8 @@ class Store extends Model {
   List<StoreContacts> contacts;
   @JsonKey(name: 'delivery')
   DeliveryDetails deliveryDetails;
+  @JsonKey(name: 'keywords', defaultValue: [""])
+  List<String> keywords;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)

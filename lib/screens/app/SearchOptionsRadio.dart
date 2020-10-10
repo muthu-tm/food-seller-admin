@@ -15,14 +15,15 @@ class SearchOptionsRadio extends StatelessWidget {
         height: 40.0,
         width: MediaQuery.of(context).size.width * 0.33,
         child: Center(
-          child: Text(_item.buttonText,
-              style: TextStyle(
-                  fontFamily: "Georgia",
-                  color: _item.isSelected
-                      ? CustomColors.white
-                      : CustomColors.blue,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0)),
+          child: Text(
+            _item.buttonText,
+            style: TextStyle(
+                fontFamily: "Georgia",
+                color:
+                    _item.isSelected ? CustomColors.white : CustomColors.blue,
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0),
+          ),
         ),
         decoration: BoxDecoration(
           color: _item.isSelected ? _color : CustomColors.lightGrey,

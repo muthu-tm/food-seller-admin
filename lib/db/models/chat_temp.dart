@@ -1,4 +1,3 @@
-import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/db/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -57,6 +56,30 @@ class ChatTemplate {
         .setData(this.toJson());
   }
 
+  Future<void> updateToRead(String storeID, String custID) async {
+    await Model.db
+        .collection("stores")
+        .document(storeID)
+        .collection("customers")
+        .document(custID)
+        .updateData({
+      'has_store_unread': false,
+      'updated_at': DateTime.now()
+    });
+  }
+
+  Future<void> updateToUnRead(String storeID, String custID) async {
+    await Model.db
+        .collection("stores")
+        .document(storeID)
+        .collection("customers")
+        .document(custID)
+        .updateData({
+      'has_store_unread': true,
+      'updated_at': DateTime.now()
+    });
+  }
+
   Stream<QuerySnapshot> streamOrderChats(
       String custID, String orderID, int limit) {
     return getOrderCollectionRef(custID, orderID)
@@ -75,12 +98,12 @@ class ChatTemplate {
         .setData(this.toJson());
   }
 
-  Future<QuerySnapshot> streamStoreCustomers(String storeID) {
+  Stream<QuerySnapshot> streamStoreCustomers(String storeID) {
     return Model.db
         .collection("stores")
         .document(storeID)
         .collection("customers")
-        .getDocuments();
+        .snapshots();
   }
 
   Stream<QuerySnapshot> streamStoreChats(
@@ -105,8 +128,10 @@ class ChatTemplate {
       List<User> _buyers = [];
 
       for (var i = 0; i < snap.documents.length; i++) {
-        DocumentSnapshot custSnap =
-            await Model.db.collection('buyers').document(snap.documents[i].data['contact_numer']).get();
+        DocumentSnapshot custSnap = await Model.db
+            .collection('buyers')
+            .document(snap.documents[i].data['contact_numer'])
+            .get();
 
         if (custSnap.exists) {
           User _u = User.fromJson(custSnap.data);

@@ -185,7 +185,7 @@ class HomeScreen extends StatelessWidget {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     CustomersChatScreen(
-                                                        store.uuid),
+                                                        store.uuid, store.name),
                                                 settings: RouteSettings(
                                                     name: '/store/chats'),
                                               ),

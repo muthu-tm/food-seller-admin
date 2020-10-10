@@ -1,7 +1,10 @@
+import 'package:chipchop_seller/db/models/chat_temp.dart';
 import 'package:chipchop_seller/screens/chats/ChatsHome.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+
+bool newStoreNotification = false;
 
 class ChatBottomWidget extends StatefulWidget {
   ChatBottomWidget(this.size);
@@ -15,55 +18,82 @@ class ChatBottomWidget extends StatefulWidget {
 class _ChatBottomWidgetState extends State<ChatBottomWidget> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  bool _newNotification = false;
-  Map<String, dynamic> message;
+  bool _newStoreNotification = false;
 
   @override
   void initState() {
     super.initState();
+    _newStoreNotification = newStoreNotification;
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
         if (message['data']['type'] == '1') {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              content: ListTile(
-                title: Text(
-                  message['notification']['title'],
-                  style: TextStyle(
-                      color: CustomColors.green,
-                      fontSize: 16.0,
-                      fontFamily: 'Georgia',
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.start,
-                ),
-                subtitle: Text(
-                  message['notification']['body'],
-                  style: TextStyle(
-                      fontSize: 14.0,
-                      fontFamily: 'Georgia',
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('OK'),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
+          // showDialog(
+          //   context: context,
+          //   builder: (context) => AlertDialog(
+          //     content: ListTile(
+          //       title: Text(
+          //         message['notification']['title'],
+          //         style: TextStyle(
+          //             color: CustomColors.green,
+          //             fontSize: 16.0,
+          //             fontFamily: 'Georgia',
+          //             fontWeight: FontWeight.bold),
+          //         textAlign: TextAlign.start,
+          //       ),
+          //       subtitle: Text(
+          //         message['notification']['body'],
+          //         style: TextStyle(
+          //             fontSize: 14.0,
+          //             fontFamily: 'Georgia',
+          //             fontWeight: FontWeight.bold),
+          //       ),
+          //     ),
+          //     actions: <Widget>[
+          //       FlatButton(
+          //         child: Text('OK'),
+          //         onPressed: () => Navigator.of(context).pop(),
+          //       ),
+          //     ],
+          //   ),
+          // );
+
+          await ChatTemplate().updateToUnRead(
+            message['data']['store_uuid'],
+            message['data']['customer_uuid'],
           );
           setState(() {
-            this.message = message;
-            _newNotification = true;
+            _newStoreNotification = true;
+            newStoreNotification = true;
           });
         }
       },
       onLaunch: (Map<String, dynamic> message) async {
+        if (message['data']['type'] == '1') {
+          await ChatTemplate().updateToUnRead(
+            message['data']['store_uuid'],
+            message['data']['customer_uuid'],
+          );
+
+          setState(() {
+            _newStoreNotification = true;
+            newStoreNotification = true;
+          });
+        }
         print("onLaunch: $message");
       },
       onResume: (Map<String, dynamic> message) async {
+        if (message['data']['type'] == '1') {
+          await ChatTemplate().updateToUnRead(
+            message['data']['store_uuid'],
+            message['data']['customer_uuid'],
+          );
+
+          setState(() {
+            _newStoreNotification = true;
+            newStoreNotification = true;
+          });
+        }
         print("onResume: $message");
       },
     );
@@ -73,7 +103,7 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
   Widget build(BuildContext context) {
     Widget child;
 
-    _newNotification
+    _newStoreNotification
         ? child = SizedBox.fromSize(
             size: widget.size,
             child: Stack(
@@ -87,7 +117,10 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
                         builder: (context) => ChatsHome(),
                         settings: RouteSettings(name: '/chats'),
                       ),
-                    );
+                    ).then((value) {
+                      newStoreNotification = false;
+                      _newStoreNotification = false;
+                    });
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -146,7 +179,10 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
                     builder: (context) => ChatsHome(),
                     settings: RouteSettings(name: '/chats'),
                   ),
-                );
+                ).then((value) {
+                  newStoreNotification = false;
+                  _newStoreNotification = false;
+                });
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

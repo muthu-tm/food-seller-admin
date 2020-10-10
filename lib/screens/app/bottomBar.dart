@@ -6,6 +6,7 @@ import 'package:chipchop_seller/screens/settings/SettingsHome.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 Widget bottomBar(BuildContext context) {
   Size size = Size(screenWidth(context, dividedBy: 5), 100);
@@ -72,7 +73,7 @@ Widget bottomBar(BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                  Icons.search,
+                  FontAwesomeIcons.shoppingBasket,
                   size: 25.0,
                   color: CustomColors.black,
                 ),

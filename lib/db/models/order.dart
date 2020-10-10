@@ -196,7 +196,7 @@ class Order {
   Future<List<Map<String, dynamic>>> getByOrderID(String id) async {
     QuerySnapshot snap = await getGroupQuery()
         .where('store_uuid', whereIn: cachedLocalUser.stores)
-        .where('order_id', isEqualTo: id)
+        .where('order_id', isGreaterThanOrEqualTo: id)
         .getDocuments();
 
     List<Map<String, dynamic>> oList = [];

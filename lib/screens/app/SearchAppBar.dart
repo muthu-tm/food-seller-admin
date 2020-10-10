@@ -46,7 +46,8 @@ class _SearchAppBarState extends State<SearchAppBar> {
             color: CustomColors.black,
           ),
           decoration: InputDecoration(
-            hintText: searchMode == 0 ? "Type Product Name" : "Type Order ID",
+            hintText:
+                searchMode == 0 ? "Type Product Full Name" : "Type Order ID",
             hintStyle: TextStyle(color: CustomColors.black),
           ),
         ),
@@ -63,9 +64,10 @@ class _SearchAppBarState extends State<SearchAppBar> {
             ),
             onPressed: () {
               if (_searchController.text.isEmpty ||
-                  _searchController.text.trim().length < 3) {
+                  _searchController.text.trim().length < 2) {
                 _scaffoldKey.currentState.showSnackBar(
-                    CustomSnackBar.errorSnackBar("Enter minimum 3 digits", 2));
+                  CustomSnackBar.errorSnackBar("Enter minimum 2 digits", 2),
+                );
                 return null;
               } else {
                 searchKey = _searchController.text.trim();
@@ -158,10 +160,12 @@ class _SearchAppBarState extends State<SearchAppBar> {
                       itemBuilder: (BuildContext context, int index) {
                         if (inOutList[1].isSelected == true) {
                           return OrderWidget(
-                              Order.fromJson(snapshot.data[index]));
+                            Order.fromJson(snapshot.data[index]),
+                          );
                         } else {
                           return ProductWidget(
-                              Products.fromJson(snapshot.data[index]));
+                            Products.fromJson(snapshot.data[index]),
+                          );
                         }
                       },
                     );
@@ -217,7 +221,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
                         child: Text(
                           "No Search Triggerred yet!",
                           style: TextStyle(
-                              color: CustomColors.blue, fontSize: 16.0),
+                              color: CustomColors.alertRed, fontSize: 16.0),
                         ),
                       ),
                       Padding(

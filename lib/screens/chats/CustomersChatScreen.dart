@@ -6,29 +6,30 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class CustomersChatScreen extends StatelessWidget {
-  CustomersChatScreen(this.storeID);
+  CustomersChatScreen(this.storeID, this.storeName);
 
   final String storeID;
+  final String storeName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Customers",
+          '$storeName',
           textAlign: TextAlign.start,
-          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+          style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
-            color: CustomColors.white,
+            color: CustomColors.black,
           ),
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: CustomColors.green,
       ),
-      body: FutureBuilder(
-          future: ChatTemplate().streamStoreCustomers(storeID),
+      body: StreamBuilder(
+          stream: ChatTemplate().streamStoreCustomers(storeID),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             Widget child;
 
@@ -47,6 +48,7 @@ class CustomersChatScreen extends StatelessWidget {
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     primary: true,
+                    shrinkWrap: true,
                     itemCount: snapshot.data.documents.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
@@ -57,29 +59,44 @@ class CustomersChatScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => StoreChatScreen(
-                                    storeID: storeID,
-                                    custID: snapshot
-                                        .data.documents[index].documentID),
+                                  storeID: storeID,
+                                  custID:
+                                      snapshot.data.documents[index].documentID,
+                                  custName: snapshot
+                                      .data.documents[index].data['first_name'],
+                                ),
                                 settings:
                                     RouteSettings(name: '/store/chat/customer'),
                               ),
-                            );
+                            ).then((value) async {
+                              await ChatTemplate().updateToRead(storeID,
+                                  snapshot.data.documents[index].documentID);
+                            });
                           },
                           leading: Container(
                             height: 50,
                             width: 50,
                             decoration: BoxDecoration(
-                            color: CustomColors.grey,
+                              color: CustomColors.grey,
                               borderRadius: BorderRadius.circular(40.0),
                             ),
                             child: Icon(
                               Icons.person,
-                              color: CustomColors.blueGreen,
+                              color: CustomColors.green,
                             ),
                           ),
                           title: Text(
                             snapshot.data.documents[index].data['first_name'],
                           ),
+                          trailing: (snapshot.data.documents[index].data
+                                      .containsKey('has_store_unread') &&
+                                  snapshot
+                                      .data.documents[index].data['has_store_unread'])
+                              ? Icon(
+                                  Icons.question_answer,
+                                  color: CustomColors.alertRed,
+                                )
+                              : Text(""),
                           subtitle: Text(
                             snapshot
                                 .data.documents[index].data['contact_number'],
@@ -92,14 +109,14 @@ class CustomersChatScreen extends StatelessWidget {
               }
             } else if (snapshot.hasError) {
               child = Container(
-                child:  Column(
-                  children: AsyncWidgets.asyncError()
+                child: Column(
+                  children: AsyncWidgets.asyncError(),
                 ),
               );
             } else {
               child = Container(
                 child: Column(
-                  children: AsyncWidgets.asyncWaiting()
+                  children: AsyncWidgets.asyncWaiting(),
                 ),
               );
             }

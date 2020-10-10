@@ -145,6 +145,11 @@ class _AddProductState extends State<AddProduct> {
         _p.productCategory = _selectedCategory == "0" ? "" : _selectedCategory;
         _p.productSubCategory =
             _selectedSubCategory == "0" ? "" : _selectedSubCategory;
+        _p.keywords = [
+          pName.trim(),
+          pName.trim().toLowerCase(),
+          pName.trim().toUpperCase()
+        ];
         CustomDialogs.actionWaiting(context);
         await _p.create();
         Navigator.pop(context);

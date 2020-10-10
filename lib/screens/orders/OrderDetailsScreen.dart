@@ -67,10 +67,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       appBar: AppBar(
         title: Text(
           "Order Details",
-          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+          style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: CustomColors.white),
+          icon: Icon(Icons.arrow_back_ios, color: CustomColors.black),
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: CustomColors.green,
