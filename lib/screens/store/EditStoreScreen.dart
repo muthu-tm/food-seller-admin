@@ -746,7 +746,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.blue,
+        backgroundColor: CustomColors.alertRed,
         onPressed: () {
           final FormState form = _formKey.currentState;
 

@@ -57,15 +57,19 @@ class _LoginPageState extends State<LoginPage> {
             key: _scaffoldKey,
             backgroundColor: CustomColors.lightGrey,
             body: Container(
-                height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+              height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                child: SingleChildScrollView(child: _getBody())))
+              ),
+              child: SingleChildScrollView(
+                child: _getBody(),
+              ),
+            ),
+          )
         : Container(
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
@@ -75,14 +79,16 @@ class _LoginPageState extends State<LoginPage> {
                 end: Alignment.bottomRight,
               ),
             ),
-            child: SingleChildScrollView(child: _getBody()));
+            child: SingleChildScrollView(
+              child: _getBody(),
+            ),
+          );
   }
 
   Widget _getBody() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        SizedBox(height: MediaQuery.of(context).size.height*0.150,),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -102,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5),
               child: Text(
-                "Welcome Back",
+                "Welcome Back!",
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 22.0,
@@ -135,6 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                       AppLocalizations.of(context).translate('mobile_number'),
                   fillColor: CustomColors.white,
                   filled: true,
+                  contentPadding: EdgeInsets.all(14),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(
@@ -147,43 +154,41 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SizedBox(width: 5),
                 Icon(
                   Icons.info,
                   color: CustomColors.alertRed,
                   size: 20.0,
                 ),
                 SizedBox(width: 5.0),
-                Center(
-                  child: Flexible(
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: AppLocalizations.of(context)
-                                .translate('we_will_send'),
-                            style: TextStyle(
-                                color: CustomColors.blue,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          TextSpan(
-                            text: AppLocalizations.of(context)
-                                .translate('one_time_password'),
-                            style: TextStyle(
-                                color: CustomColors.alertRed,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          TextSpan(
-                            text: AppLocalizations.of(context)
-                                .translate('to_mobile_no'),
-                            style: TextStyle(
-                                color: CustomColors.blue,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ],
-                      ),
+                Flexible(
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: AppLocalizations.of(context)
+                              .translate('we_will_send'),
+                          style: TextStyle(
+                              color: CustomColors.blue,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        TextSpan(
+                          text: AppLocalizations.of(context)
+                              .translate('one_time_password'),
+                          style: TextStyle(
+                              color: CustomColors.alertRed,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w700),
+                        ),
+                        TextSpan(
+                          text: AppLocalizations.of(context)
+                              .translate('to_mobile_no'),
+                          style: TextStyle(
+                              color: CustomColors.blue,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -191,12 +196,12 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Padding(padding: EdgeInsets.all(10.0)),
             SizedBox(
-              height: 35,
+              height: 40,
               width: 125,
               child: RaisedButton(
                 color: CustomColors.alertRed,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(5.0),
                 ),
                 onPressed: () {
                   _submit();
@@ -216,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
         SizedBox(
-          height: 10.0,
+          height: 20.0,
         ),
         Container(
           child: Row(
@@ -253,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         SizedBox(
-          height: 10.0,
+          height: 50.0,
         ),
         Align(
           alignment: FractionalOffset.bottomCenter,

@@ -51,7 +51,6 @@ dependencies:
   google_maps_flutter: ^0.5.30
   geolocator: ^5.3.2+2
   geoflutterfire: ^2.1.0
-  convex_bottom_bar: ^2.4.1
   cached_network_image: ^2.3.1
   carousel_pro: ^1.0.0
   font_awesome_flutter: ^8.8.1

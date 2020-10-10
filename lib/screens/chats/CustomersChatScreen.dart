@@ -1,5 +1,5 @@
 import 'package:chipchop_seller/db/models/chat_temp.dart';
-import 'package:chipchop_seller/screens/store/StoreChatScreen.dart';
+import 'package:chipchop_seller/screens/chats/StoreChatScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -82,7 +82,7 @@ class CustomersChatScreen extends StatelessWidget {
                           ),
                           subtitle: Text(
                             snapshot
-                                .data.documents[index].data['contact_nunmber'],
+                                .data.documents[index].data['contact_number'],
                           ),
                         ),
                       );

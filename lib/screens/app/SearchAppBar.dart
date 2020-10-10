@@ -43,15 +43,15 @@ class _SearchAppBarState extends State<SearchAppBar> {
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.sentences,
           style: TextStyle(
-            color: CustomColors.white,
+            color: CustomColors.black,
           ),
           decoration: InputDecoration(
             hintText: searchMode == 0 ? "Type Product Name" : "Type Order ID",
-            hintStyle: TextStyle(color: CustomColors.white),
+            hintStyle: TextStyle(color: CustomColors.black),
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: CustomColors.white),
+          icon: Icon(Icons.arrow_back_ios, color: CustomColors.black),
           onPressed: () => Navigator.pop(context),
         ),
         actions: <Widget>[
@@ -59,7 +59,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
             icon: Icon(
               Icons.search,
               size: 30.0,
-              color: CustomColors.white,
+              color: CustomColors.black,
             ),
             onPressed: () {
               if (_searchController.text.isEmpty ||
@@ -86,7 +86,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.alertRed.withOpacity(0.7),
+        backgroundColor: CustomColors.alertRed,
         tooltip: "Clear Results",
         onPressed: () {
           setState(() {
@@ -124,7 +124,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
                     },
                   );
                 },
-                child: SearchOptionsRadio(inOutList[0], CustomColors.blueGreen),
+                child: SearchOptionsRadio(inOutList[0], CustomColors.alertRed),
               ),
               title: InkWell(
                 onTap: () {

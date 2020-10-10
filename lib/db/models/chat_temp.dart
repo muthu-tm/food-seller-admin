@@ -1,3 +1,5 @@
+import 'package:chipchop_seller/db/models/store.dart';
+import 'package:chipchop_seller/db/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -87,5 +89,35 @@ class ChatTemplate {
         .orderBy('created_at', descending: true)
         .limit(limit)
         .snapshots();
+  }
+
+  Future<List<User>> getStoreChatsList(String storeID) async {
+    try {
+      QuerySnapshot snap = await Model.db
+          .collection('stores')
+          .document(storeID)
+          .collection('customers')
+          .orderBy('created_at', descending: true)
+          .getDocuments();
+
+      if (snap.documents.isEmpty) return [];
+
+      List<User> _buyers = [];
+
+      for (var i = 0; i < snap.documents.length; i++) {
+        DocumentSnapshot custSnap =
+            await Model.db.collection('buyers').document(snap.documents[i].data['contact_numer']).get();
+
+        if (custSnap.exists) {
+          User _u = User.fromJson(custSnap.data);
+          _buyers.add(_u);
+        }
+      }
+
+      return _buyers;
+    } catch (err) {
+      print(err);
+      throw err;
+    }
   }
 }

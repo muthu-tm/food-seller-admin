@@ -55,7 +55,7 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.alertRed,
         onPressed: () {
           if (geoData == null || geoData.geoHash.isEmpty) {
             _scaffoldKey.currentState.showSnackBar(

@@ -5,23 +5,23 @@ import 'package:flutter/material.dart';
 
 class AsyncWidgets {
   static asyncWaiting(
-      {dotOneColor = CustomColors.alertRed,
-      dotTwoColor = CustomColors.blue,
-      dotThreeColor = CustomColors.lightPurple}) {
+      {dotOneColor = CustomColors.green,
+      dotTwoColor = CustomColors.alertRed,
+      dotThreeColor = CustomColors.black}) {
     return <Widget>[
       ColorLoader(
         dotOneColor: dotOneColor,
         dotTwoColor: dotTwoColor,
         dotThreeColor: dotThreeColor,
-        dotIcon: Icon(Icons.adjust),
+        dotIcon: Icon(Icons.arrow_forward_ios),
       ),
       GradientText(
-        'Loading...',
-        size: 18.0,
+        'LOADING...',
+        size: 16.0,
         gradient: LinearGradient(
           colors: [
             CustomColors.green,
-            CustomColors.blue,
+            CustomColors.alertRed,
           ],
         ),
       ),
@@ -38,7 +38,7 @@ class AsyncWidgets {
       Text(
         'Unable to load, Error!',
         style: TextStyle(
-            fontSize: 17.0,
+            fontSize: 16.0,
             fontWeight: FontWeight.bold,
             color: CustomColors.alertRed),
       ),

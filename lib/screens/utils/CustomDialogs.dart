@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
-import 'package:chipchop_seller/screens/utils/GradientText.dart';
 
 class CustomDialogs {
   static information(BuildContext context, String title, Color titleColor,
@@ -84,7 +83,7 @@ class CustomDialogs {
                 height: 45,
                 child: CircularProgressIndicator(
                   strokeWidth: 3,
-                  backgroundColor: CustomColors.blue,
+                  backgroundColor: CustomColors.alertRed,
                   valueColor:
                       AlwaysStoppedAnimation<Color>(CustomColors.green),
                 ),

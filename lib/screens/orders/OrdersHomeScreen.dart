@@ -1,3 +1,6 @@
+import 'package:chipchop_seller/screens/app/appBar.dart';
+import 'package:chipchop_seller/screens/app/bottomBar.dart';
+import 'package:chipchop_seller/screens/app/sideDrawer.dart';
 import 'package:chipchop_seller/screens/orders/OrderWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -30,61 +33,66 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Container(
-                width: 210,
-                height: 40,
-                child: DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    labelText: "Filter",
-                    labelStyle: TextStyle(
-                      color: CustomColors.blue,
+    return Scaffold(
+      appBar: appBar(context),
+      drawer: sideDrawer(context),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Container(
+                  width: 210,
+                  height: 40,
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      labelText: "Filter",
+                      labelStyle: TextStyle(
+                        color: CustomColors.blue,
+                      ),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      fillColor: CustomColors.white,
+                      filled: true,
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: CustomColors.white),
+                      ),
                     ),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    fillColor: CustomColors.white,
-                    filled: true,
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustomColors.white),
-                    ),
-                  ),
-                  items: _selectedFilter.entries.map(
-                    (f) {
-                      return DropdownMenuItem<String>(
-                        value: f.key,
-                        child: Text(f.value),
-                      );
+                    items: _selectedFilter.entries.map(
+                      (f) {
+                        return DropdownMenuItem<String>(
+                          value: f.key,
+                          child: Text(f.value),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (newVal) {
+                      setState(() {
+                        filterBy = newVal;
+                      });
                     },
-                  ).toList(),
-                  onChanged: (newVal) {
-                    setState(() {
-                      filterBy = newVal;
-                    });
-                  },
-                  value: filterBy,
+                    value: filterBy,
+                  ),
                 ),
               ),
             ),
-          ),
-          widget.stores.isEmpty
-              ? Container(
-                  child: Text(
-                  "TODO",
-                  style: TextStyle(
-                      color: CustomColors.blueGreen,
-                      fontSize: 16,
-                      fontFamily: "Georgia"),
-                ))
-              : getBody(context)
-        ],
+            widget.stores.isEmpty
+                ? Container(
+                    child: Text(
+                    "TODO",
+                    style: TextStyle(
+                        color: CustomColors.blueGreen,
+                        fontSize: 16,
+                        fontFamily: "Georgia"),
+                  ))
+                : getBody(context)
+          ],
+        ),
       ),
+      bottomNavigationBar: bottomBar(context),
     );
   }
 
@@ -160,5 +168,4 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
       },
     );
   }
-
 }

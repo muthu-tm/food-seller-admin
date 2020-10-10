@@ -1,28 +1,30 @@
 import 'package:chipchop_seller/db/models/store.dart';
+import 'package:chipchop_seller/screens/app/appBar.dart';
+import 'package:chipchop_seller/screens/app/bottomBar.dart';
+import 'package:chipchop_seller/screens/app/sideDrawer.dart';
 import 'package:chipchop_seller/screens/products/ActiveProductsScreen.dart';
 import 'package:chipchop_seller/screens/products/AddProducts.dart';
 import 'package:chipchop_seller/screens/products/InActiveProductsHome.dart';
-import 'package:chipchop_seller/screens/utils/AddStoreWidget.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/NoStoresWidget.dart';
 import 'package:flutter/material.dart';
 
-class ProductsHome extends StatefulWidget {
-  @override
-  _ProductsHomeState createState() => _ProductsHomeState();
-}
-
-class _ProductsHomeState extends State<ProductsHome> {
+class ProductsHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        color: CustomColors.lightGrey,
-        child: SingleChildScrollView(
-          child: getStores(context),
+    return Scaffold(
+      appBar: appBar(context),
+      drawer: sideDrawer(context),
+      body: SingleChildScrollView(
+        child: Container(
+          color: CustomColors.lightGrey,
+          child: SingleChildScrollView(
+            child: getStores(context),
+          ),
         ),
       ),
+      bottomNavigationBar: bottomBar(context),
     );
   }
 

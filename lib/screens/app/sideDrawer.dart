@@ -3,6 +3,8 @@ import 'package:chipchop_seller/screens/Home/AuthPage.dart';
 import 'package:chipchop_seller/screens/app/ContactAndSupportWidget.dart';
 import 'package:chipchop_seller/screens/app/ProfilePictureUpload.dart';
 import 'package:chipchop_seller/screens/home/HomeScreen.dart';
+import 'package:chipchop_seller/screens/orders/OrdersHomeScreen.dart';
+import 'package:chipchop_seller/screens/products/ProductsHome.dart';
 import 'package:chipchop_seller/screens/settings/StoreSettings.dart';
 import 'package:chipchop_seller/screens/settings/UserProfileSettings.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
@@ -31,7 +33,7 @@ Widget sideDrawer(BuildContext context) {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: CustomColors.blue,
+                            color: CustomColors.alertRed,
                             style: BorderStyle.solid,
                             width: 2.0,
                           ),
@@ -136,11 +138,11 @@ Widget sideDrawer(BuildContext context) {
                                   );
                                 },
                                 child: CircleAvatar(
-                                  backgroundColor: CustomColors.blue,
+                                  backgroundColor: CustomColors.alertRed,
                                   radius: 15,
                                   child: Icon(
                                     Icons.edit,
-                                    color: CustomColors.green,
+                                    color: CustomColors.white,
                                     size: 20.0,
                                   ),
                                 ),
@@ -170,7 +172,7 @@ Widget sideDrawer(BuildContext context) {
           ),
         ),
         ListTile(
-          leading: Icon(Icons.home, color: CustomColors.blue),
+          leading: Icon(Icons.home, color: CustomColors.green),
           title: Text(
             "Home",
           ),
@@ -185,42 +187,42 @@ Widget sideDrawer(BuildContext context) {
             );
           },
         ),
-        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.black, thickness: 1.0),
         ListTile(
           onTap: () async {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => HomeScreen(1),
+                builder: (context) => ProductsHome(),
                 settings: RouteSettings(name: '/products'),
               ),
             );
           },
           leading:
-              Icon(FontAwesomeIcons.shoppingBasket, color: CustomColors.blue),
+              Icon(FontAwesomeIcons.shoppingBasket, color: CustomColors.green),
           title: Text(
             "Product",
           ),
         ),
-        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.black, thickness: 1.0),
         ListTile(
           onTap: () async {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => HomeScreen(2),
+                builder: (context) => OrdersHomeScreen(cachedLocalUser.stores),
                 settings: RouteSettings(name: '/orders'),
               ),
             );
           },
-          leading: Icon(Icons.assessment, color: CustomColors.blue),
+          leading: Icon(Icons.assessment, color: CustomColors.green),
           title: Text(
             "Orders",
           ),
         ),
-        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.black, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.store_mall_directory, color: CustomColors.blue),
+          leading: Icon(Icons.store_mall_directory, color: CustomColors.green),
           title: Text(
             "Store settings",
           ),
@@ -234,9 +236,9 @@ Widget sideDrawer(BuildContext context) {
             );
           },
         ),
-        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.black, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.settings, color: CustomColors.blue),
+          leading: Icon(Icons.settings, color: CustomColors.green),
           title: Text(
             AppLocalizations.of(context).translate('profile_settings'),
           ),
@@ -250,9 +252,9 @@ Widget sideDrawer(BuildContext context) {
             );
           },
         ),
-        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.black, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.headset_mic, color: CustomColors.blue),
+          leading: Icon(Icons.headset_mic, color: CustomColors.green),
           title: Text(
             AppLocalizations.of(context).translate('help_and_support'),
           ),
@@ -268,7 +270,7 @@ Widget sideDrawer(BuildContext context) {
             );
           },
         ),
-        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.black, thickness: 1.0),
         ListTile(
           leading: Icon(Icons.error, color: CustomColors.alertRed),
           title: Text(
@@ -289,7 +291,7 @@ Widget sideDrawer(BuildContext context) {
             );
           }, () => Navigator.pop(context, false)),
         ),
-        Divider(color: CustomColors.blue, thickness: 1.0),
+        Divider(color: CustomColors.black, thickness: 1.0),
         Container(
           child: AboutListTile(
             dense: true,
@@ -333,7 +335,7 @@ Widget sideDrawer(BuildContext context) {
                   text: TextSpan(
                     text: 'ChipChop',
                     style: TextStyle(
-                      color: CustomColors.blue,
+                      color: CustomColors.alertRed,
                       fontFamily: 'Georgia',
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
@@ -342,7 +344,7 @@ Widget sideDrawer(BuildContext context) {
                       TextSpan(
                         text: ' Seller',
                         style: TextStyle(
-                          color: CustomColors.blue,
+                          color: CustomColors.alertRed,
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),

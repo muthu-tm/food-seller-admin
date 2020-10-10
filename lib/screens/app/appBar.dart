@@ -15,7 +15,7 @@ Widget appBar(BuildContext context) {
           child: Icon(
             Icons.menu,
             size: 30.0,
-            color: CustomColors.white,
+            color: CustomColors.black,
           ),
         ),
       ),
@@ -25,7 +25,7 @@ Widget appBar(BuildContext context) {
         icon: Icon(
           Icons.search,
           size: 30.0,
-          color: CustomColors.white,
+          color: CustomColors.black,
         ),
         onPressed: () {
           Navigator.push(

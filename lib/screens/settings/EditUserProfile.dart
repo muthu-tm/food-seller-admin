@@ -57,10 +57,10 @@ class _EditUserProfileState extends State<EditUserProfile> {
         title: Text(
           AppLocalizations.of(context).translate('edit_profile'),
           textAlign: TextAlign.start,
-          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+          style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios, color: CustomColors.black,),
           onPressed: () => Navigator.pop(context),
         ),
       ),

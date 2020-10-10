@@ -135,7 +135,7 @@ class _AuthPageState extends State<AuthPage> {
       shaderCallback: (bounds) => LinearGradient(
         colors: [
           CustomColors.green,
-          CustomColors.blue,
+          CustomColors.alertRed,
         ],
       ).createShader(
         Rect.fromLTWH(0, 0, bounds.width, bounds.height),
@@ -321,9 +321,9 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             height: 40,
             width: 100,
             child: RaisedButton(
-              color: CustomColors.green,
+              color: CustomColors.alertRed,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+                borderRadius: BorderRadius.circular(5.0),
               ),
               onPressed: () {
                 _submit(widget._user);
@@ -335,7 +335,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                   style: TextStyle(
                     fontSize: 18.0,
                     fontFamily: 'Georgia',
-                    color: CustomColors.blue,
+                    color: CustomColors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -343,7 +343,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             ),
           ),
           SizedBox(
-            height: 15,
+            height: 20,
           ),
           Container(
             child: Row(
@@ -372,7 +372,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.positiveGreen,
+                      color: CustomColors.blue,
                     ),
                   ),
                 ),
