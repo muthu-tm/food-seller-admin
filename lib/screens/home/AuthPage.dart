@@ -186,7 +186,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
       ),
       height: MediaQuery.of(context).size.height,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -221,12 +221,10 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
               ),
             ],
           ),
-          SizedBox(
-            height: 5,
-          ),
           Container(
-            child: Flexible(
-              child: widget._user.getProfilePicPath() == ""
+              child: Column(
+            children: [
+              widget._user.getProfilePicPath() == ""
                   ? Container(
                       width: 90,
                       height: 90,
@@ -268,165 +266,167 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                         ),
                       ),
                     ),
-            ),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Text(
-            widget._user.firstName,
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w500,
-              color: CustomColors.blue,
-            ),
-          ),
-          Text(
-            widget._user.mobileNumber.toString(),
-            style: TextStyle(
-              fontSize: 14.0,
-              fontWeight: FontWeight.w500,
-              color: CustomColors.blue,
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-            ),
-            child: TextFormField(
-              textAlign: TextAlign.center,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(4),
-              ],
-              obscureText: true,
-              autofocus: false,
-              controller: _pController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    width: 0,
-                    style: BorderStyle.none,
+              Text(
+                widget._user.firstName,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                  color: CustomColors.blue,
+                ),
+              ),
+              Text(
+                widget._user.mobileNumber.toString(),
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w500,
+                  color: CustomColors.blue,
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(4),
+                  ],
+                  obscureText: true,
+                  autofocus: false,
+                  controller: _pController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                        width: 0,
+                        style: BorderStyle.none,
+                      ),
+                    ),
+                    hintText:
+                        AppLocalizations.of(context).translate('secret_key'),
+                    fillColor: CustomColors.white,
+                    filled: true,
+                    contentPadding: EdgeInsets.all(14),
                   ),
                 ),
-                hintText: AppLocalizations.of(context).translate('secret_key'),
-                fillColor: CustomColors.white,
-                filled: true,
-                contentPadding: EdgeInsets.all(14),
               ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              (widget._user.preferences.isfingerAuthEnabled)
-                  ? FlatButton(
-                      onPressed: () async {
-                        await biometric();
-                      },
-                      child: Text(
-                        "Fingerprint",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: CustomColors.grey,
-                          fontSize: 11.0,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  (widget._user.preferences.isfingerAuthEnabled)
+                      ? FlatButton(
+                          onPressed: () async {
+                            await biometric();
+                          },
+                          child: Text(
+                            "Fingerprint",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              color: CustomColors.grey,
+                              fontSize: 11.0,
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              LoginPage(true, widget._scaffoldKey),
                         ),
+                      );
+                    },
+                    child: Text(
+                      AppLocalizations.of(context).translate('forget_key'),
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                        color: CustomColors.alertRed,
+                        fontSize: 11.0,
                       ),
-                    )
-                  : Container(),
-              FlatButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          LoginPage(true, widget._scaffoldKey),
                     ),
-                  );
-                },
-                child: Text(
-                  AppLocalizations.of(context).translate('forget_key'),
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    color: CustomColors.alertRed,
-                    fontSize: 11.0,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 40,
+                width: 100,
+                child: RaisedButton(
+                  color: CustomColors.alertRed,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  onPressed: () {
+                    _submit(widget._user);
+                  },
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.of(context).translate('login'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontFamily: 'Georgia',
+                        color: CustomColors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ),
             ],
-          ),
-          SizedBox(
-            height: 40,
-            width: 100,
-            child: RaisedButton(
-              color: CustomColors.alertRed,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-              onPressed: () {
-                _submit(widget._user);
-              },
-              child: Center(
-                child: Text(
-                  AppLocalizations.of(context).translate('login'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontFamily: 'Georgia',
-                    color: CustomColors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 15,
-          ),
+          )),
           Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  AppLocalizations.of(context).translate('no_account'),
-                  style: TextStyle(
-                    fontSize: 13.0,
-                    fontFamily: 'Georgia',
-                    fontWeight: FontWeight.bold,
-                    color: CustomColors.alertRed.withOpacity(0.7),
-                  ),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => MobileSignInPage(),
-                        settings: RouteSettings(name: '/signup'),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      AppLocalizations.of(context).translate('no_account'),
+                      style: TextStyle(
+                        fontSize: 13.0,
+                        fontFamily: 'Georgia',
+                        fontWeight: FontWeight.bold,
+                        color: CustomColors.alertRed.withOpacity(0.7),
                       ),
-                    );
-                  },
-                  child: Text(
-                    AppLocalizations.of(context).translate('sign_up'),
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                      color: CustomColors.blue,
                     ),
-                  ),
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                MobileSignInPage(),
+                            settings: RouteSettings(name: '/signup'),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('sign_up'),
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                          color: CustomColors.blue,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+                Text(
+                  "Powered by Fourcup Inc.",
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                )
               ],
             ),
           ),
-          Text(
-            "Powered by Fourcup Inc.",
-            style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
-          )
         ],
       ),
-    );}
+    );
+  }
 
   biometric() async {
     final LocalAuthentication auth = LocalAuthentication();
