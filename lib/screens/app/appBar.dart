@@ -7,18 +7,33 @@ Widget appBar(BuildContext context) {
     backgroundColor: CustomColors.green,
     titleSpacing: 0.0,
     automaticallyImplyLeading: false,
-    title: Builder(
-      builder: (context) => InkWell(
-        onTap: () => Scaffold.of(context).openDrawer(),
-        child: Container(
-          padding: EdgeInsets.only(left: 5.0),
-          child: Icon(
-            Icons.menu,
-            size: 30.0,
-            color: CustomColors.black,
+    title: Row(
+      children: [
+        Builder(
+          builder: (context) => InkWell(
+            onTap: () => Scaffold.of(context).openDrawer(),
+            child: Container(
+              padding: EdgeInsets.only(left: 5.0),
+              child: Icon(
+                Icons.menu,
+                size: 30.0,
+                color: CustomColors.black,
+              ),
+            ),
           ),
         ),
-      ),
+        SizedBox(
+          width: 15,
+        ),
+        Text(
+          "Uniques",
+          style: TextStyle(
+              fontFamily: "OLED",
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black),
+        ),
+      ],
     ),
     actions: <Widget>[
       IconButton(

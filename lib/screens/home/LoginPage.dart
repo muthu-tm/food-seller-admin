@@ -56,7 +56,22 @@ class _LoginPageState extends State<LoginPage> {
         ? Scaffold(
             key: _scaffoldKey,
             backgroundColor: CustomColors.lightGrey,
-            body: Container(
+            body: SingleChildScrollView(
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: _getBody(),
+              ),
+            ),
+          )
+        : SingleChildScrollView(
+            child: Container(
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -65,26 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                   end: Alignment.bottomRight,
                 ),
               ),
-              child: Center(
-                child: SingleChildScrollView(
-                  child: _getBody(),
-                ),
-              ),
-            ),
-          )
-        : Container(
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: Center(
-              child: SingleChildScrollView(
-                child: _getBody(),
-              ),
+              child: _getBody(),
             ),
           );
   }
@@ -94,7 +90,6 @@ class _LoginPageState extends State<LoginPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(5),
@@ -106,11 +101,24 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 10,
+            Text(
+              "UNIQUES",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: "OLED",
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold),
             ),
+            Text(
+              "Buy Organic Vegetables & Groceries",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 14.0,
+              ),
+            ),
+            SizedBox(height: 10),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
+              padding: EdgeInsets.symmetric(vertical: 5),
               child: Text(
                 "Welcome Back!",
                 style: TextStyle(
@@ -119,6 +127,9 @@ class _LoginPageState extends State<LoginPage> {
                     fontWeight: FontWeight.bold),
               ),
             ),
+            SizedBox(
+              height: 5,
+            ),
             Padding(
               padding: EdgeInsets.only(
                   top: 10, bottom: 15.0, left: 20.0, right: 20.0),
@@ -126,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                 textAlign: TextAlign.start,
                 controller: _nController,
                 autofocus: false,
-                keyboardType: TextInputType.phone,
+                keyboardType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                   LengthLimitingTextInputFormatter(10)
@@ -160,6 +171,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                SizedBox(width: 5),
                 Icon(
                   Icons.info,
                   color: CustomColors.alertRed,
@@ -210,14 +222,12 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   _submit();
                 },
-                child: Center(
-                  child: Text(
-                    AppLocalizations.of(context).translate('get_otp'),
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: CustomColors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                child: Text(
+                  AppLocalizations.of(context).translate('get_otp'),
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: CustomColors.white,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -225,7 +235,7 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
         SizedBox(
-          height: 20.0,
+          height: 10.0,
         ),
         Container(
           child: Row(
@@ -262,34 +272,31 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         SizedBox(
-          height: 50.0,
+          height: 20.0,
         ),
-        Align(
-          alignment: FractionalOffset.bottomCenter,
-          child: FlatButton.icon(
-            onPressed: () {
-              showDialog(
-                context: context,
-                routeSettings: RouteSettings(name: "/home/help"),
-                builder: (context) {
-                  return Center(
-                    child: contactAndSupportDialog(context),
-                  );
-                },
-              );
-            },
-            icon: Icon(
-              Icons.info,
+        FlatButton.icon(
+          onPressed: () {
+            showDialog(
+              context: context,
+              routeSettings: RouteSettings(name: "/home/help"),
+              builder: (context) {
+                return Center(
+                  child: contactAndSupportDialog(context),
+                );
+              },
+            );
+          },
+          icon: Icon(
+            Icons.info,
+            color: CustomColors.blue,
+          ),
+          label: Text(
+            AppLocalizations.of(context).translate('help_support'),
+            style: TextStyle(
+              fontFamily: 'Georgia',
+              fontWeight: FontWeight.bold,
               color: CustomColors.blue,
-            ),
-            label: Text(
-              AppLocalizations.of(context).translate('help_support'),
-              style: TextStyle(
-                fontFamily: 'Georgia',
-                fontWeight: FontWeight.bold,
-                color: CustomColors.blue,
-                fontSize: 16.0,
-              ),
+              fontSize: 16.0,
             ),
           ),
         ),

@@ -177,7 +177,6 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
@@ -185,61 +184,100 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
           end: Alignment.bottomRight,
         ),
       ),
+      height: MediaQuery.of(context).size.height,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.25,
-          ),
-          Flexible(
-            child: widget._user.getProfilePicPath() == ""
-                ? Container(
-                    width: 80,
-                    height: 80,
-                    margin: EdgeInsets.only(bottom: 5),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: CustomColors.blue,
-                          style: BorderStyle.solid,
-                          width: 2.0),
-                    ),
-                    child: Icon(
-                      Icons.person,
-                      size: 45.0,
-                      color: CustomColors.lightGrey,
-                    ),
-                  )
-                : SizedBox(
-                    width: 100.0,
-                    height: 100.0,
-                    child: Center(
-                      child: CachedNetworkImage(
-                        imageUrl: widget._user.getMediumProfilePicPath(),
-                        imageBuilder: (context, imageProvider) => CircleAvatar(
-                          radius: 45.0,
-                          backgroundImage: imageProvider,
-                          backgroundColor: Colors.transparent,
-                        ),
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) =>
-                                CircularProgressIndicator(
-                                    value: downloadProgress.progress),
-                        errorWidget: (context, url, error) => Icon(
-                          Icons.error,
-                          size: 35,
-                        ),
-                        fadeOutDuration: Duration(seconds: 1),
-                        fadeInDuration: Duration(seconds: 2),
-                      ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ClipRRect(
+                child: Image.asset(
+                  "images/icons/logo.png",
+                  height: 80,
+                ),
+              ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Text(
+                      "UNIQUES",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: "OLED",
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
+                  Text(
+                    "Buy Organic Vegetables & Groceries",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Container(
+            child: Flexible(
+              child: widget._user.getProfilePicPath() == ""
+                  ? Container(
+                      width: 90,
+                      height: 90,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            color: CustomColors.alertRed,
+                            style: BorderStyle.solid,
+                            width: 2.0),
+                      ),
+                      child: Icon(
+                        Icons.person,
+                        size: 45.0,
+                        color: CustomColors.lightGrey,
+                      ),
+                    )
+                  : SizedBox(
+                      width: 100.0,
+                      height: 100.0,
+                      child: Center(
+                        child: CachedNetworkImage(
+                          imageUrl: widget._user.getMediumProfilePicPath(),
+                          imageBuilder: (context, imageProvider) =>
+                              CircleAvatar(
+                            radius: 45.0,
+                            backgroundImage: imageProvider,
+                            backgroundColor: Colors.transparent,
+                          ),
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(
+                                      value: downloadProgress.progress),
+                          errorWidget: (context, url, error) => Icon(
+                            Icons.error,
+                            size: 35,
+                          ),
+                          fadeOutDuration: Duration(seconds: 1),
+                          fadeInDuration: Duration(seconds: 2),
+                        ),
+                      ),
+                    ),
+            ),
+          ),
+          SizedBox(
+            height: 15,
           ),
           Text(
             widget._user.firstName,
             style: TextStyle(
               fontSize: 16.0,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               color: CustomColors.blue,
             ),
           ),
@@ -252,10 +290,13 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           Padding(
-            padding: EdgeInsets.only(left: 20, right: 20, bottom: 5),
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+            ),
             child: TextFormField(
               textAlign: TextAlign.center,
               inputFormatters: [
@@ -310,7 +351,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                   AppLocalizations.of(context).translate('forget_key'),
                   textAlign: TextAlign.end,
                   style: TextStyle(
-                    color: CustomColors.orange,
+                    color: CustomColors.alertRed,
                     fontSize: 11.0,
                   ),
                 ),
@@ -343,7 +384,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 15,
           ),
           Container(
             child: Row(
@@ -378,11 +419,14 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                 ),
               ],
             ),
+          ),
+          Text(
+            "Powered by Fourcup Inc.",
+            style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
           )
         ],
       ),
-    );
-  }
+    );}
 
   biometric() async {
     final LocalAuthentication auth = LocalAuthentication();
