@@ -65,8 +65,10 @@ class _LoginPageState extends State<LoginPage> {
                   end: Alignment.bottomRight,
                 ),
               ),
-              child: SingleChildScrollView(
-                child: _getBody(),
+              child: Center(
+                child: SingleChildScrollView(
+                  child: _getBody(),
+                ),
               ),
             ),
           )
@@ -79,8 +81,10 @@ class _LoginPageState extends State<LoginPage> {
                 end: Alignment.bottomRight,
               ),
             ),
-            child: SingleChildScrollView(
-              child: _getBody(),
+            child: Center(
+              child: SingleChildScrollView(
+                child: _getBody(),
+              ),
             ),
           );
   }
