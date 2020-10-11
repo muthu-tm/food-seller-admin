@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/products.dart';
+import 'package:chipchop_seller/screens/utils/ImageView.dart';
 import 'package:chipchop_seller/screens/orders/OrderAmountWidget.dart';
 import 'package:chipchop_seller/screens/chats/OrderChatScreen.dart';
 import 'package:chipchop_seller/screens/products/ProductDetailsScreen.dart';
@@ -244,11 +245,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       fontFamily: "Georgia"),
                                 ),
                                 trailing: Text(
-                                  DateUtils.formatDateTime(
-                                    DateTime.fromMillisecondsSinceEpoch(
-                                        order.delivery.scheduledDate),
-                                  ),
-                                )),
+                                  order.delivery.scheduledDate != null
+                                      ? DateUtils.formatDateTime(
+                                          DateTime.fromMillisecondsSinceEpoch(
+                                              order.delivery.scheduledDate),
+                                        )
+                                      : '',
+                                ),
+                              ),
                         ListTile(
                           leading: Text(""),
                           title: Text(
@@ -497,272 +501,434 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   title: Text("Products"),
                 ),
                 Container(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    primary: false,
-                    itemCount: order.products.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return FutureBuilder(
-                        future: Products()
-                            .getByProductID(order.products[index].productID),
-                        builder: (context, AsyncSnapshot<Products> snapshot) {
-                          Widget child;
-                          if (snapshot.hasData) {
-                            Products _p = snapshot.data;
-                            child = Card(
-                                child: Container(
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      Container(
-                                        width: 125,
-                                        child: Column(
+                  child: order.products.length > 0
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          primary: false,
+                          itemCount: order.products.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return FutureBuilder(
+                              future: Products().getByProductID(
+                                  order.products[index].productID),
+                              builder:
+                                  (context, AsyncSnapshot<Products> snapshot) {
+                                Widget child;
+                                if (snapshot.hasData) {
+                                  Products _p = snapshot.data;
+                                  child = Card(
+                                      child: Container(
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
                                           children: <Widget>[
                                             Container(
                                               width: 125,
-                                              height: 125,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      _p.getProductImage(),
-                                                  imageBuilder: (context,
-                                                          imageProvider) =>
-                                                      Image(
-                                                    fit: BoxFit.fill,
-                                                    image: imageProvider,
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Container(
+                                                    width: 125,
+                                                    height: 125,
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                      child: CachedNetworkImage(
+                                                        imageUrl: _p
+                                                            .getProductImage(),
+                                                        imageBuilder: (context,
+                                                                imageProvider) =>
+                                                            Image(
+                                                          fit: BoxFit.fill,
+                                                          image: imageProvider,
+                                                        ),
+                                                        progressIndicatorBuilder:
+                                                            (context, url,
+                                                                    downloadProgress) =>
+                                                                Center(
+                                                          child: SizedBox(
+                                                            height: 50.0,
+                                                            width: 50.0,
+                                                            child: CircularProgressIndicator(
+                                                                value:
+                                                                    downloadProgress
+                                                                        .progress,
+                                                                valueColor:
+                                                                    AlwaysStoppedAnimation(
+                                                                        CustomColors
+                                                                            .blue),
+                                                                strokeWidth:
+                                                                    2.0),
+                                                          ),
+                                                        ),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            Icon(
+                                                          Icons.error,
+                                                          size: 35,
+                                                        ),
+                                                        fadeOutDuration:
+                                                            Duration(
+                                                                seconds: 1),
+                                                        fadeInDuration:
+                                                            Duration(
+                                                                seconds: 2),
+                                                      ),
+                                                    ),
                                                   ),
-                                                  progressIndicatorBuilder:
-                                                      (context, url,
-                                                              downloadProgress) =>
-                                                          Center(
-                                                    child: SizedBox(
-                                                      height: 50.0,
-                                                      width: 50.0,
-                                                      child: CircularProgressIndicator(
-                                                          value:
-                                                              downloadProgress
-                                                                  .progress,
-                                                          valueColor:
-                                                              AlwaysStoppedAnimation(
+                                                ],
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.all(5),
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  150,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: <Widget>[
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text(
+                                                      '${_p.name}',
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 3,
+                                                      style: TextStyle(
+                                                          color: CustomColors
+                                                              .black,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: Text(
+                                                          'Weight: ',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  "Georgia",
+                                                              color: CustomColors
+                                                                  .lightBlue,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '${_p.weight}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          color: CustomColors
+                                                              .black,
+                                                          fontFamily: "Georgia",
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(5.0),
+                                                        child: Text(
+                                                          _p.getUnit(),
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                "Georgia",
+                                                            color: CustomColors
+                                                                .black,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: Text(
+                                                          'Price: ',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  "Georgia",
+                                                              color: CustomColors
+                                                                  .lightBlue,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ),
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .centerRight,
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  5.0),
+                                                          child: Text(
+                                                            'Rs. ${_p.currentPrice}',
+                                                            textAlign:
+                                                                TextAlign.end,
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  "Georgia",
+                                                              fontSize: 16,
+                                                              color:
                                                                   CustomColors
-                                                                      .blue),
-                                                          strokeWidth: 2.0),
-                                                    ),
+                                                                      .black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  errorWidget:
-                                                      (context, url, error) =>
-                                                          Icon(
-                                                    Icons.error,
-                                                    size: 35,
-                                                  ),
-                                                  fadeOutDuration:
-                                                      Duration(seconds: 1),
-                                                  fadeInDuration:
-                                                      Duration(seconds: 2),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.all(5),
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                150,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                '${_p.name}',
-                                                textAlign: TextAlign.start,
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 3,
-                                                style: TextStyle(
-                                                    color: CustomColors.black,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    'Weight: ',
-                                                    textAlign: TextAlign.start,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        fontFamily: "Georgia",
-                                                        color: CustomColors
-                                                            .lightBlue,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${_p.weight}',
-                                                  textAlign: TextAlign.start,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    color: CustomColors.black,
-                                                    fontFamily: "Georgia",
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(5.0),
-                                                  child: Text(
-                                                    _p.getUnit(),
-                                                    textAlign: TextAlign.start,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontFamily: "Georgia",
-                                                      color: CustomColors.black,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    'Price: ',
-                                                    textAlign: TextAlign.start,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        fontFamily: "Georgia",
-                                                        color: CustomColors
-                                                            .lightBlue,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child: Padding(
+                                                  Padding(
                                                     padding:
                                                         EdgeInsets.all(5.0),
-                                                    child: Text(
-                                                      'Rs. ${_p.currentPrice}',
-                                                      textAlign: TextAlign.end,
-                                                      style: TextStyle(
-                                                        fontFamily: "Georgia",
-                                                        fontSize: 16,
-                                                        color:
-                                                            CustomColors.black,
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.bottomRight,
+                                                      child: FlatButton(
+                                                        child: Text(
+                                                          "Show Details",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  CustomColors
+                                                                      .blue),
+                                                        ),
+                                                        onPressed: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  ProductDetailsScreen(
+                                                                      _p),
+                                                              settings:
+                                                                  RouteSettings(
+                                                                      name:
+                                                                          '/store/products'),
+                                                            ),
+                                                          );
+                                                        },
                                                       ),
                                                     ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.all(5.0),
-                                              child: Align(
-                                                alignment:
-                                                    Alignment.bottomRight,
-                                                child: FlatButton(
-                                                  child: Text(
-                                                    "Show Details",
-                                                    style: TextStyle(
-                                                        color:
-                                                            CustomColors.blue),
-                                                  ),
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ProductDetailsScreen(
-                                                                _p),
-                                                        settings: RouteSettings(
-                                                            name:
-                                                                '/store/products'),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
+                                                  )
+                                                ],
                                               ),
-                                            )
+                                            ),
                                           ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  ListTile(
-                                    leading: Text(
-                                      "Quantity: ",
-                                      style: TextStyle(
-                                          fontFamily: "Georgia",
-                                          fontSize: 16,
-                                          color: CustomColors.black,
-                                          fontWeight: FontWeight.bold),
+                                        ListTile(
+                                          leading: Text(
+                                            "Quantity: ",
+                                            style: TextStyle(
+                                                fontFamily: "Georgia",
+                                                fontSize: 16,
+                                                color: CustomColors.black,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          title: Text(
+                                            '${order.products[index].quantity.round()}',
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                fontFamily: "Georgia",
+                                                fontSize: 16,
+                                                color: CustomColors.black,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          trailing: Text(
+                                            'Rs. ${order.products[index].amount}',
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                fontFamily: "Georgia",
+                                                fontSize: 16,
+                                                color: CustomColors.black,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                    title: Text(
-                                      '${order.products[index].quantity.round()}',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          fontFamily: "Georgia",
-                                          fontSize: 16,
-                                          color: CustomColors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    trailing: Text(
-                                      'Rs. ${order.products[index].amount}',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          fontFamily: "Georgia",
-                                          fontSize: 16,
-                                          color: CustomColors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ));
-                          } else if (snapshot.hasError) {
-                            child = Center(
-                                child: Column(
-                              children: AsyncWidgets.asyncError(),
-                            ));
-                          } else {
-                            child = Center(
-                                child: Column(
-                              children: AsyncWidgets.asyncWaiting(),
-                            ));
-                          }
+                                  ));
+                                } else if (snapshot.hasError) {
+                                  child = Center(
+                                      child: Column(
+                                    children: AsyncWidgets.asyncError(),
+                                  ));
+                                } else {
+                                  child = Center(
+                                      child: Column(
+                                    children: AsyncWidgets.asyncWaiting(),
+                                  ));
+                                }
 
-                          return child;
-                        },
-                      );
-                    },
+                                return child;
+                              },
+                            );
+                          },
+                        )
+                      : Text(
+                          "No Products added",
+                          style: TextStyle(
+                              fontFamily: "Georgia",
+                              fontSize: 16,
+                              color: CustomColors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                ),
+                ListTile(
+                  leading: Icon(
+                    FontAwesomeIcons.images,
+                    color: CustomColors.blueGreen,
                   ),
-                )
+                  title: Text("Images"),
+                ),
+                widget.order.orderImages.length > 0
+                    ? GridView.count(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: 0.95,
+                        shrinkWrap: true,
+                        primary: false,
+                        mainAxisSpacing: 10,
+                        children: List.generate(
+                          widget.order.orderImages.length,
+                          (index) {
+                            return Padding(
+                              padding:
+                                  EdgeInsets.only(left: 10, right: 10, top: 5),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ImageView(
+                                        url: widget.order.orderImages[index],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: CachedNetworkImage(
+                                      imageUrl: widget.order.orderImages[index],
+                                      imageBuilder: (context, imageProvider) =>
+                                          Image(
+                                        fit: BoxFit.fill,
+                                        image: imageProvider,
+                                      ),
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              Center(
+                                        child: SizedBox(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          child: CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(
+                                                      CustomColors.blue),
+                                              strokeWidth: 2.0),
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(
+                                        Icons.error,
+                                        size: 35,
+                                      ),
+                                      fadeOutDuration: Duration(seconds: 1),
+                                      fadeInDuration: Duration(seconds: 2),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    : Container(
+                        child: Text(
+                          "No Images added",
+                          style: TextStyle(
+                              fontFamily: "Georgia",
+                              fontSize: 16,
+                              color: CustomColors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                ListTile(
+                  leading: Icon(
+                    FontAwesomeIcons.solidEdit,
+                    color: CustomColors.blueGreen,
+                  ),
+                  title: Text("Written Orders"),
+                ),
+                widget.order.writtenOrders.trim().isNotEmpty
+                    ? Container(
+                        child: ListTile(
+                          title: TextFormField(
+                            initialValue: widget.order.writtenOrders,
+                            maxLines: 10,
+                            keyboardType: TextInputType.multiline,
+                            textCapitalization: TextCapitalization.sentences,
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              fillColor: CustomColors.white,
+                              filled: true,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 3.0, horizontal: 3.0),
+                              border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: CustomColors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        child: Text(
+                          "No Orders Written",
+                          style: TextStyle(
+                              fontFamily: "Georgia",
+                              fontSize: 16,
+                              color: CustomColors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                Padding(
+                  padding: EdgeInsets.all(40),
+                ),
               ],
             );
           }
@@ -794,7 +960,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     );
   }
 
-  Future<void> _selectPaymentDate(BuildContext context) async {
+  Future<void> _selectDeliveryDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),

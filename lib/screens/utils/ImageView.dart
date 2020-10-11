@@ -4,10 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import '../utils/CustomColors.dart';
 
-class ChatImageView extends StatelessWidget {
+class ImageView extends StatelessWidget {
   final String url;
 
-  ChatImageView({Key key, @required this.url}) : super(key: key);
+  ImageView({Key key, @required this.url}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +17,14 @@ class ChatImageView extends StatelessWidget {
         title: Text(
           'Image View',
           style: TextStyle(
-            color: CustomColors.lightGrey,
+            color: CustomColors.black,
             fontWeight: FontWeight.bold,
           ),
         ),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
-            color: CustomColors.lightGrey,
+            color: CustomColors.black,
           ),
           onPressed: () => Navigator.pop(context),
         ),

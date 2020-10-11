@@ -6,7 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:chipchop_seller/db/models/chat_temp.dart';
 import 'package:chipchop_seller/screens/app/ProfilePictureUpload.dart';
 import 'package:chipchop_seller/screens/app/TakePicturePage.dart';
-import 'package:chipchop_seller/screens/orders/ChatImageView.dart';
+import 'package:chipchop_seller/screens/utils/ImageView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -151,7 +151,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                         style: TextStyle(color: CustomColors.white),
                       ),
                       padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                      width: 200.0,
+                      width: MediaQuery.of(context).size.width * 0.7,
                       decoration: BoxDecoration(
                           color: CustomColors.grey,
                           borderRadius: BorderRadius.circular(8.0)),
@@ -200,7 +200,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ChatImageView(
+                              builder: (context) => ImageView(
                                 url: document.data['content'],
                               ),
                             ),
@@ -259,7 +259,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                           style: TextStyle(color: Colors.white),
                         ),
                         padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                        width: 200.0,
+                        width: MediaQuery.of(context).size.width * 0.7,
                         decoration: BoxDecoration(
                             color: CustomColors.green,
                             borderRadius: BorderRadius.circular(8.0)),
@@ -309,7 +309,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ChatImageView(
+                                builder: (context) => ImageView(
                                   url: document.data['content'],
                                 ),
                               ),
@@ -386,6 +386,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
               border: Border.all(color: CustomColors.blueGreen),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 // List of messages
                 buildListMessage(),
@@ -514,41 +515,47 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   }
 
   Widget buildListMessage() {
-    return Container(
-      child: StreamBuilder(
-        stream: ChatTemplate()
-            .streamOrderChats(widget.buyerID, widget.orderUUID, _limit),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor:
-                    AlwaysStoppedAnimation<Color>(CustomColors.lightGrey),
-              ),
-            );
-          } else {
-            if (snapshot.data.documents.isEmpty) {
-              return Container(
-                  alignment: AlignmentDirectional.center,
-                  height: 200,
-                  child: Text(
-                    "No Chats Found",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: CustomColors.grey, fontSize: 16),
-                  ));
+    return SingleChildScrollView(
+      child: Container(
+        child: StreamBuilder(
+          stream: ChatTemplate()
+              .streamOrderChats(widget.buyerID, widget.orderUUID, _limit),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(CustomColors.lightGrey),
+                ),
+              );
+            } else {
+              if (snapshot.data.documents.isEmpty) {
+                return Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Container(
+                    alignment: AlignmentDirectional.center,
+                    child: Text(
+                      "No Chats!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: CustomColors.grey, fontSize: 16),
+                    ),
+                  ),
+                );
+              }
+              listMessage.addAll(snapshot.data.documents);
+              return ListView.builder(
+                padding: EdgeInsets.all(10.0),
+                itemBuilder: (context, index) =>
+                    buildItem(index, snapshot.data.documents[index]),
+                itemCount: snapshot.data.documents.length,
+                reverse: true,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                controller: listScrollController,
+              );
             }
-            listMessage.addAll(snapshot.data.documents);
-            return ListView.builder(
-              padding: EdgeInsets.all(10.0),
-              itemBuilder: (context, index) =>
-                  buildItem(index, snapshot.data.documents[index]),
-              itemCount: snapshot.data.documents.length,
-              reverse: true,
-              shrinkWrap: true,
-              controller: listScrollController,
-            );
-          }
-        },
+          },
+        ),
       ),
     );
   }
