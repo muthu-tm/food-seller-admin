@@ -53,7 +53,7 @@ class SettingsHome extends StatelessWidget {
                                   child: Icon(
                                     Icons.person,
                                     size: 35,
-                                    color: CustomColors.black,
+                                    color: CustomColors.white,
                                   ),
                                 ),
                               ),
@@ -126,7 +126,7 @@ class SettingsHome extends StatelessWidget {
                                   child: Icon(
                                     Icons.store,
                                     size: 35,
-                                    color: CustomColors.black,
+                                    color: CustomColors.white,
                                   ),
                                 ),
                               ),

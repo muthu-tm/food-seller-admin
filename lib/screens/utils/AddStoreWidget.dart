@@ -25,12 +25,7 @@ class AddStoreWidget extends StatelessWidget {
           width: 175,
           height: 50,
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: <Color>[
-                CustomColors.blueGreen,
-                CustomColors.green,
-              ],
-            ),
+            color: CustomColors.alertRed,
             borderRadius: BorderRadius.all(
               Radius.circular(8.0),
             ),

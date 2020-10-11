@@ -3,9 +3,9 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/chat_temp.dart';
-import 'package:chipchop_seller/screens/app/ProfilePictureUpload.dart';
 import 'package:chipchop_seller/screens/app/TakePicturePage.dart';
 import 'package:chipchop_seller/screens/utils/ImageView.dart';
+import 'package:chipchop_seller/services/storage/image_uploader.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,11 @@ class StoreChatScreen extends StatefulWidget {
   final String custID;
   final String custName;
 
-  StoreChatScreen({Key key, @required this.storeID, @required this.custID, @required this.custName})
+  StoreChatScreen(
+      {Key key,
+      @required this.storeID,
+      @required this.custID,
+      @required this.custName})
       : super(key: key);
 
   @override
@@ -83,13 +87,24 @@ class StoreChatScreenState extends State<StoreChatScreen> {
     pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
     if (pickedFile == null) return;
 
-    imageFile = File(pickedFile.path);
+    setState(() {
+      isLoading = true;
+    });
 
-    if (imageFile != null) {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    String filePath = 'order_chats/${cachedLocalUser.getID()}/$fileName.png';
+    try {
+      imageUrl =
+          await Uploader().uploadImageFile(false, pickedFile.path, filePath);
+      await onSendMessage(imageUrl, 1);
       setState(() {
-        isLoading = true;
+        isLoading = false;
       });
-      uploadFile();
+    } catch (err) {
+      setState(() {
+        isLoading = false;
+      });
+      Fluttertoast.showToast(msg: 'This file is not an image');
     }
   }
 
@@ -520,8 +535,22 @@ class StoreChatScreenState extends State<StoreChatScreen> {
       setState(() {
         isLoading = true;
       });
-      imageFile = await fixExifRotation(result.toString());
-      uploadFile();
+
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      String filePath = 'order_chats/${cachedLocalUser.getID()}/$fileName.png';
+      try {
+        imageUrl =
+            await Uploader().uploadImageFile(true, result.toString(), filePath);
+        await onSendMessage(imageUrl, 1);
+        setState(() {
+          isLoading = false;
+        });
+      } catch (err) {
+        setState(() {
+          isLoading = false;
+        });
+        Fluttertoast.showToast(msg: 'This file is not an image');
+      }
     }
   }
 

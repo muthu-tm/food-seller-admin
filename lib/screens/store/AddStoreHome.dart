@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/delivery_details.dart';
@@ -11,10 +12,17 @@ import 'package:chipchop_seller/screens/store/LocationPicker.dart';
 import 'package:chipchop_seller/screens/utils/AddressWidget.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
+import 'package:chipchop_seller/screens/utils/ImageView.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
+import 'package:chipchop_seller/services/storage/image_uploader.dart';
+import 'package:chipchop_seller/services/storage/storage_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
 
 class AddNewStoreHome extends StatefulWidget {
@@ -25,6 +33,8 @@ class AddNewStoreHome extends StatefulWidget {
 class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  List<String> imagePaths = [];
   Address sAddress = Address();
   String storeName = '';
   String ownedBy = '';
@@ -99,7 +109,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.blueGreen,
+        backgroundColor: CustomColors.alertRed,
         onPressed: () {
           final FormState form = _formKey.currentState;
 
@@ -134,6 +144,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             store.name = this.storeName;
             store.ownedBy = this.ownedBy;
             store.users = [cachedLocalUser.getIntID()];
+            store.storeImages = imagePaths;
             store.availProducts = this.availProducts;
             store.availProductCategories = this.availProductCategories;
             store.availProductSubCategories = this.availProductSubCategories;
@@ -241,44 +252,173 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 10.0, top: 10),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      AppLocalizations.of(context).translate('owner_name'),
+                  padding: EdgeInsets.only(top: 10),
+                  child: ListTile(
+                    title: Text(
+                      "Store Images",
                       style: TextStyle(
                           fontFamily: "Georgia",
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 10, top: 10, right: 10),
-                  child: TextFormField(
-                    autofocus: false,
-                    keyboardType: TextInputType.text,
-                    textAlign: TextAlign.start,
-                    initialValue: ownedBy,
-                    decoration: InputDecoration(
-                      fillColor: CustomColors.white,
-                      filled: true,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: CustomColors.grey)),
+                    trailing: Container(
+                      alignment: Alignment.centerRight,
+                      width: 175,
+                      child: FlatButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        color: CustomColors.grey,
+                        onPressed: () async {
+                          String imageUrl = '';
+                          try {
+                            ImagePicker imagePicker = ImagePicker();
+                            PickedFile pickedFile;
+
+                            pickedFile = await imagePicker.getImage(
+                                source: ImageSource.gallery);
+                            if (pickedFile == null) return;
+
+                            String fileName = DateTime.now()
+                                .millisecondsSinceEpoch
+                                .toString();
+                            String fbFilePath =
+                                'store_profile/${cachedLocalUser.getID()}/$fileName.png';
+                            CustomDialogs.actionWaiting(context);
+                            // Upload to storage
+                            imageUrl = await Uploader().uploadImageFile(
+                                true, pickedFile.path, fbFilePath);
+                            Navigator.of(context).pop();
+                          } catch (err) {
+                            Fluttertoast.showToast(
+                                msg: 'This file is not an image');
+                          }
+                          if (imageUrl != "")
+                            setState(() {
+                              imagePaths.add(imageUrl);
+                            });
+                        },
+                        label: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 15.0,
+                          ),
+                          child: Text(
+                            "Pick Image!",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: "Georgia",
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        icon: Icon(FontAwesomeIcons.images),
+                      ),
                     ),
-                    validator: (owner) {
-                      if (owner.isEmpty) {
-                        return "Enter Owner Name";
-                      } else {
-                        this.ownedBy = owner.trim();
-                      }
-                      return null;
-                    },
                   ),
                 ),
+                imagePaths.length > 0
+                    ? GridView.count(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: 0.95,
+                        shrinkWrap: true,
+                        primary: false,
+                        mainAxisSpacing: 10,
+                        children: List.generate(
+                          imagePaths.length,
+                          (index) {
+                            return Stack(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 10, right: 10, top: 5),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ImageView(
+                                            url: imagePaths[index],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        child: CachedNetworkImage(
+                                          imageUrl: imagePaths[index],
+                                          imageBuilder:
+                                              (context, imageProvider) => Image(
+                                            fit: BoxFit.fill,
+                                            image: imageProvider,
+                                          ),
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              Center(
+                                            child: SizedBox(
+                                              height: 50.0,
+                                              width: 50.0,
+                                              child: CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                  valueColor:
+                                                      AlwaysStoppedAnimation(
+                                                          CustomColors.blue),
+                                                  strokeWidth: 2.0),
+                                            ),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(
+                                            Icons.error,
+                                            size: 35,
+                                          ),
+                                          fadeOutDuration: Duration(seconds: 1),
+                                          fadeInDuration: Duration(seconds: 2),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 10,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: CustomColors.alertRed,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: InkWell(
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 25,
+                                        color: CustomColors.white,
+                                      ),
+                                      onTap: () async {
+                                        CustomDialogs.actionWaiting(context);
+                                        bool res = await StorageUtils()
+                                            .removeFile(imagePaths[index]);
+                                        Navigator.of(context).pop();
+                                        if (res)
+                                          setState(() {
+                                            imagePaths
+                                                .remove(imagePaths[index]);
+                                          });
+                                        else
+                                          Fluttertoast.showToast(
+                                              msg: 'Unable to remove image');
+                                      },
+                                    ),
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        ),
+                      )
+                    : Container(),
                 Padding(
                   padding: EdgeInsets.only(left: 15.0, top: 10),
                   child: Align(
@@ -384,7 +524,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                           child: Container(
                             padding: EdgeInsets.all(10),
                             color: workingDays.contains(index)
-                                ? CustomColors.blue
+                                ? CustomColors.alertRed
                                 : CustomColors.white,
                             height: 40,
                             width: 50,
@@ -436,7 +576,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                         "--",
                         style: TextStyle(
                           fontFamily: "Georgia",
-                          color: CustomColors.green,
+                          color: CustomColors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
@@ -499,7 +639,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   child: Container(
                     padding: EdgeInsets.all(10),
                     color: availProducts.contains(types.uuid)
-                        ? CustomColors.blue
+                        ? CustomColors.alertRed
                         : CustomColors.white,
                     height: 40,
                     width: 50,
@@ -597,7 +737,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   child: Container(
                     padding: EdgeInsets.all(10),
                     color: availProductCategories.contains(categories.uuid)
-                        ? CustomColors.blue
+                        ? CustomColors.alertRed
                         : CustomColors.white,
                     height: 40,
                     width: 50,
@@ -701,7 +841,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   "--",
                   style: TextStyle(
                     fontFamily: "Georgia",
-                    color: CustomColors.green,
+                    color: CustomColors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                   ),
@@ -1013,7 +1153,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   child: Container(
                     padding: EdgeInsets.all(10),
                     color: availProductSubCategories.contains(categories.uuid)
-                        ? CustomColors.blue
+                        ? CustomColors.alertRed
                         : CustomColors.white,
                     height: 40,
                     width: 50,
