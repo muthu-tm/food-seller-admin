@@ -42,6 +42,8 @@ class Store extends Model {
   List<String> storeImages;
   @JsonKey(name: 'users')
   List<int> users;
+  @JsonKey(name: 'avail_payments')
+  List<int> availablePayments; // 0 - Cash, 1 - Gpay, 2 - Card, 3, PayTM 
   @JsonKey(name: 'users_access')
   List<StoreUserAccess> usersAccess;
   @JsonKey(name: 'contacts')

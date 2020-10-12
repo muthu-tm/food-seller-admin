@@ -70,6 +70,11 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   bool _isCheckedInstant;
   bool _isCheckedSameDay;
   bool _isCheckedScheduled;
+  List<int> paymentOptions = [0, 1];
+  bool _isCheckedCash;
+  bool _isCheckedGpay;
+  bool _isCheckedCard;
+  bool _isCheckedPaytm;
 
   @override
   void initState() {
@@ -79,6 +84,11 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
     _isCheckedInstant = true;
     _isCheckedSameDay = true;
     _isCheckedScheduled = true;
+
+    _isCheckedCash = true;
+    _isCheckedGpay = true;
+    _isCheckedCard = false;
+    _isCheckedPaytm = false;
 
     activeFrom = '${fromTime.hour}:${fromTime.minute}';
     activeTill = '${tillTime.hour}:${tillTime.minute}';
@@ -121,6 +131,13 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
               );
               return;
             }
+            if (paymentOptions.length == 0) {
+              _scaffoldKey.currentState.showSnackBar(
+                CustomSnackBar.errorSnackBar(
+                    "Please Select atlease one Payment Option!", 2),
+              );
+              return;
+            }
             if (workingDays.length == 0) {
               _scaffoldKey.currentState.showSnackBar(
                 CustomSnackBar.errorSnackBar(
@@ -144,6 +161,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             store.name = this.storeName;
             store.ownedBy = this.ownedBy;
             store.users = [cachedLocalUser.getIntID()];
+            store.availablePayments = paymentOptions;
             store.storeImages = imagePaths;
             store.availProducts = this.availProducts;
             store.availProductCategories = this.availProductCategories;
@@ -598,6 +616,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   padding: EdgeInsets.all(5),
                   child: AddressWidget("Store Address", Address(), sAddress),
                 ),
+                getPaymentDetails(),
                 getDeliveryDetails(),
                 SizedBox(height: 80),
               ],
@@ -792,6 +811,131 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
     );
   }
 
+  Widget getPaymentDetails() {
+    return Card(
+      color: CustomColors.lightGrey,
+      elevation: 5.0,
+      margin: EdgeInsets.all(5.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            height: 40,
+            alignment: Alignment.center,
+            child: Text(
+              "Accepted Payments",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: "Georgia",
+                fontWeight: FontWeight.bold,
+                color: CustomColors.blue,
+              ),
+            ),
+          ),
+          Divider(
+            color: CustomColors.blue,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text("Cash"),
+                        value: _isCheckedCash,
+                        onChanged: (val) {
+                          setState(() {
+                            _isCheckedCash = val;
+                            if (_isCheckedCash) {
+                              paymentOptions.add(0);
+                            } else {
+                              paymentOptions.remove(0);
+                            }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text("Google Pay"),
+                        value: _isCheckedGpay,
+                        onChanged: (val) {
+                          setState(() {
+                            _isCheckedGpay = val;
+                            if (_isCheckedGpay) {
+                              paymentOptions.add(1);
+                            } else {
+                              paymentOptions.remove(1);
+                            }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text("Card Payments"),
+                        value: _isCheckedCard,
+                        onChanged: (val) {
+                          setState(() {
+                            _isCheckedCard = val;
+                            if (_isCheckedCard) {
+                              paymentOptions.add(2);
+                            } else {
+                              paymentOptions.remove(2);
+                            }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text("Paytm"),
+                        value: _isCheckedPaytm,
+                        onChanged: (val) {
+                          setState(() {
+                            _isCheckedPaytm = val;
+                            if (_isCheckedPaytm) {
+                              paymentOptions.add(3);
+                            } else {
+                              paymentOptions.remove(3);
+                            }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget getDeliveryDetails() {
     return Card(
       color: CustomColors.lightGrey,
@@ -920,9 +1064,9 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                           setState(() {
                             _isCheckedSameDay = val;
                             if (_isCheckedSameDay) {
-                              deliveryTemp.add(0);
+                              deliveryTemp.add(2);
                             } else {
-                              deliveryTemp.remove(0);
+                              deliveryTemp.remove(2);
                             }
                           });
                         },
@@ -940,9 +1084,9 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                           setState(() {
                             _isCheckedScheduled = val;
                             if (_isCheckedScheduled) {
-                              deliveryTemp.add(1);
+                              deliveryTemp.add(3);
                             } else {
-                              deliveryTemp.remove(1);
+                              deliveryTemp.remove(3);
                             }
                           });
                         },

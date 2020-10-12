@@ -65,12 +65,18 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   bool _isCheckedInstant;
   bool _isCheckedSameDay;
   bool _isCheckedScheduled;
+  List<int> paymentOptions = [0, 1];
+  bool _isCheckedCash;
+  bool _isCheckedGpay;
+  bool _isCheckedCard;
+  bool _isCheckedPaytm;
 
   @override
   void initState() {
     super.initState();
 
     deliveryTemp = widget.store.deliveryDetails.availableOptions;
+    paymentOptions = widget.store.availablePayments;
 
     availProducts = widget.store.availProducts;
     availProductCategories = widget.store.availProductCategories;
@@ -84,6 +90,17 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
         widget.store.deliveryDetails.availableOptions.contains(2);
     _isCheckedScheduled =
         widget.store.deliveryDetails.availableOptions.contains(3);
+    
+    _isCheckedCash =
+        widget.store.availablePayments.contains(0);
+    _isCheckedGpay =
+        widget.store.availablePayments.contains(1);
+    _isCheckedCard =
+        widget.store.availablePayments.contains(2);
+    _isCheckedPaytm =
+        widget.store.availablePayments.contains(3);
+
+    
 
     fromTime = TimeOfDay(
         hour: int.parse(widget.store.activeFrom.split(":")[0]),
@@ -503,6 +520,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                   child: AddressWidget(
                       "Store Address", widget.store.address, updateAddress),
                 ),
+                getPaymentDetails(),
                 getDeliveryDetails(),
                 SizedBox(height: 80),
               ],
@@ -745,6 +763,132 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
 
         return children;
       },
+    );
+  }
+
+
+  Widget getPaymentDetails() {
+    return Card(
+      color: CustomColors.lightGrey,
+      elevation: 5.0,
+      margin: EdgeInsets.all(5.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            height: 40,
+            alignment: Alignment.center,
+            child: Text(
+              "Accepted Payments",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: "Georgia",
+                fontWeight: FontWeight.bold,
+                color: CustomColors.blue,
+              ),
+            ),
+          ),
+          Divider(
+            color: CustomColors.blue,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text("Cash"),
+                        value: _isCheckedCash,
+                        onChanged: (val) {
+                          setState(() {
+                            _isCheckedCash = val;
+                            if (_isCheckedCash) {
+                              paymentOptions.add(0);
+                            } else {
+                              paymentOptions.remove(0);
+                            }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text("Google Pay"),
+                        value: _isCheckedGpay,
+                        onChanged: (val) {
+                          setState(() {
+                            _isCheckedGpay = val;
+                            if (_isCheckedGpay) {
+                              paymentOptions.add(1);
+                            } else {
+                              paymentOptions.remove(1);
+                            }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text("Card Payments"),
+                        value: _isCheckedCard,
+                        onChanged: (val) {
+                          setState(() {
+                            _isCheckedCard = val;
+                            if (_isCheckedCard) {
+                              paymentOptions.add(2);
+                            } else {
+                              paymentOptions.remove(2);
+                            }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text("Paytm"),
+                        value: _isCheckedPaytm,
+                        onChanged: (val) {
+                          setState(() {
+                            _isCheckedPaytm = val;
+                            if (_isCheckedPaytm) {
+                              paymentOptions.add(3);
+                            } else {
+                              paymentOptions.remove(3);
+                            }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

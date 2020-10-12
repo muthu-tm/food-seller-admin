@@ -43,6 +43,10 @@ Store _$StoreFromJson(Map<String, dynamic> json) {
             ?.map((e) => e == null ? null : e as int)
             ?.toList() ??
         []
+    ..availablePayments = (json['avail_payments'] as List)
+            ?.map((e) => e == null ? null : e as int)
+            ?.toList() ??
+        [0]
     ..usersAccess = (json['users_access'] as List)
         ?.map((e) => e == null
             ? null
@@ -85,6 +89,7 @@ Map<String, dynamic> _$StoreToJson(Store instance) => <String, dynamic>{
       'store_images': instance.storeImages == null ? [] : instance.storeImages,
       'contacts': instance.contacts?.map((e) => e?.toJson())?.toList(),
       'users': instance.users == null ? [] : instance.users,
+      'avail_payments': instance.availablePayments == null ? [0] : instance.availablePayments,
       'users_access': instance.usersAccess?.map((e) => e?.toJson())?.toList(),
       'delivery': instance.deliveryDetails?.toJson(),
       'keywords':
