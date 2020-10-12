@@ -88,7 +88,18 @@ class _AddProductState extends State<AddProduct> {
       backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
         backgroundColor: CustomColors.green,
-        title: Text("Add Products"),
+        title: Text(
+          "Add Products",
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.black, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.black,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: CustomColors.blue,

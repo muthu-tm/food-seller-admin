@@ -30,8 +30,12 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
   @override
   void initState() {
     super.initState();
+
     geoData = widget.store.geoPoint;
     this.searchKey = widget.store.address.pincode;
+
+    _searchAndNavigate();
+
     _markers.add(
       Marker(
         markerId: MarkerId(
@@ -50,6 +54,15 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context).translate('title_add_location'),
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.black, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.black,
+          ),
+          onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: CustomColors.green,
       ),

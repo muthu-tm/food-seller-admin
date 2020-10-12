@@ -91,7 +91,19 @@ class _EditProductsState extends State<EditProducts> {
       backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
         backgroundColor: CustomColors.green,
-        title: Text("Add Products"),
+        title: Text(
+          "Edit - ${widget.product.name}",
+          textAlign: TextAlign.start,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(color: CustomColors.black, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.black,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: CustomColors.blue,

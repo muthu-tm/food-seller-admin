@@ -27,15 +27,15 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
         title: Text(
           widget.categoryName,
           textAlign: TextAlign.start,
-          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+          style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios, color: CustomColors.black,),
           onPressed: () => Navigator.pop(context),
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.shopping_cart),
+            icon: Icon(Icons.shopping_cart, color: CustomColors.black,),
             onPressed: () {},
           ),
         ],

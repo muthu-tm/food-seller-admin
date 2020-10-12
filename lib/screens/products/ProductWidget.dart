@@ -82,7 +82,7 @@ class ProductWidget extends StatelessWidget {
                       IconButton(
                           icon: Icon(
                             FontAwesomeIcons.solidEye,
-                            color: CustomColors.green,
+                            color: CustomColors.alertRed,
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -98,7 +98,7 @@ class ProductWidget extends StatelessWidget {
                       IconButton(
                           icon: Icon(
                             FontAwesomeIcons.solidEdit,
-                            color: CustomColors.green,
+                            color: CustomColors.alertRed,
                           ),
                           onPressed: () {
                             Navigator.push(
