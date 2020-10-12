@@ -75,23 +75,4 @@ class ProductTypes extends Model {
       throw err;
     }
   }
-
-  Future<List<ProductCategories>> getCategories(String uuid) async {
-    try {
-      QuerySnapshot snap = await getDocumentReference(uuid)
-              .collection("product_categories").getDocuments();
-
-      List<ProductCategories> _c = [];
-      if (snap.documents.isNotEmpty) {
-        for (var i = 0; i < snap.documents.length; i++) {
-          ProductCategories _s = ProductCategories.fromJson(snap.documents[i].data);
-          _c.add(_s);
-        }
-      }
-
-      return _c;
-    } catch (err) {
-      throw err;
-    }
-  }
 }

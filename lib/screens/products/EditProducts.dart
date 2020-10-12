@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/product_categories.dart';
 import 'package:chipchop_seller/db/models/product_sub_categories.dart';
 import 'package:chipchop_seller/db/models/product_types.dart';
@@ -6,7 +7,13 @@ import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
+import 'package:chipchop_seller/screens/utils/ImageView.dart';
+import 'package:chipchop_seller/services/storage/image_uploader.dart';
+import 'package:chipchop_seller/services/storage/storage_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProducts extends StatefulWidget {
   final Products product;
@@ -19,6 +26,8 @@ class EditProducts extends StatefulWidget {
 class _EditProductsState extends State<EditProducts> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  List<String> imagePaths = [];
 
   TextEditingController priceController = TextEditingController();
 
@@ -35,11 +44,11 @@ class _EditProductsState extends State<EditProducts> {
     "5": "m.litre"
   };
 
-  String _selectedStore;
-  String _selectedType;
-  String _selectedCategory;
-  String _selectedSubCategory;
-  String _selectedUnit;
+  String _selectedStore = "0";
+  String _selectedType = "0";
+  String _selectedCategory = "0";
+  String _selectedSubCategory = "0";
+  String _selectedUnit = "0";
 
   List<String> pImages = [];
   String pName = "";
@@ -63,25 +72,26 @@ class _EditProductsState extends State<EditProducts> {
 
     loadStores();
     loadProductTypes();
+    onTypesDropdownItem(widget.product.productType);
+    if (widget.product.productCategory != "")
+      onCategoryDropdownItem(widget.product.productCategory);
 
-    // _selectedStore = widget.product.storeID;
-    // _selectedType = widget.product.productType;
-    // _selectedCategory = widget.product.productCategory;
-    // _selectedSubCategory = widget.product.productSubCategory;
-    // _selectedUnit = (widget.product.unit).toString();
+    _selectedUnit = (widget.product.unit).toString();
 
-    if (widget.product != null) {
-      this.pImages = widget.product.productImages;
-      this.pName = widget.product.name;
-      this.shortDetails = widget.product.shortDetails;
-      this.productType = widget.product.productType;
-      this.productCategory = widget.product.productType;
-      this.productSubCategory = widget.product.productSubCategory;
-      this.weight = widget.product.weight;
-      this.unit = widget.product.unit;
-      this.originalPrice = widget.product.originalPrice;
-      this.keywords = widget.product.keywords;
-    }
+    this.imagePaths = widget.product.productImages;
+    this.pImages = widget.product.productImages;
+    this.pName = widget.product.name;
+    this.shortDetails = widget.product.shortDetails;
+    this.productType = widget.product.productType;
+    this.productCategory = widget.product.productType;
+    this.productSubCategory = widget.product.productSubCategory;
+    this.weight = widget.product.weight;
+    this.unit = widget.product.unit;
+    this.originalPrice = widget.product.originalPrice;
+    this.offer = widget.product.offer;
+    this.currentPrice = widget.product.currentPrice;
+    priceController.text = this.currentPrice.toString();
+    this.keywords = widget.product.keywords;
   }
 
   @override
@@ -106,7 +116,7 @@ class _EditProductsState extends State<EditProducts> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.blue,
+        backgroundColor: CustomColors.alertRed,
         onPressed: () async {
           await _submit();
         },
@@ -127,14 +137,14 @@ class _EditProductsState extends State<EditProducts> {
 
   _submit() async {
     try {
-      if (widget.product.productType == "0") {
+      if (_selectedType == "0") {
         _scaffoldKey.currentState.showSnackBar(
           CustomSnackBar.errorSnackBar("Please select Product Type!", 2),
         );
         return;
       }
 
-      if (widget.product.storeID == "0") {
+      if (storeID == "0") {
         _scaffoldKey.currentState.showSnackBar(
           CustomSnackBar.errorSnackBar("Please select your store!", 2),
         );
@@ -144,11 +154,11 @@ class _EditProductsState extends State<EditProducts> {
       final FormState form = _formKey.currentState;
 
       if (form.validate()) {
-        Products _p = Products();
+        Products _p = widget.product;
         _p.name = pName;
         _p.shortDetails = shortDetails;
-        _p.productImages = [""];
-        _p.currentPrice = originalPrice - offer;
+        _p.productImages = imagePaths;
+        _p.currentPrice = double.parse(priceController.text.trim());
         _p.originalPrice = originalPrice;
         _p.offer = offer;
         _p.isAvailable = true;
@@ -161,7 +171,7 @@ class _EditProductsState extends State<EditProducts> {
         _p.productSubCategory =
             _selectedSubCategory == "0" ? "" : _selectedSubCategory;
         CustomDialogs.actionWaiting(context);
-        //await _p.update(data);
+        await _p.updateByID(_p.toJson(), _p.uuid);
         Navigator.pop(context);
         Navigator.pop(context);
       } else {
@@ -221,147 +231,178 @@ class _EditProductsState extends State<EditProducts> {
                 ),
               ),
             ),
-            ListTile(
-              leading: Icon(
-                Icons.image,
-                size: 35,
-                color: CustomColors.blue,
-              ),
-              title: Text(
-                "Add Images",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontFamily: 'Georgia',
-                  color: CustomColors.black,
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: ListTile(
+                leading: Icon(
+                  Icons.image,
+                  size: 35,
+                  color: CustomColors.blue,
+                ),
+                title: Text(
+                  "Product Images",
+                  style: TextStyle(
+                      fontFamily: "Georgia",
+                      color: CustomColors.black,
+                      fontSize: 16),
+                ),
+                trailing: Container(
+                  width: 155,
+                  child: FlatButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    color: CustomColors.alertRed,
+                    onPressed: () async {
+                      if (_selectedStore == "0") {
+                        Fluttertoast.showToast(
+                            msg: 'Please Select a Store First');
+                        return;
+                      }
+                      String imageUrl = '';
+                      try {
+                        ImagePicker imagePicker = ImagePicker();
+                        PickedFile pickedFile;
+
+                        pickedFile = await imagePicker.getImage(
+                            source: ImageSource.gallery);
+                        if (pickedFile == null) return;
+
+                        String fileName =
+                            DateTime.now().millisecondsSinceEpoch.toString();
+                        String fbFilePath =
+                            'products/$_selectedStore/$fileName.png';
+                        CustomDialogs.actionWaiting(context);
+                        // Upload to storage
+                        imageUrl = await Uploader()
+                            .uploadImageFile(true, pickedFile.path, fbFilePath);
+                        Navigator.of(context).pop();
+                      } catch (err) {
+                        Fluttertoast.showToast(
+                            msg: 'This file is not an image');
+                      }
+                      if (imageUrl != "")
+                        setState(() {
+                          imagePaths.add(imageUrl);
+                        });
+                    },
+                    label: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 15.0,
+                      ),
+                      child: Text(
+                        "Pick Image!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: "Georgia",
+                            fontSize: 16,
+                            color: CustomColors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    icon: Icon(FontAwesomeIcons.images),
+                  ),
                 ),
               ),
             ),
-            Container(
-              height: 130,
-              child: SingleChildScrollView(
-                primary: true,
-                scrollDirection: Axis.vertical,
-                reverse: true,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 125,
-                              width: 125,
-                              child: Text(
-                                "Add Image",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: CustomColors.white,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500,
+            imagePaths.length > 0
+                ? GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 0.95,
+                    shrinkWrap: true,
+                    primary: false,
+                    mainAxisSpacing: 10,
+                    children: List.generate(
+                      imagePaths.length,
+                      (index) {
+                        return Stack(
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsets.only(left: 10, right: 10, top: 5),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ImageView(
+                                        url: imagePaths[index],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: CachedNetworkImage(
+                                      imageUrl: imagePaths[index],
+                                      imageBuilder: (context, imageProvider) =>
+                                          Image(
+                                        fit: BoxFit.fill,
+                                        image: imageProvider,
+                                      ),
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              Center(
+                                        child: SizedBox(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          child: CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(
+                                                      CustomColors.blue),
+                                              strokeWidth: 2.0),
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(
+                                        Icons.error,
+                                        size: 35,
+                                      ),
+                                      fadeOutDuration: Duration(seconds: 1),
+                                      fadeInDuration: Duration(seconds: 2),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: CustomColors.grey,
-                                border: Border.all(
-                                    width: 1,
-                                    style: BorderStyle.solid,
-                                    color: CustomColors.blue),
                               ),
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 125,
-                              width: 125,
-                              child: Text(
-                                "Add Image",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: CustomColors.white,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500,
+                            Positioned(
+                              right: 10,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: CustomColors.alertRed,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: InkWell(
+                                  child: Icon(
+                                    Icons.close,
+                                    size: 25,
+                                    color: CustomColors.white,
+                                  ),
+                                  onTap: () async {
+                                    CustomDialogs.actionWaiting(context);
+                                    bool res = await StorageUtils()
+                                        .removeFile(imagePaths[index]);
+                                    Navigator.of(context).pop();
+                                    if (res)
+                                      setState(() {
+                                        imagePaths.remove(imagePaths[index]);
+                                      });
+                                    else
+                                      Fluttertoast.showToast(
+                                          msg: 'Unable to remove image');
+                                  },
                                 ),
                               ),
-                              decoration: BoxDecoration(
-                                color: CustomColors.grey,
-                                border: Border.all(
-                                  width: 1,
-                                  style: BorderStyle.none,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                            )
+                          ],
+                        );
+                      },
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 125,
-                              width: 125,
-                              child: Text(
-                                "Add Image",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: CustomColors.white,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: CustomColors.grey,
-                                border: Border.all(
-                                    width: 1, style: BorderStyle.none),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 125,
-                              width: 125,
-                              child: Text(
-                                "Add Image",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: CustomColors.white,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: CustomColors.grey,
-                                border: Border.all(
-                                    width: 1, style: BorderStyle.none),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                  )
+                : Container(),
             ListTile(
               leading: Icon(
                 Icons.format_shapes,
@@ -681,7 +722,7 @@ class _EditProductsState extends State<EditProducts> {
                       filled: true,
                     ),
                     onChanged: (val) {
-                      if (originalPrice <= 0) {
+                      if (originalPrice >= 0) {
                         priceController.text =
                             (originalPrice - double.parse(val)).toString();
                       } else {
@@ -753,6 +794,8 @@ class _EditProductsState extends State<EditProducts> {
         },
       );
     }
+
+    _selectedStore = widget.product.storeID;
   }
 
   loadProductTypes() async {
@@ -771,6 +814,8 @@ class _EditProductsState extends State<EditProducts> {
         },
       );
     }
+
+    _selectedType = widget.product.productType;
   }
 
   onStoreDropdownItem(String uuid) async {
@@ -792,7 +837,7 @@ class _EditProductsState extends State<EditProducts> {
     }
 
     List<ProductCategories> categories =
-        await ProductTypes().getCategories(uuid);
+        await ProductCategories().getCategoriesForTypes([uuid]);
     Map<String, String> cList = Map();
     if (categories.length > 0) {
       categories.forEach(
@@ -800,6 +845,8 @@ class _EditProductsState extends State<EditProducts> {
           cList[b.uuid] = b.name;
         },
       );
+
+      print(cList);
 
       setState(
         () {
@@ -814,6 +861,9 @@ class _EditProductsState extends State<EditProducts> {
         },
       );
     }
+
+    if (widget.product.productCategory != "")
+      _selectedCategory = widget.product.productCategory;
   }
 
   onCategoryDropdownItem(String uuid) async {
@@ -849,5 +899,7 @@ class _EditProductsState extends State<EditProducts> {
         },
       );
     }
+    if (widget.product.productSubCategory != "")
+      _selectedSubCategory = widget.product.productSubCategory;
   }
 }

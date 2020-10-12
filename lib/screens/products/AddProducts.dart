@@ -1,10 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/chipchop_products.dart';
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
+import 'package:chipchop_seller/screens/utils/ImageView.dart';
+import 'package:chipchop_seller/services/storage/image_uploader.dart';
+import 'package:chipchop_seller/services/storage/storage_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../db/models/product_categories.dart';
 import '../../db/models/product_sub_categories.dart';
@@ -25,6 +32,8 @@ class _AddProductState extends State<AddProduct> {
 
   TextEditingController priceController = TextEditingController();
 
+  List<String> imagePaths = [];
+
   Map<String, String> _stores = {"0": "Choose your Store"};
   Map<String, String> _types = {"0": "Choose Product Type"};
   Map<String, String> _categories = {"0": "Choose Product Category"};
@@ -44,7 +53,6 @@ class _AddProductState extends State<AddProduct> {
   String _selectedSubCategory = "0";
   String _selectedUnit = "0";
 
-  List<String> pImages = [];
   String pName = "";
   String shortDetails = "";
   String productType = "";
@@ -68,7 +76,7 @@ class _AddProductState extends State<AddProduct> {
     loadProductTypes();
 
     if (widget.product != null) {
-      this.pImages = widget.product.productImages;
+      this.imagePaths = widget.product.productImages;
       this.pName = widget.product.name;
       this.shortDetails = widget.product.shortDetails;
       this.productType = widget.product.productType;
@@ -102,7 +110,7 @@ class _AddProductState extends State<AddProduct> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.blue,
+        backgroundColor: CustomColors.alertRed,
         onPressed: () async {
           await _submit();
         },
@@ -143,7 +151,7 @@ class _AddProductState extends State<AddProduct> {
         Products _p = Products();
         _p.name = pName;
         _p.shortDetails = shortDetails;
-        _p.productImages = [""];
+        _p.productImages = imagePaths;
         _p.currentPrice = double.parse(priceController.text);
         _p.originalPrice = originalPrice;
         _p.offer = offer;
@@ -222,147 +230,178 @@ class _AddProductState extends State<AddProduct> {
                 ),
               ),
             ),
-            ListTile(
-              leading: Icon(
-                Icons.image,
-                size: 35,
-                color: CustomColors.blue,
-              ),
-              title: Text(
-                "Add Images",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontFamily: 'Georgia',
-                  color: CustomColors.black,
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: ListTile(
+                leading: Icon(
+                  Icons.image,
+                  size: 35,
+                  color: CustomColors.blue,
+                ),
+                title: Text(
+                  "Product Images",
+                  style: TextStyle(
+                      fontFamily: "Georgia",
+                      color: CustomColors.black,
+                      fontSize: 16),
+                ),
+                trailing: Container(
+                  width: 155,
+                  child: FlatButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    color: CustomColors.alertRed,
+                    onPressed: () async {
+                      if (_selectedStore == "0") {
+                        Fluttertoast.showToast(
+                            msg: 'Please Select a Store First');
+                        return;
+                      }
+                      String imageUrl = '';
+                      try {
+                        ImagePicker imagePicker = ImagePicker();
+                        PickedFile pickedFile;
+
+                        pickedFile = await imagePicker.getImage(
+                            source: ImageSource.gallery);
+                        if (pickedFile == null) return;
+
+                        String fileName =
+                            DateTime.now().millisecondsSinceEpoch.toString();
+                        String fbFilePath =
+                            'products/$_selectedStore/$fileName.png';
+                        CustomDialogs.actionWaiting(context);
+                        // Upload to storage
+                        imageUrl = await Uploader()
+                            .uploadImageFile(true, pickedFile.path, fbFilePath);
+                        Navigator.of(context).pop();
+                      } catch (err) {
+                        Fluttertoast.showToast(
+                            msg: 'This file is not an image');
+                      }
+                      if (imageUrl != "")
+                        setState(() {
+                          imagePaths.add(imageUrl);
+                        });
+                    },
+                    label: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 15.0,
+                      ),
+                      child: Text(
+                        "Pick Image!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: "Georgia",
+                            fontSize: 16,
+                            color: CustomColors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    icon: Icon(FontAwesomeIcons.images),
+                  ),
                 ),
               ),
             ),
-            Container(
-              height: 130,
-              child: SingleChildScrollView(
-                primary: true,
-                scrollDirection: Axis.vertical,
-                reverse: true,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 125,
-                              width: 125,
-                              child: Text(
-                                "Add Image",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: CustomColors.white,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500,
+            imagePaths.length > 0
+                ? GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 0.95,
+                    shrinkWrap: true,
+                    primary: false,
+                    mainAxisSpacing: 10,
+                    children: List.generate(
+                      imagePaths.length,
+                      (index) {
+                        return Stack(
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsets.only(left: 10, right: 10, top: 5),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ImageView(
+                                        url: imagePaths[index],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: CachedNetworkImage(
+                                      imageUrl: imagePaths[index],
+                                      imageBuilder: (context, imageProvider) =>
+                                          Image(
+                                        fit: BoxFit.fill,
+                                        image: imageProvider,
+                                      ),
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              Center(
+                                        child: SizedBox(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          child: CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(
+                                                      CustomColors.blue),
+                                              strokeWidth: 2.0),
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(
+                                        Icons.error,
+                                        size: 35,
+                                      ),
+                                      fadeOutDuration: Duration(seconds: 1),
+                                      fadeInDuration: Duration(seconds: 2),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: CustomColors.grey,
-                                border: Border.all(
-                                    width: 1,
-                                    style: BorderStyle.solid,
-                                    color: CustomColors.blue),
                               ),
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 125,
-                              width: 125,
-                              child: Text(
-                                "Add Image",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: CustomColors.white,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500,
+                            Positioned(
+                              right: 10,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: CustomColors.alertRed,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: InkWell(
+                                  child: Icon(
+                                    Icons.close,
+                                    size: 25,
+                                    color: CustomColors.white,
+                                  ),
+                                  onTap: () async {
+                                    CustomDialogs.actionWaiting(context);
+                                    bool res = await StorageUtils()
+                                        .removeFile(imagePaths[index]);
+                                    Navigator.of(context).pop();
+                                    if (res)
+                                      setState(() {
+                                        imagePaths.remove(imagePaths[index]);
+                                      });
+                                    else
+                                      Fluttertoast.showToast(
+                                          msg: 'Unable to remove image');
+                                  },
                                 ),
                               ),
-                              decoration: BoxDecoration(
-                                color: CustomColors.grey,
-                                border: Border.all(
-                                  width: 1,
-                                  style: BorderStyle.none,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                            )
+                          ],
+                        );
+                      },
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 125,
-                              width: 125,
-                              child: Text(
-                                "Add Image",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: CustomColors.white,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: CustomColors.grey,
-                                border: Border.all(
-                                    width: 1, style: BorderStyle.none),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 125,
-                              width: 125,
-                              child: Text(
-                                "Add Image",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: CustomColors.white,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: CustomColors.grey,
-                                border: Border.all(
-                                    width: 1, style: BorderStyle.none),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                  )
+                : Container(),
             ListTile(
               leading: Icon(
                 Icons.format_shapes,
@@ -379,7 +418,7 @@ class _AddProductState extends State<AddProduct> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 60.0),
+              padding: EdgeInsets.only(left: 60.0, right: 10),
               child: TextFormField(
                 initialValue: pName,
                 textAlign: TextAlign.start,
