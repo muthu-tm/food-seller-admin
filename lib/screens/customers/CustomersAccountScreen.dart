@@ -2,9 +2,11 @@ import 'package:chipchop_seller/db/models/customers.dart';
 import 'package:chipchop_seller/db/models/user_store_wallet_history.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:chipchop_seller/services/utils/DateUtils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CustomersAccountScreen extends StatefulWidget {
   CustomersAccountScreen(this.customer);
@@ -39,7 +41,12 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: CustomColors.blueGreen,
-        onPressed: () {},
+        onPressed: () {
+          _scaffoldKey.currentState.showBottomSheet(
+            (context) => AddUserTransaction(
+                widget.customer.storeID, widget.customer.contactNumber),
+          );
+        },
         child: Icon(Icons.add),
       ),
       body: getTransactionHistoryWidget(context),
@@ -48,7 +55,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
 
   Widget getTransactionHistoryWidget(BuildContext context) {
     return StreamBuilder(
-      stream: UserStoreWalletHstory().streamUsersStoreWallet(
+      stream: UserStoreWalletHistory().streamUsersStoreWallet(
           widget.customer.storeID, widget.customer.contactNumber),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget widget;
@@ -61,8 +68,9 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
               primary: false,
               itemCount: snapshot.data.documents.length,
               itemBuilder: (BuildContext context, int index) {
-                UserStoreWalletHstory history = UserStoreWalletHstory.fromJson(
-                    snapshot.data.documents[index].data);
+                UserStoreWalletHistory history =
+                    UserStoreWalletHistory.fromJson(
+                        snapshot.data.documents[index].data);
 
                 Color tileColor = CustomColors.green;
                 Color textColor = CustomColors.white;
@@ -103,7 +111,9 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  history.userNumber.toString(),
+                                  history.details,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
                                   style: TextStyle(
                                       fontFamily: "Georgia",
                                       fontSize: 18.0,
@@ -124,7 +134,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                                       : history.type == 1
                                           ? "Order Credit"
                                           : history.type == 2
-                                              ? "Store Offer"
+                                              ? "Store Transaction"
                                               : "Offer",
                                   style: TextStyle(
                                       fontSize: 10.0,
@@ -215,6 +225,198 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
           ),
         );
       },
+    );
+  }
+}
+
+class AddUserTransaction extends StatefulWidget {
+  AddUserTransaction(this.storeID, this.custID);
+
+  final String storeID;
+  final String custID;
+  @override
+  _AdUserdTransactionState createState() => _AdUserdTransactionState();
+}
+
+class _AdUserdTransactionState extends State<AddUserTransaction> {
+  String details = "";
+  double amount = 0.00;
+  String _selectedType = "0";
+  Map<String, String> _types = {
+    "0": "Credit",
+    "1": "Debit",
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 300,
+      decoration: BoxDecoration(
+        color: CustomColors.lightGrey,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(10),
+          topLeft: Radius.circular(10),
+        ),
+        border: Border.all(color: CustomColors.green),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Card(
+            elevation: 2,
+            child: Column(
+              children: [
+                ListTile(
+                  leading: SizedBox(
+                    width: 70,
+                    child: Text(
+                      "Details",
+                      style: TextStyle(
+                          fontFamily: "Georgia",
+                          fontSize: 16.0,
+                          color: CustomColors.blueGreen),
+                    ),
+                  ),
+                  title: TextFormField(
+                    textAlign: TextAlign.start,
+                    autofocus: false,
+                    keyboardType: TextInputType.text,
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: CustomColors.lightGreen),
+                      ),
+                      hintText: "Ex, Account Settlement",
+                      fillColor: CustomColors.white,
+                      filled: true,
+                    ),
+                    onChanged: (val) {
+                      this.details = val.trim();
+                    },
+                  ),
+                ),
+                ListTile(
+                  leading: SizedBox(
+                    width: 70,
+                    child: Text(
+                      "Amount",
+                      style: TextStyle(
+                        fontFamily: "Georgia",
+                        fontSize: 16.0,
+                        color: CustomColors.blueGreen,
+                      ),
+                    ),
+                  ),
+                  title: TextFormField(
+                    textAlign: TextAlign.start,
+                    initialValue: amount.toString(),
+                    autofocus: false,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: CustomColors.lightGreen),
+                      ),
+                      fillColor: CustomColors.white,
+                      filled: true,
+                    ),
+                    onChanged: (val) {
+                      this.amount = double.parse(val.trim());
+                    },
+                  ),
+                ),
+                ListTile(
+                  leading: SizedBox(
+                    width: 70,
+                    child: Text(
+                      "Type",
+                      style: TextStyle(
+                          fontFamily: "Georgia",
+                          fontSize: 16.0,
+                          color: CustomColors.blueGreen),
+                    ),
+                  ),
+                  title: Container(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        items: _types.entries.map(
+                          (f) {
+                            return DropdownMenuItem<String>(
+                              value: f.key,
+                              child: Text(f.value),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            _selectedType = val;
+                          });
+                        },
+                        value: _selectedType,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              RaisedButton.icon(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                color: CustomColors.alertRed,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.cancel,
+                  color: CustomColors.white,
+                ),
+                label: Text(
+                  "Cancel",
+                  style: TextStyle(
+                    color: CustomColors.white,
+                  ),
+                ),
+              ),
+              RaisedButton.icon(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                color: CustomColors.green,
+                onPressed: () async {
+                  try {
+                    UserStoreWalletHistory tran = new UserStoreWalletHistory();
+
+                    if (_selectedType == "1")
+                      tran.amount = this.amount * -1;
+                    else
+                      tran.amount = this.amount;
+
+                    tran.details = this.details;
+                    tran.type = 2;
+                    tran.id = "";
+                    tran.storeUUID = widget.storeID;
+                    tran.createdAt = DateTime.now().millisecondsSinceEpoch;
+                    tran.addedBy = cachedLocalUser.getID();
+                    await tran.addTransaction(widget.storeID, widget.custID);
+                    Navigator.pop(context);
+                  } catch (err) {
+                    Fluttertoast.showToast(
+                        msg: 'Sorry, Unable to ADD Transaction');
+                  }
+                },
+                icon: Icon(Icons.add_circle),
+                label: Text("Save"),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

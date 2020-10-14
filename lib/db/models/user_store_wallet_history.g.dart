@@ -1,8 +1,8 @@
 part of 'user_store_wallet_history.dart';
 
-UserStoreWalletHstory _$UserStoreWalletHstoryFromJson(
+UserStoreWalletHistory _$UserStoreWalletHistoryFromJson(
     Map<String, dynamic> json) {
-  return UserStoreWalletHstory()
+  return UserStoreWalletHistory()
     ..id = json['id'] as String ?? ''
     ..type = json['type'] as int
     ..details = json['details'] as String ?? ''
@@ -13,8 +13,8 @@ UserStoreWalletHstory _$UserStoreWalletHstoryFromJson(
     ..createdAt = json['created_at'] as int;
 }
 
-Map<String, dynamic> _$UserStoreWalletHstoryToJson(
-        UserStoreWalletHstory instance) =>
+Map<String, dynamic> _$UserStoreWalletHistoryToJson(
+        UserStoreWalletHistory instance) =>
     <String, dynamic>{
       'id': instance.id,
       'type': instance.type,
