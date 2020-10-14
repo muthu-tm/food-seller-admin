@@ -79,27 +79,31 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: CustomColors.blueGreen,
         onPressed: () {
-          return _scaffoldKey.currentState.showBottomSheet((context) {
-            return Builder(builder: (BuildContext childContext) {
-              return Container(
-                height: 400,
-                decoration: BoxDecoration(
-                  color: CustomColors.lightGrey,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
-                    topLeft: Radius.circular(10),
-                  ),
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: OrderChatScreen(
-                    buyerID: widget.buyerID,
-                    orderUUID: widget.order.uuid,
-                  ),
-                ),
+          return _scaffoldKey.currentState.showBottomSheet(
+            (context) {
+              return Builder(
+                builder: (BuildContext childContext) {
+                  return Container(
+                    height: 400,
+                    decoration: BoxDecoration(
+                      color: CustomColors.lightGrey,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(10),
+                        topLeft: Radius.circular(10),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: OrderChatScreen(
+                        buyerID: widget.buyerID,
+                        orderUUID: widget.order.uuid,
+                      ),
+                    ),
+                  );
+                },
               );
-            });
-          });
+            },
+          );
         },
         label: Text("Chat"),
         icon: Icon(Icons.chat),

@@ -63,17 +63,7 @@ class OrderWidget extends StatelessWidget {
                   size: 35,
                   color: CustomColors.blueGreen,
                 ),
-                title: Text(
-                  "Delivery Address",
-                  style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 14,
-                      fontFamily: "Georgia"),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 70.0, bottom: 10),
-                child: Container(
+                title: Container(
                   width: MediaQuery.of(context).size.width - 100,
                   padding: EdgeInsets.only(right: 10, left: 10),
                   decoration: BoxDecoration(
@@ -172,7 +162,46 @@ class OrderWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.location_searching,
+                  size: 35,
+                  color: CustomColors.blueGreen,
+                ),
+                title: Text(
+                  "Location",
+                  style: TextStyle(
+                      fontFamily: "Georgia",
+                      color: CustomColors.black,
+                      fontSize: 16),
+                ),
+                trailing: Container(
+                  width: 155,
+                  child: FlatButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    color: CustomColors.blueGreen,
+                    onPressed: () async {},
+                    label: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 5.0,
+                      ),
+                      child: Text(
+                        "Map View",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: "Georgia",
+                            fontSize: 16,
+                            color: CustomColors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    icon: Icon(Icons.location_on),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

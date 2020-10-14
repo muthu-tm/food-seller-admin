@@ -72,7 +72,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                     UserStoreWalletHistory.fromJson(
                         snapshot.data.documents[index].data);
 
-                Color tileColor = CustomColors.green;
+                Color tileColor = CustomColors.blueGreen;
                 Color textColor = CustomColors.white;
 
                 if (index % 2 == 0) {
