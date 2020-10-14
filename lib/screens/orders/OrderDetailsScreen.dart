@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/screens/utils/ImageView.dart';
 import 'package:chipchop_seller/screens/orders/OrderAmountWidget.dart';
-import 'package:chipchop_seller/screens/chats/OrderChatScreen.dart';
+import 'package:chipchop_seller/screens/customers/OrderChatScreen.dart';
 import 'package:chipchop_seller/screens/products/ProductDetailsScreen.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

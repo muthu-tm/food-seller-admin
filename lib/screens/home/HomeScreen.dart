@@ -3,7 +3,7 @@ import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/app/appBar.dart';
 import 'package:chipchop_seller/screens/app/bottomBar.dart';
 import 'package:chipchop_seller/screens/app/sideDrawer.dart';
-import 'package:chipchop_seller/screens/chats/CustomersChatScreen.dart';
+import 'package:chipchop_seller/screens/customers/CustomersScreen.dart';
 import 'package:chipchop_seller/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
@@ -184,7 +184,7 @@ class HomeScreen extends StatelessWidget {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    CustomersChatScreen(
+                                                    CustomersScreen(
                                                         store.uuid, store.name),
                                                 settings: RouteSettings(
                                                     name: '/store/chats'),

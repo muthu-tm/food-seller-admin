@@ -1,4 +1,4 @@
-import 'package:chipchop_seller/screens/app/chatBottomWidget.dart';
+import 'package:chipchop_seller/screens/app/CustomersBottomWidget.dart';
 import 'package:chipchop_seller/screens/home/HomeScreen.dart';
 import 'package:chipchop_seller/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_seller/screens/products/ProductsHome.dart';
@@ -91,7 +91,7 @@ Widget bottomBar(BuildContext context) {
             ),
           ),
         ),
-        ChatBottomWidget(size),
+        CustomersBottomWidget(size),
         SizedBox.fromSize(
           size: size,
           child: InkWell(
