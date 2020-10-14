@@ -1,5 +1,6 @@
 import 'package:chipchop_seller/db/models/order.dart';
 import 'package:chipchop_seller/screens/orders/OrderDetailsScreen.dart';
+import 'package:chipchop_seller/screens/orders/OrderLocationMapViewer.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
@@ -183,7 +184,16 @@ class OrderWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                     color: CustomColors.blueGreen,
-                    onPressed: () async {},
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              OrderLocationMapView(order.delivery.userLocation),
+                          settings: RouteSettings(name: '/orders/location'),
+                        ),
+                      );
+                    },
                     label: Container(
                       padding: EdgeInsets.symmetric(
                         vertical: 5.0,

@@ -47,9 +47,9 @@ class Customers {
     return getCollectionRef(storeID).snapshots();
   }
 
-  Stream<DocumentSnapshot> streamUsersData(String storeID) {
+  Stream<DocumentSnapshot> streamUsersData(String storeID, String custID) {
     return getCollectionRef(storeID)
-        .document(cachedLocalUser.getID())
+        .document(custID)
         .snapshots();
   }
 }

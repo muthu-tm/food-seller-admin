@@ -49,7 +49,124 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
         },
         child: Icon(Icons.add),
       ),
-      body: getTransactionHistoryWidget(context),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            getWalletWidget(),
+            getTransactionHistoryWidget(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget getWalletWidget() {
+    return StreamBuilder(
+      stream: Customers().streamUsersData(
+          widget.customer.storeID, widget.customer.contactNumber),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        Widget widget;
+
+        if (snapshot.hasData) {
+          if (snapshot.data.exists && snapshot.data.data.isNotEmpty) {
+            Customers _cust = Customers.fromJson(snapshot.data.data);
+            double amount = _cust.availableBalance;
+
+            widget = Padding(
+              padding: EdgeInsets.all(10),
+              child: Card(
+                elevation: 5.0,
+                shadowColor: CustomColors.green.withOpacity(0.7),
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Text(
+                        "Available Balance",
+                        style: TextStyle(
+                          color: CustomColors.blueGreen,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "₹ ${amount ?? 0.00}",
+                        style: TextStyle(
+                          color: amount.isNegative
+                              ? CustomColors.alertRed
+                              : CustomColors.green,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          } else {
+            widget = Card(
+              elevation: 5.0,
+              shadowColor: CustomColors.alertRed.withOpacity(0.7),
+              child: Container(
+                padding: EdgeInsets.all(10),
+                height: 50,
+                child: Text(
+                  "Rs.0.00",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: CustomColors.green,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            );
+          }
+        } else if (snapshot.hasError) {
+          widget = Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: AsyncWidgets.asyncError());
+        } else {
+          widget = Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: AsyncWidgets.asyncWaiting());
+        }
+
+        return Card(
+          color: CustomColors.lightGrey,
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(
+                  Icons.account_balance_wallet,
+                  size: 35.0,
+                  color: CustomColors.alertRed,
+                ),
+                title: Text(
+                  "Wallet Amount",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: "Georgia",
+                    fontWeight: FontWeight.bold,
+                    color: CustomColors.green,
+                    fontSize: 17.0,
+                  ),
+                ),
+              ),
+              Divider(
+                color: CustomColors.green,
+              ),
+              widget,
+            ],
+          ),
+        );
+      },
     );
   }
 
