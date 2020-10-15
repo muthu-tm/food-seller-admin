@@ -57,8 +57,8 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
       // current user's position in real time,
       // so we're holding on to it
       currentLocation = cLoc;
-      if (currentLocation != null) updatePinOnMap();
     });
+    if (currentLocation != null) updatePinOnMap();
 
     setInitialLocation();
 
@@ -90,7 +90,7 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
     // every time the location changes, so the camera
     // follows the pin as it moves with an animation
     CameraPosition cPosition = CameraPosition(
-      // zoom: cameraZoom,
+      zoom: cameraZoom,
       tilt: cameraTilt,
       bearing: cameraBearing,
       target: LatLng(currentLocation.latitude, currentLocation.longitude),
@@ -168,6 +168,16 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: CustomColors.green,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: CustomColors.alertRed,
+        onPressed: () {
+          updatePinOnMap();
+        },
+        label: Text(
+          "Update My Location",
+        ),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
