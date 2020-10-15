@@ -1,10 +1,8 @@
 import 'dart:async';
 
-import 'package:chipchop_seller/db/models/geopoint_data.dart';
 import 'package:chipchop_seller/db/models/user_locations.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -22,10 +20,7 @@ class OrderLocationMapView extends StatefulWidget {
 
 class _OrderLocationMapViewState extends State<OrderLocationMapView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  GoogleMapController mapController;
   String searchKey = "";
-  GeoPointData geoData;
-  Geoflutterfire geo = Geoflutterfire();
 
   LocationData currentLocation;
 // a reference to the destination location
@@ -36,6 +31,19 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
   Completer<GoogleMapController> _controller = Completer();
   Set<Marker> _markers = Set<Marker>();
 
+  double cameraZoom = 13;
+  double cameraTilt = 80;
+  double cameraBearing = 30;
+
+  StreamSubscription<LocationData> subscription;
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    subscription.cancel();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -44,12 +52,12 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
 
     // subscribe to changes in the user's location
     // by "listening" to the location's onLocationChanged event
-    location.onLocationChanged.listen((LocationData cLoc) {
+    subscription = location.onLocationChanged.listen((LocationData cLoc) {
       // cLoc contains the lat and long of the
       // current user's position in real time,
       // so we're holding on to it
       currentLocation = cLoc;
-      updatePinOnMap();
+      if (currentLocation != null) updatePinOnMap();
     });
 
     setInitialLocation();
@@ -82,9 +90,9 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
     // every time the location changes, so the camera
     // follows the pin as it moves with an animation
     CameraPosition cPosition = CameraPosition(
-      zoom: 16,
-      tilt: 80,
-      bearing: 30,
+      // zoom: cameraZoom,
+      tilt: cameraTilt,
+      bearing: cameraBearing,
       target: LatLng(currentLocation.latitude, currentLocation.longitude),
     );
     final GoogleMapController controller = await _controller.future;
@@ -131,24 +139,24 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
   @override
   Widget build(BuildContext context) {
     CameraPosition initialCameraPosition = CameraPosition(
-        zoom: 16,
-        tilt: 80,
-        bearing: 30,
+        zoom: cameraZoom,
+        tilt: cameraTilt,
+        bearing: cameraBearing,
         target: LatLng(widget.loc.geoPoint.geoPoint.latitude,
             widget.loc.geoPoint.geoPoint.longitude));
     if (currentLocation != null) {
       initialCameraPosition = CameraPosition(
           target: LatLng(currentLocation.latitude, currentLocation.longitude),
-          zoom: 16,
-          tilt: 80,
-          bearing: 30);
+          zoom: cameraZoom,
+          tilt: cameraTilt,
+          bearing: cameraBearing);
     }
 
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context).translate('title_add_location'),
+          "Order Location View",
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
@@ -160,16 +168,6 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: CustomColors.green,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.alertRed,
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        label: Text(
-          "Close",
-        ),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -228,7 +226,8 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
     try {
       List<Placemark> marks =
           await Geolocator().placemarkFromAddress(searchKey);
-      mapController.animateCamera(
+      final GoogleMapController controller = await _controller.future;
+      controller.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
             zoom: 11,
@@ -245,6 +244,6 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
 
-    showPinsOnMap();
+    if (currentLocation != null) showPinsOnMap();
   }
 }
