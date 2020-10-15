@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chipchop_seller/db/models/geopoint_data.dart';
 import 'package:chipchop_seller/db/models/user_locations.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 import '../../app_localizations.dart';
 
@@ -22,14 +25,34 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
   GoogleMapController mapController;
   String searchKey = "";
   GeoPointData geoData;
-  Set<Marker> _markers = {};
   Geoflutterfire geo = Geoflutterfire();
+
+  LocationData currentLocation;
+// a reference to the destination location
+  LocationData destinationLocation;
+// wrapper around the location API
+  Location location;
+
+  Completer<GoogleMapController> _controller = Completer();
+  Set<Marker> _markers = Set<Marker>();
 
   @override
   void initState() {
     super.initState();
 
-    _animateToUser();
+    location = new Location();
+
+    // subscribe to changes in the user's location
+    // by "listening" to the location's onLocationChanged event
+    location.onLocationChanged.listen((LocationData cLoc) {
+      // cLoc contains the lat and long of the
+      // current user's position in real time,
+      // so we're holding on to it
+      currentLocation = cLoc;
+      updatePinOnMap();
+    });
+
+    setInitialLocation();
 
     _markers.add(
       Marker(
@@ -42,8 +65,85 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
     );
   }
 
+  void setInitialLocation() async {
+    // set the initial location by pulling the user's
+    // current location from the location's getLocation()
+    currentLocation = await location.getLocation();
+
+    // hard-coded destination for this example
+    destinationLocation = LocationData.fromMap({
+      "latitude": widget.loc.geoPoint.geoPoint.latitude,
+      "longitude": widget.loc.geoPoint.geoPoint.longitude
+    });
+  }
+
+  void updatePinOnMap() async {
+    // create a new CameraPosition instance
+    // every time the location changes, so the camera
+    // follows the pin as it moves with an animation
+    CameraPosition cPosition = CameraPosition(
+      zoom: 16,
+      tilt: 80,
+      bearing: 30,
+      target: LatLng(currentLocation.latitude, currentLocation.longitude),
+    );
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(cPosition));
+    // do this inside the setState() so Flutter gets notified
+    // that a widget update is due
+    setState(() {
+      // updated position
+      var pinPosition =
+          LatLng(currentLocation.latitude, currentLocation.longitude);
+
+      // the trick is to remove the marker (by id)
+      // and add it again at the updated location
+      _markers.removeWhere((m) => m.markerId.value == 'sourcePin');
+      _markers.add(Marker(
+        markerId: MarkerId('sourcePin'),
+        position: pinPosition, // updated position
+      ));
+    });
+  }
+
+  void showPinsOnMap() {
+    // get a LatLng for the source location
+    // from the LocationData currentLocation object
+    var pinPosition =
+        LatLng(currentLocation.latitude, currentLocation.longitude);
+    // get a LatLng out of the LocationData object
+    var destPosition =
+        LatLng(destinationLocation.latitude, destinationLocation.longitude);
+    // add the initial source location pin
+    _markers.add(Marker(
+      markerId: MarkerId('sourcePin'),
+      position: pinPosition,
+    ));
+    // destination pin
+    _markers.add(Marker(
+      markerId: MarkerId('destPin'),
+      position: destPosition,
+    ));
+    // set the route lines on the map from source to destination
+    // for more info follow this tutorial
+  }
+
   @override
   Widget build(BuildContext context) {
+    CameraPosition initialCameraPosition = CameraPosition(
+        zoom: 16,
+        tilt: 80,
+        bearing: 30,
+        target: LatLng(widget.loc.geoPoint.geoPoint.latitude,
+            widget.loc.geoPoint.geoPoint.longitude));
+    if (currentLocation != null) {
+      initialCameraPosition = CameraPosition(
+          target: LatLng(currentLocation.latitude, currentLocation.longitude),
+          zoom: 16,
+          tilt: 80,
+          bearing: 30);
+    }
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -76,13 +176,11 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
         child: Stack(
           children: [
             GoogleMap(
-              initialCameraPosition: CameraPosition(
-                  target: LatLng(widget.loc.geoPoint.geoPoint.latitude,
-                      widget.loc.geoPoint.geoPoint.longitude),
-                  zoom: 15),
+              initialCameraPosition: initialCameraPosition,
               compassEnabled: true,
               onMapCreated: _onMapCreated,
               myLocationButtonEnabled: true,
+              tiltGesturesEnabled: false,
               mapToolbarEnabled: true,
               myLocationEnabled: true,
               markers: _markers,
@@ -144,19 +242,9 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
     }
   }
 
-  _animateToUser() async {
-    Position pos = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
-
-    mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-      target: LatLng(pos.latitude, pos.latitude),
-      zoom: 12.0,
-    )));
-  }
-
   void _onMapCreated(GoogleMapController controller) {
-    setState(() {
-      mapController = controller;
-    });
+    _controller.complete(controller);
+
+    showPinsOnMap();
   }
 }

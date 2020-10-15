@@ -208,7 +208,10 @@ class OrderWidget extends StatelessWidget {
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    icon: Icon(Icons.location_on),
+                    icon: Icon(
+                      Icons.location_on,
+                      color: CustomColors.white,
+                    ),
                   ),
                 ),
               ),
