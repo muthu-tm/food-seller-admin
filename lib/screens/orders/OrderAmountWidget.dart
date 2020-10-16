@@ -14,6 +14,7 @@ class OrderAmountWidget extends StatefulWidget {
 
 class _OrderAmountWidgetState extends State<OrderAmountWidget> {
   double oAmount;
+  double wAmount;
   double dAmount;
   double rAmount;
 
@@ -22,6 +23,7 @@ class _OrderAmountWidgetState extends State<OrderAmountWidget> {
     super.initState();
 
     oAmount = widget.order.amount.orderAmount;
+    wAmount = widget.order.amount.walletAmount ?? 0.00;
     dAmount = widget.order.amount.deliveryCharge;
     rAmount = widget.order.amount.paidAmount ?? 0.00;
   }
@@ -48,7 +50,7 @@ class _OrderAmountWidgetState extends State<OrderAmountWidget> {
                 initialValue: '$oAmount',
                 textAlign: TextAlign.start,
                 autofocus: false,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   prefix: Text('₹ '),
                   labelText: "Order Amount",
@@ -62,12 +64,28 @@ class _OrderAmountWidgetState extends State<OrderAmountWidget> {
               ),
             ),
             Padding(
+              padding: EdgeInsets.all(5.0),
+              child: TextFormField(
+                initialValue: '$wAmount',
+                textAlign: TextAlign.start,
+                autofocus: false,
+                readOnly: true,
+                decoration: InputDecoration(
+                  prefix: Text('₹ '),
+                  labelText: "Wallet Amount",
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: CustomColors.lightGreen),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.all(5.0),
               child: TextFormField(
                 initialValue: '$dAmount',
                 textAlign: TextAlign.start,
                 autofocus: false,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   prefix: Text('₹ '),
                   labelText: "Delivery Charge",
@@ -86,7 +104,7 @@ class _OrderAmountWidgetState extends State<OrderAmountWidget> {
                 initialValue: '$rAmount',
                 textAlign: TextAlign.start,
                 autofocus: false,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   prefix: Text('₹ '),
                   labelText: "Received Amount",

@@ -31,7 +31,6 @@ class OrderDetailsScreen extends StatefulWidget {
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
-  TextEditingController _date = TextEditingController();
   DateTime selectedDate;
   String dContact = cachedLocalUser.getID();
 
@@ -964,21 +963,4 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     );
   }
 
-  Future<void> _selectDeliveryDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(
-        Duration(days: 30),
-      ),
-    );
-    if (picked != null && picked != selectedDate)
-      setState(
-        () {
-          selectedDate = picked;
-          _date.text = DateUtils.formatDate(picked);
-        },
-      );
-  }
 }

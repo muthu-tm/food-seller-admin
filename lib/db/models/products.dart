@@ -175,7 +175,8 @@ class Products extends Model {
     }
   }
 
-    Stream<QuerySnapshot> streamProductsForCategory(String storeID, String categoryID) {
+  Stream<QuerySnapshot> streamProductsForCategory(
+      String storeID, String categoryID) {
     try {
       return getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)
@@ -231,11 +232,10 @@ class Products extends Model {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getByNameRange(
-      String searchKey) async {
+  Future<List<Map<String, dynamic>>> getByNameRange(String searchKey) async {
     QuerySnapshot snap = await getCollectionRef()
         .where('store_uuid', whereIn: cachedLocalUser.stores)
-        .where('keywords', arrayContains: searchKey)
+        .where('keywords', arrayContainsAny: searchKey.split(" "))
         .getDocuments();
 
     List<Map<String, dynamic>> pList = [];
