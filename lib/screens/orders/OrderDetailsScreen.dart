@@ -66,7 +66,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          "Order Details",
+          "Order - ${widget.order.orderID}",
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
         leading: IconButton(
@@ -138,19 +138,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
             child = Column(
               children: [
-                Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Text(
-                      order.orderID,
-                      style: TextStyle(
-                          color: CustomColors.purple,
-                          fontSize: 14,
-                          fontFamily: "Georgia"),
-                    ),
-                  ),
-                ),
                 ListTile(
                   leading: Icon(
                     Icons.access_time,

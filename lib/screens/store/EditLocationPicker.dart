@@ -32,9 +32,6 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
     super.initState();
 
     geoData = widget.store.geoPoint;
-    this.searchKey = widget.store.address.pincode;
-
-    _searchAndNavigate();
 
     _markers.add(
       Marker(
@@ -53,7 +50,7 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context).translate('title_add_location'),
+          "Edit Location",
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
@@ -69,7 +66,7 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: CustomColors.alertRed,
-        onPressed: () {
+        onPressed: () async{
           if (geoData == null || geoData.geoHash.isEmpty) {
             _scaffoldKey.currentState.showSnackBar(
               CustomSnackBar.errorSnackBar(
@@ -77,9 +74,8 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
             );
             return;
           }
-          widget.store.geoPoint = geoData;
           try {
-            widget.store.create();
+            await widget.store.updateLocation(geoData);
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (BuildContext context) => HomeScreen(),
@@ -89,7 +85,7 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
           } catch (err) {
             _scaffoldKey.currentState.showSnackBar(
               CustomSnackBar.errorSnackBar(
-                  "Sorry, Unable to create your store now. Please try again later!",
+                  "Sorry, Unable to update your store now. Please try again later!",
                   2),
             );
           }
@@ -103,8 +99,10 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
         child: Stack(
           children: [
             GoogleMap(
-              initialCameraPosition:
-                  CameraPosition(target: LatLng(12.9716, 77.5946), zoom: 5),
+              initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                      geoData.geoPoint.latitude, geoData.geoPoint.longitude),
+                  zoom: 15),
               onTap: (latlang) {
                 if (_markers.length >= 1) {
                   _markers.clear();
@@ -200,17 +198,6 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
     geoPoint.geoPoint = point.geoPoint;
     geoData = geoPoint;
     return point.hash;
-  }
-
-  _animateToUser() async {
-    Position pos = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-    mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-      target: LatLng(pos.latitude, pos.latitude),
-      zoom: 10.0,
-    )));
-    _loadAddress(pos.latitude, pos.longitude);
   }
 
   void _onMapCreated(GoogleMapController controller) {

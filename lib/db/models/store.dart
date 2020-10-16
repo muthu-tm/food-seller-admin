@@ -43,7 +43,7 @@ class Store extends Model {
   @JsonKey(name: 'users')
   List<int> users;
   @JsonKey(name: 'avail_payments')
-  List<int> availablePayments; // 0 - Cash, 1 - Gpay, 2 - Card, 3, PayTM 
+  List<int> availablePayments; // 0 - Cash, 1 - Gpay, 2 - Card, 3, PayTM
   @JsonKey(name: 'users_access')
   List<StoreUserAccess> usersAccess;
   @JsonKey(name: 'contacts')
@@ -137,6 +137,14 @@ class Store extends Model {
       return this;
     } catch (err) {
       cachedLocalUser.stores.remove(this.uuid);
+      throw err;
+    }
+  }
+
+  Future<void> updateLocation(GeoPointData geoData) async {
+    try {
+      await this.update({'geo_point': geoData.toJson()});
+    } catch (err) {
       throw err;
     }
   }
