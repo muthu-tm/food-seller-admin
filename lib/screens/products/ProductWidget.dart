@@ -12,110 +12,85 @@ class ProductWidget extends StatelessWidget {
   final Products product;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10.0),
+    return Padding(
+      padding: EdgeInsets.all(5.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10.0),
+          ),
+          color: CustomColors.white,
         ),
-        color: CustomColors.white,
-      ),
-      padding: EdgeInsets.only(top: 5),
-      alignment: Alignment.centerLeft,
-      child: Center(
-        child: Column(
-          children: [
-            Hero(
-              tag: "${product.uuid}",
-              child: CachedNetworkImage(
-                imageUrl: product.getProductImage(),
-                imageBuilder: (context, imageProvider) => Container(
-                  width: 125,
-                  height: 75,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                    shape: BoxShape.rectangle,
-                    image:
-                        DecorationImage(fit: BoxFit.fill, image: imageProvider),
-                  ),
+        child: ListTile(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductDetailsScreen(product),
+                settings: RouteSettings(name: '/settings/products/view'),
+              ),
+            );
+          },
+          leading: CachedNetworkImage(
+            imageUrl: product.getProductImage(),
+            imageBuilder: (context, imageProvider) => Container(
+              width: 60,
+              height: 70,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5.0),
                 ),
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(value: downloadProgress.progress),
-                errorWidget: (context, url, error) => Icon(
-                  Icons.error,
-                  size: 35,
-                ),
-                fadeOutDuration: Duration(seconds: 1),
-                fadeInDuration: Duration(seconds: 2),
+                shape: BoxShape.rectangle,
+                image:
+                    DecorationImage(fit: BoxFit.fill, image: imageProvider),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Text(
-                      product.name,
-                      style: TextStyle(
-                        fontFamily: 'Georgia',
-                        color: CustomColors.blue,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                CircularProgressIndicator(value: downloadProgress.progress),
+            errorWidget: (context, url, error) => Icon(
+              Icons.error,
+              size: 35,
+            ),
+            fadeOutDuration: Duration(seconds: 1),
+            fadeInDuration: Duration(seconds: 2),
+          ),
+          title: Text(
+            product.name,
+            style: TextStyle(
+              fontFamily: 'Georgia',
+              color: CustomColors.blue,
+              fontSize: 14.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          subtitle: Text(
+            "${product.weight} ${product.getUnit()} - Rs. ${product.originalPrice.toString()}",
+            style: TextStyle(
+              color: CustomColors.blue,
+              fontSize: 13.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                icon: Icon(
+                  FontAwesomeIcons.solidEdit,
+                  color: CustomColors.alertRed,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditProducts(product),
+                      settings: RouteSettings(name: '/settings/products/edit'),
                     ),
-                  ),
-                  Center(
-                    child: Text(
-                      "${product.weight} ${product.getUnit()} - Rs. ${product.originalPrice.toString()}",
-                      style: TextStyle(
-                        color: CustomColors.blue,
-                        fontSize: 13.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                          icon: Icon(
-                            FontAwesomeIcons.solidEye,
-                            color: CustomColors.alertRed,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ProductDetailsScreen(product),
-                                settings: RouteSettings(
-                                    name: '/settings/products/view'),
-                              ),
-                            );
-                          }),
-                      IconButton(
-                          icon: Icon(
-                            FontAwesomeIcons.solidEdit,
-                            color: CustomColors.alertRed,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditProducts(product),
-                                settings: RouteSettings(
-                                    name: '/settings/products/edit'),
-                              ),
-                            );
-                          }),
-                    ],
-                  )
-                ],
+                  );
+                },
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );

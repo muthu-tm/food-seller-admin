@@ -2,9 +2,8 @@ import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/app/appBar.dart';
 import 'package:chipchop_seller/screens/app/bottomBar.dart';
 import 'package:chipchop_seller/screens/app/sideDrawer.dart';
-import 'package:chipchop_seller/screens/products/ActiveProductsScreen.dart';
 import 'package:chipchop_seller/screens/products/AddProducts.dart';
-import 'package:chipchop_seller/screens/products/InActiveProductsHome.dart';
+import 'package:chipchop_seller/screens/products/ViewProductsList.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/NoStoresWidget.dart';
@@ -126,12 +125,12 @@ class ProductsHome extends StatelessWidget {
                       width: MediaQuery.of(context).size.width,
                       child: ExpansionTile(
                         leading: Icon(
-                          Icons.adjust,
+                          Icons.remove_red_eye,
                           size: 35,
                           color: CustomColors.blue,
                         ),
                         title: Text(
-                          "Active Products",
+                          "View Products",
                           style: TextStyle(
                             fontSize: 16.0,
                             fontFamily: 'Georgia',
@@ -160,66 +159,9 @@ class ProductsHome extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          ActiveProductsScreen(store),
+                                          ViewProductsListScreen(store),
                                       settings: RouteSettings(
-                                          name: '/settings/products/active'),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Card(
-                    elevation: 5.0,
-                    child: Container(
-                      padding: EdgeInsets.all(5),
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width,
-                      child: ExpansionTile(
-                        leading: Icon(
-                          Icons.adjust,
-                          size: 35,
-                          color: CustomColors.alertRed,
-                        ),
-                        title: Text(
-                          "InActive Products",
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontFamily: 'Georgia',
-                            color: CustomColors.black,
-                          ),
-                        ),
-                        children: [
-                          ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            primary: false,
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              Store store = snapshot.data[index];
-                              return ListTile(
-                                leading:
-                                    Icon(Icons.store, color: CustomColors.blue),
-                                title: Text(
-                                  store.name,
-                                ),
-                                trailing: Icon(
-                                  Icons.keyboard_arrow_right,
-                                  size: 35,
-                                  color: CustomColors.blue,
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          InActiveProductsScreen(store),
-                                      settings: RouteSettings(
-                                          name: '/settings/products/active'),
+                                          name: '/settings/products/view'),
                                     ),
                                   );
                                 },
