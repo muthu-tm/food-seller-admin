@@ -27,6 +27,7 @@ class PhoneAuthVerify extends StatefulWidget {
 }
 
 class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   final AuthController _authController = AuthController();
@@ -56,11 +57,84 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white.withOpacity(0.95),
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: _getBody(),
+      body: Container(
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: EdgeInsets.all(_fixedPadding),
+                child: ClipRRect(
+                  child: Image.asset(
+                    "images/icons/logo.png",
+                    height: 80,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  "UNIQUES",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: "OLED",
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Text(
+                "Buy Organic Vegetables & Groceries",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14.0,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "My Pass Code",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0,
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              _getBody(),
+              SizedBox(
+                height: 10,
+              ),
+              RaisedButton(
+                elevation: 16.0,
+                onPressed: signIn,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    AppLocalizations.of(context).translate('verify'),
+                    style: TextStyle(
+                      color: CustomColors.white,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ),
+                color: CustomColors.alertRed,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+              )
+            ],
           ),
         ),
       ),
@@ -68,70 +142,20 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
   }
 
   Widget _getBody() => Card(
-        color: CustomColors.green,
+        margin: EdgeInsets.all(10),
+        color: Color(0xffD8F2A7),
         elevation: 2.0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(30.0),
         ),
         child: SizedBox(
-          height: _height * 0.6,
-          width: _width * 0.8,
           child: _getColumnBody(),
         ),
       );
 
   Widget _getColumnBody() => Column(
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(_fixedPadding),
-            child: ClipRRect(
-              child: Image.asset(
-                "images/icons/logo.png",
-                height: 80,
-              ),
-            ),
-          ),
-          Text(
-            'ChipChop Seller',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: CustomColors.white,
-                fontSize: 20.0,
-                fontWeight: FontWeight.w700),
-          ),
           SizedBox(height: 20.0),
-          Row(
-            children: <Widget>[
-              SizedBox(width: 16.0),
-              Expanded(
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                          text: 'Please enter the ',
-                          style: TextStyle(
-                              color: CustomColors.white,
-                              fontWeight: FontWeight.w400)),
-                      TextSpan(
-                          text: 'One Time Password',
-                          style: TextStyle(
-                              color: CustomColors.blue,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w700)),
-                      TextSpan(
-                        text: ' sent to your mobile',
-                        style: TextStyle(
-                            color: CustomColors.white,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(width: 16.0),
-            ],
-          ),
-          SizedBox(height: 16.0),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -149,24 +173,39 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
               SizedBox(width: 5.0),
             ],
           ),
-          SizedBox(height: 32.0),
-          RaisedButton(
-            elevation: 16.0,
-            onPressed: signIn,
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                AppLocalizations.of(context).translate('verify'),
-                style: TextStyle(
-                  color: CustomColors.green,
-                  fontSize: 18.0,
+          SizedBox(
+            height: 30,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(width: 16.0),
+              Flexible(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "I didn't receive the code, ",
+                        style: TextStyle(
+                            color: CustomColors.black,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      TextSpan(
+                        text: 'Resend',
+                        style: TextStyle(
+                            color: CustomColors.alertRed,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            color: CustomColors.blue,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-          )
+              SizedBox(width: 16.0),
+            ],
+          ),
+          SizedBox(height: 16.0),
+          SizedBox(height: 32.0),
         ],
       );
 
@@ -175,7 +214,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('invalid_otp'), 2));
     } else {
-      CustomDialogs.actionWaiting(context);
+      CustomDialogs.showLoadingDialog(context, _keyLoader);
       verifyOTPAndLogin(code.join());
     }
   }
@@ -196,7 +235,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
             widget.lastName,
             authResult.user.uid);
         if (!result['is_success']) {
-          Navigator.pop(context);
+          Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
           _scaffoldKey.currentState
               .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
         } else {
@@ -208,7 +247,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
         dynamic result =
             await _authController.signInWithMobileNumber(User.fromJson(_uJSON));
         if (!result['is_success']) {
-          Navigator.pop(context);
+          Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
           _scaffoldKey.currentState
               .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
         } else {
@@ -222,7 +261,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
         }
       }
     }).catchError((error) {
-      Navigator.pop(context);
+      Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('try_later'), 2));
       _scaffoldKey.currentState
@@ -282,12 +321,12 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
           },
           maxLengthEnforced: false,
           textAlign: TextAlign.center,
-          cursorColor: CustomColors.white,
+          cursorColor: CustomColors.black,
           keyboardType: TextInputType.number,
           style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.w600,
-              color: CustomColors.white),
+              color: CustomColors.alertRed),
         ),
       );
 }

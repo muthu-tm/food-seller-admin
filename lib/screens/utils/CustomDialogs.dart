@@ -35,6 +35,65 @@ class CustomDialogs {
         });
   }
 
+  static Future<void> showLoadingDialog(
+      BuildContext context, GlobalKey key) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+            key: key,
+            elevation: 0,
+            contentPadding: EdgeInsets.all(1),
+            backgroundColor: Colors.transparent,
+            children: <Widget>[
+              Container(
+                alignment: Alignment.center,
+                width: 60,
+                height: 60,
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      width: 60,
+                      height: 60,
+                      padding: EdgeInsets.all(10),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: CustomColors.lightGrey
+                      ),
+                      child: ClipRRect(
+                        child: Image.asset(
+                          "images/icons/logo.png",
+                          height: 35,
+                          width: 35,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 7.5,
+                      left: 7.5,
+                      child: SizedBox(
+                        width: 45,
+                        height: 45,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          backgroundColor: CustomColors.alertRed,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(CustomColors.green),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+        );
+      },
+    );
+  }
+
+
   static waiting(BuildContext context, String title, String description) {
     return showDialog(
         context: context,
