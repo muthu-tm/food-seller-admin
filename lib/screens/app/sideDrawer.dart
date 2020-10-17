@@ -294,88 +294,82 @@ Widget sideDrawer(BuildContext context) {
         Divider(color: CustomColors.black, thickness: 1.0),
         Container(
           child: AboutListTile(
-            dense: true,
-            applicationIcon: Container(
-              height: 80,
-              width: 50,
-              child: ClipRRect(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    'images/icons/logo.png',
-                    height: 60,
-                    width: 60,
-                  ),
-                ),
+            applicationIcon: Align(
+              alignment: Alignment.center,
+              child: Image.asset(
+                'images/icons/logo.png',
+                height: 60,
+                width: 60,
               ),
             ),
             applicationName: seller_app_name,
+            applicationVersion: app_version,
             applicationLegalese:
                 AppLocalizations.of(context).translate('copyright'),
-            child: ListTile(
-              leading: Text(
-                seller_app_name,
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                  color: CustomColors.green,
-                  fontFamily: 'Georgia',
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
+            child:  Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(2.0),
+                  child: Text(
+                    seller_app_name,
+                    style: TextStyle(
+                      color: CustomColors.alertRed,
+                      fontFamily: "OLED",
+                      fontSize: 14.0,
+                    ),
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: EdgeInsets.all(2.0),
+                  child: Text(
+                    app_version,
+                    style: TextStyle(
+                      color: CustomColors.green,
+                      fontFamily: "OLED",
+                      fontSize: 13.0,
+                    ),
+                  ),
+                ),
+              ],
             ),
             aboutBoxChildren: <Widget>[
               SizedBox(
-                height: 20,
+                height: 5,
               ),
-              Divider(),
+              Divider(height: 0,),
               ListTile(
-                leading: RichText(
-                  textAlign: TextAlign.justify,
-                  text: TextSpan(
-                    text: 'ChipChop',
-                    style: TextStyle(
-                      color: CustomColors.alertRed,
-                      fontFamily: 'Georgia',
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: ' Seller',
-                        style: TextStyle(
-                          color: CustomColors.alertRed,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                leading: Text(""),
+                title: Text(
+                  seller_app_name,
+                  style: TextStyle(
+                    color: CustomColors.blue,
+                    fontFamily: 'Georgia',
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 5,
               ),
               ListTile(
                 leading: Icon(
                   Icons.info,
-                  color: CustomColors.green,
+                  color: CustomColors.alertRed,
                   size: 35.0,
                 ),
                 title: Text(
                   AppLocalizations.of(context)
                       .translate('terms_and_conditions'),
                   style: TextStyle(
-                    color: CustomColors.lightPurple,
-                    fontSize: 18.0,
+                    color: CustomColors.blue,
+                    fontSize: 14.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
-              Divider(),
+              Divider(height: 0,),
             ],
           ),
         ),
