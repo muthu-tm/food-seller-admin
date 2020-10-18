@@ -13,6 +13,14 @@ class StoreSettings extends StatefulWidget {
 }
 
 class _StoreSettingsState extends State<StoreSettings> {
+  bool isSwitched;
+
+  @override
+  void initState() {
+    super.initState();
+    isSwitched = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,6 +148,18 @@ class _StoreSettingsState extends State<StoreSettings> {
                                 ),
                               ],
                             ),
+                          ),
+                          Spacer(),
+                          Switch(
+                            value: isSwitched,
+                            onChanged: (value) {
+                              setState(() {
+                                isSwitched = value;
+                              });
+                            },
+                            inactiveTrackColor: Colors.red,
+                            activeTrackColor: Colors.lightGreenAccent,
+                            activeColor: Colors.green,
                           ),
                         ],
                       ),

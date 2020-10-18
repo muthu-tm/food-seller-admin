@@ -46,7 +46,7 @@ class _ProductWidgetState extends State<ProductWidget> {
             );
           },
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Column(
                 children: [
@@ -78,6 +78,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                 ],
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     widget.product.name,
