@@ -190,4 +190,14 @@ class Store extends Model {
 
     return stores;
   }
+
+  Future updateStoreStatus(String docID, bool isLive) async {
+    try {
+    await getCollectionRef()
+        .document(docID)
+        .updateData({'is_active': isLive, 'updated_at': DateTime.now()});
+    } catch(err) {
+      throw err;
+    }
+  }
 }

@@ -13,12 +13,9 @@ class StoreSettings extends StatefulWidget {
 }
 
 class _StoreSettingsState extends State<StoreSettings> {
-  bool isSwitched;
-
   @override
   void initState() {
     super.initState();
-    isSwitched = true;
   }
 
   @override
@@ -151,14 +148,12 @@ class _StoreSettingsState extends State<StoreSettings> {
                           ),
                           Spacer(),
                           Switch(
-                            value: isSwitched,
-                            onChanged: (value) {
-                              setState(() {
-                                isSwitched = value;
-                              });
+                            value: store.isActive,
+                            onChanged: (value) async {
+                              await store.updateStoreStatus(store.uuid, value);
                             },
-                            inactiveTrackColor: Colors.red,
-                            activeTrackColor: Colors.lightGreenAccent,
+                            inactiveTrackColor: CustomColors.alertRed,
+                            activeTrackColor: CustomColors.green,
                             activeColor: Colors.green,
                           ),
                         ],
