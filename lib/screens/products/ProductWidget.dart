@@ -16,12 +16,12 @@ class ProductWidget extends StatefulWidget {
 }
 
 class _ProductWidgetState extends State<ProductWidget> {
-  bool isSwitched;
+  bool isSwitched = false;
 
   @override
   void initState() {
     super.initState();
-    isSwitched = true;
+    isSwitched = widget.product.isAvailable;
   }
 
   @override
@@ -119,13 +119,13 @@ class _ProductWidgetState extends State<ProductWidget> {
                   ),
                   Switch(
                     value: isSwitched,
-                    onChanged: (value) {
-                      setState(() {
-                        isSwitched = value;
-                      });
+                    onChanged: (value) async {
+                      isSwitched = value;
+                      await widget.product
+                          .updateProductStatus(widget.product.uuid, value);
                     },
-                    inactiveTrackColor: Colors.red,
-                    activeTrackColor: Colors.lightGreenAccent,
+                    inactiveTrackColor: CustomColors.alertRed,
+                    activeTrackColor: CustomColors.green,
                     activeColor: Colors.green,
                   ),
                 ],

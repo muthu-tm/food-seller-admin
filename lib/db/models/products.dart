@@ -7,7 +7,7 @@ part 'products.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Products extends Model {
-  static CollectionReference _storeCollRef = Model.db.collection("products");
+  static CollectionReference _productsCollRef = Model.db.collection("products");
 
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
@@ -123,11 +123,11 @@ class Products extends Model {
   Map<String, dynamic> toJson() => _$ProductsToJson(this);
 
   CollectionReference getCollectionRef() {
-    return _storeCollRef;
+    return _productsCollRef;
   }
 
   DocumentReference getDocumentReference(String uuid) {
-    return _storeCollRef.document(uuid);
+    return _productsCollRef.document(uuid);
   }
 
   String getID() {
@@ -246,5 +246,15 @@ class Products extends Model {
     }
 
     return pList;
+  }
+
+  Future updateProductStatus(String docID, bool isAvail) async {
+    try {
+      await getDocumentReference(docID).updateData(
+        {'is_available': isAvail, 'updated_at': DateTime.now()},
+      );
+    } catch (err) {
+      throw err;
+    }
   }
 }
