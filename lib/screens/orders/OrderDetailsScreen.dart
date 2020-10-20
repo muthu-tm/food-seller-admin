@@ -28,7 +28,7 @@ class OrderDetailsScreen extends StatefulWidget {
   _OrderDetailsScreenState createState() => _OrderDetailsScreenState();
 }
 
-class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
+class _OrderDetailsScreenState extends State<OrderDetailsScreen> with SingleTickerProviderStateMixin{
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
   DateTime selectedDate;
@@ -48,9 +48,37 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   String _currentStatus = "0";
 
+  TabController _controller;
+
+  List<Widget> list = [
+    Tab(
+      icon: Icon(
+        Icons.card_travel,
+        size: 20,
+      ),
+      text: "Delivery",
+    ),
+    Tab(
+      icon: Icon(
+        FontAwesomeIcons.moneyBill,
+        size: 20,
+      ),
+      text: "Amount",
+    ),
+    Tab(
+      icon: Icon(
+        Icons.local_shipping,
+        size: 20,
+      ),
+      text: "Orders",
+    ),
+  ];
+
   @override
   void initState() {
     super.initState();
+
+    _controller = TabController(length: list.length, vsync: this);
 
     _currentStatus = widget.order.status.toString();
     if (widget.order.delivery.deliveryContact != null)
@@ -107,10 +135,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         label: Text("Chat"),
         icon: Icon(Icons.chat),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          child: getBody(context),
-        ),
+      body: Container(
+        child: getBody(context),
       ),
     );
   }
@@ -152,9 +178,21 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         fontFamily: "Georgia"),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Container(
+                        SizedBox(
+                height: 20,
+              ),
+              Container(
+                child: TabBar(
+                    indicatorColor: CustomColors.alertRed,
+                    labelColor: CustomColors.blueGreen,
+                    unselectedLabelColor: CustomColors.black,
+                    controller: _controller,
+                    tabs: list),
+              ),
+              Expanded(
+                child: TabBarView(controller: _controller, children: [
+                SingleChildScrollView(
+                                  child: Container(
                     color: CustomColors.grey,
                     child: Column(
                       children: [
@@ -482,7 +520,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     ),
                   ),
                 ),
-                OrderAmountWidget(order),
+                SingleChildScrollView(child: OrderAmountWidget(order)),
+                SingleChildScrollView(
+                    child: Container(
+                      child: Column(
+                        children: [
                 ListTile(
                   leading: Icon(
                     FontAwesomeIcons.shoppingBasket,
@@ -916,9 +958,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               fontWeight: FontWeight.bold),
                         ),
                       ),
-                Padding(
-                  padding: EdgeInsets.all(40),
-                ),
+                        ],),),),],),),
+                
               ],
             );
           }
