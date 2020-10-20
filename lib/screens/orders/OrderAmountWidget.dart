@@ -125,8 +125,8 @@ class _OrderAmountWidgetState extends State<OrderAmountWidget> {
                       widget.order.userNumber, oAmount, dAmount, rAmount);
                   Fluttertoast.showToast(
                       msg: 'Updated Amount Details',
-                      backgroundColor: CustomColors.grey,
-                      textColor: CustomColors.white);
+                      backgroundColor: CustomColors.green,
+                      textColor: CustomColors.black);
                 } catch (err) {
                   print(err);
                   Fluttertoast.showToast(

@@ -144,7 +144,7 @@ class Order {
       {
         'status': status,
         'updated_at': DateTime.now(),
-        'delivery.expected_at': eDelivery.millisecondsSinceEpoch,
+        'delivery.expected_at': eDelivery == null ? null : eDelivery.millisecondsSinceEpoch,
         'delivery.delivery_contact': number,
         field: DateTime.now().millisecondsSinceEpoch
       },
