@@ -37,6 +37,14 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      bottomNavigationBar: Text(
+        "Powered by Fourcup Inc.",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.black,
+        ),
+      ),
+      extendBody: true,
       body: Center(
         child: SingleChildScrollView(
           child: FutureBuilder<String>(
@@ -415,11 +423,6 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     ),
                   ],
                 ),
-                Text(
-                  "Powered by Fourcup Inc.",
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
-                )
               ],
             ),
           ),

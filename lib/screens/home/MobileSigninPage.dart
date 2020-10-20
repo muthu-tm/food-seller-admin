@@ -43,6 +43,14 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      bottomNavigationBar: Text(
+        "Powered by Fourcup Inc.",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.black,
+        ),
+      ),
+      extendBody: true,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -362,11 +370,6 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       ),
                     ),
                   ],
-                ),
-                Text(
-                  "Powered by Fourcup Inc.",
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
                 ),
               ],
             ),

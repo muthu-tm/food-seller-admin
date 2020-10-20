@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:chipchop_seller/db/models/products.dart';
+import 'package:chipchop_seller/db/models/store.dart';
+import 'package:chipchop_seller/screens/store/StoreProfileWidget.dart';
+import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -20,6 +23,7 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     with SingleTickerProviderStateMixin {
   TabController _controller;
+  Store store;
 
   List<Widget> list = [
     Tab(
@@ -64,7 +68,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     return SingleChildScrollView(
       child: Container(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                child: Text(
+                  widget.product.name,
+                  style: TextStyle(
+                      color: CustomColors.blue,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Padding(
               padding: EdgeInsets.all(10),
               child: Container(
@@ -76,7 +96,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                   dotSpacing: 20.0,
                   dotIncreasedColor: CustomColors.green,
                   dotColor: CustomColors.alertRed,
-                  indicatorBgPadding: 5.0,
+                  indicatorBgPadding: 1.0,
                   dotBgColor: Colors.transparent,
                   borderRadius: true,
                   radius: Radius.circular(20),
@@ -85,15 +105,61 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                child: Text(
-                  widget.product.name,
-                  style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700),
-                ),
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                widget.product.shortDetails,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: CustomColors.black,
+                    fontFamily: 'Georgia'),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        "${widget.product.weight} ${widget.product.getUnit()}",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          color: CustomColors.black,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          widget.product.offer > 0
+                              ? Text(
+                                  '₹ ${widget.product.originalPrice.toString()}',
+                                  style: TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 18,
+                                      decoration: TextDecoration.lineThrough),
+                                )
+                              : Container(),
+                          SizedBox(
+                            width: 6,
+                          ),
+                          Text(
+                            '₹ ${widget.product.currentPrice.toString()}',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -201,101 +267,70 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            Container(
+              child: TabBar(
+                  indicatorColor: CustomColors.alertRed,
+                  labelColor: CustomColors.blueGreen,
+                  unselectedLabelColor: CustomColors.black,
+                  controller: _controller,
+                  tabs: list),
+            ),
+            Container(
+              height: 400,
+              child: TabBarView(
+                controller: _controller,
                 children: [
-                  Column(
-                    children: [
-                      Text(
-                        "Quantity",
-                        style: TextStyle(
-                          color: CustomColors.blue,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "${widget.product.weight} ${widget.product.getUnit()}",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                  Container(
+                    child: getStoreDetails(context),
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "-",
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  widget.product.offer > 0
-                      ? Text(
-                          '₹ ${widget.product.originalPrice.toString()}',
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 18,
-                              decoration: TextDecoration.lineThrough),
-                        )
-                      : Container(),
-                  SizedBox(
-                    width: 6,
-                  ),
-                  Text(
-                    '₹ ${widget.product.currentPrice.toString()}',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700),
-                  )
+                  Container(),
+                  Container()
                 ],
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Column(
-              children: [
-                Container(
-                  child: TabBar(
-                      indicatorColor: Colors.grey,
-                      labelColor: Colors.black,
-                      unselectedLabelColor: Colors.grey,
-                      controller: _controller,
-                      tabs: list),
-                ),
-                Container(
-                  height: 200,
-                  child: TabBarView(controller: _controller, children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        widget.product.shortDetails,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: CustomColors.black,
-                            fontFamily: 'Georgia'),
-                      ),
-                    ),
-                    Container(),
-                    Container()
-                  ]),
-                )
-              ],
             )
           ],
         ),
       ),
+    );
+  }
+
+  Widget getStoreDetails(BuildContext context) {
+    return FutureBuilder(
+      future: Store().getByID(widget.product.storeID),
+      builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.isNotEmpty) {
+            store = Store.fromJson(snapshot.data);
+            return SingleChildScrollView(child: StoreProfileWidget(store));
+          } else {
+            return Container(
+              padding: EdgeInsets.all(10),
+              color: CustomColors.white,
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Text(
+                "Unable to load Store Details",
+                style: TextStyle(
+                  fontFamily: 'Georgia',
+                  color: CustomColors.alertRed,
+                  fontSize: 16.0,
+                ),
+              ),
+            );
+          }
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Column(
+              children: AsyncWidgets.asyncError(),
+            ),
+          );
+        } else {
+          return Center(
+            child: Column(
+              children: AsyncWidgets.asyncWaiting(),
+            ),
+          );
+        }
+      },
     );
   }
 
