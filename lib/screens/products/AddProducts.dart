@@ -66,6 +66,8 @@ class _AddProductState extends State<AddProduct> {
   double currentPrice = 0.00;
   bool isAvailable = true;
   bool isDeliverable = true;
+  bool isPopular = false;
+  bool isReturnable = true;
   List<String> keywords = [];
 
   @override
@@ -155,8 +157,10 @@ class _AddProductState extends State<AddProduct> {
         _p.currentPrice = double.parse(priceController.text);
         _p.originalPrice = originalPrice;
         _p.offer = offer;
-        _p.isAvailable = true;
-        _p.isDeliverable = true;
+        _p.isAvailable = isAvailable;
+        _p.isDeliverable = isDeliverable;
+        _p.isPopular = isPopular;
+        _p.isReturnable = isReturnable;
         _p.storeID = _selectedStore;
         _p.weight = weight;
         _p.unit = int.parse(_selectedUnit);
@@ -768,6 +772,110 @@ class _AddProductState extends State<AddProduct> {
                     ),
                   ),
                 ],
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.adjust,
+                size: 35,
+                color: CustomColors.blue,
+              ),
+              title: Text(
+                "Available",
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontFamily: 'Georgia',
+                  color: CustomColors.black,
+                ),
+              ),
+              trailing: Switch(
+                value: isAvailable,
+                onChanged: (value) {
+                  setState(() {
+                    isAvailable = value;
+                  });
+                },
+                inactiveTrackColor: CustomColors.alertRed,
+                activeTrackColor: CustomColors.green,
+                activeColor: Colors.green,
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.local_shipping,
+                size: 35,
+                color: CustomColors.blue,
+              ),
+              title: Text(
+                "Deliverable",
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontFamily: 'Georgia',
+                  color: CustomColors.black,
+                ),
+              ),
+              trailing: Switch(
+                value: isDeliverable,
+                onChanged: (value) {
+                  setState(() {
+                    isDeliverable = value;
+                  });
+                },
+                inactiveTrackColor: CustomColors.alertRed,
+                activeTrackColor: CustomColors.green,
+                activeColor: Colors.green,
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.favorite_border,
+                size: 35,
+                color: CustomColors.blue,
+              ),
+              title: Text(
+                "Popular Item",
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontFamily: 'Georgia',
+                  color: CustomColors.black,
+                ),
+              ),
+              trailing: Switch(
+                value: isPopular,
+                onChanged: (value) {
+                  setState(() {
+                    isPopular = value;
+                  });
+                },
+                inactiveTrackColor: CustomColors.alertRed,
+                activeTrackColor: CustomColors.green,
+                activeColor: Colors.green,
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.av_timer,
+                size: 35,
+                color: CustomColors.blue,
+              ),
+              title: Text(
+                "Returnable",
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontFamily: 'Georgia',
+                  color: CustomColors.black,
+                ),
+              ),
+              trailing: Switch(
+                value: isReturnable,
+                onChanged: (value) {
+                  setState(() {
+                    isReturnable = value;
+                  });
+                },
+                inactiveTrackColor: CustomColors.alertRed,
+                activeTrackColor: CustomColors.green,
+                activeColor: Colors.green,
               ),
             ),
             Padding(padding: EdgeInsets.all(35))
