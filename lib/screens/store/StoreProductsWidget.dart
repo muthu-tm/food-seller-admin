@@ -27,7 +27,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Products().streamAvailableProducts(widget.storeID),
+      stream: Products().streamProducts(widget.storeID),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget children;
 
