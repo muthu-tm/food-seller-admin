@@ -27,6 +27,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
   GlobalKey<ScaffoldState> _scaffoldKey;
   TextEditingController _nController = TextEditingController();
   AuthController _authController = AuthController();
@@ -36,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
   User _user;
 
   String number = "";
-  String countryCode = "91";
+  int countryCode = 91;
   String _smsVerificationCode;
 
   @override
@@ -56,7 +58,8 @@ class _LoginPageState extends State<LoginPage> {
         ? Scaffold(
             key: _scaffoldKey,
             backgroundColor: CustomColors.lightGrey,
-            bottomNavigationBar: Text(
+            bottomNavigationBar: 
+            Text(
               "Powered by Fourcup Inc.",
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -95,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _getBody() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -138,10 +141,11 @@ class _LoginPageState extends State<LoginPage> {
                 child: Text(
                   "WELCOME BACK!",
                   style: TextStyle(
-                      fontFamily: "OLED",
-                      color: Colors.black,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold),
+                    fontFamily: "OLED",
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.0,
+                  ),
                 ),
               ),
               Padding(
@@ -224,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-              SizedBox(width: 5),
+              Padding(padding: EdgeInsets.all(5.0)),
               SizedBox(
                 height: 40,
                 width: 125,
@@ -323,14 +327,14 @@ class _LoginPageState extends State<LoginPage> {
           AppLocalizations.of(context).translate('enter_valid_phone'), 2));
       return;
     } else {
-      CustomDialogs.actionWaiting(context);
+      CustomDialogs.showLoadingDialog(context, _keyLoader);
 
       number = _nController.text;
       try {
         Map<String, dynamic> _uJSON =
-            await User().getByID(countryCode + number);
+            await User().getByID(countryCode.toString() + number);
         if (_uJSON == null) {
-          Navigator.pop(context);
+          Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
           _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
               AppLocalizations.of(context).translate('invalid_user_signup'),
               2));
@@ -340,21 +344,24 @@ class _LoginPageState extends State<LoginPage> {
           _verifyPhoneNumber();
         }
       } on PlatformException catch (err) {
-        Navigator.pop(context);
-        _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-            "Error while Login: " + err.message, 2));
+        Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+        _scaffoldKey.currentState.showSnackBar(
+          CustomSnackBar.errorSnackBar("Error while Login: " + err.message, 2),
+        );
       } on Exception catch (err) {
-        Navigator.pop(context);
-        _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-            AppLocalizations.of(context).translate('login_error') +
-                err.toString(),
-            2));
+        Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+        _scaffoldKey.currentState.showSnackBar(
+          CustomSnackBar.errorSnackBar(
+              AppLocalizations.of(context).translate('login_error') +
+                  err.toString(),
+              2),
+        );
       }
     }
   }
 
   _verifyPhoneNumber() async {
-    String phoneNumber = "+" + countryCode + number;
+    String phoneNumber = '+' + countryCode.toString() + number;
     final FirebaseAuth _auth = FirebaseAuth.instance;
     await _auth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
@@ -375,12 +382,12 @@ class _LoginPageState extends State<LoginPage> {
         .signInWithCredential(authCredential)
         .then((AuthResult authResult) async {
       final SharedPreferences prefs = await _prefs;
-      prefs.setString("mobile_number", countryCode + number);
+      prefs.setString("mobile_number", countryCode.toString() + number);
 
       var result = await _authController.signInWithMobileNumber(_user);
 
       if (!result['is_success']) {
-        Navigator.pop(context);
+        Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
         _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
             AppLocalizations.of(context).translate('unable_to_login'), 2));
         _scaffoldKey.currentState
@@ -396,7 +403,7 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     }).catchError((error) {
-      Navigator.pop(context);
+      Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('try_later'), 2));
       _scaffoldKey.currentState
@@ -409,12 +416,12 @@ class _LoginPageState extends State<LoginPage> {
         .showSnackBar(CustomSnackBar.successSnackBar("OTP sent", 1));
 
     _smsVerificationCode = verificationId;
-    Navigator.pop(context);
-    CustomDialogs.actionWaiting(context);
+    Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+    CustomDialogs.showLoadingDialog(context, _keyLoader);
   }
 
   _verificationFailed(AuthException authException, BuildContext context) {
-    Navigator.pop(context);
+    Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
     _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
         AppLocalizations.of(context).translate('verification_failed') +
             authException.message.toString(),
@@ -424,8 +431,7 @@ class _LoginPageState extends State<LoginPage> {
   _codeAutoRetrievalTimeout(String verificationId) {
     _smsVerificationCode = verificationId;
 
-    Navigator.pop(context);
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (BuildContext context) => PhoneAuthVerify(
             false,
