@@ -5,6 +5,7 @@ import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/store/StoreProfileWidget.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/screens/utils/ImageView.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -339,8 +340,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     List<Widget> images = [];
 
     for (var item in widget.product.getProductImages()) {
-      images.add(
-        CachedNetworkImage(
+      images.add(InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ImageView(
+                url: item,
+              ),
+              settings: RouteSettings(name: '/products/image'),
+            ),
+          );
+        },
+        child: CachedNetworkImage(
           imageUrl: item,
           imageBuilder: (context, imageProvider) => Image(
             height: 150,
@@ -365,7 +377,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
           fadeOutDuration: Duration(seconds: 1),
           fadeInDuration: Duration(seconds: 2),
         ),
-      );
+      ));
     }
     return images;
   }
