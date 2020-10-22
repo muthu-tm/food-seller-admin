@@ -88,6 +88,10 @@ class _AddProductState extends State<AddProduct> {
       this.unit = widget.product.unit;
       this.originalPrice = widget.product.originalPrice;
       this.keywords = widget.product.keywords;
+      this.isAvailable = widget.product.isAvailable;
+      this.isDeliverable = widget.product.isDeliverable;
+      this.isPopular = widget.product.isPopular;
+      this.isReturnable = widget.product.isReturnable;
     }
   }
 
