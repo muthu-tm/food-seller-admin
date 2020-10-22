@@ -91,7 +91,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
           ),
           Padding(
             padding: EdgeInsets.all(10),
-            child: CarouselIndicatorSlider(store.getStoreImages()),
+            child: CarouselIndicatorSlider(widget.product.getProductImages()),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
