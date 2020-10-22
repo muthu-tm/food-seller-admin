@@ -161,7 +161,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
             if (widget.store.availProducts.length == 0) {
               _scaffoldKey.currentState.showSnackBar(
                 CustomSnackBar.errorSnackBar(
-                    "Please Select your available products!", 2),
+                    "Please Select your Store Type!", 2),
               );
               return;
             }
@@ -372,7 +372,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                             vertical: 15.0,
                           ),
                           child: Text(
-                            "Pick Image!",
+                            "Pick Image",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontFamily: "Georgia",
@@ -492,8 +492,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      AppLocalizations.of(context)
-                          .translate('available_products'),
+                      "Store Type",
                       style: TextStyle(
                           fontFamily: "Georgia",
                           color: CustomColors.grey,
@@ -515,7 +514,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Product Categories",
+                      "Categories",
                       style: TextStyle(
                           fontFamily: "Georgia",
                           color: CustomColors.grey,
@@ -537,7 +536,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Product Sub Categories",
+                      "Sub Categories",
                       style: TextStyle(
                           fontFamily: "Georgia",
                           color: CustomColors.grey,
@@ -737,7 +736,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                 children: <Widget>[
                   Spacer(),
                   Text(
-                    "No Product Types Available",
+                    "No Store Types Available",
                     style: TextStyle(
                       color: CustomColors.alertRed,
                       fontSize: 18.0,
@@ -868,34 +867,21 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
               },
             );
           } else {
-            children = Container(
-              height: 90,
-              child: Column(
-                children: <Widget>[
-                  Spacer(),
-                  Text(
-                    "No Product Categories Available",
+            children = Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    "Select Your Store Type",
                     style: TextStyle(
                       color: CustomColors.alertRed,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Spacer(
-                    flex: 2,
-                  ),
-                  Text(
-                    "Sorry. Please Try Again Later!",
-                    style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Spacer(),
-                ],
-              ),
+                ),
+              ],
             );
           }
         } else if (snapshot.hasError) {

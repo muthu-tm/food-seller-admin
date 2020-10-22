@@ -681,7 +681,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                 children: <Widget>[
                   Spacer(),
                   Text(
-                    "No Product Types Available",
+                    "No Store Types Available",
                     style: TextStyle(
                       color: CustomColors.alertRed,
                       fontSize: 18.0,
