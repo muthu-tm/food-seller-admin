@@ -6,7 +6,7 @@ class NoStoresWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: CustomColors.white,
+      color: Colors.transparent,
       height: 150,
       child: Column(
         children: <Widget>[

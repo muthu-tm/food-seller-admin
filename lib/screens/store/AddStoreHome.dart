@@ -1321,7 +1321,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Select Availabble Categories",
+                    "Select Available Categories",
                     style: TextStyle(
                       color: CustomColors.alertRed,
                       fontSize: 18.0,

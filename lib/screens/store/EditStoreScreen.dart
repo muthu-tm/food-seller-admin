@@ -1414,32 +1414,19 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
               },
             );
           } else {
-            children = Container(
-              height: 90,
+            children = Padding(
+              padding: const EdgeInsets.all(10.0),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Spacer(),
                   Text(
-                    "No Product SubCategories Available",
+                    "Select Available Categories",
                     style: TextStyle(
                       color: CustomColors.alertRed,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Spacer(
-                    flex: 2,
-                  ),
-                  Text(
-                    "Sorry. Please Try Again Later!",
-                    style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Spacer(),
                 ],
               ),
             );

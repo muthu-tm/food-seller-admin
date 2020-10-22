@@ -176,7 +176,9 @@ class ProductsHome extends StatelessWidget {
               ),
             );
           } else {
-            children = NoStoresWidget();
+            children = Center(
+              child: NoStoresWidget(),
+            );
           }
         } else if (snapshot.hasError) {
           children = Center(
