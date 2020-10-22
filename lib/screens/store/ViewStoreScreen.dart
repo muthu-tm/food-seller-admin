@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_pro/carousel_pro.dart';
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/store/StoreItemWidget.dart';
-import 'package:chipchop_seller/screens/store/StoreSearchBar.dart';
+import 'package:chipchop_seller/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -39,25 +38,10 @@ class ViewStoreScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            StoreSearchBar(),
+            // StoreSearchBar(),
             Padding(
-              padding: EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 150.0,
-                width: double.infinity,
-                child: Carousel(
-                  images: getImages(),
-                  dotSize: 5.0,
-                  dotSpacing: 20.0,
-                  dotIncreasedColor: CustomColors.green,
-                  dotColor: CustomColors.alertRed,
-                  indicatorBgPadding: 5.0,
-                  dotBgColor: Colors.transparent,
-                  borderRadius: true,
-                  radius: Radius.circular(20),
-                  noRadiusForIndicator: true,
-                ),
-              ),
+              padding: EdgeInsets.all(10),
+              child: CarouselIndicatorSlider(store.getStoreImages()),
             ),
             Expanded(
               child: StoreItemWidget(store),
