@@ -81,7 +81,9 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
               ),
             ),
             widget.stores == null || widget.stores.isEmpty
-                ? NoStoresWidget()
+                ? Center(
+                    child: NoStoresWidget(),
+                  )
                 : getBody(context)
           ],
         ),
