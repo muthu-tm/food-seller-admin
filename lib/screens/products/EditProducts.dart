@@ -958,8 +958,6 @@ class _EditProductsState extends State<EditProducts> {
         },
       );
 
-      print(cList);
-
       setState(
         () {
           _selectedType = uuid;
