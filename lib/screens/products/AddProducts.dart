@@ -75,24 +75,31 @@ class _AddProductState extends State<AddProduct> {
     super.initState();
 
     loadStores();
-    loadProductTypes();
 
     if (widget.product != null) {
       this.imagePaths = widget.product.productImages;
       this.pName = widget.product.name;
       this.shortDetails = widget.product.shortDetails;
       this.productType = widget.product.productType;
-      this.productCategory = widget.product.productType;
+      this.productCategory = widget.product.productCategory;
       this.productSubCategory = widget.product.productSubCategory;
       this.weight = widget.product.weight;
       this.unit = widget.product.unit;
       this.originalPrice = widget.product.originalPrice;
+      this.offer = widget.product.offer;
+      this.currentPrice = widget.product.currentPrice;
+      priceController.text = this.currentPrice.toString();
       this.keywords = widget.product.keywords;
       this.isAvailable = widget.product.isAvailable;
       this.isDeliverable = widget.product.isDeliverable;
       this.isPopular = widget.product.isPopular;
       this.isReturnable = widget.product.isReturnable;
     }
+
+    loadProductTypes();
+    if (this.productType != "") onTypesDropdownItem(this.productType);
+    if (this.productCategory != "")
+      onCategoryDropdownItem(this.productCategory);
   }
 
   @override
@@ -923,6 +930,8 @@ class _AddProductState extends State<AddProduct> {
         },
       );
     }
+
+    _selectedType = this.productType;
   }
 
   onStoreDropdownItem(String uuid) async {
@@ -966,6 +975,9 @@ class _AddProductState extends State<AddProduct> {
         },
       );
     }
+
+    if (this.productCategory != "")
+      _selectedCategory = this.productCategory;
   }
 
   onCategoryDropdownItem(String uuid) async {
@@ -1001,6 +1013,9 @@ class _AddProductState extends State<AddProduct> {
         },
       );
     }
+
+    if (this.productSubCategory != "")
+      _selectedSubCategory = this.productSubCategory;
   }
 }
 
