@@ -930,8 +930,7 @@ class _AddProductState extends State<AddProduct> {
         },
       );
     }
-
-    _selectedType = this.productType;
+    if (this.productType != "") _selectedType = this.productType;
   }
 
   onStoreDropdownItem(String uuid) async {
@@ -976,8 +975,7 @@ class _AddProductState extends State<AddProduct> {
       );
     }
 
-    if (this.productCategory != "")
-      _selectedCategory = this.productCategory;
+    if (this.productCategory != "") _selectedCategory = this.productCategory;
   }
 
   onCategoryDropdownItem(String uuid) async {
