@@ -4,6 +4,7 @@ import 'package:chipchop_seller/screens/store/EditStoreScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/AddStoreWidget.dart';
+import 'package:chipchop_seller/services/utils/DateUtils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -135,7 +136,7 @@ class _StoreSettingsState extends State<StoreSettings> {
                                 SizedBox(height: 5.0),
                                 Container(
                                   child: Text(
-                                    "Timings - ${store.activeFrom} : ${store.activeTill}",
+                                    "Timing - ${DateUtils.getFormattedTime(store.activeFrom)} : ${DateUtils.getFormattedTime(store.activeTill)}",
                                     style: TextStyle(
                                       
                                       color: CustomColors.black,
