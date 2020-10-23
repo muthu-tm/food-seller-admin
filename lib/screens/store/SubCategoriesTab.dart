@@ -1,21 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chipchop_seller/db/models/product_categories.dart';
+import 'package:chipchop_seller/db/models/product_sub_categories.dart';
 import 'package:chipchop_seller/db/models/store.dart';
-import 'package:chipchop_seller/screens/store/StoreCategoriesScreen.dart';
+import 'package:chipchop_seller/screens/store/SubCategoriesProductScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
-class StoreCategoryWidget extends StatelessWidget {
-  StoreCategoryWidget(this.store);
+class SubCategoriesTab extends StatelessWidget {
+  SubCategoriesTab(this.categoryID, this.store);
 
+  final String categoryID;
   final Store store;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future:
-          ProductCategories().getCategoriesForIDs(store.availProductCategories),
+      future: ProductSubCategories().getSubCategoriesForCategoryWithIDs(
+          categoryID, store.availProductSubCategories),
       builder: (context, AsyncSnapshot snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
@@ -35,6 +36,7 @@ class StoreCategoryWidget extends StatelessWidget {
             else
               return GridView.count(
                 crossAxisCount: 3,
+                childAspectRatio: 0.85,
                 crossAxisSpacing: 5,
                 shrinkWrap: true,
                 mainAxisSpacing: 10,
@@ -42,19 +44,23 @@ class StoreCategoryWidget extends StatelessWidget {
                 children: List<Widget>.generate(
                   snapshot.data.length,
                   (index) {
-                    ProductCategories _c = snapshot.data[index];
+                    ProductSubCategories _sc = snapshot.data[index];
                     return InkWell(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                StoreCategoriesScreen(store, _c.uuid, _c.name),
+                            builder: (context) => SubCategoriesProductsScreen(
+                                store.uuid,
+                                store.name,
+                                categoryID,
+                                _sc.uuid,
+                                _sc.name),
                           ),
                         );
                       },
                       child: Container(
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
                             Radius.circular(10.0),
@@ -64,14 +70,13 @@ class StoreCategoryWidget extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: Center(
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               CachedNetworkImage(
-                                imageUrl: _c.getCategoryImage(),
+                                imageUrl: _sc.getSubCategoryImage(),
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
-                                  width: 90,
-                                  height: 65,
+                                  width: 75,
+                                  height: 75,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(10.0),
@@ -97,10 +102,9 @@ class StoreCategoryWidget extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.all(5.0),
                                 child: Text(
-                                  _c.name,
+                                  _sc.name,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: CustomColors.black,
                                       fontFamily: 'Roboto-Light.ttf',

@@ -325,7 +325,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                             vertical: 15.0,
                           ),
                           child: Text(
-                            "Pick Image!",
+                            "Pick Image",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 
@@ -445,8 +445,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      AppLocalizations.of(context)
-                          .translate('available_products'),
+                      "Store Type",
                       style: TextStyle(
                           
                           color: CustomColors.grey,
@@ -467,7 +466,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Product Categories",
+                      "Categories",
                       style: TextStyle(
                           
                           color: CustomColors.grey,
@@ -488,7 +487,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Product Sub Categories",
+                      "Sub Categories",
                       style: TextStyle(
                           
                           color: CustomColors.grey,
@@ -685,7 +684,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                 children: <Widget>[
                   Spacer(),
                   Text(
-                    "No Product Types Available",
+                    "No Store Types Available",
                     style: TextStyle(
                       color: CustomColors.alertRed,
                       fontSize: 18.0,
@@ -784,7 +783,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
-                    "Select any Product Type",
+                    "Select Your Store Type",
                     style: TextStyle(
                       color: CustomColors.alertRed,
                       fontSize: 18.0,
@@ -1325,7 +1324,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Select any Product Category",
+                    "Select Available Categories",
                     style: TextStyle(
                       color: CustomColors.alertRed,
                       fontSize: 18.0,

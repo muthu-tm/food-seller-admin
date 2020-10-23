@@ -2,6 +2,7 @@ import 'package:chipchop_seller/screens/app/appBar.dart';
 import 'package:chipchop_seller/screens/app/bottomBar.dart';
 import 'package:chipchop_seller/screens/app/sideDrawer.dart';
 import 'package:chipchop_seller/screens/orders/OrderWidget.dart';
+import 'package:chipchop_seller/screens/utils/NoStoresWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -79,15 +80,10 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                 ),
               ),
             ),
-            widget.stores.isEmpty
-                ? Container(
-                    child: Text(
-                    "TODO",
-                    style: TextStyle(
-                        color: CustomColors.blueGreen,
-                        fontSize: 16,
-                        ),
-                  ))
+            widget.stores == null || widget.stores.isEmpty
+                ? Center(
+                    child: NoStoresWidget(),
+                  )
                 : getBody(context)
           ],
         ),

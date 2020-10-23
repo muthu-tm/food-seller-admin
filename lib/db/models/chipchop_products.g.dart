@@ -17,8 +17,10 @@ ChipChopProducts _$ChipChopProductsFromJson(Map<String, dynamic> json) {
     ..originalPrice = (json['org_price'] as num)?.toDouble() ?? 0.00
     ..offer = (json['offer'] as num)?.toDouble() ?? 0.00
     ..currentPrice = (json['current_price'] as num)?.toDouble() ?? 0.00
+    ..isReturnable = json['is_returnable'] as bool ?? false
     ..isAvailable = json['is_available'] as bool ?? true
-    ..isDeliverable = json['is_deliverable'] as bool ?? true
+    ..isDeliverable= json['is_deliverable'] as bool ?? true
+    ..isPopular = json['is_popular'] as bool ?? false
     ..keywords = (json['keywords'] as List)
             ?.map((e) => e == null ? null : e as String)
             ?.toList() ??
@@ -52,8 +54,10 @@ Map<String, dynamic> _$ChipChopProductsToJson(ChipChopProducts instance) =>
       'org_price': instance.originalPrice ?? 0.00,
       'offer': instance.offer ?? 0.00,
       'current_price': instance.currentPrice ?? 0.00,
+      'is_returnable': instance.isReturnable ?? false,
       'is_available': instance.isAvailable ?? true,
       'is_deliverable': instance.isDeliverable ?? true,
+      'is_popular': instance.isPopular ?? false,
       'keywords':
           instance.keywords == null ? [] : instance.keywords,
       'created_at': instance.createdAt,

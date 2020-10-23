@@ -33,10 +33,14 @@ class ChipChopProducts extends Model {
   double offer;
   @JsonKey(name: 'current_price')
   double currentPrice;
+  @JsonKey(name: 'is_returnable', defaultValue: false)
+  bool isReturnable;
   @JsonKey(name: 'is_available')
   bool isAvailable;
   @JsonKey(name: 'is_deliverable')
   bool isDeliverable;
+  @JsonKey(name: 'is_popular')
+  bool isPopular;
   @JsonKey(name: 'keywords', defaultValue: [""])
   List<String> keywords;
   @JsonKey(name: 'created_at', nullable: true)

@@ -27,6 +27,20 @@ class ProductSubCategories extends Model {
 
   ProductSubCategories();
 
+  String getSubCategoryImage() {
+    if (this.productImages.isEmpty) {
+      return no_image_placeholder.replaceFirst(
+          firebase_storage_path, image_kit_path + ik_medium_size);
+    } else {
+      if (this.productImages.first != null && this.productImages.first != "") {
+        return this.productImages.first.replaceFirst(
+            firebase_storage_path, image_kit_path + ik_medium_size);
+      } else
+        return no_image_placeholder.replaceFirst(
+            firebase_storage_path, image_kit_path + ik_medium_size);
+    }
+  }
+
   List<String> getMediumProfilePicPath() {
     List<String> paths = [];
 
@@ -114,6 +128,46 @@ class ProductSubCategories extends Model {
       ProductSubCategories _c =
           ProductSubCategories.fromJson(snap.documents[j].data);
       categories.add(_c);
+    }
+
+    return categories;
+  }
+
+  Future<List<ProductSubCategories>> getSubCategoriesForCategoryWithIDs(
+      String categoryID, List<String> ids) async {
+    // handle empty params
+    if (ids.isEmpty) return [];
+
+    List<ProductSubCategories> categories = [];
+
+    if (ids.length > 9) {
+      int end = 0;
+      for (int i = 0; i < ids.length; i = i + 9) {
+        if (end + 9 > ids.length)
+          end = ids.length;
+        else
+          end = end + 9;
+
+        QuerySnapshot snap = await getCollectionRef()
+            .where('category_uuid', arrayContains: categoryID)
+            .where('uuid', whereIn: ids.sublist(i, end))
+            .getDocuments();
+        for (var j = 0; j < snap.documents.length; j++) {
+          ProductSubCategories _c =
+              ProductSubCategories.fromJson(snap.documents[j].data);
+          categories.add(_c);
+        }
+      }
+    } else {
+      QuerySnapshot snap = await getCollectionRef()
+          .where('category_uuid', arrayContains: categoryID)
+          .where('uuid', whereIn: ids)
+          .getDocuments();
+      for (var j = 0; j < snap.documents.length; j++) {
+        ProductSubCategories _c =
+            ProductSubCategories.fromJson(snap.documents[j].data);
+        categories.add(_c);
+      }
     }
 
     return categories;

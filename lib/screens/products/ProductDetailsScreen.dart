@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_pro/carousel_pro.dart';
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/store/StoreProfileWidget.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
+import 'package:chipchop_seller/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/screens/utils/ImageView.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -67,7 +68,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: getBody(context),
+      body: SingleChildScrollView(child: getBody(context)),
     );
   }
 
@@ -88,27 +89,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               ),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
           Padding(
             padding: EdgeInsets.all(10),
-            child: Container(
-              height: 150.0,
-              width: double.infinity,
-              child: Carousel(
-                images: getImages(),
-                dotSize: 5.0,
-                dotSpacing: 20.0,
-                dotIncreasedColor: CustomColors.green,
-                dotColor: CustomColors.alertRed,
-                indicatorBgPadding: 1.0,
-                dotBgColor: Colors.transparent,
-                borderRadius: true,
-                radius: Radius.circular(20),
-                noRadiusForIndicator: true,
-              ),
-            ),
+            child: CarouselIndicatorSlider(widget.product.getProductImages()),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -278,7 +261,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 controller: _controller,
                 tabs: list),
           ),
-          Expanded(
+          SizedBox(
+            height: 300,
             child: TabBarView(
               controller: _controller,
               children: [
@@ -339,8 +323,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     List<Widget> images = [];
 
     for (var item in widget.product.getProductImages()) {
-      images.add(
-        CachedNetworkImage(
+      images.add(InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ImageView(
+                url: item,
+              ),
+              settings: RouteSettings(name: '/products/image'),
+            ),
+          );
+        },
+        child: CachedNetworkImage(
           imageUrl: item,
           imageBuilder: (context, imageProvider) => Image(
             height: 150,
@@ -365,7 +360,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
           fadeOutDuration: Duration(seconds: 1),
           fadeInDuration: Duration(seconds: 2),
         ),
-      );
+      ));
     }
     return images;
   }
