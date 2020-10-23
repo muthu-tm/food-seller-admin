@@ -10,7 +10,6 @@ import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_seller/services/controllers/auth/auth_controller.dart';
-import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:chipchop_seller/services/utils/hash_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
