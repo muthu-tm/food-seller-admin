@@ -32,9 +32,9 @@ class StoreProfileWidget extends StatelessWidget {
             title: Text(
               store.name,
               style: TextStyle(
-                  color: CustomColors.black,
-                  fontSize: 13.0,
-                  ),
+                color: CustomColors.black,
+                fontSize: 13.0,
+              ),
             ),
           ),
           ListTile(
@@ -47,9 +47,9 @@ class StoreProfileWidget extends StatelessWidget {
               maxLines: 5,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  color: CustomColors.black,
-                  fontSize: 13.0,
-                  ),
+                color: CustomColors.black,
+                fontSize: 13.0,
+              ),
             ),
           ),
           ListTile(
@@ -62,7 +62,6 @@ class StoreProfileWidget extends StatelessWidget {
               style: TextStyle(
                   color: CustomColors.grey,
                   fontSize: 16.0,
-                  
                   fontWeight: FontWeight.w500),
             ),
           ),
@@ -99,14 +98,14 @@ class StoreProfileWidget extends StatelessWidget {
                           Text(
                             store.contacts[index].contactName,
                             style: TextStyle(
-                                color: CustomColors.black,
-                                ),
+                              color: CustomColors.black,
+                            ),
                           ),
                           Text(
                             store.contacts[index].contactNumber.toString(),
                             style: TextStyle(
-                                color: CustomColors.black,
-                                ),
+                              color: CustomColors.black,
+                            ),
                           )
                         ],
                       ),
@@ -126,7 +125,6 @@ class StoreProfileWidget extends StatelessWidget {
               style: TextStyle(
                   color: CustomColors.grey,
                   fontSize: 16.0,
-                  
                   fontWeight: FontWeight.w500),
             ),
           ),
@@ -153,16 +151,15 @@ class StoreProfileWidget extends StatelessWidget {
               style: TextStyle(
                   color: CustomColors.black,
                   fontSize: 16.0,
-                  
                   fontWeight: FontWeight.w500),
             ),
             trailing: Text(
               DateUtils.getFormattedTime(store.activeFrom),
               textAlign: TextAlign.start,
               style: TextStyle(
-                  color: CustomColors.black,
-                  fontSize: 14.0,
-                  ),
+                color: CustomColors.black,
+                fontSize: 14.0,
+              ),
             ),
           ),
           ListTile(
@@ -172,16 +169,15 @@ class StoreProfileWidget extends StatelessWidget {
               style: TextStyle(
                   color: CustomColors.black,
                   fontSize: 16.0,
-                  
                   fontWeight: FontWeight.w500),
             ),
             trailing: Text(
               DateUtils.getFormattedTime(store.activeTill),
               textAlign: TextAlign.start,
               style: TextStyle(
-                  color: CustomColors.black,
-                  fontSize: 14.0,
-                  ),
+                color: CustomColors.black,
+                fontSize: 14.0,
+              ),
             ),
           ),
           ListTile(
@@ -194,7 +190,6 @@ class StoreProfileWidget extends StatelessWidget {
               style: TextStyle(
                   color: CustomColors.grey,
                   fontSize: 16.0,
-                  
                   fontWeight: FontWeight.w500),
             ),
           ),
@@ -206,36 +201,44 @@ class StoreProfileWidget extends StatelessWidget {
                   leading: Text(
                     "Delivery From:",
                     style: TextStyle(
-                        color: CustomColors.black, ),
+                      color: CustomColors.black,
+                    ),
                   ),
                   trailing: Text(
-                    store.deliveryDetails.deliveryFrom,
+                    DateUtils.getFormattedTime(
+                        store.deliveryDetails.deliveryFrom),
                     style: TextStyle(
-                        color: CustomColors.black, ),
+                      color: CustomColors.black,
+                    ),
                   ),
                 ),
                 ListTile(
                   leading: Text(
                     "Delivery Till:",
                     style: TextStyle(
-                        color: CustomColors.black, ),
+                      color: CustomColors.black,
+                    ),
                   ),
                   trailing: Text(
-                    store.deliveryDetails.deliveryTill,
+                    DateUtils.getFormattedTime(
+                        store.deliveryDetails.deliveryTill),
                     style: TextStyle(
-                        color: CustomColors.black, ),
+                      color: CustomColors.black,
+                    ),
                   ),
                 ),
                 ListTile(
                   leading: Text(
                     "Max Distance:",
                     style: TextStyle(
-                        color: CustomColors.black, ),
+                      color: CustomColors.black,
+                    ),
                   ),
                   trailing: Text(
                     '${store.deliveryDetails.maxDistance.toString()} km',
                     style: TextStyle(
-                        color: CustomColors.black, ),
+                      color: CustomColors.black,
+                    ),
                   ),
                 ),
               ],
