@@ -77,7 +77,7 @@ Widget contactAndSupportDialog(context) {
               RaisedButton.icon(
                 icon: Icon(
                   Icons.email,
-                  color: CustomColors.lightGrey,
+                  color: CustomColors.alertRed,
                 ),
                 elevation: 15.0,
                 onPressed: () {
@@ -89,7 +89,7 @@ Widget contactAndSupportDialog(context) {
                 label: Text(
                     AppLocalizations.of(context).translate('email'),
                     style: TextStyle(
-                      color: CustomColors.alertRed,
+                      color: CustomColors.blue,
                       fontSize: 14.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -105,7 +105,7 @@ Widget contactAndSupportDialog(context) {
               RaisedButton.icon(
                 icon: Icon(
                   Icons.phone,
-                  color: CustomColors.lightGrey,
+                  color: CustomColors.alertRed,
                 ),
                 elevation: 15.0,
                 onPressed: () {
@@ -114,7 +114,7 @@ Widget contactAndSupportDialog(context) {
                 label: Text(
                     AppLocalizations.of(context).translate('phone'),
                     style: TextStyle(
-                      color: CustomColors.alertRed,
+                      color: CustomColors.blue,
                       fontSize: 14.0,
                       fontWeight: FontWeight.bold,
                     ),
