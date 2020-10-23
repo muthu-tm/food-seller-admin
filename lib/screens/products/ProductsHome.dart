@@ -62,7 +62,7 @@ class ProductsHome extends StatelessWidget {
                               "Add Product",
                               style: TextStyle(
                                 fontSize: 16.0,
-                                fontFamily: 'Georgia',
+                                
                                 color: CustomColors.black,
                               ),
                             ),
@@ -76,7 +76,7 @@ class ProductsHome extends StatelessWidget {
                               "Search & Load from existing Products",
                               style: TextStyle(
                                 fontSize: 14.0,
-                                fontFamily: 'Georgia',
+                                
                                 color: CustomColors.black,
                               ),
                             ),
@@ -87,7 +87,7 @@ class ProductsHome extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 16.0,
-                              fontFamily: 'Georgia',
+                              
                               color: CustomColors.grey,
                             ),
                           ),
@@ -107,7 +107,7 @@ class ProductsHome extends StatelessWidget {
                               "Add Custom Product",
                               style: TextStyle(
                                 fontSize: 14.0,
-                                fontFamily: 'Georgia',
+                                
                                 color: CustomColors.black,
                               ),
                             ),
@@ -133,7 +133,7 @@ class ProductsHome extends StatelessWidget {
                           "View Products",
                           style: TextStyle(
                             fontSize: 16.0,
-                            fontFamily: 'Georgia',
+                            
                             color: CustomColors.black,
                           ),
                         ),

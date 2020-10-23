@@ -210,7 +210,7 @@ class _EditProductsState extends State<EditProducts> {
                 "Store",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -250,7 +250,7 @@ class _EditProductsState extends State<EditProducts> {
                 title: Text(
                   "Product Images",
                   style: TextStyle(
-                      fontFamily: "Georgia",
+                      
                       color: CustomColors.black,
                       fontSize: 16),
                 ),
@@ -302,7 +302,7 @@ class _EditProductsState extends State<EditProducts> {
                         "Pick Image!",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontFamily: "Georgia",
+                            
                             fontSize: 16,
                             color: CustomColors.white,
                             fontWeight: FontWeight.bold),
@@ -421,7 +421,7 @@ class _EditProductsState extends State<EditProducts> {
                 "Product Name",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -460,7 +460,7 @@ class _EditProductsState extends State<EditProducts> {
                 "Product Details",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -500,7 +500,7 @@ class _EditProductsState extends State<EditProducts> {
                 "Product Type",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -539,7 +539,7 @@ class _EditProductsState extends State<EditProducts> {
                 "Product Category",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -578,7 +578,7 @@ class _EditProductsState extends State<EditProducts> {
                 "Product SubCategory",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -757,7 +757,7 @@ class _EditProductsState extends State<EditProducts> {
                     "Current Price",
                     style: TextStyle(
                       fontSize: 16.0,
-                      fontFamily: 'Georgia',
+                      
                       color: CustomColors.black,
                     ),
                   ),
@@ -789,7 +789,7 @@ class _EditProductsState extends State<EditProducts> {
                 "Available",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -815,7 +815,7 @@ class _EditProductsState extends State<EditProducts> {
                 "Deliverable",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -841,7 +841,7 @@ class _EditProductsState extends State<EditProducts> {
                 "Popular Item",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -867,7 +867,7 @@ class _EditProductsState extends State<EditProducts> {
                 "Returnable",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),

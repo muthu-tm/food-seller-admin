@@ -68,7 +68,7 @@ class SettingsHome extends StatelessWidget {
                         "Profile Settings",
                         style: TextStyle(
                           fontSize: 16.0,
-                          fontFamily: 'Georgia',
+                          
                           color: CustomColors.black,
                         ),
                       ),
@@ -141,7 +141,7 @@ class SettingsHome extends StatelessWidget {
                         "Store Settings",
                         style: TextStyle(
                           fontSize: 16.0,
-                          fontFamily: 'Georgia',
+                          
                           color: CustomColors.black,
                         ),
                       ),

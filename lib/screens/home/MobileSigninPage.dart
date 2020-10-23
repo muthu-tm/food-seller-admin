@@ -352,7 +352,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                             .translate('already_account'),
                         style: TextStyle(
                           fontSize: 14,
-                          fontFamily: 'Georgia',
+                          
                           color: CustomColors.positiveGreen,
                         ),
                       ),

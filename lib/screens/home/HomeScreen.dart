@@ -109,7 +109,7 @@ class HomeScreen extends StatelessWidget {
                                           Text(
                                             store.name,
                                             style: TextStyle(
-                                              fontFamily: 'Georgia',
+                                              
                                               color: CustomColors.blue,
                                               fontSize: 14.0,
                                             ),
@@ -119,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                                             child: Text(
                                               "Timings - ${store.activeFrom} : ${store.activeTill}",
                                               style: TextStyle(
-                                                fontFamily: 'Georgia',
+                                                
                                                 color: CustomColors.black,
                                                 fontSize: 14.0,
                                               ),

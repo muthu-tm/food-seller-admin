@@ -83,7 +83,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                   Text(
                     widget.product.name,
                     style: TextStyle(
-                      fontFamily: 'Georgia',
+                      
                       color: CustomColors.blue,
                       fontSize: 14.0,
                       fontWeight: FontWeight.bold,

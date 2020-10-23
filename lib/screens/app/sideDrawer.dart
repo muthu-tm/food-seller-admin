@@ -344,7 +344,7 @@ Widget sideDrawer(BuildContext context) {
                   seller_app_name,
                   style: TextStyle(
                     color: CustomColors.blue,
-                    fontFamily: 'Georgia',
+                    
                     fontSize: 14.0,
                     fontWeight: FontWeight.bold,
                   ),

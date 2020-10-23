@@ -152,7 +152,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                   "Wallet Amount",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: "Georgia",
+                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.green,
                     fontSize: 17.0,
@@ -232,7 +232,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: TextStyle(
-                                      fontFamily: "Georgia",
+                                      
                                       fontSize: 18.0,
                                       color: textColor,
                                       fontWeight: FontWeight.bold),
@@ -326,7 +326,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                     "Transaction History",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontFamily: "Georgia",
+                      
                       fontWeight: FontWeight.bold,
                       color: CustomColors.green,
                       fontSize: 17.0,
@@ -389,7 +389,7 @@ class _AdUserdTransactionState extends State<AddUserTransaction> {
                     child: Text(
                       "Details",
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           fontSize: 16.0,
                           color: CustomColors.blueGreen),
                     ),
@@ -418,7 +418,7 @@ class _AdUserdTransactionState extends State<AddUserTransaction> {
                     child: Text(
                       "Amount",
                       style: TextStyle(
-                        fontFamily: "Georgia",
+                        
                         fontSize: 16.0,
                         color: CustomColors.blueGreen,
                       ),
@@ -447,7 +447,7 @@ class _AdUserdTransactionState extends State<AddUserTransaction> {
                     child: Text(
                       "Type",
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           fontSize: 16.0,
                           color: CustomColors.blueGreen),
                     ),

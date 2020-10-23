@@ -122,7 +122,7 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontFamily: 'Georgia',
+                              
                               color: CustomColors.blue,
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
@@ -180,7 +180,7 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                                   .round()
                                                   .toString(),
                                               style: TextStyle(
-                                                  fontFamily: 'Georgia',
+                                                  
                                                   color: CustomColors.blue,
                                                   fontSize: 17),
                                             ),
@@ -236,7 +236,7 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                   Text(
                     "No Popular Products added By Store",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
+                      
                       color: CustomColors.alertRed,
                       fontSize: 16.0,
                     ),
@@ -245,7 +245,7 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                   Text(
                     "No Worries!",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
+                      
                       color: CustomColors.grey,
                       fontSize: 14.0,
                     ),
@@ -254,7 +254,7 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                   Text(
                     "You could still order your favourite item with Written/Capture ORDER option!",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
+                      
                       color: CustomColors.blue,
                       fontSize: 16.0,
                     ),

@@ -157,7 +157,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                 style: TextStyle(
                     color: CustomColors.purple,
                     fontSize: 14,
-                    fontFamily: "Georgia"),
+                    ),
               ),
             );
           } else {
@@ -176,7 +176,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                     style: TextStyle(
                         color: CustomColors.black,
                         fontSize: 14,
-                        fontFamily: "Georgia"),
+                        ),
                   ),
                 ),
                 ListTile(
@@ -190,7 +190,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                     style: TextStyle(
                         color: CustomColors.black,
                         fontSize: 14,
-                        fontFamily: "Georgia"),
+                        ),
                   ),
                 ),
                 SizedBox(
@@ -223,7 +223,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                   style: TextStyle(
                                       color: CustomColors.black,
                                       fontSize: 17,
-                                      fontFamily: "Georgia"),
+                                      ),
                                 ),
                               ),
                               ListTile(
@@ -266,14 +266,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                         style: TextStyle(
                                             color: CustomColors.black,
                                             fontSize: 16,
-                                            fontFamily: "Georgia"),
+                                            ),
                                       ),
                                       trailing: Text(
                                         order.getDeliveryType(),
                                         style: TextStyle(
                                             color: CustomColors.black,
                                             fontSize: 16,
-                                            fontFamily: "Georgia"),
+                                            ),
                                       ),
                                     )
                                   : ListTile(
@@ -287,7 +287,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                         style: TextStyle(
                                             color: CustomColors.black,
                                             fontSize: 16,
-                                            fontFamily: "Georgia"),
+                                            ),
                                       ),
                                       trailing: Text(
                                         order.delivery.scheduledDate != null
@@ -712,8 +712,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                                         overflow:
                                                                             TextOverflow.ellipsis,
                                                                         style: TextStyle(
-                                                                            fontFamily:
-                                                                                "Georgia",
                                                                             color:
                                                                                 CustomColors.lightBlue,
                                                                             fontWeight: FontWeight.bold),
@@ -731,8 +729,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                                           TextStyle(
                                                                         color: CustomColors
                                                                             .black,
-                                                                        fontFamily:
-                                                                            "Georgia",
+                                                                        
                                                                       ),
                                                                     ),
                                                                     Padding(
@@ -748,8 +745,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                                             TextOverflow.ellipsis,
                                                                         style:
                                                                             TextStyle(
-                                                                          fontFamily:
-                                                                              "Georgia",
                                                                           color:
                                                                               CustomColors.black,
                                                                         ),
@@ -774,8 +769,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                                         overflow:
                                                                             TextOverflow.ellipsis,
                                                                         style: TextStyle(
-                                                                            fontFamily:
-                                                                                "Georgia",
                                                                             color:
                                                                                 CustomColors.lightBlue,
                                                                             fontWeight: FontWeight.bold),
@@ -796,8 +789,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                                               TextAlign.end,
                                                                           style:
                                                                               TextStyle(
-                                                                            fontFamily:
-                                                                                "Georgia",
                                                                             fontSize:
                                                                                 16,
                                                                             color:
@@ -851,8 +842,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                         leading: Text(
                                                           "Quantity: ",
                                                           style: TextStyle(
-                                                              fontFamily:
-                                                                  "Georgia",
                                                               fontSize: 16,
                                                               color:
                                                                   CustomColors
@@ -866,8 +855,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                           textAlign:
                                                               TextAlign.start,
                                                           style: TextStyle(
-                                                              fontFamily:
-                                                                  "Georgia",
                                                               fontSize: 16,
                                                               color:
                                                                   CustomColors
@@ -881,8 +868,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                           textAlign:
                                                               TextAlign.start,
                                                           style: TextStyle(
-                                                              fontFamily:
-                                                                  "Georgia",
                                                               fontSize: 16,
                                                               color:
                                                                   CustomColors
@@ -917,7 +902,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                     : Text(
                                         "No Products added",
                                         style: TextStyle(
-                                            fontFamily: "Georgia",
+                                            
                                             fontSize: 16,
                                             color: CustomColors.black,
                                             fontWeight: FontWeight.bold),
@@ -1011,7 +996,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                       child: Text(
                                         "No Images added",
                                         style: TextStyle(
-                                            fontFamily: "Georgia",
+                                            
                                             fontSize: 16,
                                             color: CustomColors.black,
                                             fontWeight: FontWeight.bold),
@@ -1054,7 +1039,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                       child: Text(
                                         "No Orders Written",
                                         style: TextStyle(
-                                            fontFamily: "Georgia",
+                                            
                                             fontSize: 16,
                                             color: CustomColors.black,
                                             fontWeight: FontWeight.bold),

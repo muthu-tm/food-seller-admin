@@ -68,7 +68,7 @@ class UserProfileWidget extends StatelessWidget {
                 AppLocalizations.of(context).translate('name'),
                 style: TextStyle(
                     fontSize: 14,
-                    fontFamily: "Georgia",
+                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.grey),
               ),
@@ -95,7 +95,7 @@ class UserProfileWidget extends StatelessWidget {
                 AppLocalizations.of(context).translate('contact_number'),
                 style: TextStyle(
                     fontSize: 14,
-                    fontFamily: "Georgia",
+                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.grey),
               ),
@@ -124,7 +124,7 @@ class UserProfileWidget extends StatelessWidget {
                       AppLocalizations.of(context).translate('password'),
                       style: TextStyle(
                           fontSize: 14,
-                          fontFamily: "Georgia",
+                          
                           fontWeight: FontWeight.bold,
                           color: CustomColors.grey),
                     ),
@@ -176,7 +176,7 @@ class UserProfileWidget extends StatelessWidget {
                 AppLocalizations.of(context).translate('gender'),
                 style: TextStyle(
                     fontSize: 14,
-                    fontFamily: "Georgia",
+                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.grey),
               ),
@@ -201,7 +201,7 @@ class UserProfileWidget extends StatelessWidget {
                 AppLocalizations.of(context).translate('email'),
                 style: TextStyle(
                     fontSize: 14,
-                    fontFamily: "Georgia",
+                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.grey),
               ),
@@ -226,7 +226,7 @@ class UserProfileWidget extends StatelessWidget {
                 AppLocalizations.of(context).translate('dob'),
                 style: TextStyle(
                     fontSize: 14,
-                    fontFamily: "Georgia",
+                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.grey),
               ),
@@ -259,7 +259,7 @@ class UserProfileWidget extends StatelessWidget {
                 AppLocalizations.of(context).translate('address'),
                 style: TextStyle(
                     fontSize: 14,
-                    fontFamily: "Georgia",
+                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.grey),
               ),

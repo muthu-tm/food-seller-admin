@@ -7,6 +7,7 @@ import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Widget bottomBar(BuildContext context) {
   Size size = Size(screenWidth(context, dividedBy: 5), 100);
@@ -43,16 +44,10 @@ Widget bottomBar(BuildContext context) {
                   size: 25.0,
                   color: CustomColors.black,
                 ),
-                Text(
-                  "HOME",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: "Georgia",
-                    fontSize: 11,
-                    color: CustomColors.black,
-                  ),
-                ),
+                Text("HOME",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.oswald()),
               ],
             ),
           ),
@@ -81,11 +76,7 @@ Widget bottomBar(BuildContext context) {
                   "PRODUCTS",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: "Georgia",
-                    fontSize: 11,
-                    color: CustomColors.black,
-                  ),
+                  style: GoogleFonts.oswald()
                 ),
               ],
             ),
@@ -99,7 +90,8 @@ Widget bottomBar(BuildContext context) {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => OrdersHomeScreen(cachedLocalUser.stores),
+                  builder: (context) =>
+                      OrdersHomeScreen(cachedLocalUser.stores),
                   settings: RouteSettings(name: '/orders'),
                 ),
                 (Route<dynamic> route) => false,
@@ -117,11 +109,7 @@ Widget bottomBar(BuildContext context) {
                   "ORDERS",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: "Georgia",
-                    fontSize: 11,
-                    color: CustomColors.black,
-                  ),
+                  style: GoogleFonts.oswald()
                 ),
               ],
             ),
@@ -150,11 +138,7 @@ Widget bottomBar(BuildContext context) {
                   "SETTINGS",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: "Georgia",
-                    fontSize: 11,
-                    color: CustomColors.black,
-                  ),
+                  style: GoogleFonts.oswald()
                 ),
               ],
             ),

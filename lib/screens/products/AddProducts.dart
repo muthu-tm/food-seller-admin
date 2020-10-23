@@ -205,7 +205,7 @@ class _AddProductState extends State<AddProduct> {
                 "Store",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -245,7 +245,7 @@ class _AddProductState extends State<AddProduct> {
                 title: Text(
                   "Product Images",
                   style: TextStyle(
-                      fontFamily: "Georgia",
+                      
                       color: CustomColors.black,
                       fontSize: 16),
                 ),
@@ -297,7 +297,7 @@ class _AddProductState extends State<AddProduct> {
                         "Pick Image!",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontFamily: "Georgia",
+                            
                             fontSize: 16,
                             color: CustomColors.white,
                             fontWeight: FontWeight.bold),
@@ -416,7 +416,7 @@ class _AddProductState extends State<AddProduct> {
                 "Product Name",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -455,7 +455,7 @@ class _AddProductState extends State<AddProduct> {
                 "Product Details",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -495,7 +495,7 @@ class _AddProductState extends State<AddProduct> {
                 "Product Type",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -534,7 +534,7 @@ class _AddProductState extends State<AddProduct> {
                 "Product Category",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -573,7 +573,7 @@ class _AddProductState extends State<AddProduct> {
                 "Product SubCategory",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -752,7 +752,7 @@ class _AddProductState extends State<AddProduct> {
                     "Current Price",
                     style: TextStyle(
                       fontSize: 16.0,
-                      fontFamily: 'Georgia',
+                      
                       color: CustomColors.black,
                     ),
                   ),
@@ -784,7 +784,7 @@ class _AddProductState extends State<AddProduct> {
                 "Available",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -810,7 +810,7 @@ class _AddProductState extends State<AddProduct> {
                 "Deliverable",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -836,7 +836,7 @@ class _AddProductState extends State<AddProduct> {
                 "Popular Item",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),
@@ -862,7 +862,7 @@ class _AddProductState extends State<AddProduct> {
                 "Returnable",
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.black,
                 ),
               ),

@@ -263,7 +263,7 @@ class _LoginPageState extends State<LoginPage> {
                     AppLocalizations.of(context).translate('no_account'),
                     style: TextStyle(
                       fontSize: 13.0,
-                      fontFamily: 'Georgia',
+                      
                       color: CustomColors.alertRed,
                       fontWeight: FontWeight.bold,
                     ),
@@ -307,7 +307,7 @@ class _LoginPageState extends State<LoginPage> {
                 label: Text(
                   AppLocalizations.of(context).translate('help_support'),
                   style: TextStyle(
-                    fontFamily: 'Georgia',
+                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.blue,
                     fontSize: 16.0,

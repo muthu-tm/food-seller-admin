@@ -149,7 +149,7 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontFamily: 'Georgia',
+                                
                                 color: CustomColors.blue,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.bold,
@@ -173,7 +173,7 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
                   Text(
                     "No Products added By Store",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
+                      
                       color: CustomColors.alertRed,
                       fontSize: 16.0,
                     ),
@@ -182,7 +182,7 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
                   Text(
                     "No Worries!",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
+                      
                       color: CustomColors.grey,
                       fontSize: 14.0,
                     ),
@@ -191,7 +191,7 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
                   Text(
                     "You could still place Written/Captured ORDER here.",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
+                      
                       color: CustomColors.blue,
                       fontSize: 16.0,
                     ),

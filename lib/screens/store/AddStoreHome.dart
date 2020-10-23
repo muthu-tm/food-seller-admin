@@ -221,7 +221,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
-                      fontFamily: "Georgia",
+                      
                       fontWeight: FontWeight.bold,
                       color: CustomColors.blue,
                     ),
@@ -237,7 +237,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       AppLocalizations.of(context).translate('store_name'),
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -275,7 +275,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     title: Text(
                       "Store Images",
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -325,7 +325,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                             "Pick Image!",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontFamily: "Georgia",
+                                
                                 fontSize: 16,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -445,7 +445,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       AppLocalizations.of(context)
                           .translate('available_products'),
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -466,7 +466,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       "Product Categories",
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -487,7 +487,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       "Product Sub Categories",
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -508,7 +508,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       AppLocalizations.of(context).translate('working_days'),
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -550,7 +550,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                             child: Text(
                               _d,
                               style: TextStyle(
-                                  fontFamily: "Georgia",
+                                  
                                   color: workingDays.contains(index)
                                       ? CustomColors.white
                                       : CustomColors.green),
@@ -568,7 +568,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       AppLocalizations.of(context).translate('working_hours'),
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -593,7 +593,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       Text(
                         "--",
                         style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
@@ -666,7 +666,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       types.name,
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: availProducts.contains(types.uuid)
                               ? CustomColors.white
                               : CustomColors.green),
@@ -764,7 +764,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       categories.name,
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color:
                               availProductCategories.contains(categories.uuid)
                                   ? CustomColors.white
@@ -828,7 +828,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
-                fontFamily: "Georgia",
+                
                 fontWeight: FontWeight.bold,
                 color: CustomColors.blue,
               ),
@@ -953,7 +953,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
-                fontFamily: "Georgia",
+                
                 fontWeight: FontWeight.bold,
                 color: CustomColors.blue,
               ),
@@ -984,7 +984,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                 Text(
                   "--",
                   style: TextStyle(
-                    fontFamily: "Georgia",
+                    
                     color: CustomColors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -1305,7 +1305,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       categories.name,
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: availProductSubCategories
                                   .contains(categories.uuid)
                               ? CustomColors.white

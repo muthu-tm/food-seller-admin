@@ -128,7 +128,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontFamily: 'Georgia',
+                              
                               color: CustomColors.blue,
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
@@ -187,7 +187,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                                   .round()
                                                   .toString(),
                                               style: TextStyle(
-                                                  fontFamily: 'Georgia',
+                                                  
                                                   color: CustomColors.blue,
                                                   fontSize: 17),
                                             ),
@@ -272,7 +272,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                   Text(
                     "No Products added By Store",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
+                      
                       color: CustomColors.alertRed,
                       fontSize: 16.0,
                     ),
@@ -281,7 +281,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                   Text(
                     "No Worries!",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
+                      
                       color: CustomColors.grey,
                       fontSize: 14.0,
                     ),
@@ -290,7 +290,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                   Text(
                     "You could still place Written/Captured ORDER here.",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
+                      
                       color: CustomColors.blue,
                       fontSize: 16.0,
                     ),

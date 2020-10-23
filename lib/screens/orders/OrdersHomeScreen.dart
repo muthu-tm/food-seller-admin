@@ -86,7 +86,7 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                     style: TextStyle(
                         color: CustomColors.blueGreen,
                         fontSize: 16,
-                        fontFamily: "Georgia"),
+                        ),
                   ))
                 : getBody(context)
           ],
@@ -122,7 +122,7 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                       style: TextStyle(
                           color: CustomColors.blueGreen,
                           fontSize: 16,
-                          fontFamily: "Georgia"),
+                          ),
                     ),
                     SizedBox(height: 20),
                     Text(
@@ -130,7 +130,7 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                       style: TextStyle(
                           color: CustomColors.blue,
                           fontSize: 16,
-                          fontFamily: "Georgia"),
+                          ),
                     ),
                   ],
                 ),

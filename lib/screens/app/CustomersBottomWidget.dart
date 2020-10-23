@@ -3,6 +3,7 @@ import 'package:chipchop_seller/screens/customers/CustomersHome.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 bool newStoreNotification = false;
 
@@ -37,7 +38,7 @@ class _CustomersBottomWidgetState extends State<CustomersBottomWidget> {
           //         style: TextStyle(
           //             color: CustomColors.green,
           //             fontSize: 16.0,
-          //             fontFamily: 'Georgia',
+          //             
           //             fontWeight: FontWeight.bold),
           //         textAlign: TextAlign.start,
           //       ),
@@ -45,7 +46,7 @@ class _CustomersBottomWidgetState extends State<CustomersBottomWidget> {
           //         message['notification']['body'],
           //         style: TextStyle(
           //             fontSize: 14.0,
-          //             fontFamily: 'Georgia',
+          //             
           //             fontWeight: FontWeight.bold),
           //       ),
           //     ),
@@ -104,7 +105,9 @@ class _CustomersBottomWidgetState extends State<CustomersBottomWidget> {
     Widget child;
 
     _newStoreNotification
-        ? child = SizedBox.fromSize(
+        ? child = SizedBox.fromSize
+        
+        (
             size: widget.size,
             child: Stack(
               alignment: Alignment.center,
@@ -135,7 +138,7 @@ class _CustomersBottomWidgetState extends State<CustomersBottomWidget> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           fontSize: 11,
                           color: CustomColors.black,
                         ),
@@ -196,11 +199,7 @@ class _CustomersBottomWidgetState extends State<CustomersBottomWidget> {
                     "CUSTOMERS",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontFamily: "Georgia",
-                      fontSize: 11,
-                      color: CustomColors.black,
-                    ),
+                    style: GoogleFonts.oswald()
                   ),
                 ],
               ),

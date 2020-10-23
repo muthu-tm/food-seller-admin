@@ -232,7 +232,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
-                      fontFamily: "Georgia",
+                      
                       fontWeight: FontWeight.bold,
                       color: CustomColors.blue,
                     ),
@@ -248,7 +248,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     child: Text(
                       AppLocalizations.of(context).translate('store_name'),
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -287,7 +287,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     child: Text(
                       AppLocalizations.of(context).translate('owner_name'),
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -325,7 +325,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     title: Text(
                       "Store Images",
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -375,7 +375,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                             "Pick Image!",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontFamily: "Georgia",
+                                
                                 fontSize: 16,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -495,7 +495,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                       AppLocalizations.of(context)
                           .translate('available_products'),
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -517,7 +517,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     child: Text(
                       "Product Categories",
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -539,7 +539,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     child: Text(
                       "Product Sub Categories",
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -561,7 +561,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     child: Text(
                       AppLocalizations.of(context).translate('working_days'),
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -603,7 +603,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                             child: Text(
                               _d,
                               style: TextStyle(
-                                  fontFamily: "Georgia",
+                                  
                                   color:
                                       widget.store.workingDays.contains(index)
                                           ? CustomColors.white
@@ -622,7 +622,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     child: Text(
                       AppLocalizations.of(context).translate('working_hours'),
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -647,7 +647,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                       Text(
                         "--",
                         style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.green,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
@@ -721,7 +721,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     child: Text(
                       types.name,
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: availProducts.contains(types.uuid)
                               ? CustomColors.white
                               : CustomColors.green),
@@ -857,7 +857,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     child: Text(
                       categories.name,
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color:
                               availProductCategories.contains(categories.uuid)
                                   ? CustomColors.white
@@ -934,7 +934,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
-                fontFamily: "Georgia",
+                
                 fontWeight: FontWeight.bold,
                 color: CustomColors.blue,
               ),
@@ -1059,7 +1059,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
-                fontFamily: "Georgia",
+                
                 fontWeight: FontWeight.bold,
                 color: CustomColors.blue,
               ),
@@ -1090,7 +1090,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                 Text(
                   "--",
                   style: TextStyle(
-                    fontFamily: "Georgia",
+                    
                     color: CustomColors.green,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -1417,7 +1417,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     child: Text(
                       categories.name,
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: availProductSubCategories
                                   .contains(categories.uuid)
                               ? CustomColors.white

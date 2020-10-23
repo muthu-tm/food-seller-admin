@@ -56,7 +56,7 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                     Text(
                       "Categories",
                       style: TextStyle(
-                          color: CustomColors.black, fontFamily: 'Georgia'),
+                          color: CustomColors.black, ),
                     )
                   ],
                 ),
@@ -84,7 +84,7 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                     Text(
                       "Products",
                       style: TextStyle(
-                          color: CustomColors.black, fontFamily: 'Georgia'),
+                          color: CustomColors.black, ),
                     )
                   ],
                 ),
@@ -114,7 +114,7 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                     Text(
                       "Popular",
                       style: TextStyle(
-                          color: CustomColors.black, fontFamily: 'Georgia'),
+                          color: CustomColors.black, ),
                     )
                   ],
                 ),
@@ -144,7 +144,7 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                     Text(
                       "Info",
                       style: TextStyle(
-                          color: CustomColors.black, fontFamily: 'Georgia'),
+                          color: CustomColors.black, ),
                     )
                   ],
                 )
