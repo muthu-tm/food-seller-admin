@@ -67,7 +67,7 @@ Widget sideDrawer(BuildContext context) {
                                 padding: EdgeInsets.all(5),
                                 child: Icon(
                                   Icons.person,
-                                  size: 40.0,
+                                  size: 35.0,
                                   color: CustomColors.lightGrey,
                                 ),
                               ),
@@ -87,8 +87,8 @@ Widget sideDrawer(BuildContext context) {
                         child: Stack(
                           children: <Widget>[
                             SizedBox(
-                              width: 85.0,
-                              height: 85.0,
+                              width: 90.0,
+                              height: 90.0,
                               child: Center(
                                 child: CachedNetworkImage(
                                   imageUrl:
