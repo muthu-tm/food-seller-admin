@@ -128,7 +128,6 @@ class _StoreSettingsState extends State<StoreSettings> {
                                 Text(
                                   store.name,
                                   style: TextStyle(
-                                    
                                     color: CustomColors.blue,
                                     fontSize: 14.0,
                                   ),
@@ -138,7 +137,6 @@ class _StoreSettingsState extends State<StoreSettings> {
                                   child: Text(
                                     "Timing - ${DateUtils.getFormattedTime(store.activeFrom)} : ${DateUtils.getFormattedTime(store.activeTill)}",
                                     style: TextStyle(
-                                      
                                       color: CustomColors.black,
                                       fontSize: 14.0,
                                     ),
