@@ -7,6 +7,7 @@ import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_seller/services/controllers/auth/auth_controller.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:chipchop_seller/app_localizations.dart';
 
@@ -40,7 +41,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
   FocusNode focusNode4 = FocusNode();
   FocusNode focusNode5 = FocusNode();
   FocusNode focusNode6 = FocusNode();
-  List<String> code = [];
+  List<String> code = [null, null, null, null, null, null];
 
   @override
   void initState() {
@@ -74,75 +75,80 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
             end: Alignment.bottomRight,
           ),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: EdgeInsets.all(_fixedPadding),
-                child: ClipRRect(
-                  child: Image.asset(
-                    "images/icons/logo.png",
-                    height: 80,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                      child: Image.asset(
+                        "images/icons/logo.png",
+                        height: 80,
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Text(
+                            "UNIQUES",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: "OLED",
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text(
+                          "Buy Organic Vegetables & Groceries",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "My Pass Code",
+                  style: TextStyle(
+                    fontFamily: "Geogia",
+                    color: Colors.black,
+                    fontSize: 18.0,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Text(
-                  "UNIQUES",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: "OLED",
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold),
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-              Text(
-                "Buy Organic Vegetables & Groceries",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14.0,
+                _getBody(),
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "My Pass Code",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18.0,
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              _getBody(),
-              SizedBox(
-                height: 10,
-              ),
-              RaisedButton(
-                elevation: 16.0,
-                onPressed: signIn,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    AppLocalizations.of(context).translate('verify'),
-                    style: TextStyle(
-                      color: CustomColors.white,
-                      fontSize: 18.0,
+                RaisedButton(
+                  elevation: 16.0,
+                  onPressed: signIn,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      AppLocalizations.of(context).translate('verify'),
+                      style: TextStyle(
+                        color: CustomColors.white,
+                        fontSize: 18.0,
+                      ),
                     ),
                   ),
-                ),
-                color: CustomColors.alertRed,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-              )
-            ],
+                  color: CustomColors.alertRed,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -163,7 +169,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
   Widget _getColumnBody() => Column(
         children: <Widget>[
-          SizedBox(height: 20.0),
+          SizedBox(height: 30.0),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -182,7 +188,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
             ],
           ),
           SizedBox(
-            height: 30,
+            height: 20,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -199,7 +205,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                             fontWeight: FontWeight.w400),
                       ),
                       TextSpan(
-                        text: 'Resend',
+                        text: 'RESEND',
                         style: TextStyle(
                             color: CustomColors.alertRed,
                             fontSize: 16.0,
@@ -212,13 +218,12 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
               SizedBox(width: 16.0),
             ],
           ),
-          SizedBox(height: 16.0),
-          SizedBox(height: 32.0),
+          SizedBox(height: 30.0),
         ],
       );
 
   signIn() {
-    if (code.length != 6) {
+    if (code.indexOf(null) != -1) {
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('invalid_otp'), 2));
     } else {
@@ -292,9 +297,13 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
     );
   }
 
-  Widget getPinField({String key, FocusNode focusNode}) => SizedBox(
-        height: 40.0,
+  Widget getPinField({String key, FocusNode focusNode}) => Container(
+        height: 35.0,
         width: 35.0,
+        decoration: BoxDecoration(
+          color: CustomColors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: TextField(
           key: Key(key),
           expands: false,
@@ -302,8 +311,11 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
           focusNode: focusNode,
           onChanged: (String value) {
             if (value.length == 1) {
-              code.insert(int.parse(key) - 1, value);
-              switch (code.length) {
+              if (code[int.parse(key) - 1] == null) {
+                code.removeAt(int.parse(key) - 1);
+                code.insert(int.parse(key) - 1, value);
+              }
+              switch (int.parse(key)) {
                 case 1:
                   FocusScope.of(context).requestFocus(focusNode2);
                   break;
@@ -323,10 +335,20 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                   FocusScope.of(context).requestFocus(FocusNode());
                   break;
               }
-            } else {
+            } else if (value.length == 0) {
               code.removeAt(int.parse(key) - 1);
+              code.insert(int.parse(key) - 1, null);
             }
           },
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(1),
+          ],
+          decoration: new InputDecoration(
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              disabledBorder: InputBorder.none),
           maxLengthEnforced: false,
           textAlign: TextAlign.center,
           cursorColor: CustomColors.black,
