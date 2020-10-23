@@ -3,10 +3,8 @@ import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/screens/products/ProductDetailsScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
-import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SubCategoriesProductsScreen extends StatefulWidget {
   SubCategoriesProductsScreen(

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateUtils {
@@ -32,6 +33,25 @@ class DateUtils {
     }
 
     return dateTimeFormatter.format(dateTime);
+  }
+
+  static getFormattedTime(String time) {
+    List<String> val = time.split(':');
+    TimeOfDay parsedTime = TimeOfDay(
+      hour: int.parse(val[0]),
+      minute: int.parse(val[1]),
+    );
+
+    if (parsedTime.period == DayPeriod.am)
+      return parsedTime.hourOfPeriod.toString() +
+          "." +
+          parsedTime.minute.toString().padLeft(2, '0') +
+          " AM";
+    else
+      return parsedTime.hourOfPeriod.toString() +
+          "." +
+          parsedTime.minute.toString().padLeft(2, '0') +
+          " PM";
   }
 
   static DateTime getCurrentDate() {
