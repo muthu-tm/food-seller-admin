@@ -143,6 +143,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
   }
 
   Widget getBody(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+        final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
+        final double itemWidth = size.width / 2;
     return StreamBuilder(
       stream: Order()
           .streamOrderByID(widget.buyerID, widget.storeID, widget.order.uuid),
@@ -573,6 +576,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                         itemCount: order.products.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
+                                              
                                           return FutureBuilder(
                                             future: Products().getByProductID(
                                                 order
@@ -919,7 +923,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                   ? GridView.count(
                                       crossAxisCount: 2,
                                       crossAxisSpacing: 10,
-                                      childAspectRatio: 0.95,
+                                      childAspectRatio: (itemWidth/itemHeight),
                                       shrinkWrap: true,
                                       primary: false,
                                       mainAxisSpacing: 10,

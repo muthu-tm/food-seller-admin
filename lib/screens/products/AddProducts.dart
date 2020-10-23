@@ -190,6 +190,9 @@ class _AddProductState extends State<AddProduct> {
   }
 
   Widget getBody(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
+    final double itemWidth = size.width / 2;
     return SingleChildScrollView(
       child: Container(
         color: CustomColors.white,
@@ -205,7 +208,6 @@ class _AddProductState extends State<AddProduct> {
                 "Store",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -244,10 +246,7 @@ class _AddProductState extends State<AddProduct> {
                 ),
                 title: Text(
                   "Product Images",
-                  style: TextStyle(
-                      
-                      color: CustomColors.black,
-                      fontSize: 16),
+                  style: TextStyle(color: CustomColors.black, fontSize: 16),
                 ),
                 trailing: Container(
                   width: 155,
@@ -297,7 +296,6 @@ class _AddProductState extends State<AddProduct> {
                         "Pick Image!",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            
                             fontSize: 16,
                             color: CustomColors.white,
                             fontWeight: FontWeight.bold),
@@ -312,7 +310,7 @@ class _AddProductState extends State<AddProduct> {
                 ? GridView.count(
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
-                    childAspectRatio: 0.95,
+                    childAspectRatio: (itemWidth/itemHeight),
                     shrinkWrap: true,
                     primary: false,
                     mainAxisSpacing: 10,
@@ -416,7 +414,6 @@ class _AddProductState extends State<AddProduct> {
                 "Product Name",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -455,7 +452,6 @@ class _AddProductState extends State<AddProduct> {
                 "Product Details",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -495,7 +491,6 @@ class _AddProductState extends State<AddProduct> {
                 "Product Type",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -534,7 +529,6 @@ class _AddProductState extends State<AddProduct> {
                 "Product Category",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -573,7 +567,6 @@ class _AddProductState extends State<AddProduct> {
                 "Product SubCategory",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -752,7 +745,6 @@ class _AddProductState extends State<AddProduct> {
                     "Current Price",
                     style: TextStyle(
                       fontSize: 16.0,
-                      
                       color: CustomColors.black,
                     ),
                   ),
@@ -784,7 +776,6 @@ class _AddProductState extends State<AddProduct> {
                 "Available",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -810,7 +801,6 @@ class _AddProductState extends State<AddProduct> {
                 "Deliverable",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -836,7 +826,6 @@ class _AddProductState extends State<AddProduct> {
                 "Popular Item",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -862,7 +851,6 @@ class _AddProductState extends State<AddProduct> {
                 "Returnable",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),

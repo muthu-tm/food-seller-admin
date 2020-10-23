@@ -195,6 +195,9 @@ class _EditProductsState extends State<EditProducts> {
   }
 
   Widget getBody(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+        final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
+        final double itemWidth = size.width / 2;
     return SingleChildScrollView(
       child: Container(
         color: CustomColors.white,
@@ -317,7 +320,7 @@ class _EditProductsState extends State<EditProducts> {
                 ? GridView.count(
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
-                    childAspectRatio: 0.95,
+                    childAspectRatio: (itemWidth/itemHeight),
                     shrinkWrap: true,
                     primary: false,
                     mainAxisSpacing: 10,

@@ -100,6 +100,9 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+        final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
+        final double itemWidth = size.width / 2;
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -340,7 +343,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     ? GridView.count(
                         crossAxisCount: 2,
                         crossAxisSpacing: 10,
-                        childAspectRatio: 0.95,
+                        childAspectRatio: (itemWidth/itemHeight),
                         shrinkWrap: true,
                         primary: false,
                         mainAxisSpacing: 10,

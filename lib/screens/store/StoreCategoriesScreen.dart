@@ -45,6 +45,9 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
   }
 
   Widget getBody(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+        final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
+        final double itemWidth = size.width / 2;
     return StreamBuilder<QuerySnapshot>(
       stream: Products()
           .streamProductsForCategory(widget.storeID, widget.categoryID),
@@ -57,7 +60,7 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
               child: GridView.count(
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
-                childAspectRatio: 0.95,
+                childAspectRatio: (itemWidth/itemHeight),
                 shrinkWrap: true,
                 mainAxisSpacing: 10,
                 children: List.generate(
