@@ -39,7 +39,7 @@ class _UserSettingState extends State<UserSetting> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.orange.withOpacity(0.7),
+        backgroundColor: CustomColors.alertRed,
         onPressed: () async {
           await forceDeactivate(context);
         },
@@ -89,21 +89,24 @@ class _UserSettingState extends State<UserSetting> {
             textAlign: TextAlign.start,
           ),
           content: Container(
-            height: 200,
+            height: 220,
             child: Column(
               children: <Widget>[
                 Text(
                     "Deactivating account won't remove your Details & Stores immediatly.\n\nWe will notify you before cleaning your details!"),
                 Expanded(
-                  child: TextFormField(
-                    textAlign: TextAlign.center,
-                    obscureText: true,
-                    autofocus: false,
-                    controller: _pController,
-                    decoration: InputDecoration(
-                      hintText: 'Secret KEY',
-                      fillColor: CustomColors.lightGrey,
-                      filled: true,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 5.0),
+                    child: TextFormField(
+                      textAlign: TextAlign.center,
+                      obscureText: true,
+                      autofocus: false,
+                      controller: _pController,
+                      decoration: InputDecoration(
+                        hintText: 'Secret KEY',
+                        fillColor: CustomColors.lightGrey,
+                        filled: true,
+                      ),
                     ),
                   ),
                 ),
