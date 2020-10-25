@@ -76,6 +76,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   bool _isCheckedCard;
   bool _isCheckedPaytm;
 
+  bool isActive = true;
+
   @override
   void initState() {
     super.initState();
@@ -188,7 +190,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             userAccess.accessLevel = [0];
             store.users = [cachedLocalUser.getIntID()];
             store.usersAccess = [userAccess];
-            store.isActive = false;
+            store.isActive = isActive;
+            store.keywords = this.storeName.split(" ");
 
             Navigator.push(
               context,
@@ -221,7 +224,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
-                      
                       fontWeight: FontWeight.bold,
                       color: CustomColors.blue,
                     ),
@@ -237,7 +239,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       AppLocalizations.of(context).translate('store_name'),
                       style: TextStyle(
-                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -275,7 +276,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     title: Text(
                       "Store Images",
                       style: TextStyle(
-                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -325,7 +325,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                             "Pick Image",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                
                                 fontSize: 16,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -443,7 +442,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       "Store Type",
                       style: TextStyle(
-                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -464,7 +462,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       "Categories",
                       style: TextStyle(
-                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -485,7 +482,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       "Sub Categories",
                       style: TextStyle(
-                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -506,7 +502,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       AppLocalizations.of(context).translate('working_days'),
                       style: TextStyle(
-                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -548,7 +543,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                             child: Text(
                               _d,
                               style: TextStyle(
-                                  
                                   color: workingDays.contains(index)
                                       ? CustomColors.white
                                       : CustomColors.green),
@@ -566,7 +560,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       AppLocalizations.of(context).translate('working_hours'),
                       style: TextStyle(
-                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -591,7 +584,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       Text(
                         "--",
                         style: TextStyle(
-                          
                           color: CustomColors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
@@ -616,6 +608,31 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                 ),
                 getPaymentDetails(),
                 getDeliveryDetails(),
+                ListTile(
+                  leading: Icon(
+                    Icons.favorite_border,
+                    size: 35,
+                    color: CustomColors.blue,
+                  ),
+                  title: Text(
+                    "Go Live NOW!",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: CustomColors.black,
+                    ),
+                  ),
+                  trailing: Switch(
+                    value: isActive,
+                    onChanged: (value) {
+                      setState(() {
+                        isActive = value;
+                      });
+                    },
+                    inactiveTrackColor: CustomColors.alertRed,
+                    activeTrackColor: CustomColors.green,
+                    activeColor: Colors.green,
+                  ),
+                ),
                 SizedBox(height: 80),
               ],
             ),
@@ -664,7 +681,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       types.name,
                       style: TextStyle(
-                          
                           color: availProducts.contains(types.uuid)
                               ? CustomColors.white
                               : CustomColors.green),
@@ -762,7 +778,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       categories.name,
                       style: TextStyle(
-                          
                           color:
                               availProductCategories.contains(categories.uuid)
                                   ? CustomColors.white
@@ -826,7 +841,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
-                
                 fontWeight: FontWeight.bold,
                 color: CustomColors.blue,
               ),
@@ -951,7 +965,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
-                
                 fontWeight: FontWeight.bold,
                 color: CustomColors.blue,
               ),
@@ -982,7 +995,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                 Text(
                   "--",
                   style: TextStyle(
-                    
                     color: CustomColors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -1303,7 +1315,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     child: Text(
                       categories.name,
                       style: TextStyle(
-                          
                           color: availProductSubCategories
                                   .contains(categories.uuid)
                               ? CustomColors.white

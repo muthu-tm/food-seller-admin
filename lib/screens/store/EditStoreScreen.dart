@@ -191,6 +191,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
             store.workingDays = workingDays;
             store.availablePayments = paymentOptions;
             store.deliveryDetails.availableOptions = deliveryTemp;
+            store.keywords = this.storeName.split(" ");
 
             store.deliveryDetails.deliveryFrom = deliverFrom;
             store.deliveryDetails.deliveryTill = deliverTill;
