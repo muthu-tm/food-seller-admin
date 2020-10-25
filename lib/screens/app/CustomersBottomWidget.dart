@@ -38,7 +38,7 @@ class _CustomersBottomWidgetState extends State<CustomersBottomWidget> {
           //         style: TextStyle(
           //             color: CustomColors.green,
           //             fontSize: 16.0,
-          //             
+          //
           //             fontWeight: FontWeight.bold),
           //         textAlign: TextAlign.start,
           //       ),
@@ -46,7 +46,7 @@ class _CustomersBottomWidgetState extends State<CustomersBottomWidget> {
           //         message['notification']['body'],
           //         style: TextStyle(
           //             fontSize: 14.0,
-          //             
+          //
           //             fontWeight: FontWeight.bold),
           //       ),
           //     ),
@@ -105,9 +105,7 @@ class _CustomersBottomWidgetState extends State<CustomersBottomWidget> {
     Widget child;
 
     _newStoreNotification
-        ? child = SizedBox.fromSize
-        
-        (
+        ? child = SizedBox.fromSize(
             size: widget.size,
             child: Stack(
               alignment: Alignment.center,
@@ -138,7 +136,6 @@ class _CustomersBottomWidgetState extends State<CustomersBottomWidget> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          
                           fontSize: 11,
                           color: CustomColors.black,
                         ),
@@ -195,12 +192,7 @@ class _CustomersBottomWidgetState extends State<CustomersBottomWidget> {
                     size: 25.0,
                     color: CustomColors.black,
                   ),
-                  Text(
-                    "CUSTOMERS",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.oswald()
-                  ),
+                  Text("CUSTOMERS", style: GoogleFonts.openSansCondensed()),
                 ],
               ),
             ),
