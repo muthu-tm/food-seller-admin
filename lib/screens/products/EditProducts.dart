@@ -132,10 +132,19 @@ class _EditProductsState extends State<EditProducts> {
         ),
         label: Text("Save"),
       ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: getBody(context),
+      body: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: getBody(context),
+          ),
         ),
       ),
     );
@@ -178,6 +187,8 @@ class _EditProductsState extends State<EditProducts> {
         _p.productCategory = _selectedCategory == "0" ? "" : _selectedCategory;
         _p.productSubCategory =
             _selectedSubCategory == "0" ? "" : _selectedSubCategory;
+
+        _p.keywords.addAll(pName.split(" "));
         CustomDialogs.actionWaiting(context);
         await _p.updateByID(_p.toJson(), _p.uuid);
         Navigator.pop(context);
