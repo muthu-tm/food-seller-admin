@@ -30,7 +30,7 @@ class ViewStoreScreen extends StatelessWidget {
         backgroundColor: CustomColors.green,
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.blue,
+        backgroundColor: CustomColors.alertRed,
         onPressed: () {},
         label: Text("Order NOW"),
         icon: Icon(FontAwesomeIcons.solidSmile),
