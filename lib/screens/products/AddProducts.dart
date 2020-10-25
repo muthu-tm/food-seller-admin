@@ -133,10 +133,19 @@ class _AddProductState extends State<AddProduct> {
         ),
         label: Text("Save"),
       ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: getBody(context),
+      body: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: getBody(context),
+          ),
         ),
       ),
     );
@@ -179,11 +188,7 @@ class _AddProductState extends State<AddProduct> {
         _p.productCategory = _selectedCategory == "0" ? "" : _selectedCategory;
         _p.productSubCategory =
             _selectedSubCategory == "0" ? "" : _selectedSubCategory;
-        _p.keywords = [
-          pName.trim(),
-          pName.trim().toLowerCase(),
-          pName.trim().toUpperCase()
-        ];
+        _p.keywords.addAll(pName.split(" "));
         CustomDialogs.actionWaiting(context);
         await _p.create();
         Navigator.pop(context);
@@ -201,9 +206,6 @@ class _AddProductState extends State<AddProduct> {
   }
 
   Widget getBody(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
-    final double itemWidth = size.width / 2;
     return SingleChildScrollView(
       child: Container(
         color: CustomColors.white,
@@ -321,7 +323,6 @@ class _AddProductState extends State<AddProduct> {
                 ? GridView.count(
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
-                    childAspectRatio: (itemWidth/itemHeight),
                     shrinkWrap: true,
                     primary: false,
                     mainAxisSpacing: 10,
@@ -478,7 +479,7 @@ class _AddProductState extends State<AddProduct> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: CustomColors.lightGreen)),
-                  hintText: "Ex, Rice",
+                  hintText: "Ex, Boiled Rice",
                   fillColor: CustomColors.white,
                   filled: true,
                 ),

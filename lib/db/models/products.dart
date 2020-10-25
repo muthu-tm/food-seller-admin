@@ -246,19 +246,27 @@ class Products extends Model {
   }
 
   Future<List<Map<String, dynamic>>> getByNameRange(String searchKey) async {
-    QuerySnapshot snap = await getCollectionRef()
-        .where('store_uuid', whereIn: cachedLocalUser.stores)
-        .where('keywords', arrayContains: searchKey)
-        .getDocuments();
+    try {
+      List<Map<String, dynamic>> pList = [];
 
-    List<Map<String, dynamic>> pList = [];
-    if (snap.documents.isNotEmpty) {
-      snap.documents.forEach((p) {
-        pList.add(p.data);
-      });
+      for (var i = 0; i < cachedLocalUser.stores.length; i++) {
+        QuerySnapshot snap = await getCollectionRef()
+            .where('store_uuid', isEqualTo: cachedLocalUser.stores[i])
+            .where('keywords', arrayContainsAny: searchKey.split(" "))
+            .getDocuments();
+
+        if (snap.documents.isNotEmpty) {
+          snap.documents.forEach((p) {
+            pList.add(p.data);
+          });
+        }
+      }
+
+      return pList;
+    } catch (err) {
+      print(err);
+      throw err;
     }
-
-    return pList;
   }
 
   Future updateProductStatus(String docID, bool isAvail) async {

@@ -136,16 +136,22 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
         label: Text("Chat"),
         icon: Icon(Icons.chat),
       ),
-      body: Container(
-        child: getBody(context),
+      body: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: Container(
+          child: getBody(context),
+        ),
       ),
     );
   }
 
   Widget getBody(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-        final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
-        final double itemWidth = size.width / 2;
     return StreamBuilder(
       stream: Order()
           .streamOrderByID(widget.buyerID, widget.storeID, widget.order.uuid),
@@ -158,9 +164,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
               child: Text(
                 "No Elements Found",
                 style: TextStyle(
-                    color: CustomColors.purple,
-                    fontSize: 14,
-                    ),
+                  color: CustomColors.purple,
+                  fontSize: 14,
+                ),
               ),
             );
           } else {
@@ -177,9 +183,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                   trailing: Text(
                     order.storeName,
                     style: TextStyle(
-                        color: CustomColors.black,
-                        fontSize: 14,
-                        ),
+                      color: CustomColors.black,
+                      fontSize: 14,
+                    ),
                   ),
                 ),
                 ListTile(
@@ -191,9 +197,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                   trailing: Text(
                     DateUtils.formatDateTime(order.createdAt),
                     style: TextStyle(
-                        color: CustomColors.black,
-                        fontSize: 14,
-                        ),
+                      color: CustomColors.black,
+                      fontSize: 14,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -224,9 +230,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                 title: Text(
                                   "Status",
                                   style: TextStyle(
-                                      color: CustomColors.black,
-                                      fontSize: 17,
-                                      ),
+                                    color: CustomColors.black,
+                                    fontSize: 17,
+                                  ),
                                 ),
                               ),
                               ListTile(
@@ -267,16 +273,16 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                       title: Text(
                                         "Delivery",
                                         style: TextStyle(
-                                            color: CustomColors.black,
-                                            fontSize: 16,
-                                            ),
+                                          color: CustomColors.black,
+                                          fontSize: 16,
+                                        ),
                                       ),
                                       trailing: Text(
                                         order.getDeliveryType(),
                                         style: TextStyle(
-                                            color: CustomColors.black,
-                                            fontSize: 16,
-                                            ),
+                                          color: CustomColors.black,
+                                          fontSize: 16,
+                                        ),
                                       ),
                                     )
                                   : ListTile(
@@ -288,9 +294,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                       title: Text(
                                         "Delivery At",
                                         style: TextStyle(
-                                            color: CustomColors.black,
-                                            fontSize: 16,
-                                            ),
+                                          color: CustomColors.black,
+                                          fontSize: 16,
+                                        ),
                                       ),
                                       trailing: Text(
                                         order.delivery.scheduledDate != null
@@ -521,7 +527,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                 ),
                               ),
                               RaisedButton.icon(
-                                color: CustomColors.blueGreen,
+                                color: CustomColors.alertRed,
                                 onPressed: () async {
                                   try {
                                     await order.updateDeliveryDetails(
@@ -576,7 +582,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                         itemCount: order.products.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
-                                              
                                           return FutureBuilder(
                                             future: Products().getByProductID(
                                                 order
@@ -733,7 +738,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                                           TextStyle(
                                                                         color: CustomColors
                                                                             .black,
-                                                                        
                                                                       ),
                                                                     ),
                                                                     Padding(
@@ -906,7 +910,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                     : Text(
                                         "No Products added",
                                         style: TextStyle(
-                                            
                                             fontSize: 16,
                                             color: CustomColors.black,
                                             fontWeight: FontWeight.bold),
@@ -923,7 +926,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                   ? GridView.count(
                                       crossAxisCount: 2,
                                       crossAxisSpacing: 10,
-                                      childAspectRatio: (itemWidth/itemHeight),
                                       shrinkWrap: true,
                                       primary: false,
                                       mainAxisSpacing: 10,
@@ -1000,7 +1002,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                       child: Text(
                                         "No Images added",
                                         style: TextStyle(
-                                            
                                             fontSize: 16,
                                             color: CustomColors.black,
                                             fontWeight: FontWeight.bold),
@@ -1043,7 +1044,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                       child: Text(
                                         "No Orders Written",
                                         style: TextStyle(
-                                            
                                             fontSize: 16,
                                             color: CustomColors.black,
                                             fontWeight: FontWeight.bold),

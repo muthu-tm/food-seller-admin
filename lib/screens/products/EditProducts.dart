@@ -132,10 +132,19 @@ class _EditProductsState extends State<EditProducts> {
         ),
         label: Text("Save"),
       ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: getBody(context),
+      body: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: getBody(context),
+          ),
         ),
       ),
     );
@@ -178,6 +187,8 @@ class _EditProductsState extends State<EditProducts> {
         _p.productCategory = _selectedCategory == "0" ? "" : _selectedCategory;
         _p.productSubCategory =
             _selectedSubCategory == "0" ? "" : _selectedSubCategory;
+
+        _p.keywords.addAll(pName.split(" "));
         CustomDialogs.actionWaiting(context);
         await _p.updateByID(_p.toJson(), _p.uuid);
         Navigator.pop(context);
@@ -195,9 +206,6 @@ class _EditProductsState extends State<EditProducts> {
   }
 
   Widget getBody(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-        final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
-        final double itemWidth = size.width / 2;
     return SingleChildScrollView(
       child: Container(
         color: CustomColors.white,
@@ -213,7 +221,6 @@ class _EditProductsState extends State<EditProducts> {
                 "Store",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -252,10 +259,7 @@ class _EditProductsState extends State<EditProducts> {
                 ),
                 title: Text(
                   "Product Images",
-                  style: TextStyle(
-                      
-                      color: CustomColors.black,
-                      fontSize: 16),
+                  style: TextStyle(color: CustomColors.black, fontSize: 16),
                 ),
                 trailing: Container(
                   width: 155,
@@ -305,7 +309,6 @@ class _EditProductsState extends State<EditProducts> {
                         "Pick Image!",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            
                             fontSize: 16,
                             color: CustomColors.white,
                             fontWeight: FontWeight.bold),
@@ -320,7 +323,6 @@ class _EditProductsState extends State<EditProducts> {
                 ? GridView.count(
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
-                    childAspectRatio: (itemWidth/itemHeight),
                     shrinkWrap: true,
                     primary: false,
                     mainAxisSpacing: 10,
@@ -424,13 +426,12 @@ class _EditProductsState extends State<EditProducts> {
                 "Product Name",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 60.0),
+              padding: EdgeInsets.only(left: 60.0, right: 10),
               child: TextFormField(
                 initialValue: widget.product.name,
                 textAlign: TextAlign.start,
@@ -463,7 +464,6 @@ class _EditProductsState extends State<EditProducts> {
                 "Product Details",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -503,7 +503,6 @@ class _EditProductsState extends State<EditProducts> {
                 "Product Type",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -542,7 +541,6 @@ class _EditProductsState extends State<EditProducts> {
                 "Product Category",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -581,7 +579,6 @@ class _EditProductsState extends State<EditProducts> {
                 "Product SubCategory",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -760,7 +757,6 @@ class _EditProductsState extends State<EditProducts> {
                     "Current Price",
                     style: TextStyle(
                       fontSize: 16.0,
-                      
                       color: CustomColors.black,
                     ),
                   ),
@@ -792,7 +788,6 @@ class _EditProductsState extends State<EditProducts> {
                 "Available",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -818,7 +813,6 @@ class _EditProductsState extends State<EditProducts> {
                 "Deliverable",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -844,7 +838,6 @@ class _EditProductsState extends State<EditProducts> {
                 "Popular Item",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
@@ -870,7 +863,6 @@ class _EditProductsState extends State<EditProducts> {
                 "Returnable",
                 style: TextStyle(
                   fontSize: 16.0,
-                  
                   color: CustomColors.black,
                 ),
               ),
