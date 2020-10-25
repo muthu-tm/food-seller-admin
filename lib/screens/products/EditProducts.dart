@@ -420,7 +420,7 @@ class _EditProductsState extends State<EditProducts> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 60.0),
+              padding: EdgeInsets.only(left: 60.0, right: 10),
               child: TextFormField(
                 initialValue: widget.product.name,
                 textAlign: TextAlign.start,
