@@ -118,9 +118,14 @@ class _OrderAmountWidgetState extends State<OrderAmountWidget> {
               ),
             ),
             RaisedButton.icon(
-              color: CustomColors.blueGreen,
+              color: CustomColors.alertRed,
               onPressed: () async {
                 try {
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+
+                  if (!currentFocus.hasPrimaryFocus) {
+                    currentFocus.unfocus();
+                  }
                   await widget.order.updateAmountDetails(
                       widget.order.userNumber, oAmount, dAmount, rAmount);
                   Fluttertoast.showToast(

@@ -1,7 +1,7 @@
 import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/screens/Home/AuthPage.dart';
-import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/services/analytics/analytics.dart';
+import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -19,12 +19,12 @@ class MyApp extends StatefulWidget {
 
   static void setLocale(BuildContext context, Locale newLocale) {
     _MyAppState state = context.findAncestorStateOfType();
-    
+
     state.setState(() {
       state._fetchLocale().then((locale) {
         state.locale = locale;
       });
-    }); 
+    });
   }
 }
 
@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
   static FirebaseAnalytics analytics = FirebaseAnalytics();
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);
-  
+
   Locale locale;
 
   @override
@@ -50,14 +50,12 @@ class _MyAppState extends State<MyApp> {
     Analytics.setupAnalytics(analytics, observer);
     return MaterialApp(
       locale: this.locale,
-      title: 'ChipChop Seller',
+      title: seller_app_name,
       theme: ThemeData(
-        brightness: Brightness.light,
-        
-        textTheme: GoogleFonts.poppinsTextTheme(
+          brightness: Brightness.light,
+          textTheme: GoogleFonts.poppinsTextTheme(
             Theme.of(context).textTheme,
-          )
-      ),
+          )),
       supportedLocales: [
         Locale('en', 'US'),
         Locale('ta', 'IN'),
@@ -86,9 +84,9 @@ class _MyAppState extends State<MyApp> {
     var _prefs = await SharedPreferences.getInstance();
     var _language = _prefs.getString("language");
 
-    if(_language == "Tamil"){
+    if (_language == "Tamil") {
       return Locale('ta', 'IN');
-    } else if(_language == "Hindi"){
+    } else if (_language == "Hindi") {
       return Locale('hi', 'IN');
     } else {
       return Locale('en', 'US');
