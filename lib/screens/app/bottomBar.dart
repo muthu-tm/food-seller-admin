@@ -41,11 +41,13 @@ Widget bottomBar(BuildContext context) {
               children: <Widget>[
                 Icon(
                   Icons.home,
-                  size: 25.0,
+                  size: 30.0,
                   color: CustomColors.black,
                 ),
-                Text("Home",
-                    style: GoogleFonts.orienta(),),
+                Text(
+                  "Home",
+                  style: GoogleFonts.orienta(),
+                ),
               ],
             ),
           ),
@@ -70,8 +72,10 @@ Widget bottomBar(BuildContext context) {
                   size: 25.0,
                   color: CustomColors.black,
                 ),
-                Text("Products",
-                    style: GoogleFonts.orienta()),
+                SizedBox(
+                  height: 5,
+                ),
+                Text("Products", style: GoogleFonts.orienta()),
               ],
             ),
           ),
@@ -95,12 +99,14 @@ Widget bottomBar(BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                  Icons.content_copy,
+                  FontAwesomeIcons.shoppingBag,
                   size: 25.0,
                   color: CustomColors.black,
                 ),
-                Text("Orders",
-                    style: GoogleFonts.orienta()),
+                SizedBox(
+                  height: 5,
+                ),
+                Text("Orders", style: GoogleFonts.orienta()),
               ],
             ),
           ),
@@ -121,11 +127,13 @@ Widget bottomBar(BuildContext context) {
               children: <Widget>[
                 Icon(
                   Icons.settings,
-                  size: 25.0,
+                  size: 27.0,
                   color: CustomColors.black,
                 ),
-                Text("Settings",
-                    style: GoogleFonts.orienta()),
+                SizedBox(
+                  height: 3,
+                ),
+                Text("Settings", style: GoogleFonts.orienta()),
               ],
             ),
           ),

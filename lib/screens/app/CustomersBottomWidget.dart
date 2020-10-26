@@ -128,7 +128,7 @@ class _CustomersBottomWidgetState extends State<CustomersBottomWidget> {
                     children: <Widget>[
                       Icon(
                         Icons.group,
-                        size: 25.0,
+                        size: 30.0,
                         color: CustomColors.black,
                       ),
                       Text("Customers",
@@ -184,7 +184,7 @@ class _CustomersBottomWidgetState extends State<CustomersBottomWidget> {
                 children: <Widget>[
                   Icon(
                     Icons.group,
-                    size: 25.0,
+                    size: 30.0,
                     color: CustomColors.black,
                   ),
                   Text("Customers",
