@@ -1366,7 +1366,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
 
   Widget getProductSubCategories(BuildContext context) {
     return FutureBuilder<List<ProductSubCategories>>(
-      future: ProductSubCategories().getSubCategories(availProductCategories),
+      future: ProductSubCategories().getSubCategoriesByIDs(availProductCategories),
       builder: (BuildContext context,
           AsyncSnapshot<List<ProductSubCategories>> snapshot) {
         Widget children;

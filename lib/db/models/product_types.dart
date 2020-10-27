@@ -3,7 +3,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_seller/db/models/model.dart';
 
-import 'product_categories.dart';
 part 'product_types.g.dart';
 
 @JsonSerializable(explicitToJson: true)

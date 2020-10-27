@@ -40,7 +40,7 @@ Store _$StoreFromJson(Map<String, dynamic> json) {
             ?.toList() ??
         []
     ..users = (json['users'] as List)
-            ?.map((e) => e == null ? null : e as int)
+            ?.map((e) => e == null ? null : e as String)
             ?.toList() ??
         []
     ..availablePayments = (json['avail_payments'] as List)

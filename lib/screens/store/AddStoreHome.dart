@@ -162,7 +162,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
 
             store.name = this.storeName;
             store.ownedBy = this.ownedBy;
-            store.users = [cachedLocalUser.getIntID()];
+            store.users = [cachedLocalUser.getID()];
             store.availablePayments = paymentOptions;
             store.storeImages = imagePaths;
             store.availProducts = this.availProducts;
@@ -188,7 +188,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             userAccess.positionName = "Owner";
             userAccess.userNumber = cachedLocalUser.getID();
             userAccess.accessLevel = [0];
-            store.users = [cachedLocalUser.getIntID()];
             store.usersAccess = [userAccess];
             store.isActive = isActive;
             store.keywords = this.storeName.split(" ");
@@ -1278,7 +1277,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
 
   Widget getProductSubCategories(BuildContext context) {
     return FutureBuilder<List<ProductSubCategories>>(
-      future: ProductSubCategories().getSubCategories(availProductCategories),
+      future: ProductSubCategories().getSubCategoriesByIDs(availProductCategories),
       builder: (BuildContext context,
           AsyncSnapshot<List<ProductSubCategories>> snapshot) {
         Widget children;
@@ -1291,32 +1290,32 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
               primary: false,
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index) {
-                ProductSubCategories categories = snapshot.data[index];
+                ProductSubCategories sCategories = snapshot.data[index];
                 return InkWell(
                   onTap: () {
-                    if (availProductSubCategories.contains(categories.uuid)) {
+                    if (availProductSubCategories.contains(sCategories.uuid)) {
                       setState(() {
-                        availProductSubCategories.remove(categories.uuid);
+                        availProductSubCategories.remove(sCategories.uuid);
                       });
                     } else {
                       setState(() {
-                        availProductSubCategories.add(categories.uuid);
+                        availProductSubCategories.add(sCategories.uuid);
                       });
                     }
                   },
                   child: Container(
                     padding: EdgeInsets.all(10),
-                    color: availProductSubCategories.contains(categories.uuid)
+                    color: availProductSubCategories.contains(sCategories.uuid)
                         ? CustomColors.alertRed
                         : CustomColors.white,
                     height: 40,
                     width: 50,
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      categories.name,
+                      sCategories.name,
                       style: TextStyle(
                           color: availProductSubCategories
-                                  .contains(categories.uuid)
+                                  .contains(sCategories.uuid)
                               ? CustomColors.white
                               : CustomColors.green),
                     ),

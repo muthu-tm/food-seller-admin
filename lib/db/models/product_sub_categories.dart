@@ -1,4 +1,3 @@
-import 'package:chipchop_seller/db/models/product_categories.dart';
 import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:chipchop_seller/db/models/model.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -12,8 +11,8 @@ class ProductSubCategories extends Model {
 
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
-  @JsonKey(name: 'category_uuid', nullable: false)
-  List<String> categoryID;
+  @JsonKey(name: 'category_id', nullable: false)
+  String categoryID;
   @JsonKey(name: 'name', defaultValue: "")
   String name;
   @JsonKey(name: 'short_details', defaultValue: "")
@@ -65,69 +64,39 @@ class ProductSubCategories extends Model {
     return this.uuid;
   }
 
-  Future<List<ProductSubCategories>> getSubCategories(
-      List<String> categories) async {
-    // handle empty params
-    if (categories.isEmpty) return [];
-
-    List<ProductSubCategories> subCategories = [];
-
-    for (var i = 0; i < categories.length; i++) {
-      QuerySnapshot snap = await getCollectionRef()
-          .where('category_uuid', arrayContains: categories[i])
-          .getDocuments();
-      if (snap.documents.isEmpty)
-        continue;
-      else {
-        for (var j = 0; j < snap.documents.length; j++) {
-          ProductSubCategories _c =
-              ProductSubCategories.fromJson(snap.documents[j].data);
-          subCategories.add(_c);
-        }
-      }
-    }
-
-    return subCategories;
-  }
-
   Future<List<ProductSubCategories>> getSubCategoriesByIDs(
-      List<String> categories) async {
-    // handle empty params
-    if (categories.isEmpty) return [];
-
-    List<ProductSubCategories> subCategories = [];
-
-    for (var i = 0; i < categories.length; i++) {
-      QuerySnapshot snap = await getCollectionRef()
-          .where('category_uuid', arrayContains: categories[i])
-          .getDocuments();
-      if (snap.documents.isEmpty)
-        continue;
-      else {
-        for (var j = 0; j < snap.documents.length; j++) {
-          ProductSubCategories _c =
-              ProductSubCategories.fromJson(snap.documents[j].data);
-          subCategories.add(_c);
-        }
-      }
-    }
-
-    return subCategories;
-  }
-
-  Future<List<ProductSubCategories>> getSubCategoriesForIDs(
       List<String> ids) async {
     // handle empty params
     if (ids.isEmpty) return [];
 
     List<ProductSubCategories> categories = [];
 
-    QuerySnapshot snap =
-        await getCollectionRef().where('uuid', whereIn: ids).getDocuments();
-    for (var j = 0; j < snap.documents.length; j++) {
-      ProductSubCategories _c =
-          ProductSubCategories.fromJson(snap.documents[j].data);
-      categories.add(_c);
+    if (ids.length > 9) {
+      int end = 0;
+      for (int i = 0; i < ids.length; i = i + 9) {
+        if (end + 9 > ids.length)
+          end = ids.length;
+        else
+          end = end + 9;
+
+        QuerySnapshot snap = await getCollectionRef()
+            .where('category_id', whereIn: ids.sublist(i, end))
+            .getDocuments();
+        for (var j = 0; j < snap.documents.length; j++) {
+          ProductSubCategories _c =
+              ProductSubCategories.fromJson(snap.documents[j].data);
+          categories.add(_c);
+        }
+      }
+    } else {
+      QuerySnapshot snap = await getCollectionRef()
+          .where('category_id', whereIn: ids)
+          .getDocuments();
+      for (var j = 0; j < snap.documents.length; j++) {
+        ProductSubCategories _c =
+            ProductSubCategories.fromJson(snap.documents[j].data);
+        categories.add(_c);
+      }
     }
 
     return categories;
@@ -149,7 +118,7 @@ class ProductSubCategories extends Model {
           end = end + 9;
 
         QuerySnapshot snap = await getCollectionRef()
-            .where('category_uuid', arrayContains: categoryID)
+            .where('category_id', isEqualTo: categoryID)
             .where('uuid', whereIn: ids.sublist(i, end))
             .getDocuments();
         for (var j = 0; j < snap.documents.length; j++) {
@@ -160,7 +129,7 @@ class ProductSubCategories extends Model {
       }
     } else {
       QuerySnapshot snap = await getCollectionRef()
-          .where('category_uuid', arrayContains: categoryID)
+          .where('category_id', isEqualTo: categoryID)
           .where('uuid', whereIn: ids)
           .getDocuments();
       for (var j = 0; j < snap.documents.length; j++) {

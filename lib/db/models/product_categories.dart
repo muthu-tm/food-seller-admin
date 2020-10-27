@@ -12,8 +12,8 @@ class ProductCategories extends Model {
 
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
-  @JsonKey(name: 'type_uuid', nullable: false)
-  List<String> typeID;
+  @JsonKey(name: 'type_id', nullable: false)
+  String typeID;
   @JsonKey(name: 'name', defaultValue: "")
   String name;
   @JsonKey(name: 'short_details', defaultValue: "")
@@ -65,7 +65,7 @@ class ProductCategories extends Model {
     List<ProductCategories> categories = [];
 
     QuerySnapshot snap = await getCollectionRef()
-        .where('type_uuid', arrayContainsAny: types)
+        .where('type_id', whereIn: types)
         .getDocuments();
     for (var j = 0; j < snap.documents.length; j++) {
       ProductCategories _c = ProductCategories.fromJson(snap.documents[j].data);
