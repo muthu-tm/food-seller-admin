@@ -53,7 +53,7 @@ class ProductReviews {
         'type': 'product_review_create',
         'product_id': productID,
         'review_id': this.uuid,
-      }, 'product_faq');
+      }, 'product_review');
     } catch (err) {
       Analytics.reportError({
         'type': 'product_review_create_error',
@@ -77,7 +77,7 @@ class ProductReviews {
         'product_id': productID,
         'review_id': id,
         'error': err.toString()
-      }, 'product_faq');
+      }, 'product_review');
       throw err;
     }
   }

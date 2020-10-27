@@ -1,4 +1,5 @@
 import 'package:chipchop_seller/db/models/user.dart';
+import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -62,10 +63,7 @@ class ChatTemplate {
         .document(storeID)
         .collection("customers")
         .document(custID)
-        .updateData({
-      'has_store_unread': false,
-      'updated_at': DateTime.now()
-    });
+        .updateData({'has_store_unread': false, 'updated_at': DateTime.now()});
   }
 
   Future<void> updateToUnRead(String storeID, String custID) async {
@@ -74,10 +72,7 @@ class ChatTemplate {
         .document(storeID)
         .collection("customers")
         .document(custID)
-        .updateData({
-      'has_store_unread': true,
-      'updated_at': DateTime.now()
-    });
+        .updateData({'has_store_unread': true, 'updated_at': DateTime.now()});
   }
 
   Stream<QuerySnapshot> streamOrderChats(
@@ -133,6 +128,11 @@ class ChatTemplate {
 
       return _buyers;
     } catch (err) {
+      Analytics.sendAnalyticsEvent({
+        'type': 'store_chat_get_error',
+        'store_id': storeID,
+        'error': err.toString()
+      }, 'chats');
       throw err;
     }
   }

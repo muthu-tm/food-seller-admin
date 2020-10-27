@@ -1,3 +1,4 @@
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 
@@ -21,6 +22,7 @@ class Analytics {
 
   static Future loginEvent(String userID) async {
     await analytics.setUserId(userID);
+    await analytics.setUserProperty(name: "app", value: "Seller");
     await analytics.logLogin(loginMethod: 'Mobile');
   }
 
