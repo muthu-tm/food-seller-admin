@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -140,28 +141,47 @@ class Order {
       field = "returned_at";
     }
 
-    await this.getCollectionRef(buyerID).document(this.uuid).updateData(
-      {
-        'status': status,
-        'updated_at': DateTime.now(),
-        'delivery.expected_at': eDelivery == null ? null : eDelivery.millisecondsSinceEpoch,
-        'delivery.delivery_contact': number,
-        field: DateTime.now().millisecondsSinceEpoch
-      },
-    );
+    try {
+      await this.getCollectionRef(buyerID).document(this.uuid).updateData(
+        {
+          'status': status,
+          'updated_at': DateTime.now(),
+          'delivery.expected_at':
+              eDelivery == null ? null : eDelivery.millisecondsSinceEpoch,
+          'delivery.delivery_contact': number,
+          field: DateTime.now().millisecondsSinceEpoch
+        },
+      );
+    } catch (err) {
+      Analytics.sendAnalyticsEvent({
+        'type': 'order_delivery_update_error',
+        'order_id': this.uuid,
+        'error': err.toString()
+      }, 'order');
+      throw err;
+    }
   }
 
   Future<void> updateAmountDetails(
       String buyerID, double oAmount, double dAmount, double rAmount) async {
-    await this.getCollectionRef(buyerID).document(this.uuid).updateData(
-      {
-        'updated_at': DateTime.now(),
-        'amount.order_amount': oAmount,
-        'amount.delivery_charge': dAmount,
-        'delivery.delivery_charge': dAmount,
-        'amount.paid_amount': rAmount
-      },
-    );
+    try {
+      await this.getCollectionRef(buyerID).document(this.uuid).updateData(
+        {
+          'updated_at': DateTime.now(),
+          'amount.order_amount': oAmount,
+          'amount.delivery_charge': dAmount,
+          'delivery.delivery_charge': dAmount,
+          'amount.paid_amount': rAmount
+        },
+      );
+    } catch (err) {
+      Analytics.sendAnalyticsEvent({
+        'type': 'order_amount_update_error',
+        'order_id': this.uuid,
+        'error': err.toString()
+      }, 'order');
+      throw err;
+    }
   }
 
   Stream<QuerySnapshot> streamOrders(String id) {

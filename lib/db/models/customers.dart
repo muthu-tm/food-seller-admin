@@ -1,5 +1,4 @@
 import 'package:chipchop_seller/db/models/model.dart';
-import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 

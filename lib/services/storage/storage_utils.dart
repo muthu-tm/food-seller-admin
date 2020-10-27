@@ -1,3 +1,4 @@
+import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class StorageUtils {
@@ -9,7 +10,11 @@ class StorageUtils {
       await reference.delete();
       return true;
     } catch (err) {
-      print(err);
+      Analytics.reportError({
+        'type': 'storage_remove_error',
+        'file': fileURL,
+        'error': err.toString()
+      }, 'storage');
       return false;
     }
   }

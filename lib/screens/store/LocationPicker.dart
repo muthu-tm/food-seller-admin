@@ -4,6 +4,7 @@ import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/home/HomeScreen.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
+import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
@@ -161,7 +162,12 @@ class LocationPickerState extends State<LocationPicker> {
           ),
         ),
       );
-    } catch (e) {
+    } catch (err) {
+      Analytics.reportError({
+        'type': 'location_search_error',
+        'search_key': searchKey,
+        'error': err.toString()
+      }, 'location');
       Fluttertoast.showToast(
           msg: 'Error, Unable to find matching address',
           backgroundColor: CustomColors.alertRed,

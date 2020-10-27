@@ -4,6 +4,7 @@ import 'package:chipchop_seller/screens/home/AuthPage.dart';
 import 'package:chipchop_seller/screens/settings/UserProfileWidget.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
+import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/controllers/auth/auth_controller.dart';
 import 'package:chipchop_seller/services/controllers/user/user_controller.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
@@ -33,7 +34,10 @@ class _UserSettingState extends State<UserSetting> {
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: CustomColors.black,),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.black,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -47,7 +51,6 @@ class _UserSettingState extends State<UserSetting> {
           "DeActivate Account",
           style: TextStyle(
             fontSize: 17,
-            
             fontWeight: FontWeight.bold,
             color: CustomColors.white,
           ),
@@ -158,6 +161,10 @@ class _UserSettingState extends State<UserSetting> {
                       (Route<dynamic> route) => false,
                     );
                   } catch (err) {
+                    Analytics.sendAnalyticsEvent({
+                      'type': 'profile_deactivate_error',
+                      'error': err.toString()
+                    }, 'profile');
                     _pController.text = "";
                     Navigator.pop(context);
                     _scaffoldKey.currentState.showSnackBar(

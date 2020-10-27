@@ -1,3 +1,4 @@
+import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -146,7 +147,18 @@ class Products extends Model {
       this.uuid = docRef.documentID;
 
       await docRef.setData(this.toJson());
+      Analytics.sendAnalyticsEvent({
+        'type': 'product_create',
+        'store_id': this.storeID,
+        'product_id': this.uuid
+      }, 'product');
     } catch (err) {
+      Analytics.sendAnalyticsEvent({
+        'type': 'product_create_error',
+        'store_id': this.storeID,
+        'product_id': this.uuid,
+        'error': err.toString()
+      }, 'product');
       throw err;
     }
   }
@@ -208,6 +220,11 @@ class Products extends Model {
 
       return null;
     } catch (err) {
+      Analytics.sendAnalyticsEvent({
+        'type': 'product_get_error',
+        'product_id': uuid,
+        'error': err.toString()
+      }, 'product');
       throw err;
     }
   }
@@ -264,7 +281,11 @@ class Products extends Model {
 
       return pList;
     } catch (err) {
-      print(err);
+      Analytics.sendAnalyticsEvent({
+        'type': 'product_search_error',
+        'search_key': searchKey,
+        'error': err.toString()
+      }, 'product');
       throw err;
     }
   }
@@ -275,6 +296,11 @@ class Products extends Model {
         {'is_available': isAvail, 'updated_at': DateTime.now()},
       );
     } catch (err) {
+      Analytics.sendAnalyticsEvent({
+        'type': 'product_status_update_error',
+        'product_id': docID,
+        'error': err.toString()
+      }, 'product');
       throw err;
     }
   }

@@ -27,7 +27,7 @@ class AuthController {
       user.preferences = UserPreferences.fromJson(UserPreferences().toJson());
       user = await user.create();
 
-      Analytics.signupEvent(mobileNumber.toString());
+      Analytics.signupEvent(user.getID());
 
       var platformData = await UserFCM().getPlatformDetails();
 
@@ -68,7 +68,7 @@ class AuthController {
         }, 'platform_update');
       }
 
-      Analytics.loginEvent(user.mobileNumber.toString());
+      Analytics.loginEvent(user.getID());
 
       // update cloud firestore "users" collection
       user.update({'last_signed_in_at': DateTime.now()});

@@ -3,7 +3,9 @@ import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/home/HomeScreen.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
+import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -66,7 +68,7 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: CustomColors.alertRed,
-        onPressed: () async{
+        onPressed: () async {
           if (geoData == null || geoData.geoHash.isEmpty) {
             _scaffoldKey.currentState.showSnackBar(
               CustomSnackBar.errorSnackBar(
@@ -169,8 +171,16 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
           ),
         ),
       );
-    } catch (e) {
-      print(e.toString());
+    } catch (err) {
+      Analytics.reportError({
+        'type': 'location_search_error',
+        'search_key': searchKey,
+        'error': err.toString()
+      }, 'location');
+      Fluttertoast.showToast(
+          msg: 'Error, Unable to find matching address',
+          backgroundColor: CustomColors.alertRed,
+          textColor: Colors.white);
     }
   }
 

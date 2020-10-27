@@ -2,6 +2,7 @@ import 'package:chipchop_seller/db/models/customers.dart';
 import 'package:chipchop_seller/db/models/user_store_wallet_history.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:chipchop_seller/services/utils/DateUtils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -152,7 +153,6 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                   "Wallet Amount",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.green,
                     fontSize: 17.0,
@@ -232,7 +232,6 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: TextStyle(
-                                      
                                       fontSize: 18.0,
                                       color: textColor,
                                       fontWeight: FontWeight.bold),
@@ -326,7 +325,6 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                     "Transaction History",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      
                       fontWeight: FontWeight.bold,
                       color: CustomColors.green,
                       fontSize: 17.0,
@@ -389,9 +387,7 @@ class _AdUserdTransactionState extends State<AddUserTransaction> {
                     child: Text(
                       "Details",
                       style: TextStyle(
-                          
-                          fontSize: 16.0,
-                          color: CustomColors.blueGreen),
+                          fontSize: 16.0, color: CustomColors.blueGreen),
                     ),
                   ),
                   title: TextFormField(
@@ -418,7 +414,6 @@ class _AdUserdTransactionState extends State<AddUserTransaction> {
                     child: Text(
                       "Amount",
                       style: TextStyle(
-                        
                         fontSize: 16.0,
                         color: CustomColors.blueGreen,
                       ),
@@ -447,9 +442,7 @@ class _AdUserdTransactionState extends State<AddUserTransaction> {
                     child: Text(
                       "Type",
                       style: TextStyle(
-                          
-                          fontSize: 16.0,
-                          color: CustomColors.blueGreen),
+                          fontSize: 16.0, color: CustomColors.blueGreen),
                     ),
                   ),
                   title: Container(
@@ -523,6 +516,11 @@ class _AdUserdTransactionState extends State<AddUserTransaction> {
                     await tran.addTransaction(widget.storeID, widget.custID);
                     Navigator.pop(context);
                   } catch (err) {
+                    Analytics.sendAnalyticsEvent({
+                      'type': 'customer_accounts_error',
+                      'store_id': widget.storeID,
+                      'error': err.toString()
+                    }, 'customer');
                     Fluttertoast.showToast(
                         msg: 'Sorry, Unable to ADD Transaction');
                   }

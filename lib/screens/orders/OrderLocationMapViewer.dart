@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:chipchop_seller/db/models/user_locations.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -246,8 +247,12 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
           ),
         ),
       );
-    } catch (e) {
-      print(e.toString());
+    } catch (err) {
+      Analytics.reportError({
+        'type': 'location_search_error',
+        'search_ket': searchKey,
+        'error': err.toString()
+      }, 'location');
     }
   }
 

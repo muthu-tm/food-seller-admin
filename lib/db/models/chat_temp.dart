@@ -133,7 +133,6 @@ class ChatTemplate {
 
       return _buyers;
     } catch (err) {
-      print(err);
       throw err;
     }
   }

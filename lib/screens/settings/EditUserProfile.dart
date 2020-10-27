@@ -357,7 +357,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
           context,
           MaterialPageRoute(
             builder: (context) => UserSetting(),
-            settings: RouteSettings(name: '/settings/user'),
+            settings: RouteSettings(name: '/settings/profile'),
           ),
         );
       }

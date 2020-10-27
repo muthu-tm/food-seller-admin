@@ -1,4 +1,5 @@
 import 'package:chipchop_seller/db/models/products.dart';
+import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 part 'product_reviews.g.dart';
@@ -48,8 +49,18 @@ class ProductReviews {
       this.updatedAt = DateTime.now();
 
       await docRef.setData(this.toJson());
+      Analytics.sendAnalyticsEvent({
+        'type': 'product_review_create',
+        'product_id': productID,
+        'review_id': this.uuid,
+      }, 'product_faq');
     } catch (err) {
-      print(err);
+      Analytics.reportError({
+        'type': 'product_review_create_error',
+        'product_id': productID,
+        'review_id': this.uuid,
+        'error': err.toString()
+      }, 'product_review');
       throw err;
     }
   }
@@ -61,7 +72,12 @@ class ProductReviews {
 
       await docRef.updateData(this.toJson());
     } catch (err) {
-      print(err);
+      Analytics.reportError({
+        'type': 'product_review_update_error',
+        'product_id': productID,
+        'review_id': id,
+        'error': err.toString()
+      }, 'product_faq');
       throw err;
     }
   }
@@ -79,7 +95,6 @@ class ProductReviews {
 
       return reviews;
     } catch (err) {
-      print(err);
       throw err;
     }
   }
@@ -88,7 +103,6 @@ class ProductReviews {
     try {
       return getCollectionRef(productID).snapshots();
     } catch (err) {
-      print(err);
       throw err;
     }
   }

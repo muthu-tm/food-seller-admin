@@ -2,6 +2,7 @@ import 'package:chipchop_seller/db/models/model.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/user_preferences.dart';
 import 'package:chipchop_seller/db/models/user_locations.dart';
+import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -105,9 +106,19 @@ class User extends Model {
     this.updatedAt = DateTime.now();
     this.isActive = true;
 
-    await super.add(this.toJson());
-
-    return this;
+    try {
+      await super.add(this.toJson());
+      Analytics.sendAnalyticsEvent(
+          {'type': 'seller_create', 'user_id': this.getID()}, 'seller');
+      return this;
+    } catch (err) {
+      Analytics.reportError({
+        'type': 'seller_create_error',
+        'store_id': this.getID(),
+        'message': err.toString()
+      }, 'seller');
+      throw err;
+    }
   }
 
   Future updatePlatformDetails(Map<String, dynamic> data) async {

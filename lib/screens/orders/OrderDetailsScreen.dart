@@ -540,7 +540,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                         backgroundColor: CustomColors.green,
                                         textColor: CustomColors.black);
                                   } catch (err) {
-                                    print(err);
                                     Fluttertoast.showToast(
                                         msg: 'Error, Unable to Update Details',
                                         backgroundColor: CustomColors.alertRed,

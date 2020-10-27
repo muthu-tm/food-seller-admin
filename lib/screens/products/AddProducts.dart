@@ -199,7 +199,6 @@ class _AddProductState extends State<AddProduct> {
             CustomSnackBar.errorSnackBar("Fill Required fields", 2));
       }
     } catch (err) {
-      print(err);
       Navigator.pop(context);
       _scaffoldKey.currentState.showSnackBar(
         CustomSnackBar.errorSnackBar("Unable to create now! Try later!", 2),

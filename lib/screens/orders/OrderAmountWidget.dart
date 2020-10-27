@@ -133,7 +133,6 @@ class _OrderAmountWidgetState extends State<OrderAmountWidget> {
                       backgroundColor: CustomColors.green,
                       textColor: CustomColors.black);
                 } catch (err) {
-                  print(err);
                   Fluttertoast.showToast(
                       msg: 'Error, Unable to Amount Details',
                       backgroundColor: CustomColors.alertRed,

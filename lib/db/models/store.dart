@@ -1,3 +1,4 @@
+import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -134,9 +135,17 @@ class Store extends Model {
       bWrite.updateData(cachedLocalUser.getDocumentReference(),
           {'stores': cachedLocalUser.stores});
       await bWrite.commit();
+
+      Analytics.sendAnalyticsEvent(
+          {'type': 'store_create', 'store_id': this.uuid}, 'store');
       return this;
     } catch (err) {
       cachedLocalUser.stores.remove(this.uuid);
+      Analytics.reportError({
+        'type': 'store_create_error',
+        'store_id': this.uuid,
+        'message': err.toString()
+      }, 'store');
       throw err;
     }
   }
@@ -193,10 +202,15 @@ class Store extends Model {
 
   Future updateStoreStatus(String docID, bool isLive) async {
     try {
-    await getCollectionRef()
-        .document(docID)
-        .updateData({'is_active': isLive, 'updated_at': DateTime.now()});
-    } catch(err) {
+      await getCollectionRef()
+          .document(docID)
+          .updateData({'is_active': isLive, 'updated_at': DateTime.now()});
+    } catch (err) {
+      Analytics.reportError({
+        'type': 'store_status_update_error',
+        'store_id': docID,
+        'message': err.toString()
+      }, 'store');
       throw err;
     }
   }
