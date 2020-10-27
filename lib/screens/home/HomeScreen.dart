@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
 
             if (snapshot.hasData) {
               if (snapshot.data.documents.length == 0) {
-                child = NoStoresWidget();
+                child = Center(child: NoStoresWidget());
               } else {
                 child = Container(
                   child: ListView.builder(
