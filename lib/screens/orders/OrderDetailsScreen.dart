@@ -241,6 +241,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                   padding: const EdgeInsets.only(
                                       left: 10.0, right: 10.0),
                                   decoration: BoxDecoration(
+                                      color: CustomColors.lightGrey,
                                       borderRadius: BorderRadius.circular(10.0),
                                       border: Border.all()),
                                   child: DropdownButtonHideUnderline(
@@ -455,7 +456,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                         FloatingLabelBehavior.always,
                                     suffixIcon: Icon(Icons.date_range,
                                         color: CustomColors.blue, size: 30),
-                                    labelText: "DateTime",
+                                    labelText: "Date & Time",
+                                    fillColor: CustomColors.lightGrey,
+                                    filled: true,
                                     labelStyle: TextStyle(
                                       fontSize: 12,
                                       color: CustomColors.blue,
@@ -513,9 +516,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: CustomColors.lightGreen),
+                                          color: CustomColors.lightGrey),
                                     ),
                                     labelText: "Delivery - Contact Numer",
+                                    fillColor: CustomColors.lightGrey,
+                                    filled: true,
                                     labelStyle: TextStyle(
                                       fontSize: 12,
                                       color: CustomColors.blue,

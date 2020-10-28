@@ -53,6 +53,9 @@ class _OrderAmountWidgetState extends State<OrderAmountWidget> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   prefix: Text('₹ '),
+                  fillColor: CustomColors.lightGrey,
+                  filled: true,
+                  labelStyle: TextStyle(fontSize: 12, color: CustomColors.blue),
                   labelText: "Order Amount",
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: CustomColors.lightGreen),
@@ -88,6 +91,9 @@ class _OrderAmountWidgetState extends State<OrderAmountWidget> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   prefix: Text('₹ '),
+                  fillColor: CustomColors.lightGrey,
+                  filled: true,
+                  labelStyle: TextStyle(fontSize: 12, color: CustomColors.blue),
                   labelText: "Delivery Charge",
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: CustomColors.lightGreen),
@@ -107,6 +113,9 @@ class _OrderAmountWidgetState extends State<OrderAmountWidget> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   prefix: Text('₹ '),
+                  fillColor: CustomColors.lightGrey,
+                  filled: true,
+                  labelStyle: TextStyle(fontSize: 12, color: CustomColors.blue),
                   labelText: "Received Amount",
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: CustomColors.lightGreen),
