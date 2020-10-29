@@ -145,7 +145,7 @@ class ProductFAQsWidget extends StatelessWidget {
   }
 
   getAnswerDialog(BuildContext context, ProductFaqs faq) {
-    _answerController.text = "";
+    _answerController.text = faq.answer ?? "";
 
     return showDialog(
       context: context,
@@ -267,7 +267,7 @@ class ProductFAQsWidget extends StatelessWidget {
           if (snapshot.data.documents.isNotEmpty) {
             children = ListView.builder(
               scrollDirection: Axis.vertical,
-              primary: true,
+              primary: false,
               shrinkWrap: true,
               itemCount: snapshot.data.documents.length,
               itemBuilder: (BuildContext context, int index) {
@@ -282,14 +282,14 @@ class ProductFAQsWidget extends StatelessWidget {
                         text: TextSpan(
                             text: 'Q. ',
                             style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: CustomColors.black),
                             children: [
                               TextSpan(
                                 text: '${_faq.question}',
                                 style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: CustomColors.black),
                               ),
@@ -302,14 +302,14 @@ class ProductFAQsWidget extends StatelessWidget {
                                     TextSpan(
                                       text: 'A. ',
                                       style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                           color: CustomColors.black),
                                     ),
                                     TextSpan(
                                       text: '${_faq.answer}',
                                       style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 16,
                                           color: CustomColors.black),
                                     ),
                                   ]),
