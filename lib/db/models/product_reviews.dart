@@ -13,7 +13,7 @@ class ProductReviews {
   @JsonKey(name: 'review', defaultValue: "")
   String review;
   @JsonKey(name: 'rating', defaultValue: 1)
-  int rating;
+  double rating;
   @JsonKey(name: 'user_number')
   String userNumber;
   @JsonKey(name: 'user_name', defaultValue: "")
@@ -22,6 +22,8 @@ class ProductReviews {
   String location;
   @JsonKey(name: 'images', defaultValue: [""])
   List<String> images;
+  @JsonKey(name: 'helpful', defaultValue: 1)
+  int helpful;
   @JsonKey(name: 'created_time', nullable: true)
   int createdTime;
   @JsonKey(name: 'updated_at', nullable: true)
