@@ -12,6 +12,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../db/models/products.dart';
 import '../utils/CustomColors.dart';
+import 'ProductReviewWidget.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final Products product;
@@ -273,7 +274,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 Container(
                   child: getStoreDetails(context),
                 ),
-                Container(),
+                SingleChildScrollView(
+                  child: ProductReviewWidget(widget.product.uuid),
+                ),
                 SingleChildScrollView(
                     child: ProductFAQsWidget(widget.product.uuid)),
               ],
