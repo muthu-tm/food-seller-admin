@@ -48,42 +48,39 @@ class _ProductWidgetState extends State<ProductWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Column(
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: widget.product.getProductImage(),
-                    imageBuilder: (context, imageProvider) => Container(
-                      width: 60,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5.0),
-                        ),
-                        shape: BoxShape.rectangle,
-                        image: DecorationImage(
-                            fit: BoxFit.fill, image: imageProvider),
-                      ),
+              CachedNetworkImage(
+                imageUrl: widget.product.getProductImage(),
+                imageBuilder: (context, imageProvider) => Container(
+                  width: 70,
+                  height: 70,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5.0),
                     ),
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) =>
-                            CircularProgressIndicator(
-                                value: downloadProgress.progress),
-                    errorWidget: (context, url, error) => Icon(
-                      Icons.error,
-                      size: 35,
-                    ),
-                    fadeOutDuration: Duration(seconds: 1),
-                    fadeInDuration: Duration(seconds: 2),
+                    shape: BoxShape.rectangle,
+                    image: DecorationImage(
+                        fit: BoxFit.fill, image: imageProvider),
                   ),
-                ],
+                ),
+                progressIndicatorBuilder:
+                    (context, url, downloadProgress) =>
+                        CircularProgressIndicator(
+                            value: downloadProgress.progress),
+                errorWidget: (context, url, error) => Icon(
+                  Icons.error,
+                  size: 35,
+                ),
+                fadeOutDuration: Duration(seconds: 1),
+                fadeInDuration: Duration(seconds: 2),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     widget.product.name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      
                       color: CustomColors.blue,
                       fontSize: 14.0,
                       fontWeight: FontWeight.bold,

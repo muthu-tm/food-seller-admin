@@ -6,6 +6,7 @@ import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_seller/screens/utils/ImageView.dart';
+import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/storage/image_uploader.dart';
 import 'package:chipchop_seller/services/storage/storage_utils.dart';
 import 'package:flutter/material.dart';
@@ -167,6 +168,13 @@ class _AddProductState extends State<AddProduct> {
         return;
       }
 
+      if (priceController.text == "") {
+        _scaffoldKey.currentState.showSnackBar(
+          CustomSnackBar.errorSnackBar("Please fill the Price details!", 2),
+        );
+        return;
+      }
+
       final FormState form = _formKey.currentState;
 
       if (form.validate()) {
@@ -199,6 +207,11 @@ class _AddProductState extends State<AddProduct> {
             CustomSnackBar.errorSnackBar("Fill Required fields", 2));
       }
     } catch (err) {
+      Analytics.sendAnalyticsEvent({
+        'type': 'product_create_error',
+        'store_id': this.storeID,
+        'error': err.toString()
+      }, 'product');
       Navigator.pop(context);
       _scaffoldKey.currentState.showSnackBar(
         CustomSnackBar.errorSnackBar("Unable to create now! Try later!", 2),
@@ -623,18 +636,18 @@ class _AddProductState extends State<AddProduct> {
                     initialValue: weight.toString(),
                     textAlign: TextAlign.start,
                     autofocus: false,
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: CustomColors.lightGreen)),
+                        borderSide: BorderSide(color: CustomColors.lightGreen),
+                      ),
                       hintText: "Weight",
                       labelText: "Weight",
                       fillColor: CustomColors.white,
                       filled: true,
                     ),
                     validator: (weight) {
-                      if (weight.isEmpty) {
+                      if (weight.trim().isEmpty || weight.trim() == "0.0") {
                         return "Must not be empty";
                       } else {
                         this.weight = double.parse(weight);
@@ -684,7 +697,7 @@ class _AddProductState extends State<AddProduct> {
                     initialValue: originalPrice.toString(),
                     textAlign: TextAlign.start,
                     autofocus: false,
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderSide:
@@ -705,7 +718,7 @@ class _AddProductState extends State<AddProduct> {
                       this.originalPrice = double.parse(val);
                     },
                     validator: (price) {
-                      if (price.isEmpty) {
+                      if (price.trim().isEmpty || price.trim() == "0.0") {
                         return "Must not be empty";
                       } else {
                         this.originalPrice = double.parse(price);
@@ -720,7 +733,7 @@ class _AddProductState extends State<AddProduct> {
                     initialValue: offer.toString(),
                     textAlign: TextAlign.start,
                     autofocus: false,
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderSide:
@@ -739,12 +752,12 @@ class _AddProductState extends State<AddProduct> {
                       }
                     },
                     validator: (offer) {
-                      if (offer.isEmpty) {
-                        return "Must not be empty";
+                      if (offer.trim().isEmpty) {
+                        this.offer = 0.00;
                       } else {
                         this.offer = double.parse(offer);
-                        return null;
                       }
+                      return null;
                     },
                   ),
                 ),

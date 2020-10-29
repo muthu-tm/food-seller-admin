@@ -166,6 +166,13 @@ class _EditProductsState extends State<EditProducts> {
         return;
       }
 
+      if (priceController.text == "") {
+        _scaffoldKey.currentState.showSnackBar(
+          CustomSnackBar.errorSnackBar("Please fill the Price details!", 2),
+        );
+        return;
+      }
+
       final FormState form = _formKey.currentState;
 
       if (form.validate()) {
@@ -622,7 +629,7 @@ class _EditProductsState extends State<EditProducts> {
                     initialValue: widget.product.weight.toString(),
                     textAlign: TextAlign.start,
                     autofocus: false,
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderSide:
@@ -633,7 +640,7 @@ class _EditProductsState extends State<EditProducts> {
                       filled: true,
                     ),
                     validator: (weight) {
-                      if (weight.isEmpty) {
+                      if (weight.trim().isEmpty || weight.trim() == "0.0") {
                         return "Must not be empty";
                       } else {
                         this.weight = double.parse(weight);
@@ -683,7 +690,7 @@ class _EditProductsState extends State<EditProducts> {
                     initialValue: widget.product.originalPrice.toString(),
                     textAlign: TextAlign.start,
                     autofocus: false,
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderSide:
@@ -704,7 +711,7 @@ class _EditProductsState extends State<EditProducts> {
                       this.originalPrice = double.parse(val);
                     },
                     validator: (price) {
-                      if (price.isEmpty) {
+                      if (price.trim().isEmpty || price.trim() == "0.0") {
                         return "Must not be empty";
                       } else {
                         this.originalPrice = double.parse(price);
@@ -719,7 +726,7 @@ class _EditProductsState extends State<EditProducts> {
                     initialValue: widget.product.offer.toString(),
                     textAlign: TextAlign.start,
                     autofocus: false,
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderSide:
@@ -738,12 +745,12 @@ class _EditProductsState extends State<EditProducts> {
                       }
                     },
                     validator: (offer) {
-                      if (offer.isEmpty) {
-                        return "Must not be empty";
+                      if (offer.trim().isEmpty) {
+                        this.offer = 0.00;
                       } else {
                         this.offer = double.parse(offer);
-                        return null;
                       }
+                      return null;
                     },
                   ),
                 ),

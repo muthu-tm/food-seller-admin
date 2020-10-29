@@ -153,12 +153,6 @@ class Products extends Model {
         'product_id': this.uuid
       }, 'product');
     } catch (err) {
-      Analytics.sendAnalyticsEvent({
-        'type': 'product_create_error',
-        'store_id': this.storeID,
-        'product_id': this.uuid,
-        'error': err.toString()
-      }, 'product');
       throw err;
     }
   }
