@@ -86,7 +86,9 @@ class ProductReviews {
 
   Future<List<ProductReviews>> getAllReviews(String productID) async {
     try {
-      QuerySnapshot qSnap = await getCollectionRef(productID).getDocuments();
+      QuerySnapshot qSnap = await getCollectionRef(productID)
+          .orderBy('created_time', descending: true)
+          .getDocuments();
       List<ProductReviews> reviews = [];
 
       for (var i = 0; i < qSnap.documents.length; i++) {

@@ -87,7 +87,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                     ),
                   ),
                   Text(
-                    "${widget.product.weight} ${widget.product.getUnit()} - Rs. ${widget.product.originalPrice.toString()}",
+                    "${widget.product.weight} ${widget.product.getUnit()} - Rs. ${widget.product.currentPrice.toString()}",
                     style: TextStyle(
                       color: CustomColors.blue,
                       fontSize: 13.0,
