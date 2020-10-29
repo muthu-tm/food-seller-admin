@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/db/models/store.dart';
+import 'package:chipchop_seller/screens/products/ProductFAQsWidget.dart';
 import 'package:chipchop_seller/screens/store/StoreProfileWidget.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CarouselIndicatorSlider.dart';
@@ -99,9 +100,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               widget.product.shortDetails,
               textAlign: TextAlign.start,
               style: TextStyle(
-                  fontSize: 14,
-                  color: CustomColors.black,
-                  ),
+                fontSize: 14,
+                color: CustomColors.black,
+              ),
             ),
           ),
           Padding(
@@ -187,7 +188,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                               ? "Returnable"
                               : "Not Returnable",
                           style: TextStyle(
-                              color: CustomColors.black, ),
+                            color: CustomColors.black,
+                          ),
                         )
                       ],
                     ),
@@ -214,7 +216,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                               ? "Home Delivery"
                               : "Self Pickup",
                           style: TextStyle(
-                              color: CustomColors.black, ),
+                            color: CustomColors.black,
+                          ),
                         )
                       ],
                     ),
@@ -244,7 +247,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                               ? "In Stock"
                               : "Out Of Stock",
                           style: TextStyle(
-                              color: CustomColors.black, ),
+                            color: CustomColors.black,
+                          ),
                         )
                       ],
                     ),
@@ -270,7 +274,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                   child: getStoreDetails(context),
                 ),
                 Container(),
-                Container()
+                SingleChildScrollView(
+                    child: ProductFAQsWidget(widget.product.uuid)),
               ],
             ),
           )
@@ -295,7 +300,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               child: Text(
                 "Unable to load Store Details",
                 style: TextStyle(
-                  
                   color: CustomColors.alertRed,
                   fontSize: 16.0,
                 ),
