@@ -26,9 +26,6 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-        final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
-        final double itemWidth = size.width / 2;
     return StreamBuilder<QuerySnapshot>(
       stream: Products().streamProducts(widget.storeID),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -39,7 +36,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
             children = GridView.count(
               crossAxisCount: 2,
               crossAxisSpacing: 10,
-              childAspectRatio: (itemWidth/itemHeight),
+              childAspectRatio: 0.78,
               shrinkWrap: true,
               mainAxisSpacing: 10,
               children: List.generate(
@@ -213,7 +210,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                     )
                                   : Card(
                                       elevation: 2.0,
-                                      color: CustomColors.lightGreen,
+                                      color: CustomColors.green,
                                       child: Container(
                                         height: 40,
                                         width: 40,
@@ -228,7 +225,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                               _wlMap.contains(product.uuid)
                                   ? Card(
                                       elevation: 2.0,
-                                      color: CustomColors.lightGreen,
+                                      color: CustomColors.green,
                                       child: Container(
                                         height: 40,
                                         width: 40,
