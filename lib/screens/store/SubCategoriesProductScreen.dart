@@ -23,7 +23,6 @@ class SubCategoriesProductsScreen extends StatefulWidget {
 class _SubCategoriesProductsScreenState
     extends State<SubCategoriesProductsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   @override
   Widget build(BuildContext context) {

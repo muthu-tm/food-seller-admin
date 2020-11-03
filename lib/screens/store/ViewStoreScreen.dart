@@ -38,7 +38,6 @@ class ViewStoreScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // StoreSearchBar(),
             Padding(
               padding: EdgeInsets.all(10),
               child: CarouselIndicatorSlider(store.getStoreImages()),
