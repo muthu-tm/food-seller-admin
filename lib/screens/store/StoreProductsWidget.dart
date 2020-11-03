@@ -57,7 +57,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                     },
                     child: Container(
                       height: 50,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(3),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(
                           Radius.circular(10.0),
@@ -100,26 +100,28 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                   fadeInDuration: Duration(seconds: 2),
                                 ),
                               ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${product.weight} ${product.getUnit()}",
-                                    style: TextStyle(
-                                      color: CustomColors.black,
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.bold,
+                              Flexible(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${product.weight} ${product.getUnit()}",
+                                      style: TextStyle(
+                                        color: CustomColors.black,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    "Rs. ${product.originalPrice.toString()}",
-                                    style: TextStyle(
-                                      color: CustomColors.black,
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.bold,
+                                    Text(
+                                      "Rs. ${product.originalPrice.toString()}",
+                                      style: TextStyle(
+                                        color: CustomColors.black,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -128,7 +130,6 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              
                               color: CustomColors.blue,
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
@@ -187,7 +188,6 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                                   .round()
                                                   .toString(),
                                               style: TextStyle(
-                                                  
                                                   color: CustomColors.blue,
                                                   fontSize: 17),
                                             ),
@@ -272,7 +272,6 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                   Text(
                     "No Products added By Store",
                     style: TextStyle(
-                      
                       color: CustomColors.alertRed,
                       fontSize: 16.0,
                     ),
@@ -281,7 +280,6 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                   Text(
                     "No Worries!",
                     style: TextStyle(
-                      
                       color: CustomColors.grey,
                       fontSize: 14.0,
                     ),
@@ -290,7 +288,6 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                   Text(
                     "You could still place Written/Captured ORDER here.",
                     style: TextStyle(
-                      
                       color: CustomColors.blue,
                       fontSize: 16.0,
                     ),

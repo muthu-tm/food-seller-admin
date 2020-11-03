@@ -51,7 +51,7 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                     },
                     child: Container(
                       height: 50,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(3),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(
                           Radius.circular(10.0),
@@ -94,26 +94,28 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                   fadeInDuration: Duration(seconds: 2),
                                 ),
                               ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${product.weight} ${product.getUnit()}",
-                                    style: TextStyle(
-                                      color: CustomColors.black,
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.bold,
+                              Flexible(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${product.weight} ${product.getUnit()}",
+                                      style: TextStyle(
+                                        color: CustomColors.black,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    "Rs. ${product.originalPrice.toString()}",
-                                    style: TextStyle(
-                                      color: CustomColors.black,
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.bold,
+                                    Text(
+                                      "Rs. ${product.originalPrice.toString()}",
+                                      style: TextStyle(
+                                        color: CustomColors.black,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -122,7 +124,6 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              
                               color: CustomColors.blue,
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
@@ -149,8 +150,7 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                                           BorderRadius.circular(
                                                               5),
                                                     ),
-                                                    onPressed: () async {
-                                                    },
+                                                    onPressed: () async {},
                                                     child: Icon(
                                                       Icons.delete_forever,
                                                       size: 20,
@@ -168,8 +168,7 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                                           BorderRadius.circular(
                                                               5),
                                                     ),
-                                                    onPressed: () async {
-                                                    },
+                                                    onPressed: () async {},
                                                     child: Icon(Icons.remove),
                                                   ),
                                                 ),
@@ -180,7 +179,6 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                                   .round()
                                                   .toString(),
                                               style: TextStyle(
-                                                  
                                                   color: CustomColors.blue,
                                                   fontSize: 17),
                                             ),
@@ -194,8 +192,7 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                                 borderRadius:
                                                     BorderRadius.circular(5),
                                               ),
-                                              onPressed: () async {
-                                              },
+                                              onPressed: () async {},
                                               child: Icon(Icons.add),
                                             ),
                                           ),
@@ -212,8 +209,7 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                           iconSize: 20,
                                           alignment: Alignment.center,
                                           icon: Icon(FontAwesomeIcons.cartPlus),
-                                          onPressed: () async {
-                                          },
+                                          onPressed: () async {},
                                         ),
                                       ),
                                     ),
@@ -236,7 +232,6 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                   Text(
                     "No Popular Products added By Store",
                     style: TextStyle(
-                      
                       color: CustomColors.alertRed,
                       fontSize: 16.0,
                     ),
@@ -245,7 +240,6 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                   Text(
                     "No Worries!",
                     style: TextStyle(
-                      
                       color: CustomColors.grey,
                       fontSize: 14.0,
                     ),
@@ -254,7 +248,6 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                   Text(
                     "You could still order your favourite item with Written/Capture ORDER option!",
                     style: TextStyle(
-                      
                       color: CustomColors.blue,
                       fontSize: 16.0,
                     ),

@@ -26,54 +26,52 @@ class _ProductWidgetState extends State<ProductWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(5.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.0),
-          ),
-          color: CustomColors.white,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
         ),
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProductDetailsScreen(widget.product),
-                settings: RouteSettings(name: '/settings/products/view'),
-              ),
-            );
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              CachedNetworkImage(
-                imageUrl: widget.product.getProductImage(),
-                imageBuilder: (context, imageProvider) => Container(
-                  width: 70,
-                  height: 70,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5.0),
-                    ),
-                    shape: BoxShape.rectangle,
-                    image: DecorationImage(
-                        fit: BoxFit.fill, image: imageProvider),
+        color: CustomColors.white,
+      ),
+      padding: EdgeInsets.all(2),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductDetailsScreen(widget.product),
+              settings: RouteSettings(name: '/settings/products/view'),
+            ),
+          );
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            CachedNetworkImage(
+              imageUrl: widget.product.getProductImage(),
+              imageBuilder: (context, imageProvider) => Container(
+                width: 70,
+                height: 70,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5.0),
                   ),
+                  shape: BoxShape.rectangle,
+                  image:
+                      DecorationImage(fit: BoxFit.fill, image: imageProvider),
                 ),
-                progressIndicatorBuilder:
-                    (context, url, downloadProgress) =>
-                        CircularProgressIndicator(
-                            value: downloadProgress.progress),
-                errorWidget: (context, url, error) => Icon(
-                  Icons.error,
-                  size: 35,
-                ),
-                fadeOutDuration: Duration(seconds: 1),
-                fadeInDuration: Duration(seconds: 2),
               ),
-              Column(
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  CircularProgressIndicator(value: downloadProgress.progress),
+              errorWidget: (context, url, error) => Icon(
+                Icons.error,
+                size: 35,
+              ),
+              fadeOutDuration: Duration(seconds: 1),
+              fadeInDuration: Duration(seconds: 2),
+            ),
+            Flexible(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -96,39 +94,39 @@ class _ProductWidgetState extends State<ProductWidget> {
                   ),
                 ],
               ),
-              Column(
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      FontAwesomeIcons.solidEdit,
-                      color: CustomColors.alertRed,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditProducts(widget.product),
-                          settings:
-                              RouteSettings(name: '/settings/products/edit'),
-                        ),
-                      );
-                    },
+            ),
+            Column(
+              children: [
+                IconButton(
+                  icon: Icon(
+                    FontAwesomeIcons.solidEdit,
+                    color: CustomColors.alertRed,
                   ),
-                  Switch(
-                    value: isSwitched,
-                    onChanged: (value) async {
-                      isSwitched = value;
-                      await widget.product
-                          .updateProductStatus(widget.product.uuid, value);
-                    },
-                    inactiveTrackColor: CustomColors.alertRed,
-                    activeTrackColor: CustomColors.green,
-                    activeColor: Colors.green,
-                  ),
-                ],
-              )
-            ],
-          ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditProducts(widget.product),
+                        settings:
+                            RouteSettings(name: '/settings/products/edit'),
+                      ),
+                    );
+                  },
+                ),
+                Switch(
+                  value: isSwitched,
+                  onChanged: (value) async {
+                    isSwitched = value;
+                    await widget.product
+                        .updateProductStatus(widget.product.uuid, value);
+                  },
+                  inactiveTrackColor: CustomColors.alertRed,
+                  activeTrackColor: CustomColors.green,
+                  activeColor: Colors.green,
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );
