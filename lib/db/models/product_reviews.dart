@@ -1,5 +1,7 @@
+import 'package:chipchop_seller/db/models/model.dart';
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/services/analytics/analytics.dart';
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 part 'product_reviews.g.dart';
@@ -49,8 +51,26 @@ class ProductReviews {
       this.uuid = docRef.documentID;
       this.createdTime = DateTime.now().millisecondsSinceEpoch;
       this.updatedAt = DateTime.now();
+      this.userName = cachedLocalUser.firstName;
+      this.userNumber = cachedLocalUser.getID();
+      this.location = cachedLocalUser.primaryLocation.address.city;
 
-      await docRef.setData(this.toJson());
+      WriteBatch _batch = Model.db.batch();
+
+      _batch.setData(docRef, this.toJson());
+      DocumentReference _productDocRef = Products().getDocumentRef(productID);
+      DocumentSnapshot docSnap = await _productDocRef.get();
+      Products _p = Products.fromJson(docSnap.data);
+      double newTotalRating = _p.totalRatings + this.rating;
+      double newRating = (newTotalRating / _p.totalReviews + 1);
+      _batch.updateData(Products().getDocumentRef(productID), {
+        'rating': newRating,
+        'total_ratings': newTotalRating,
+        'total_reviews': _p.totalReviews + 1,
+        'updated_at': DateTime.now()
+      });
+      _batch.commit();
+
       Analytics.sendAnalyticsEvent({
         'type': 'product_review_create',
         'product_id': productID,
