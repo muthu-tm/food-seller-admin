@@ -116,7 +116,10 @@ class _ViewProductsListScreenState extends State<ViewProductsListScreen> {
                 itemBuilder: (BuildContext context, int index) {
                   Products product =
                       Products.fromJson(snapshot.data.documents[index].data);
-                  return ProductWidget(product);
+                  return Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: ProductWidget(product),
+                  );
                 });
           } else {
             children = Center(
