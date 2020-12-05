@@ -28,14 +28,11 @@ class LocationPickerState extends State<LocationPicker> {
   GeoPointData geoData;
 
   final Set<Marker> _markers = {};
-  String searchKey = "";
 
   @override
   void initState() {
     super.initState();
-    this.searchKey = widget.store.address.pincode;
-
-    _searchAndNavigate();
+    _searchAndNavigate(widget.store.address.pincode);
   }
 
   @override
@@ -55,7 +52,7 @@ class LocationPickerState extends State<LocationPicker> {
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
@@ -116,30 +113,26 @@ class LocationPickerState extends State<LocationPicker> {
               left: 10,
               right: 80,
               child: Card(
-                elevation: 5.0,
-                color: CustomColors.white,
-                child: TextField(
-                  textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context)
-                        .translate('hint_search_with_picode'),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(5),
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () async {
-                        if (searchKey != "") await _searchAndNavigate();
-                      },
-                    ),
-                  ),
-                  autofocus: false,
-                  onChanged: (val) {
-                    setState(
-                      () {
-                        searchKey = val;
-                      },
-                    );
-                  },
+                elevation: 2,
+                child: Container(
+                  color: CustomColors.white,
+                  alignment: Alignment.topCenter,
+                  child: TextFormField(
+                      textAlignVertical: TextAlignVertical.center,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.search,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: "Search",
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(5),
+                      ),
+                      autofocus: false,
+                      onFieldSubmitted: (searchKey) async {
+                        if (searchKey != "")
+                          await _searchAndNavigate(searchKey);
+                      }),
                 ),
               ),
             ),
@@ -149,7 +142,7 @@ class LocationPickerState extends State<LocationPicker> {
     );
   }
 
-  _searchAndNavigate() async {
+  _searchAndNavigate(String searchKey) async {
     try {
       List<Placemark> marks =
           await Geolocator().placemarkFromAddress(searchKey);
@@ -199,17 +192,6 @@ class LocationPickerState extends State<LocationPicker> {
     geoPoint.geoPoint = point.geoPoint;
     geoData = geoPoint;
     return point.hash;
-  }
-
-  _animateToUser() async {
-    Position pos = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-    mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-      target: LatLng(pos.latitude, pos.latitude),
-      zoom: 10.0,
-    )));
-    _loadAddress(pos.latitude, pos.longitude);
   }
 
   void _onMapCreated(GoogleMapController controller) {

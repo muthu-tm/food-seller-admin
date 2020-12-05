@@ -107,7 +107,7 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                         },
                         child: Icon(
                           FontAwesomeIcons.angellist,
-                          color: CustomColors.green,
+                          color: CustomColors.primary,
                         ),
                       ),
                     ),

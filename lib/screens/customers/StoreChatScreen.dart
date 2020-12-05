@@ -276,7 +276,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                         padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
                         width: 200.0,
                         decoration: BoxDecoration(
-                            color: CustomColors.green,
+                            color: CustomColors.primary,
                             borderRadius: BorderRadius.circular(8.0)),
                         margin: EdgeInsets.only(left: 10.0),
                       )
@@ -407,7 +407,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
       ),
       body: Stack(
         children: <Widget>[

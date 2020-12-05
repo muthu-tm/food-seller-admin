@@ -52,11 +52,11 @@ class _TakePicturePageState extends State<TakePicturePage> {
           icon: Icon(Icons.arrow_back_ios, color: CustomColors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.green.withOpacity(0.7),
+        backgroundColor: CustomColors.primary.withOpacity(0.7),
         onPressed: () async {
           await _takePicture(context);
         },

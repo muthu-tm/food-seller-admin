@@ -28,7 +28,7 @@ class CustomDialogs {
                 onPressed: () => Navigator.pop(context),
                 child: Text('OK'),
                 textColor: CustomColors.blue,
-                color: CustomColors.green,
+                color: CustomColors.primary,
               )
             ],
           );
@@ -80,7 +80,7 @@ class CustomDialogs {
                           strokeWidth: 3,
                           backgroundColor: CustomColors.alertRed,
                           valueColor:
-                              AlwaysStoppedAnimation<Color>(CustomColors.green),
+                              AlwaysStoppedAnimation<Color>(CustomColors.primary),
                         ),
                       ),
                     ),
@@ -144,7 +144,7 @@ class CustomDialogs {
                   strokeWidth: 3,
                   backgroundColor: CustomColors.alertRed,
                   valueColor:
-                      AlwaysStoppedAnimation<Color>(CustomColors.green),
+                      AlwaysStoppedAnimation<Color>(CustomColors.primary),
                 ),
               ),
             ),
@@ -177,7 +177,7 @@ class CustomDialogs {
                   child: Text(
                     description,
                     style: TextStyle(
-                        color: CustomColors.green, fontSize: 20.0),
+                        color: CustomColors.primary, fontSize: 20.0),
                     textAlign: TextAlign.center,
                   ),
                 ),

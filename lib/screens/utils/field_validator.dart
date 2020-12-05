@@ -36,13 +36,14 @@ class FieldValidator {
       String passkey, Function(String) setPasskeyState) {
     if (passkey.isEmpty) {
       return 'Secret KEY is required';
-    } else if (passkey.length != 4) {
-      return 'Secret KEY must be 4 characters long';
+    } else if (passkey.length < 4) {
+      return 'Secret KEY atleast 4 characters long';
     }
 
     setPasskeyState(passkey);
     return null;
   }
+
   static String customerNameValidator(
       String customerName, Function(String) setCustomerNameState) {
     if (customerName.isEmpty) {
@@ -56,5 +57,4 @@ class FieldValidator {
     setCustomerNameState(customerName);
     return null;
   }
-
 }

@@ -45,7 +45,7 @@ class ProductReviewWidget extends StatelessWidget {
                             ? Colors.red
                             : product.rating <= 3.5
                                 ? Colors.amber
-                                : CustomColors.green,
+                                : CustomColors.primary,
                       ),
                       itemCount: 5,
                       itemSize: 30.0,
@@ -87,7 +87,7 @@ class ProductReviewWidget extends StatelessWidget {
                                       ? Colors.red
                                       : snapshot.data[index].rating <= 3.5
                                           ? Colors.amber
-                                          : CustomColors.green,
+                                          : CustomColors.primary,
                                 ),
                               ],
                             ),
@@ -181,7 +181,7 @@ class ProductReviewDetailed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: CustomColors.black),
@@ -215,7 +215,7 @@ class ProductReviewDetailed extends StatelessWidget {
                           ? Colors.red
                           : review.rating <= 3.5
                               ? Colors.amber
-                              : CustomColors.green,
+                              : CustomColors.primary,
                     ),
                     SizedBox(
                       width: 10,

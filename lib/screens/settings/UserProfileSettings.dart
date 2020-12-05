@@ -27,7 +27,7 @@ class _UserSettingState extends State<UserSetting> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
         title: Text(
           AppLocalizations.of(context).translate('profile_settings'),
           textAlign: TextAlign.start,
@@ -118,7 +118,7 @@ class _UserSettingState extends State<UserSetting> {
           ),
           actions: <Widget>[
             FlatButton(
-                color: CustomColors.green,
+                color: CustomColors.primary,
                 child: Text(
                   "NO",
                   style: TextStyle(

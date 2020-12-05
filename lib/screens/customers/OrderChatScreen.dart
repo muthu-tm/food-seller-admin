@@ -250,7 +250,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                         padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
                         width: MediaQuery.of(context).size.width * 0.7,
                         decoration: BoxDecoration(
-                            color: CustomColors.green,
+                            color: CustomColors.primary,
                             borderRadius: BorderRadius.circular(8.0)),
                         margin: EdgeInsets.only(left: 10.0),
                       )

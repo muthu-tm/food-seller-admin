@@ -34,7 +34,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
         centerTitle: true,
         titleSpacing: 0.0,
         title: TextFormField(
@@ -167,7 +167,9 @@ class _SearchAppBarState extends State<SearchAppBar> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Divider(),
+                        SizedBox(
+                          height: 5,
+                        ),
                         Text(
                           "Try with different KEYWORDS..",
                           textAlign: TextAlign.center,

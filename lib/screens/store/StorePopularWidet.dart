@@ -201,7 +201,7 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                     )
                                   : Card(
                                       elevation: 2.0,
-                                      color: CustomColors.green,
+                                      color: CustomColors.primary,
                                       child: Container(
                                         height: 40,
                                         width: 40,

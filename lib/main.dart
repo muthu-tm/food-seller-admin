@@ -49,6 +49,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     Analytics.setupAnalytics(analytics, observer);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       locale: this.locale,
       title: seller_app_name,
       theme: ThemeData(

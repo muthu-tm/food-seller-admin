@@ -118,7 +118,7 @@ class ProductFAQsWidget extends StatelessWidget {
                           }
                         },
                         child: Text("Submit"),
-                        color: CustomColors.green,
+                        color: CustomColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -231,7 +231,7 @@ class ProductFAQsWidget extends StatelessWidget {
                           }
                         },
                         child: Text("Submit"),
-                        color: CustomColors.green,
+                        color: CustomColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),

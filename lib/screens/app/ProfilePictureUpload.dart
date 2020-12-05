@@ -68,14 +68,14 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                      color: CustomColors.green,
+                                      color: CustomColors.primary,
                                       style: BorderStyle.solid,
                                       width: 2.0),
                                 ),
                                 child: Icon(
                                   Icons.person,
                                   size: 45.0,
-                                  color: CustomColors.green,
+                                  color: CustomColors.primary,
                                 ),
                               )
                             : CircleAvatar(
@@ -91,7 +91,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                               padding: EdgeInsets.all(5),
                               child: FlatButton(
                                 padding: EdgeInsets.all(5),
-                                color: CustomColors.green,
+                                color: CustomColors.primary,
                                 child: Text(
                                   "Select Image",
                                   style: TextStyle(
@@ -157,7 +157,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                               padding: EdgeInsets.all(5),
                               child: FlatButton(
                                 padding: EdgeInsets.all(5),
-                                color: CustomColors.green,
+                                color: CustomColors.primary,
                                 child: Text(
                                   "Change",
                                   style: TextStyle(
@@ -177,7 +177,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                               padding: EdgeInsets.all(5),
                               child: FlatButton(
                                 padding: EdgeInsets.all(5),
-                                color: CustomColors.green,
+                                color: CustomColors.primary,
                                 child: Text(
                                   "Upload",
                                   style: TextStyle(

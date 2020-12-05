@@ -1,29 +1,98 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/app/appBar.dart';
 import 'package:chipchop_seller/screens/app/bottomBar.dart';
 import 'package:chipchop_seller/screens/app/sideDrawer.dart';
 import 'package:chipchop_seller/screens/products/AddProducts.dart';
-import 'package:chipchop_seller/screens/products/ViewProductsList.dart';
+import 'package:chipchop_seller/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/NoStoresWidget.dart';
+import 'package:chipchop_seller/services/utils/DateUtils.dart';
 import 'package:flutter/material.dart';
 
 class ProductsHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(context),
-      drawer: sideDrawer(context),
-      body: SingleChildScrollView(
-        child: Container(
-          color: CustomColors.lightGrey,
-          child: SingleChildScrollView(
-            child: getStores(context),
+    return DefaultTabController(
+      length: 2,
+      initialIndex: 0,
+      child: Scaffold(
+        drawer: sideDrawer(context),
+        appBar: appBar(context),
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5.0),
+                  child: Card(
+                    elevation: 2,
+                    color: CustomColors.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: ExpansionTile(
+                      backgroundColor: CustomColors.lightGrey,
+                      title: Text("View Products"),
+                      children: [getStores(context)],
+                    ),
+                  ),
+                ),
+                Card(
+                  elevation: 2,
+                  color: CustomColors.lightGrey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                  ),
+                  child: Container(
+                    child: ListTile(
+                      onTap: () {
+                        showSearch(context: context, delegate: Search());
+                      },
+                      leading: Text("Select & Load from ChipChop Products"),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 15,
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  elevation: 2,
+                  color: CustomColors.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                  ),
+                  child: Container(
+                    child: ListTile(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddProduct(null),
+                            settings: RouteSettings(name: '/products/add'),
+                          ),
+                        );
+                      },
+                      leading: Text("Add Custom Product"),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 15,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
+        bottomNavigationBar: bottomBar(context),
       ),
-      bottomNavigationBar: bottomBar(context),
     );
   }
 
@@ -34,146 +103,95 @@ class ProductsHome extends StatelessWidget {
         Widget children;
         if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
-            children = Container(
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
-                color: CustomColors.white,
-              ),
-              child: Column(
-                children: [
-                  Card(
-                    elevation: 5.0,
-                    child: Container(
-                      padding: EdgeInsets.all(5),
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
+            children = ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                Store store = snapshot.data[index];
+                return Padding(
+                  padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewStoreScreen(store),
+                          settings: RouteSettings(name: '/store'),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      elevation: 2,
+                      color: CustomColors.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                      ),
+                      child: Row(
                         children: [
-                          ListTile(
-                            leading: Icon(
-                              Icons.add_circle_outline,
+                          CachedNetworkImage(
+                            imageUrl: store.getPrimaryImage(),
+                            imageBuilder: (context, imageProvider) => Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10.0),
+                                  bottomLeft: Radius.circular(10.0),
+                                ),
+                                shape: BoxShape.rectangle,
+                                image: DecorationImage(
+                                    fit: BoxFit.fill, image: imageProvider),
+                              ),
+                            ),
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) =>
+                                    CircularProgressIndicator(
+                                        value: downloadProgress.progress),
+                            errorWidget: (context, url, error) => Icon(
+                              Icons.error,
                               size: 35,
-                              color: CustomColors.blue,
                             ),
-                            title: Text(
-                              "Add Product",
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                
-                                color: CustomColors.black,
-                              ),
-                            ),
+                            fadeOutDuration: Duration(seconds: 1),
+                            fadeInDuration: Duration(seconds: 2),
                           ),
-                          ListTile(
-                            onTap: () {
-                              showSearch(context: context, delegate: Search());
-                            },
-                            leading: Text(""),
-                            title: Text(
-                              "Search & Load from existing Products",
-                              style: TextStyle(
-                                fontSize: 14.0,
-                                
-                                color: CustomColors.black,
-                              ),
-                            ),
-                            trailing: Icon(Icons.arrow_forward_ios),
-                          ),
-                          Text(
-                            "OR",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              
-                              color: CustomColors.grey,
-                            ),
-                          ),
-                          ListTile(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AddProduct(null),
-                                  settings: RouteSettings(
-                                      name: '/settings/products/add'),
+                          SizedBox(width: 5),
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  store.name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600),
                                 ),
-                              );
-                            },
-                            leading: Text(""),
-                            title: Text(
-                              "Add Custom Product",
-                              style: TextStyle(
-                                fontSize: 14.0,
-                                
-                                color: CustomColors.black,
-                              ),
+                                Text(
+                                  store.address.city ?? "",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                Text(
+                                  "Timings :  ${DateUtils.getFormattedTime(store.activeFrom)} - ${DateUtils.getFormattedTime(store.activeTill)}",
+                                  style: TextStyle(
+                                    color: CustomColors.alertRed,
+                                    fontSize: 12.0,
+                                  ),
+                                )
+                              ],
                             ),
-                            trailing: Icon(Icons.arrow_forward_ios),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  Card(
-                    elevation: 5.0,
-                    child: Container(
-                      padding: EdgeInsets.all(5),
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width,
-                      child: ExpansionTile(
-                        leading: Icon(
-                          Icons.remove_red_eye,
-                          size: 35,
-                          color: CustomColors.blue,
-                        ),
-                        title: Text(
-                          "View Products",
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            
-                            color: CustomColors.black,
-                          ),
-                        ),
-                        children: [
-                          ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            primary: false,
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              Store store = snapshot.data[index];
-                              return ListTile(
-                                leading:
-                                    Icon(Icons.store, color: CustomColors.blue),
-                                title: Text(store.name),
-                                trailing: Icon(
-                                  Icons.keyboard_arrow_right,
-                                  size: 35,
-                                  color: CustomColors.blue,
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          ViewProductsListScreen(store),
-                                      settings: RouteSettings(
-                                          name: '/settings/products/view'),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             );
           } else {
             children = Center(

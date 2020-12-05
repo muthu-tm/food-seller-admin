@@ -53,7 +53,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
         title: Text(
           AppLocalizations.of(context).translate('edit_profile'),
           textAlign: TextAlign.start,

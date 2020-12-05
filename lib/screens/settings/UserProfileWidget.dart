@@ -29,7 +29,7 @@ class UserProfileWidget extends StatelessWidget {
             title: Text(
               title,
               style: TextStyle(
-                color: CustomColors.green,
+                color: CustomColors.primary,
                 fontSize: 18.0,
               ),
             ),

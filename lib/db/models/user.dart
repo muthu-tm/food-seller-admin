@@ -84,8 +84,8 @@ class User extends Model {
     return _userCollRef;
   }
 
-  DocumentReference getDocumentReference() {
-    return _userCollRef.document(getID());
+  DocumentReference getDocumentReference(String id) {
+    return _userCollRef.document(id);
   }
 
   String getID() {
@@ -97,8 +97,12 @@ class User extends Model {
         this.countryCode.toString() + this.mobileNumber.toString());
   }
 
+  String getFullName() {
+    return this.firstName + " " + this.lastName ?? "";
+  }
+
   Stream<DocumentSnapshot> streamUserData() {
-    return getDocumentReference().snapshots();
+    return getDocumentReference(getID()).snapshots();
   }
 
   Future<User> create() async {

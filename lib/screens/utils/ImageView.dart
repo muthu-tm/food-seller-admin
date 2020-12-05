@@ -13,7 +13,7 @@ class ImageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
         title: Text(
           'Image View',
           style: TextStyle(

@@ -25,7 +25,7 @@ Widget contactAndSupportDialog(context) {
             title: Text(
               AppLocalizations.of(context).translate('help_and_support'),
               style: TextStyle(
-                  color: CustomColors.green,
+                  color: CustomColors.primary,
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold),
             ),
@@ -46,7 +46,7 @@ Widget contactAndSupportDialog(context) {
             AppLocalizations.of(context).translate('lost_need_help'),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: CustomColors.green,
+                color: CustomColors.primary,
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold),
           ),
@@ -63,7 +63,7 @@ Widget contactAndSupportDialog(context) {
             AppLocalizations.of(context).translate('contact_us'),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: CustomColors.green,
+                color: CustomColors.primary,
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold),
           ),
@@ -94,7 +94,7 @@ Widget contactAndSupportDialog(context) {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                color: CustomColors.green,
+                color: CustomColors.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -119,7 +119,7 @@ Widget contactAndSupportDialog(context) {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                color: CustomColors.green,
+                color: CustomColors.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),

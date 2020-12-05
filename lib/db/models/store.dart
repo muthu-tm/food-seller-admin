@@ -21,6 +21,8 @@ class Store extends Model {
   String ownedBy;
   @JsonKey(name: 'store_name', defaultValue: "")
   String name;
+  @JsonKey(name: 'short_details', defaultValue: "")
+  String shortDetails;
   @JsonKey(name: 'geo_point', defaultValue: "")
   GeoPointData geoPoint;
   @JsonKey(name: 'avail_products')
@@ -37,12 +39,20 @@ class Store extends Model {
   String activeTill;
   @JsonKey(name: 'address')
   Address address;
+  @JsonKey(name: 'deliver_anywhere', defaultValue: false)
+  bool deliverAnywhere;
   @JsonKey(name: 'is_active', defaultValue: true)
   bool isActive;
+  @JsonKey(name: 'image', defaultValue: "")
+  String image;
   @JsonKey(name: 'store_images', defaultValue: [""])
   List<String> storeImages;
   @JsonKey(name: 'users')
   List<String> users;
+  @JsonKey(name: 'upi')
+  String upiID;
+  @JsonKey(name: 'wallet_number')
+  String walletNumber;
   @JsonKey(name: 'avail_payments')
   List<int> availablePayments; // 0 - Cash, 1 - Gpay, 2 - Card, 3, PayTM
   @JsonKey(name: 'users_access')
@@ -80,6 +90,15 @@ class Store extends Model {
               firebase_storage_path, image_kit_path + ik_medium_size)
         ];
     }
+  }
+
+  String getPrimaryImage() {
+    if (image != null && image.trim() != "")
+      return image.replaceFirst(
+          firebase_storage_path, image_kit_path + ik_medium_size);
+    else
+      return no_image_placeholder.replaceFirst(
+          firebase_storage_path, image_kit_path + ik_medium_size);
   }
 
   List<String> getStoreOriginalImages() {
@@ -131,8 +150,11 @@ class Store extends Model {
     this.uuid = docRef.documentID;
     try {
       bWrite.setData(docRef, this.toJson());
-      cachedLocalUser.stores.add(this.uuid);
-      bWrite.updateData(cachedLocalUser.getDocumentReference(),
+      cachedLocalUser.stores == null
+          ? cachedLocalUser.stores = [this.uuid]
+          : cachedLocalUser.stores.add(this.uuid);
+      bWrite.updateData(
+          cachedLocalUser.getDocumentReference(cachedLocalUser.getID()),
           {'stores': cachedLocalUser.stores});
       await bWrite.commit();
 
@@ -140,7 +162,8 @@ class Store extends Model {
           {'type': 'store_create', 'store_id': this.uuid}, 'store');
       return this;
     } catch (err) {
-      cachedLocalUser.stores.remove(this.uuid);
+      if (cachedLocalUser.stores.contains(this.uuid))
+        cachedLocalUser.stores.remove(this.uuid);
       Analytics.reportError({
         'type': 'store_create_error',
         'store_id': this.uuid,

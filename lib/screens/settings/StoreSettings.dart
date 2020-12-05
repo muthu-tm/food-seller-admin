@@ -35,7 +35,7 @@ class _StoreSettingsState extends State<StoreSettings> {
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
       ),
       floatingActionButton: AddStoreWidget(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -152,7 +152,7 @@ class _StoreSettingsState extends State<StoreSettings> {
                               await store.updateStoreStatus(store.uuid, value);
                             },
                             inactiveTrackColor: CustomColors.alertRed,
-                            activeTrackColor: CustomColors.green,
+                            activeTrackColor: CustomColors.primary,
                             activeColor: Colors.green,
                           ),
                         ],

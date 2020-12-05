@@ -28,7 +28,7 @@ class CustomersScreen extends StatelessWidget {
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
       ),
       body: StreamBuilder(
           stream: Customers().streamStoreCustomers(storeID),
@@ -70,7 +70,7 @@ class CustomersScreen extends StatelessWidget {
                                   ),
                                   child: Icon(
                                     Icons.person,
-                                    color: CustomColors.green,
+                                    color: CustomColors.primary,
                                   ),
                                 ),
                                 title: Text(cust.firstName),

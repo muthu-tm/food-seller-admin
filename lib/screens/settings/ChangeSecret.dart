@@ -24,7 +24,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
         title: Text(
           AppLocalizations.of(context).translate('change_secret_key'),
           textAlign: TextAlign.start,
@@ -70,10 +70,10 @@ class _ChangeSecretState extends State<ChangeSecret> {
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
                       textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
-                          color: CustomColors.green,
+                          color: CustomColors.primary,
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         fillColor: CustomColors.white,
@@ -96,11 +96,11 @@ class _ChangeSecretState extends State<ChangeSecret> {
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
                       textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.text,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
-                          color: CustomColors.green,
+                          color: CustomColors.primary,
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         fillColor: CustomColors.white,

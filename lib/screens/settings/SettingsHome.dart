@@ -29,7 +29,7 @@ class SettingsHome extends StatelessWidget {
                             width: 85,
                             height: 80,
                             decoration: BoxDecoration(
-                              color: CustomColors.green,
+                              color: CustomColors.primary,
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(40),
@@ -86,7 +86,7 @@ class SettingsHome extends StatelessWidget {
                 },
               ),
               Divider(
-                color: CustomColors.green,
+                color: CustomColors.primary,
                 thickness: 2.0,
                 height: 1,
               ),
@@ -102,7 +102,7 @@ class SettingsHome extends StatelessWidget {
                             width: 85,
                             height: 80,
                             decoration: BoxDecoration(
-                              color: CustomColors.green,
+                              color: CustomColors.primary,
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(40),
@@ -159,7 +159,7 @@ class SettingsHome extends StatelessWidget {
                 },
               ),
               Divider(
-                color: CustomColors.green,
+                color: CustomColors.primary,
                 thickness: 2.0,
                 height: 1,
               ),

@@ -106,7 +106,7 @@ class _EditProductsState extends State<EditProducts> {
       key: _scaffoldKey,
       backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
         title: Text(
           "Edit - ${widget.product.name}",
           textAlign: TextAlign.start,
@@ -806,7 +806,7 @@ class _EditProductsState extends State<EditProducts> {
                   });
                 },
                 inactiveTrackColor: CustomColors.alertRed,
-                activeTrackColor: CustomColors.green,
+                activeTrackColor: CustomColors.primary,
                 activeColor: Colors.green,
               ),
             ),
@@ -831,7 +831,7 @@ class _EditProductsState extends State<EditProducts> {
                   });
                 },
                 inactiveTrackColor: CustomColors.alertRed,
-                activeTrackColor: CustomColors.green,
+                activeTrackColor: CustomColors.primary,
                 activeColor: Colors.green,
               ),
             ),
@@ -856,7 +856,7 @@ class _EditProductsState extends State<EditProducts> {
                   });
                 },
                 inactiveTrackColor: CustomColors.alertRed,
-                activeTrackColor: CustomColors.green,
+                activeTrackColor: CustomColors.primary,
                 activeColor: Colors.green,
               ),
             ),
@@ -881,7 +881,7 @@ class _EditProductsState extends State<EditProducts> {
                   });
                 },
                 inactiveTrackColor: CustomColors.alertRed,
-                activeTrackColor: CustomColors.green,
+                activeTrackColor: CustomColors.primary,
                 activeColor: Colors.green,
               ),
             ),

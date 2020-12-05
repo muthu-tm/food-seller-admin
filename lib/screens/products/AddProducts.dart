@@ -109,7 +109,7 @@ class _AddProductState extends State<AddProduct> {
       key: _scaffoldKey,
       backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
         title: Text(
           "Add Products",
           textAlign: TextAlign.start,
@@ -813,7 +813,7 @@ class _AddProductState extends State<AddProduct> {
                   });
                 },
                 inactiveTrackColor: CustomColors.alertRed,
-                activeTrackColor: CustomColors.green,
+                activeTrackColor: CustomColors.primary,
                 activeColor: Colors.green,
               ),
             ),
@@ -838,7 +838,7 @@ class _AddProductState extends State<AddProduct> {
                   });
                 },
                 inactiveTrackColor: CustomColors.alertRed,
-                activeTrackColor: CustomColors.green,
+                activeTrackColor: CustomColors.primary,
                 activeColor: Colors.green,
               ),
             ),
@@ -863,7 +863,7 @@ class _AddProductState extends State<AddProduct> {
                   });
                 },
                 inactiveTrackColor: CustomColors.alertRed,
-                activeTrackColor: CustomColors.green,
+                activeTrackColor: CustomColors.primary,
                 activeColor: Colors.green,
               ),
             ),
@@ -888,7 +888,7 @@ class _AddProductState extends State<AddProduct> {
                   });
                 },
                 inactiveTrackColor: CustomColors.alertRed,
-                activeTrackColor: CustomColors.green,
+                activeTrackColor: CustomColors.primary,
                 activeColor: Colors.green,
               ),
             ),

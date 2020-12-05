@@ -1,10 +1,11 @@
 import 'package:chipchop_seller/screens/app/SearchAppBar.dart';
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 
 Widget appBar(BuildContext context) {
   return AppBar(
-    backgroundColor: CustomColors.green,
+    backgroundColor: CustomColors.primary,
     titleSpacing: 0.0,
     automaticallyImplyLeading: false,
     title: Row(
@@ -36,22 +37,24 @@ Widget appBar(BuildContext context) {
       ],
     ),
     actions: <Widget>[
-      IconButton(
-        icon: Icon(
-          Icons.search,
-          size: 30.0,
-          color: CustomColors.black,
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SearchAppBar(),
-              settings: RouteSettings(name: '/Search'),
-            ),
-          );
-        },
-      ),
+      cachedLocalUser.stores != null && cachedLocalUser.stores.isNotEmpty
+          ? IconButton(
+              icon: Icon(
+                Icons.search,
+                size: 30.0,
+                color: CustomColors.black,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SearchAppBar(),
+                    settings: RouteSettings(name: '/Search'),
+                  ),
+                );
+              },
+            )
+          : Container(),
     ],
   );
 }

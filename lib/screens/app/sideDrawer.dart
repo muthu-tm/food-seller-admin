@@ -21,7 +21,7 @@ Widget sideDrawer(BuildContext context) {
     child: ListView(
       children: <Widget>[
         DrawerHeader(
-          decoration: BoxDecoration(color: CustomColors.green),
+          decoration: BoxDecoration(color: CustomColors.primary),
           child: Column(
             children: <Widget>[
               Container(
@@ -171,7 +171,7 @@ Widget sideDrawer(BuildContext context) {
           ),
         ),
         ListTile(
-          leading: Icon(Icons.home, color: CustomColors.green),
+          leading: Icon(Icons.home, color: CustomColors.primary),
           title: Text(
             "Home",
           ),
@@ -198,7 +198,7 @@ Widget sideDrawer(BuildContext context) {
             );
           },
           leading:
-              Icon(FontAwesomeIcons.shoppingBasket, color: CustomColors.green),
+              Icon(FontAwesomeIcons.shoppingBasket, color: CustomColors.primary),
           title: Text(
             "Product",
           ),
@@ -214,14 +214,14 @@ Widget sideDrawer(BuildContext context) {
               ),
             );
           },
-          leading: Icon(Icons.assessment, color: CustomColors.green),
+          leading: Icon(Icons.assessment, color: CustomColors.primary),
           title: Text(
             "Orders",
           ),
         ),
         Divider(indent: 65.0, color: CustomColors.black, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.store_mall_directory, color: CustomColors.green),
+          leading: Icon(Icons.store_mall_directory, color: CustomColors.primary),
           title: Text(
             "Store settings",
           ),
@@ -237,7 +237,7 @@ Widget sideDrawer(BuildContext context) {
         ),
         Divider(indent: 65.0, color: CustomColors.black, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.settings, color: CustomColors.green),
+          leading: Icon(Icons.settings, color: CustomColors.primary),
           title: Text(
             AppLocalizations.of(context).translate('profile_settings'),
           ),
@@ -253,7 +253,7 @@ Widget sideDrawer(BuildContext context) {
         ),
         Divider(indent: 65.0, color: CustomColors.black, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.headset_mic, color: CustomColors.green),
+          leading: Icon(Icons.headset_mic, color: CustomColors.primary),
           title: Text(
             AppLocalizations.of(context).translate('help_and_support'),
           ),
@@ -324,7 +324,7 @@ Widget sideDrawer(BuildContext context) {
                   child: Text(
                     app_version,
                     style: TextStyle(
-                      color: CustomColors.green,
+                      color: CustomColors.primary,
                       fontFamily: "OLED",
                       fontSize: 13.0,
                     ),

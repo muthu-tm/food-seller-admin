@@ -36,7 +36,7 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen>
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: CustomColors.black),

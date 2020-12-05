@@ -16,7 +16,7 @@ Widget bottomBar(BuildContext context) {
     height: 60,
     decoration: BoxDecoration(
       gradient: LinearGradient(
-          colors: [CustomColors.white, CustomColors.green],
+          colors: [CustomColors.white, CustomColors.primary],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter),
     ),

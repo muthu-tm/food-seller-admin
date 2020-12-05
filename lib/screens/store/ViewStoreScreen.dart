@@ -27,7 +27,7 @@ class ViewStoreScreen extends StatelessWidget {
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: CustomColors.alertRed,

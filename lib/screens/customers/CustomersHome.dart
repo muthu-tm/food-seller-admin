@@ -5,6 +5,7 @@ import 'package:chipchop_seller/screens/customers/CustomersScreen.dart';
 import 'package:chipchop_seller/screens/utils/AddStoreWidget.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/screens/utils/NoStoresWidget.dart';
 import 'package:flutter/material.dart';
 
 class CustomersHome extends StatelessWidget {
@@ -26,7 +27,7 @@ class CustomersHome extends StatelessWidget {
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
       ),
       body: FutureBuilder(
         future: Store().getStoresForUser(),
@@ -36,23 +37,7 @@ class CustomersHome extends StatelessWidget {
           if (snapshot.hasData) {
             if (snapshot.data.length == 0) {
               child = Center(
-                child: Container(
-                  child: Column(
-                    children: [
-                      Text(
-                        "No Stores",
-                        style: TextStyle(color: CustomColors.black),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: AddStoreWidget(),
-                      ),
-                    ],
-                  ),
-                ),
+                child: NoStoresWidget()
               );
             } else {
               child = Container(

@@ -41,7 +41,7 @@ class _ViewProductsListScreenState extends State<ViewProductsListScreen> {
             ),
             onPressed: () => Navigator.pop(context),
           ),
-          backgroundColor: CustomColors.green,
+          backgroundColor: CustomColors.primary,
         ),
         body: Container(
           child: Column(

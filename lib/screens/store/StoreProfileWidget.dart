@@ -27,7 +27,7 @@ class StoreProfileWidget extends StatelessWidget {
           ListTile(
             leading: Icon(
               FontAwesomeIcons.store,
-              color: CustomColors.green,
+              color: CustomColors.primary,
             ),
             title: Text(
               store.name,
@@ -40,7 +40,7 @@ class StoreProfileWidget extends StatelessWidget {
           ListTile(
             leading: Icon(
               FontAwesomeIcons.addressCard,
-              color: CustomColors.green,
+              color: CustomColors.primary,
             ),
             title: Text(
               store.address.toString(),
@@ -55,7 +55,7 @@ class StoreProfileWidget extends StatelessWidget {
           ListTile(
             leading: Icon(
               FontAwesomeIcons.mobileAlt,
-              color: CustomColors.green,
+              color: CustomColors.primary,
             ),
             title: Text(
               "Contacts",
@@ -118,7 +118,7 @@ class StoreProfileWidget extends StatelessWidget {
           ListTile(
             leading: Icon(
               FontAwesomeIcons.calendarCheck,
-              color: CustomColors.green,
+              color: CustomColors.primary,
             ),
             title: Text(
               "Available Days",
@@ -144,7 +144,7 @@ class StoreProfileWidget extends StatelessWidget {
           ListTile(
             leading: Icon(
               FontAwesomeIcons.businessTime,
-              color: CustomColors.green,
+              color: CustomColors.primary,
             ),
             title: Text(
               "Active From: ",
@@ -183,7 +183,7 @@ class StoreProfileWidget extends StatelessWidget {
           ListTile(
             leading: Icon(
               FontAwesomeIcons.truck,
-              color: CustomColors.green,
+              color: CustomColors.primary,
             ),
             title: Text(
               "Delivery Details",
@@ -259,7 +259,7 @@ class StoreProfileWidget extends StatelessWidget {
           elevation: 5.0,
           selectedColor: CustomColors.blue,
           backgroundColor: CustomColors.white,
-          labelStyle: TextStyle(color: CustomColors.green),
+          labelStyle: TextStyle(color: CustomColors.primary),
         ),
       );
     }

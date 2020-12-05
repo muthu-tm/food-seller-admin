@@ -12,7 +12,7 @@ class NoStoresWidget extends StatelessWidget {
         children: <Widget>[
           Spacer(),
           Text(
-            "No Store Available!",
+            "Hey, Yet No Stores has been Added !!",
             style: TextStyle(
               color: CustomColors.alertRed,
               fontSize: 18.0,

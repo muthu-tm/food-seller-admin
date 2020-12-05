@@ -121,7 +121,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                         .updateProductStatus(widget.product.uuid, value);
                   },
                   inactiveTrackColor: CustomColors.alertRed,
-                  activeTrackColor: CustomColors.green,
+                  activeTrackColor: CustomColors.primary,
                   activeColor: Colors.green,
                 ),
               ],

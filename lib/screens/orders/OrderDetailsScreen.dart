@@ -102,7 +102,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
           icon: Icon(Icons.arrow_back_ios, color: CustomColors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: CustomColors.blueGreen,
@@ -542,7 +542,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                         dContact);
                                     Fluttertoast.showToast(
                                         msg: 'Updated Delivery Details',
-                                        backgroundColor: CustomColors.green,
+                                        backgroundColor: CustomColors.primary,
                                         textColor: CustomColors.black);
                                   } catch (err) {
                                     Fluttertoast.showToast(

@@ -63,7 +63,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     return Scaffold(
       backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: CustomColors.black),
@@ -239,7 +239,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                 : Icons.sentiment_dissatisfied,
                             size: 30,
                             color: widget.product.isAvailable
-                                ? CustomColors.green
+                                ? CustomColors.primary
                                 : CustomColors.alertRed,
                           ),
                         ),

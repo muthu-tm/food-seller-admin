@@ -37,7 +37,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: CustomColors.green,
+        backgroundColor: CustomColors.primary,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
@@ -78,7 +78,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
               padding: EdgeInsets.all(10),
               child: Card(
                 elevation: 5.0,
-                shadowColor: CustomColors.green.withOpacity(0.7),
+                shadowColor: CustomColors.primary.withOpacity(0.7),
                 child: Container(
                   padding: EdgeInsets.all(10),
                   height: 50,
@@ -98,7 +98,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                         style: TextStyle(
                           color: amount.isNegative
                               ? CustomColors.alertRed
-                              : CustomColors.green,
+                              : CustomColors.primary,
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -119,7 +119,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                   "Rs.0.00",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: CustomColors.green,
+                    color: CustomColors.primary,
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
                   ),
@@ -154,13 +154,13 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.green,
+                    color: CustomColors.primary,
                     fontSize: 17.0,
                   ),
                 ),
               ),
               Divider(
-                color: CustomColors.green,
+                color: CustomColors.primary,
               ),
               widget,
             ],
@@ -326,7 +326,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.green,
+                      color: CustomColors.primary,
                       fontSize: 17.0,
                     ),
                   ),
@@ -372,7 +372,7 @@ class _AdUserdTransactionState extends State<AddUserTransaction> {
           topRight: Radius.circular(10),
           topLeft: Radius.circular(10),
         ),
-        border: Border.all(color: CustomColors.green),
+        border: Border.all(color: CustomColors.primary),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -497,7 +497,7 @@ class _AdUserdTransactionState extends State<AddUserTransaction> {
               ),
               RaisedButton.icon(
                 padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-                color: CustomColors.green,
+                color: CustomColors.primary,
                 onPressed: () async {
                   try {
                     UserStoreWalletHistory tran = new UserStoreWalletHistory();
