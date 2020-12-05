@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/db/models/user_activity_tracker.dart';
-import 'package:chipchop_seller/screens/customers/CustomersHome.dart';
+import 'package:chipchop_seller/screens/customers/CustomersScreen.dart';
 import 'package:chipchop_seller/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/services/utils/DateUtils.dart';
@@ -103,7 +103,7 @@ class StoreWidget extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => CustomersHome(),
+                                    builder: (context) => CustomersScreen(store.uuid, store.name),
                                     settings:
                                         RouteSettings(name: '/customers/store'),
                                   ),
