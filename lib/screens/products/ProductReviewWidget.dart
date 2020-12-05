@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/product_reviews.dart';
-import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/ImageView.dart';
@@ -9,15 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductReviewWidget extends StatelessWidget {
-  ProductReviewWidget(this.product);
+  ProductReviewWidget(this.productID, this.productName);
 
-  final Products product;
+  final String productID;
+  final String productName;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: getReviewDetails(product.uuid),
+      child: getReviewDetails(productID),
     );
   }
 
@@ -29,6 +29,14 @@ class ProductReviewWidget extends StatelessWidget {
 
           if (snapshot.hasData) {
             if (snapshot.data.isNotEmpty) {
+              double tRating = 0.00;
+
+              for (var i = 0; i < snapshot.data.length; i++) {
+                tRating += snapshot.data[i].rating;
+              }
+
+              tRating = tRating / snapshot.data.length;
+
               child = Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -38,12 +46,12 @@ class ProductReviewWidget extends StatelessWidget {
                       style: TextStyle(fontSize: 16, color: CustomColors.black),
                     ),
                     trailing: RatingBarIndicator(
-                      rating: product.rating,
+                      rating: tRating,
                       itemBuilder: (context, index) => Icon(
                         Icons.star,
-                        color: product.rating < 2
+                        color: tRating < 2
                             ? Colors.red
-                            : product.rating <= 3.5
+                            : tRating <= 3.5
                                 ? Colors.amber
                                 : CustomColors.primary,
                       ),
@@ -70,7 +78,7 @@ class ProductReviewWidget extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ProductReviewDetailed(
-                                      snapshot.data[index], product.name),
+                                      snapshot.data[index], productName),
                                   settings: RouteSettings(
                                       name: 'store/products/review'),
                                 ),

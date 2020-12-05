@@ -110,6 +110,10 @@ class ProductFAQsWidget extends StatelessWidget {
                           try {
                             await faq.create(productID);
                             Navigator.pop(context);
+                            Fluttertoast.showToast(
+                                msg: 'Question Submitted Successfully',
+                                backgroundColor: CustomColors.primary,
+                                textColor: Colors.black);
                           } catch (err) {
                             Fluttertoast.showToast(
                                 msg: 'Unabe to ask now!',
@@ -223,6 +227,10 @@ class ProductFAQsWidget extends StatelessWidget {
                           try {
                             await _faq.update(productID, _faq.uuid);
                             Navigator.pop(context);
+                            Fluttertoast.showToast(
+                                msg: 'Answer Submitted Successfully',
+                                backgroundColor: CustomColors.primary,
+                                textColor: Colors.black);
                           } catch (err) {
                             Fluttertoast.showToast(
                                 msg: 'Unabe to Answer now!',

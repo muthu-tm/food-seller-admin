@@ -1,16 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/app/appBar.dart';
 import 'package:chipchop_seller/screens/app/bottomBar.dart';
 import 'package:chipchop_seller/screens/app/sideDrawer.dart';
-import 'package:chipchop_seller/screens/customers/CustomersScreen.dart';
+import 'package:chipchop_seller/screens/store/StoreSearchBar.dart';
 import 'package:chipchop_seller/screens/store/StoreWidget.dart';
-import 'package:chipchop_seller/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/NoStoresWidget.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
-import 'package:chipchop_seller/services/utils/DateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -24,7 +21,16 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         appBar: appBar(context),
         drawer: sideDrawer(context),
-        body: getWidget(context),
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: [
+                getWidget(context),
+                RecentProductsWidget(''),
+              ],
+            ),
+          ),
+        ),
         bottomNavigationBar: bottomBar(context),
       ),
     );
@@ -57,18 +63,31 @@ class HomeScreen extends StatelessWidget {
                     child = Center(child: NoStoresWidget());
                   } else {
                     child = Container(
-                      child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        primary: true,
-                        shrinkWrap: true,
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (BuildContext context, int index) {
-
-                          return Padding(
-                            padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-                            child: StoreWidget(snapshot.data[index]),
-                          );
-                        },
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Text(
+                              "My Stores",
+                              style: TextStyle(
+                                  color: CustomColors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17),
+                            ),
+                          ),
+                          ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            primary: true,
+                            shrinkWrap: true,
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding:
+                                    EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+                                child: StoreWidget(snapshot.data[index]),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     );
                   }
