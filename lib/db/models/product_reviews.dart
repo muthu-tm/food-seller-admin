@@ -62,7 +62,7 @@ class ProductReviews {
       DocumentSnapshot docSnap = await _productDocRef.get();
       Products _p = Products.fromJson(docSnap.data);
       double newTotalRating = _p.totalRatings + this.rating;
-      double newRating = (newTotalRating / _p.totalReviews + 1);
+      double newRating = (newTotalRating / (_p.totalReviews + 1));
       _batch.updateData(Products().getDocumentRef(productID), {
         'rating': newRating,
         'total_ratings': newTotalRating,
@@ -70,7 +70,6 @@ class ProductReviews {
         'updated_at': DateTime.now()
       });
       _batch.commit();
-
       Analytics.sendAnalyticsEvent({
         'type': 'product_review_create',
         'product_id': productID,
