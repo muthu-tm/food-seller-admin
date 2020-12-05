@@ -1,18 +1,23 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chipchop_seller/db/models/chipchop_products.dart';
+import 'package:camera/camera.dart';
+import 'package:chipchop_seller/db/models/product_description.dart';
+import 'package:chipchop_seller/db/models/product_variants.dart';
 import 'package:chipchop_seller/db/models/products.dart';
-import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
+import 'package:chipchop_seller/screens/app/TakePicturePage.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_seller/screens/utils/ImageView.dart';
-import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/storage/image_uploader.dart';
 import 'package:chipchop_seller/services/storage/storage_utils.dart';
+import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../db/models/product_categories.dart';
 import '../../db/models/product_sub_categories.dart';
@@ -22,7 +27,7 @@ import '../../db/models/store.dart';
 class AddProduct extends StatefulWidget {
   AddProduct(this.product);
 
-  final ChipChopProducts product;
+  final Products product;
   @override
   _AddProductState createState() => _AddProductState();
 }
@@ -31,9 +36,18 @@ class _AddProductState extends State<AddProduct> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  TextEditingController priceController = TextEditingController();
+  List<ProductVariants> _variants = [
+    ProductVariants.fromJson({'id': "0"})
+  ];
 
-  List<String> imagePaths = [];
+  List<ProductDescription> _descs = [ProductDescription.fromJson({})];
+
+  List<TextEditingController> vPriceControllers = [
+    TextEditingController(text: "0.00")
+  ];
+
+  List<String> imagePaths = [no_image_placeholder];
+  String primaryImage = no_image_placeholder;
 
   Map<String, String> _stores = {"0": "Choose your Store"};
   Map<String, String> _types = {"0": "Choose Product Type"};
@@ -52,23 +66,21 @@ class _AddProductState extends State<AddProduct> {
   String _selectedType = "0";
   String _selectedCategory = "0";
   String _selectedSubCategory = "0";
-  String _selectedUnit = "0";
 
   String pName = "";
+  String brandName = "";
   String shortDetails = "";
   String productType = "";
   String productCategory = "";
   String productSubCategory = "";
   String storeID = "";
-  double weight = 0.00;
-  int unit = 0;
-  double originalPrice = 0.00;
-  double offer = 0.00;
-  double currentPrice = 0.00;
+  int replaceWithinDays = 0;
+  int returnWithinDays = 0;
   bool isAvailable = true;
   bool isDeliverable = true;
   bool isPopular = false;
   bool isReturnable = true;
+  bool isReplaceable = true;
   List<String> keywords = [];
 
   @override
@@ -84,23 +96,45 @@ class _AddProductState extends State<AddProduct> {
       this.productType = widget.product.productType;
       this.productCategory = widget.product.productCategory;
       this.productSubCategory = widget.product.productSubCategory;
-      this.weight = widget.product.weight;
-      this.unit = widget.product.unit;
-      this.originalPrice = widget.product.originalPrice;
-      this.offer = widget.product.offer;
-      this.currentPrice = widget.product.currentPrice;
-      priceController.text = this.currentPrice.toString();
+      this.brandName = widget.product.brandName;
+      this._variants = widget.product.variants;
       this.keywords = widget.product.keywords;
       this.isAvailable = widget.product.isAvailable;
       this.isDeliverable = widget.product.isDeliverable;
       this.isPopular = widget.product.isPopular;
       this.isReturnable = widget.product.isReturnable;
+      this.isReplaceable = widget.product.isReplaceable;
+      this.replaceWithinDays = widget.product.replaceWithin;
+      this.returnWithinDays = widget.product.returnWithin;
+
+      widget.product.variants.forEach((element) {
+        TextEditingController _controller =
+            TextEditingController(text: element.currentPrice.toString());
+        vPriceControllers.add(_controller);
+      });
+
+      this._descs = widget.product.productDescription == null ||
+              widget.product.productDescription.isEmpty
+          ? [ProductDescription.fromJson({})]
+          : widget.product.productDescription;
+    } else {
+      _variants = [
+        ProductVariants.fromJson({'id': "0"})
+      ];
+
+      vPriceControllers = [TextEditingController(text: "0.00")];
     }
 
     loadProductTypes();
-    if (this.productType != "") onTypesDropdownItem(this.productType);
-    if (this.productCategory != "")
+    if (this.productType != "") {
+      onTypesDropdownItem(this.productType);
+      if (this.productCategory != "") _selectedCategory = this.productCategory;
+    }
+    if (this.productCategory != "") {
       onCategoryDropdownItem(this.productCategory);
+      if (this.productSubCategory != "")
+        _selectedSubCategory = this.productSubCategory;
+    }
   }
 
   @override
@@ -124,7 +158,7 @@ class _AddProductState extends State<AddProduct> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.alertRed,
+        backgroundColor: CustomColors.primary,
         onPressed: () async {
           await _submit();
         },
@@ -168,12 +202,21 @@ class _AddProductState extends State<AddProduct> {
         return;
       }
 
-      if (priceController.text == "") {
+      if (_variants.length == 1 && _variants.first.weight.toInt() == 0) {
         _scaffoldKey.currentState.showSnackBar(
-          CustomSnackBar.errorSnackBar("Please fill the Price details!", 2),
+          CustomSnackBar.errorSnackBar("Please Fill Product Varients!", 2),
         );
         return;
       }
+
+      vPriceControllers.forEach((element) {
+        if (element.text.trim().isEmpty) {
+          _scaffoldKey.currentState.showSnackBar(
+            CustomSnackBar.errorSnackBar("Please Fill Price Details!", 2),
+          );
+          return;
+        }
+      });
 
       final FormState form = _formKey.currentState;
 
@@ -182,22 +225,33 @@ class _AddProductState extends State<AddProduct> {
         _p.name = pName;
         _p.shortDetails = shortDetails;
         _p.productImages = imagePaths;
-        _p.currentPrice = double.parse(priceController.text);
-        _p.originalPrice = originalPrice;
-        _p.offer = offer;
+        _p.image = primaryImage;
         _p.isAvailable = isAvailable;
         _p.isDeliverable = isDeliverable;
         _p.isPopular = isPopular;
         _p.isReturnable = isReturnable;
+        _p.isReplaceable = isReplaceable;
+        _p.replaceWithin = replaceWithinDays;
+        _p.returnWithin = returnWithinDays;
         _p.storeID = _selectedStore;
-        _p.weight = weight;
-        _p.unit = int.parse(_selectedUnit);
+        _p.storeName = _stores[_selectedStore];
+        _p.brandName = brandName;
         _p.productType = _selectedType == "0" ? "" : _selectedType;
         _p.productCategory = _selectedCategory == "0" ? "" : _selectedCategory;
         _p.productSubCategory =
             _selectedSubCategory == "0" ? "" : _selectedSubCategory;
         _p.keywords = this.keywords;
-        _p.keywords.addAll(pName.split(" "));
+        _p.keywords.add(_types[_selectedType]);
+        if (_selectedCategory != "0")
+          _p.keywords.add(_categories[_selectedCategory]);
+        if (_selectedSubCategory != "0")
+          _p.keywords.add(_subcategories[_selectedSubCategory]);
+
+        _p.variants = _variants;
+        if (_descs.isNotEmpty) {
+          _p.productDescription = _descs;
+        } else
+          _p.productDescription = [];
         CustomDialogs.actionWaiting(context);
         await _p.create();
         Navigator.pop(context);
@@ -207,15 +261,10 @@ class _AddProductState extends State<AddProduct> {
             CustomSnackBar.errorSnackBar("Fill Required fields", 2));
       }
     } catch (err) {
-      Analytics.sendAnalyticsEvent({
-        'type': 'product_create_error',
-        'store_id': this.storeID,
-        'error': err.toString()
-      }, 'product');
-      Navigator.pop(context);
       _scaffoldKey.currentState.showSnackBar(
         CustomSnackBar.errorSnackBar("Unable to create now! Try later!", 2),
       );
+      Navigator.pop(context);
     }
   }
 
@@ -229,7 +278,7 @@ class _AddProductState extends State<AddProduct> {
               leading: Icon(
                 Icons.store,
                 size: 35,
-                color: CustomColors.blue,
+                color: CustomColors.black,
               ),
               title: Text(
                 "Store",
@@ -240,7 +289,6 @@ class _AddProductState extends State<AddProduct> {
               ),
             ),
             ListTile(
-              leading: Text(""),
               title: Container(
                 padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                 decoration: BoxDecoration(
@@ -263,255 +311,11 @@ class _AddProductState extends State<AddProduct> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: ListTile(
-                leading: Icon(
-                  Icons.image,
-                  size: 35,
-                  color: CustomColors.blue,
-                ),
-                title: Text(
-                  "Product Images",
-                  style: TextStyle(color: CustomColors.black, fontSize: 16),
-                ),
-                trailing: Container(
-                  width: 155,
-                  child: FlatButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    color: CustomColors.alertRed,
-                    onPressed: () async {
-                      if (_selectedStore == "0") {
-                        Fluttertoast.showToast(
-                            msg: 'Please Select a Store First');
-                        return;
-                      }
-                      String imageUrl = '';
-                      try {
-                        ImagePicker imagePicker = ImagePicker();
-                        PickedFile pickedFile;
-
-                        pickedFile = await imagePicker.getImage(
-                            source: ImageSource.gallery);
-                        if (pickedFile == null) return;
-
-                        String fileName =
-                            DateTime.now().millisecondsSinceEpoch.toString();
-                        String fbFilePath =
-                            'products/$_selectedStore/$fileName.png';
-                        CustomDialogs.actionWaiting(context);
-                        // Upload to storage
-                        imageUrl = await Uploader()
-                            .uploadImageFile(true, pickedFile.path, fbFilePath);
-                        Navigator.of(context).pop();
-                      } catch (err) {
-                        Fluttertoast.showToast(
-                            msg: 'This file is not an image');
-                      }
-                      if (imageUrl != "")
-                        setState(() {
-                          imagePaths.add(imageUrl);
-                        });
-                    },
-                    label: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 15.0,
-                      ),
-                      child: Text(
-                        "Pick Image!",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: CustomColors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    icon: Icon(FontAwesomeIcons.images),
-                  ),
-                ),
-              ),
-            ),
-            imagePaths.length > 0
-                ? GridView.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    shrinkWrap: true,
-                    primary: false,
-                    mainAxisSpacing: 10,
-                    children: List.generate(
-                      imagePaths.length,
-                      (index) {
-                        return Stack(
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(left: 10, right: 10, top: 5),
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ImageView(
-                                        url: imagePaths[index],
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: CachedNetworkImage(
-                                      imageUrl: imagePaths[index],
-                                      imageBuilder: (context, imageProvider) =>
-                                          Image(
-                                        fit: BoxFit.fill,
-                                        image: imageProvider,
-                                      ),
-                                      progressIndicatorBuilder:
-                                          (context, url, downloadProgress) =>
-                                              Center(
-                                        child: SizedBox(
-                                          height: 50.0,
-                                          width: 50.0,
-                                          child: CircularProgressIndicator(
-                                              value: downloadProgress.progress,
-                                              valueColor:
-                                                  AlwaysStoppedAnimation(
-                                                      CustomColors.blue),
-                                              strokeWidth: 2.0),
-                                        ),
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(
-                                        Icons.error,
-                                        size: 35,
-                                      ),
-                                      fadeOutDuration: Duration(seconds: 1),
-                                      fadeInDuration: Duration(seconds: 2),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              right: 10,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: CustomColors.alertRed,
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: InkWell(
-                                  child: Icon(
-                                    Icons.close,
-                                    size: 25,
-                                    color: CustomColors.white,
-                                  ),
-                                  onTap: () async {
-                                    CustomDialogs.actionWaiting(context);
-                                    bool res = await StorageUtils()
-                                        .removeFile(imagePaths[index]);
-                                    Navigator.of(context).pop();
-                                    if (res)
-                                      setState(() {
-                                        imagePaths.remove(imagePaths[index]);
-                                      });
-                                    else
-                                      Fluttertoast.showToast(
-                                          msg: 'Unable to remove image');
-                                  },
-                                ),
-                              ),
-                            )
-                          ],
-                        );
-                      },
-                    ),
-                  )
-                : Container(),
-            ListTile(
-              leading: Icon(
-                Icons.format_shapes,
-                size: 35,
-                color: CustomColors.blue,
-              ),
-              title: Text(
-                "Product Name",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: CustomColors.black,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 60.0, right: 10),
-              child: TextFormField(
-                initialValue: pName,
-                textAlign: TextAlign.start,
-                autofocus: false,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustomColors.lightGreen)),
-                  hintText: "Ex, Rice",
-                  fillColor: CustomColors.white,
-                  filled: true,
-                ),
-                validator: (name) {
-                  if (name.isEmpty) {
-                    return "Must not be empty";
-                  } else {
-                    this.pName = name;
-                    return null;
-                  }
-                },
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.description,
-                size: 35,
-                color: CustomColors.blue,
-              ),
-              title: Text(
-                "Product Details",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: CustomColors.black,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(60.0, 0, 10, 0),
-              child: TextFormField(
-                initialValue: shortDetails,
-                textAlign: TextAlign.start,
-                autofocus: false,
-                keyboardType: TextInputType.text,
-                maxLines: 8,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustomColors.lightGreen)),
-                  hintText: "Ex, Boiled Rice",
-                  fillColor: CustomColors.white,
-                  filled: true,
-                ),
-                validator: (details) {
-                  if (details.isEmpty) {
-                    this.shortDetails = "";
-                  } else {
-                    this.shortDetails = details;
-                  }
-                  return null;
-                },
-              ),
-            ),
             ListTile(
               leading: Icon(
                 Icons.view_stream,
                 size: 35,
-                color: CustomColors.blue,
+                color: CustomColors.black,
               ),
               title: Text(
                 "Product Type",
@@ -522,7 +326,6 @@ class _AddProductState extends State<AddProduct> {
               ),
             ),
             ListTile(
-              leading: Text(""),
               title: Container(
                 padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                 decoration: BoxDecoration(
@@ -549,7 +352,7 @@ class _AddProductState extends State<AddProduct> {
               leading: Icon(
                 Icons.menu,
                 size: 35,
-                color: CustomColors.blue,
+                color: CustomColors.black,
               ),
               title: Text(
                 "Product Category",
@@ -560,7 +363,6 @@ class _AddProductState extends State<AddProduct> {
               ),
             ),
             ListTile(
-              leading: Text(""),
               title: Container(
                 padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                 decoration: BoxDecoration(
@@ -587,7 +389,7 @@ class _AddProductState extends State<AddProduct> {
               leading: Icon(
                 Icons.apps,
                 size: 35,
-                color: CustomColors.blue,
+                color: CustomColors.black,
               ),
               title: Text(
                 "Product SubCategory",
@@ -598,7 +400,6 @@ class _AddProductState extends State<AddProduct> {
               ),
             ),
             ListTile(
-              leading: Text(""),
               title: Container(
                 padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                 decoration: BoxDecoration(
@@ -627,272 +428,1072 @@ class _AddProductState extends State<AddProduct> {
                 ),
               ),
             ),
-            Padding(padding: EdgeInsets.all(5)),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: [
-                Flexible(
-                  child: TextFormField(
-                    initialValue: weight.toString(),
-                    textAlign: TextAlign.start,
-                    autofocus: false,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: CustomColors.lightGreen),
-                      ),
-                      hintText: "Weight",
-                      labelText: "Weight",
-                      fillColor: CustomColors.white,
-                      filled: true,
-                    ),
-                    validator: (weight) {
-                      if (weight.trim().isEmpty || weight.trim() == "0.0") {
-                        return "Must not be empty";
-                      } else {
-                        this.weight = double.parse(weight);
-                        return null;
-                      }
-                    },
-                  ),
+            ListTile(
+              leading: Icon(
+                Icons.format_shapes,
+                size: 35,
+                color: CustomColors.black,
+              ),
+              title: Text(
+                "Product Name",
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: CustomColors.black,
                 ),
-                Padding(padding: EdgeInsets.only(left: 15)),
-                Flexible(
-                  child: Container(
-                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        hint: Text("Unit"),
-                        items: _units.entries.map((f) {
-                          return DropdownMenuItem<String>(
-                            value: f.key,
-                            child: Text(f.value),
-                          );
-                        }).toList(),
-                        onChanged: (unit) {
-                          setState(
-                            () {
-                              _selectedUnit = unit;
-                              this.unit = int.parse(unit);
-                            },
-                          );
-                        },
-                        value: _selectedUnit,
-                      ),
-                    ),
-                  ),
-                ),
-              ]),
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: [
-                Expanded(
-                  child: TextFormField(
-                    initialValue: originalPrice.toString(),
-                    textAlign: TextAlign.start,
-                    autofocus: false,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: CustomColors.lightGreen)),
-                      hintText: "Price",
-                      labelText: "Price",
-                      fillColor: CustomColors.white,
-                      filled: true,
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: TextFormField(
+                initialValue: pName,
+                textAlign: TextAlign.start,
+                autofocus: false,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: CustomColors.lightGreen)),
+                  hintText: "Ex, Rice",
+                  fillColor: CustomColors.white,
+                  filled: true,
+                ),
+                validator: (name) {
+                  if (name.isEmpty) {
+                    return "Must not be empty";
+                  } else {
+                    this.pName = name;
+                    return null;
+                  }
+                },
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.business,
+                size: 35,
+                color: CustomColors.black,
+              ),
+              title: Text(
+                "Product Brand Name",
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: CustomColors.black,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: TextFormField(
+                initialValue: brandName,
+                textAlign: TextAlign.start,
+                autofocus: false,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: CustomColors.lightGreen)),
+                  hintText: "Ex, India Brand",
+                  fillColor: CustomColors.white,
+                  filled: true,
+                ),
+                validator: (brand) {
+                  if (brand.isEmpty) {
+                    this.brandName = "";
+                  } else {
+                    this.brandName = brand;
+                  }
+                  return null;
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: ListTile(
+                leading: Icon(
+                  Icons.image,
+                  size: 35,
+                  color: CustomColors.black,
+                ),
+                title: Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      color: Colors.green[300],
+                      borderRadius: BorderRadius.circular(5.0)),
+                  child: InkWell(
+                    onTap: () async {
+                      if (_selectedStore == "0") {
+                        Fluttertoast.showToast(
+                            msg: 'Please Select a Store First',
+                            backgroundColor: CustomColors.alertRed,
+                            textColor: CustomColors.white);
+                        return;
+                      }
+                      String imageUrl = '';
+                      try {
+                        ImagePicker imagePicker = ImagePicker();
+                        PickedFile pickedFile;
+
+                        pickedFile = await imagePicker.getImage(
+                            source: ImageSource.gallery);
+                        if (pickedFile == null) return;
+
+                        String fileName =
+                            DateTime.now().millisecondsSinceEpoch.toString();
+                        String fbFilePath =
+                            'products/$_selectedStore/$fileName.png';
+                        CustomDialogs.actionWaiting(context);
+                        // Upload to storage
+                        imageUrl = await Uploader()
+                            .uploadImageFile(true, pickedFile.path, fbFilePath);
+                        Navigator.of(context).pop();
+                      } catch (err) {
+                        Fluttertoast.showToast(
+                            msg: 'This file is not an image',
+                            backgroundColor: CustomColors.alertRed,
+                            textColor: CustomColors.black);
+                      }
+                      if (imageUrl != "")
+                        setState(() {
+                          imagePaths.add(imageUrl);
+                        });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          FontAwesomeIcons.images,
+                          size: 20,
+                          color: CustomColors.black,
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          "Upload Image",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    onChanged: (val) {
-                      if (offer > 0) {
-                        priceController.text =
-                            (double.parse(val) - offer).toString();
-                      } else {
-                        priceController.text = val;
+                  ),
+                ),
+                trailing: Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      color: Colors.green[300],
+                      borderRadius: BorderRadius.circular(5.0)),
+                  child: InkWell(
+                    onTap: () async {
+                      if (_selectedStore == "0") {
+                        Fluttertoast.showToast(
+                            msg: 'Please Select a Store First',
+                            backgroundColor: CustomColors.alertRed,
+                            textColor: CustomColors.white);
+                        return;
                       }
 
-                      this.originalPrice = double.parse(val);
-                    },
-                    validator: (price) {
-                      if (price.trim().isEmpty || price.trim() == "0.0") {
-                        return "Must not be empty";
-                      } else {
-                        this.originalPrice = double.parse(price);
-                        return null;
+                      String imageUrl = '';
+                      try {
+                        String tempPath = (await getTemporaryDirectory()).path;
+                        String filePath = '$tempPath/chipchop_image.png';
+                        if (File(filePath).existsSync())
+                          await File(filePath).delete();
+
+                        List<CameraDescription> cameras =
+                            await availableCameras();
+                        CameraDescription camera = cameras.first;
+
+                        var result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TakePicturePage(
+                              camera: camera,
+                              path: filePath,
+                            ),
+                          ),
+                        );
+                        if (result != null) {
+                          String fileName =
+                              DateTime.now().millisecondsSinceEpoch.toString();
+                          String fbFilePath =
+                              'products/$_selectedStore/$fileName.png';
+                          CustomDialogs.actionWaiting(context);
+                          // Upload to storage
+                          imageUrl = await Uploader()
+                              .uploadImageFile(true, result, fbFilePath);
+                          Navigator.of(context).pop();
+                        }
+                      } catch (err) {
+                        Fluttertoast.showToast(
+                            msg: 'This file is not an image',
+                            backgroundColor: CustomColors.alertRed,
+                            textColor: CustomColors.white);
                       }
+                      if (imageUrl != "")
+                        setState(() {
+                          imagePaths.add(imageUrl);
+                        });
                     },
-                  ),
-                ),
-                Padding(padding: EdgeInsets.only(left: 5)),
-                Flexible(
-                  child: TextFormField(
-                    initialValue: offer.toString(),
-                    textAlign: TextAlign.start,
-                    autofocus: false,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: CustomColors.lightGreen)),
-                      hintText: "Offer",
-                      labelText: "Offer",
-                      fillColor: CustomColors.white,
-                      filled: true,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          FontAwesomeIcons.cameraRetro,
+                          size: 20,
+                          color: CustomColors.black,
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          "Capture Image",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    onChanged: (val) {
-                      if (originalPrice >= 0) {
-                        priceController.text =
-                            (originalPrice - double.parse(val)).toString();
-                      } else {
-                        priceController.text = "0.00";
-                      }
-                    },
-                    validator: (offer) {
-                      if (offer.trim().isEmpty) {
-                        this.offer = 0.00;
-                      } else {
-                        this.offer = double.parse(offer);
-                      }
-                      return null;
-                    },
                   ),
                 ),
-              ]),
+              ),
+            ),
+            imagePaths.length > 0
+                ? SizedBox(
+                    height: 160,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      primary: true,
+                      shrinkWrap: true,
+                      itemCount: imagePaths.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: 10, right: 10, top: 5),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ImageView(
+                                          url: imagePaths[index],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      child: CachedNetworkImage(
+                                        imageUrl: imagePaths[index],
+                                        imageBuilder:
+                                            (context, imageProvider) => Image(
+                                          fit: BoxFit.fill,
+                                          height: 150,
+                                          width: 150,
+                                          image: imageProvider,
+                                        ),
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                Center(
+                                          child: SizedBox(
+                                            height: 50.0,
+                                            width: 50.0,
+                                            child: CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation(
+                                                        CustomColors.black),
+                                                strokeWidth: 2.0),
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(
+                                          Icons.error,
+                                          size: 35,
+                                        ),
+                                        fadeOutDuration: Duration(seconds: 1),
+                                        fadeInDuration: Duration(seconds: 2),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 5,
+                                right: 10,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: CustomColors.alertRed,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: InkWell(
+                                    child: Icon(
+                                      Icons.close,
+                                      size: 25,
+                                      color: CustomColors.white,
+                                    ),
+                                    onTap: () async {
+                                      if (primaryImage == imagePaths[index]) {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                'You cannot remove Primary Image');
+
+                                        return;
+                                      }
+
+                                      if (imagePaths[index] ==
+                                          no_image_placeholder) {
+                                        setState(() {
+                                          imagePaths
+                                              .remove(no_image_placeholder);
+                                        });
+                                        return;
+                                      }
+                                      CustomDialogs.actionWaiting(context);
+                                      bool res = await StorageUtils()
+                                          .removeFile(imagePaths[index]);
+                                      Navigator.of(context).pop();
+                                      if (res)
+                                        setState(() {
+                                          imagePaths.remove(imagePaths[index]);
+                                        });
+                                      else
+                                        Fluttertoast.showToast(
+                                            msg: 'Unable to remove image');
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 5,
+                                left: 8,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: CustomColors.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: InkWell(
+                                    child: Icon(
+                                      primaryImage == imagePaths[index]
+                                          ? Icons.check_box
+                                          : Icons.check_box_outline_blank,
+                                      size: 25,
+                                      color: CustomColors.primary,
+                                    ),
+                                    onTap: () async {
+                                      setState(() {
+                                        primaryImage = imagePaths[index];
+                                      });
+                                    },
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : Padding(
+                    padding: EdgeInsets.only(left: 10, right: 10, top: 5),
+                    child: Container(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: CachedNetworkImage(
+                          imageUrl: primaryImage,
+                          imageBuilder: (context, imageProvider) => Image(
+                            fit: BoxFit.fill,
+                            image: imageProvider,
+                          ),
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) => Center(
+                            child: SizedBox(
+                              height: 50.0,
+                              width: 50.0,
+                              child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  valueColor: AlwaysStoppedAnimation(
+                                      CustomColors.black),
+                                  strokeWidth: 2.0),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Icon(
+                            Icons.error,
+                            size: 35,
+                          ),
+                          fadeOutDuration: Duration(seconds: 1),
+                          fadeInDuration: Duration(seconds: 2),
+                        ),
+                      ),
+                    ),
+                  ),
+            ListTile(
+              leading: Icon(
+                Icons.description,
+                size: 35,
+                color: CustomColors.black,
+              ),
+              title: Text(
+                "Product Details",
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: CustomColors.black,
+                ),
+              ),
             ),
             Padding(
-              padding: EdgeInsets.all(5.0),
-              child: Row(
-                children: [
-                  Text(
-                    "Current Price",
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: CustomColors.black,
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: TextFormField(
+                initialValue: shortDetails,
+                textAlign: TextAlign.start,
+                autofocus: false,
+                keyboardType: TextInputType.text,
+                maxLines: 5,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: CustomColors.lightGreen)),
+                  hintText: "Ex, Boiled Rice",
+                  fillColor: CustomColors.white,
+                  filled: true,
+                ),
+                validator: (details) {
+                  if (details.isEmpty) {
+                    this.shortDetails = "";
+                  } else {
+                    this.shortDetails = details;
+                  }
+                  return null;
+                },
+              ),
+            ),
+            SizedBox(height: 5),
+            Padding(
+              padding: EdgeInsets.all(15.0),
+              child: Container(
+                child: InputDecorator(
+                  decoration: InputDecoration(
+                    labelText: 'Inventory',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(left: 5)),
-                  Flexible(
-                    child: TextFormField(
-                      controller: priceController,
-                      textAlign: TextAlign.end,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: CustomColors.lightGreen)),
-                        fillColor: CustomColors.white,
-                        filled: true,
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: Text(
+                          "Is product deliverable ?",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: CustomColors.black,
+                          ),
+                        ),
+                        trailing: Switch(
+                          value: isDeliverable,
+                          onChanged: (value) {
+                            setState(() {
+                              isDeliverable = value;
+                            });
+                          },
+                          inactiveTrackColor: CustomColors.alertRed,
+                          activeTrackColor: Colors.green,
+                          activeColor: Colors.white,
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(
+                          "Is this item popular in your store ?",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: CustomColors.black,
+                          ),
+                        ),
+                        trailing: Switch(
+                          value: isPopular,
+                          onChanged: (value) {
+                            setState(() {
+                              isPopular = value;
+                            });
+                          },
+                          inactiveTrackColor: CustomColors.alertRed,
+                          activeTrackColor: Colors.green,
+                          activeColor: Colors.white,
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(
+                          "Is it returnable ?",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: CustomColors.black,
+                          ),
+                        ),
+                        trailing: Switch(
+                          value: isReturnable,
+                          onChanged: (value) {
+                            setState(() {
+                              isReturnable = value;
+                            });
+                          },
+                          inactiveTrackColor: CustomColors.alertRed,
+                          activeTrackColor: Colors.green,
+                          activeColor: Colors.white,
+                        ),
+                      ),
+                      isReturnable
+                          ? Padding(
+                              padding: EdgeInsets.fromLTRB(20, 0, 25, 0),
+                              child: TextFormField(
+                                initialValue: returnWithinDays.toString(),
+                                textAlign: TextAlign.start,
+                                autofocus: false,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: CustomColors.lightGreen)),
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  labelText: "Max no. of days to return",
+                                  fillColor: CustomColors.white,
+                                  filled: true,
+                                ),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Must not be empty";
+                                  } else {
+                                    this.returnWithinDays = int.parse(value);
+                                    return null;
+                                  }
+                                },
+                              ),
+                            )
+                          : Container(),
+                      ListTile(
+                        title: Text(
+                          "Is it replaceable ?",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: CustomColors.black,
+                          ),
+                        ),
+                        trailing: Switch(
+                          value: isReplaceable,
+                          onChanged: (value) {
+                            setState(() {
+                              isReplaceable = value;
+                            });
+                          },
+                          inactiveTrackColor: CustomColors.alertRed,
+                          activeTrackColor: Colors.green,
+                          activeColor: Colors.white,
+                        ),
+                      ),
+                      isReplaceable
+                          ? Padding(
+                              padding: EdgeInsets.fromLTRB(20, 0, 25, 0),
+                              child: TextFormField(
+                                initialValue: replaceWithinDays.toString(),
+                                textAlign: TextAlign.start,
+                                autofocus: false,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: CustomColors.lightGreen)),
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  labelText: "Max no. of days to replace",
+                                  fillColor: CustomColors.white,
+                                  filled: true,
+                                ),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Must not be empty";
+                                  } else {
+                                    this.replaceWithinDays = int.parse(value);
+                                    return null;
+                                  }
+                                },
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Having many Varients ?",
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: CustomColors.black,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  Container(
+                    width: 135,
+                    child: FlatButton.icon(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      color: Colors.green,
+                      onPressed: () async {
+                        if (_variants.isNotEmpty &&
+                            _variants.last.weight.toInt() == 0) {
+                          Fluttertoast.showToast(
+                              msg: "Please fill the Product Varient");
+                          return;
+                        } else {
+                          setState(() {
+                            _variants.add(
+                              ProductVariants.fromJson(
+                                {'id': (_variants.length).toString()},
+                              ),
+                            );
+                            vPriceControllers
+                                .add(TextEditingController(text: "0.00"));
+                          });
+                        }
+                      },
+                      icon: Icon(Icons.add),
+                      label: Text(
+                        "Add",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            ListTile(
-              leading: Icon(
-                Icons.adjust,
-                size: 35,
-                color: CustomColors.blue,
-              ),
-              title: Text(
-                "Available",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: CustomColors.black,
-                ),
-              ),
-              trailing: Switch(
-                value: isAvailable,
-                onChanged: (value) {
-                  setState(() {
-                    isAvailable = value;
-                  });
-                },
-                inactiveTrackColor: CustomColors.alertRed,
-                activeTrackColor: CustomColors.primary,
-                activeColor: Colors.green,
+            ListView.builder(
+              shrinkWrap: true,
+              primary: false,
+              itemCount: _variants.length,
+              itemBuilder: (BuildContext context, int index) {
+                ProductVariants _pv = _variants[index];
+
+                return Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Container(
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'Varient ${index + 1}',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(children: [
+                            Flexible(
+                              child: TextFormField(
+                                initialValue: _pv.weight.toString(),
+                                textAlign: TextAlign.start,
+                                autofocus: false,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: CustomColors.lightGreen)),
+                                  labelText: "Weight",
+                                  labelStyle: TextStyle(
+                                      fontSize: 13, color: CustomColors.black),
+                                  fillColor: CustomColors.white,
+                                  filled: true,
+                                ),
+                                onChanged: (val) {
+                                  setState(() {
+                                    _pv.weight = double.parse(val);
+                                  });
+                                },
+                                validator: (weight) {
+                                  if (weight.isEmpty) {
+                                    _pv.weight = 0.00;
+                                  } else {
+                                    _pv.weight = double.parse(weight);
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            Padding(padding: EdgeInsets.only(left: 5)),
+                            Flexible(
+                              child: DropdownButtonFormField(
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: CustomColors.lightGreen)),
+                                  labelText: "Unit",
+                                  labelStyle: TextStyle(
+                                      fontSize: 13, color: CustomColors.black),
+                                  fillColor: CustomColors.white,
+                                  filled: true,
+                                ),
+                                value: _pv.unit.toString(),
+                                items: _units.entries.map((f) {
+                                  return DropdownMenuItem<String>(
+                                    value: f.key,
+                                    child: Text(f.value),
+                                  );
+                                }).toList(),
+                                onChanged: (unit) {
+                                  setState(
+                                    () {
+                                      _pv.unit = int.parse(unit);
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ]),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(children: [
+                            Flexible(
+                              child: TextFormField(
+                                initialValue: _pv.originalPrice.toString(),
+                                textAlign: TextAlign.start,
+                                autofocus: false,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: CustomColors.lightGreen)),
+                                  labelText: "Product MRP",
+                                  labelStyle: TextStyle(
+                                      fontSize: 13, color: CustomColors.black),
+                                  fillColor: CustomColors.white,
+                                  filled: true,
+                                ),
+                                onChanged: (val) {
+                                  if (_pv.offer > 0) {
+                                    vPriceControllers[index].text =
+                                        (double.parse(val) - _pv.offer)
+                                            .toString();
+                                  } else {
+                                    vPriceControllers[index].text = val;
+                                  }
+
+                                  _pv.originalPrice = double.parse(val);
+                                },
+                                validator: (price) {
+                                  if (price.isEmpty &&
+                                      _pv.weight.toInt() != 0) {
+                                    return "Must not be empty";
+                                  } else {
+                                    _pv.originalPrice = double.parse(price);
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Flexible(
+                              child: TextFormField(
+                                initialValue: _pv.offer.toString(),
+                                textAlign: TextAlign.start,
+                                autofocus: false,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: CustomColors.lightGreen)),
+                                  labelText: "Offer Price",
+                                  labelStyle: TextStyle(
+                                      fontSize: 13, color: CustomColors.black),
+                                  fillColor: CustomColors.white,
+                                  filled: true,
+                                ),
+                                onChanged: (val) {
+                                  if (_pv.originalPrice >= 0) {
+                                    vPriceControllers[index].text =
+                                        (_pv.originalPrice - double.parse(val))
+                                            .toString();
+                                  } else {
+                                    vPriceControllers[index].text = "0.00";
+                                  }
+                                },
+                                validator: (offer) {
+                                  if (offer.isEmpty &&
+                                      _pv.weight.toInt() != 0) {
+                                    return "Must not be empty";
+                                  } else {
+                                    _pv.offer = double.parse(offer);
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Flexible(
+                              child: TextFormField(
+                                controller: vPriceControllers[index],
+                                textAlign: TextAlign.end,
+                                readOnly: true,
+                                decoration: InputDecoration(
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: CustomColors.lightGreen)),
+                                  labelText: "Selling Price",
+                                  labelStyle: TextStyle(
+                                      fontSize: 13, color: CustomColors.black),
+                                  fillColor: CustomColors.white,
+                                  filled: true,
+                                ),
+                                validator: (price) {
+                                  if (price.isEmpty &&
+                                      _pv.weight.toInt() != 0) {
+                                    return "Must not be empty";
+                                  } else {
+                                    _pv.currentPrice = double.parse(price);
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ),
+                          ]),
+                          ListTile(
+                            title: Text(
+                              "Is product in stock ?",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: CustomColors.black,
+                              ),
+                            ),
+                            trailing: Switch(
+                              value: _pv.isAvailable,
+                              onChanged: (value) {
+                                setState(() {
+                                  _pv.isAvailable = value;
+                                });
+                              },
+                              inactiveTrackColor: CustomColors.alertRed,
+                              activeTrackColor: Colors.green,
+                              activeColor: Colors.white,
+                            ),
+                          ),
+                          isAvailable
+                              ? Row(
+                                  children: [
+                                    Flexible(
+                                      child: Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(10, 0, 5, 0),
+                                        child: TextFormField(
+                                          initialValue: _pv.quantity.toString(),
+                                          textAlign: TextAlign.start,
+                                          autofocus: false,
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: CustomColors
+                                                        .lightGreen)),
+                                            labelText: "Available Quantity",
+                                            labelStyle: TextStyle(
+                                                fontSize: 13,
+                                                color: CustomColors.black),
+                                            fillColor: CustomColors.white,
+                                            filled: true,
+                                          ),
+                                          validator: (quantity) {
+                                            if (quantity.isEmpty) {
+                                              _pv.quantity = 0;
+                                            } else {
+                                              _pv.quantity =
+                                                  int.parse(quantity);
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child: DropdownButtonFormField(
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color:
+                                                      CustomColors.lightGreen)),
+                                          labelText: "Unit",
+                                          labelStyle: TextStyle(
+                                              fontSize: 13,
+                                              color: CustomColors.black),
+                                          fillColor: CustomColors.white,
+                                          filled: true,
+                                        ),
+                                        value: _pv.availableUnit.toString(),
+                                        items: _units.entries.map((f) {
+                                          return DropdownMenuItem<String>(
+                                            value: f.key,
+                                            child: Text(f.value),
+                                          );
+                                        }).toList(),
+                                        onChanged: (unit) {
+                                          setState(
+                                            () {
+                                              _pv.availableUnit =
+                                                  int.parse(unit);
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Product Details",
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: CustomColors.black,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  Container(
+                    width: 135,
+                    child: FlatButton.icon(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      color: Colors.green,
+                      onPressed: () async {
+                        if (_descs.isNotEmpty &&
+                            _descs.last.title.trim().isEmpty) {
+                          Fluttertoast.showToast(
+                              msg: "Please fill the last Detail");
+                          return;
+                        } else {
+                          setState(() {
+                            _descs.add(
+                              ProductDescription.fromJson(
+                                {},
+                              ),
+                            );
+                          });
+                        }
+                      },
+                      icon: Icon(Icons.add),
+                      label: Text(
+                        "Add",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            ListTile(
-              leading: Icon(
-                Icons.local_shipping,
-                size: 35,
-                color: CustomColors.blue,
-              ),
-              title: Text(
-                "Deliverable",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: CustomColors.black,
-                ),
-              ),
-              trailing: Switch(
-                value: isDeliverable,
-                onChanged: (value) {
-                  setState(() {
-                    isDeliverable = value;
-                  });
-                },
-                inactiveTrackColor: CustomColors.alertRed,
-                activeTrackColor: CustomColors.primary,
-                activeColor: Colors.green,
-              ),
+            ListView.builder(
+              shrinkWrap: true,
+              primary: false,
+              itemCount: _descs.length,
+              itemBuilder: (BuildContext context, int index) {
+                ProductDescription _pd = _descs[index];
+
+                return Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Container(
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'Detail : ${index + 1}',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            child: TextFormField(
+                              initialValue: _pd.title.toString(),
+                              textAlign: TextAlign.start,
+                              autofocus: false,
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: CustomColors.lightGreen)),
+                                labelText: "Title",
+                                labelStyle: TextStyle(
+                                    fontSize: 13, color: CustomColors.black),
+                                fillColor: CustomColors.white,
+                                filled: true,
+                              ),
+                              onChanged: (val) {
+                                setState(() {
+                                  _pd.title = val;
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Container(
+                            child: TextFormField(
+                              initialValue: _pd.description.toString(),
+                              textAlign: TextAlign.start,
+                              maxLines: 5,
+                              autofocus: false,
+                              keyboardType: TextInputType.multiline,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: CustomColors.lightGreen)),
+                                labelText: "Description",
+                                labelStyle: TextStyle(
+                                    fontSize: 13, color: CustomColors.black),
+                                fillColor: CustomColors.white,
+                                filled: true,
+                              ),
+                              onChanged: (val) {
+                                _pd.description = val;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-            ListTile(
-              leading: Icon(
-                Icons.favorite_border,
-                size: 35,
-                color: CustomColors.blue,
-              ),
-              title: Text(
-                "Popular Item",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: CustomColors.black,
-                ),
-              ),
-              trailing: Switch(
-                value: isPopular,
-                onChanged: (value) {
-                  setState(() {
-                    isPopular = value;
-                  });
-                },
-                inactiveTrackColor: CustomColors.alertRed,
-                activeTrackColor: CustomColors.primary,
-                activeColor: Colors.green,
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.av_timer,
-                size: 35,
-                color: CustomColors.blue,
-              ),
-              title: Text(
-                "Returnable",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: CustomColors.black,
-                ),
-              ),
-              trailing: Switch(
-                value: isReturnable,
-                onChanged: (value) {
-                  setState(() {
-                    isReturnable = value;
-                  });
-                },
-                inactiveTrackColor: CustomColors.alertRed,
-                activeTrackColor: CustomColors.primary,
-                activeColor: Colors.green,
-              ),
-            ),
-            Padding(padding: EdgeInsets.all(35))
+            SizedBox(height: 70)
           ],
         ),
       ),
@@ -945,6 +1546,11 @@ class _AddProductState extends State<AddProduct> {
   }
 
   onTypesDropdownItem(String uuid) async {
+    _selectedSubCategory = '0';
+    _selectedCategory = '0';
+    _categories = {"0": "Choose Product Category"};
+    _subcategories = {"0": "Choose Product SubCategory"};
+
     if (uuid == "0") {
       setState(
         () {
@@ -964,10 +1570,10 @@ class _AddProductState extends State<AddProduct> {
         },
       );
 
+      _categories = _categories..addAll(cList);
       setState(
         () {
           _selectedType = uuid;
-          _categories = _categories..addAll(cList);
         },
       );
     } else {
@@ -977,11 +1583,12 @@ class _AddProductState extends State<AddProduct> {
         },
       );
     }
-
-    if (this.productCategory != "") _selectedCategory = this.productCategory;
   }
 
   onCategoryDropdownItem(String uuid) async {
+    _selectedSubCategory = '0';
+    _subcategories = {"0": "Choose Product SubCategory"};
+
     if (uuid == "0") {
       setState(
         () {
@@ -1001,10 +1608,10 @@ class _AddProductState extends State<AddProduct> {
         },
       );
 
+      _subcategories = _subcategories..addAll(scList);
       setState(
         () {
           _selectedCategory = uuid;
-          _subcategories = _subcategories..addAll(scList);
         },
       );
     } else {
@@ -1014,130 +1621,5 @@ class _AddProductState extends State<AddProduct> {
         },
       );
     }
-
-    if (this.productSubCategory != "")
-      _selectedSubCategory = this.productSubCategory;
-  }
-}
-
-class Search extends SearchDelegate {
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return <Widget>[
-      IconButton(
-        icon: Icon(Icons.close),
-        onPressed: () {
-          query = "";
-        },
-      ),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-  }
-
-  ChipChopProducts selectedResult;
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return Container(
-      child: InkWell(
-        onTap: () {
-          print("Product clicked");
-        },
-        child: Text(selectedResult != null ? selectedResult.name : ""),
-      ),
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return FutureBuilder<List<ChipChopProducts>>(
-      future: ChipChopProducts().searchByKeyword(query),
-      builder: (BuildContext context,
-          AsyncSnapshot<List<ChipChopProducts>> snapshot) {
-        Widget children;
-
-        if (snapshot.hasData) {
-          if (snapshot.data.isNotEmpty) {
-            children = ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(
-                    snapshot.data[index].name,
-                  ),
-                  leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddProduct(snapshot.data[index]),
-                        settings: RouteSettings(name: '/settings/products/add'),
-                      ),
-                    );
-
-                    // print("Product onclick event");
-                    // selectedResult = snapshot.data[index];
-                    // showResults(context);
-                  },
-                );
-              },
-            );
-          } else {
-            children = Container(
-              height: 90,
-              child: Column(
-                children: <Widget>[
-                  Spacer(),
-                  Text(
-                    "No Products Found",
-                    style: TextStyle(
-                      color: CustomColors.alertRed,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(
-                    flex: 2,
-                  ),
-                  Text(
-                    "Sorry. Please Try Again Later!",
-                    style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Spacer(),
-                ],
-              ),
-            );
-          }
-        } else if (snapshot.hasError) {
-          children = Center(
-            child: Column(
-              children: AsyncWidgets.asyncError(),
-            ),
-          );
-        } else {
-          children = Center(
-            child: Column(
-              children: AsyncWidgets.asyncWaiting(),
-            ),
-          );
-        }
-
-        return children;
-      },
-    );
   }
 }

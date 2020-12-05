@@ -1,5 +1,6 @@
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/screens/utils/url_launcher_utils.dart';
 import 'package:chipchop_seller/services/utils/DateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -68,50 +69,46 @@ class StoreProfileWidget extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 60.0),
             child: Container(
-              child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                primary: true,
                 shrinkWrap: true,
-                primary: false,
-                mainAxisSpacing: 10,
-                children: List.generate(
-                  store.contacts.length,
-                  (index) {
-                    return Container(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: CustomColors.white),
-                            child: RawMaterialButton(
-                              onPressed: () {
-                                print("Contact Click");
-                              },
-                              shape: CircleBorder(),
-                              child: Icon(FontAwesomeIcons.image,
-                                  color: CustomColors.blue),
-                            ),
-                          ),
-                          Text(
-                            store.contacts[index].contactName,
-                            style: TextStyle(
-                              color: CustomColors.black,
-                            ),
-                          ),
-                          Text(
-                            store.contacts[index].contactNumber.toString(),
-                            style: TextStyle(
-                              color: CustomColors.black,
-                            ),
-                          )
-                        ],
+                itemCount: store.contacts.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: CustomColors.white),
+                        child: RawMaterialButton(
+                          onPressed: () {
+                            UrlLauncherUtils.makePhoneCall(
+                                store.contacts[index].contactNumber);
+                          },
+                          shape: CircleBorder(),
+                          child: Icon(FontAwesomeIcons.image,
+                              color: CustomColors.blue),
+                        ),
                       ),
-                    );
-                  },
-                ),
+                      Text(
+                        store.contacts[index].contactName,
+                        style: TextStyle(
+                          color: CustomColors.black,
+                        ),
+                      ),
+                      Text(
+                        store.contacts[index].contactNumber,
+                        style: TextStyle(
+                          color: CustomColors.black,
+                        ),
+                      )
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -121,7 +118,7 @@ class StoreProfileWidget extends StatelessWidget {
               color: CustomColors.primary,
             ),
             title: Text(
-              "Available Days",
+              "Business Days",
               style: TextStyle(
                   color: CustomColors.grey,
                   fontSize: 16.0,
@@ -241,6 +238,9 @@ class StoreProfileWidget extends StatelessWidget {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 60
+                )
               ],
             ),
           ),
@@ -254,12 +254,18 @@ class StoreProfileWidget extends StatelessWidget {
       yield Transform(
         transform: Matrix4.identity()..scale(0.9),
         child: ChoiceChip(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
           label: Text(days.value),
           selected: store.workingDays.contains(int.parse(days.key)),
-          elevation: 5.0,
-          selectedColor: CustomColors.blue,
+          elevation: 2.0,
+          selectedColor: CustomColors.primary,
           backgroundColor: CustomColors.white,
-          labelStyle: TextStyle(color: CustomColors.primary),
+          labelStyle: TextStyle(
+              color: store.workingDays.contains(int.parse(days.key))
+                  ? CustomColors.blue
+                  : CustomColors.black),
         ),
       );
     }

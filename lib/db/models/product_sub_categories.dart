@@ -64,6 +64,46 @@ class ProductSubCategories extends Model {
     return this.uuid;
   }
 
+  Future<List<ProductSubCategories>> getSubCategoriesForIDs(
+      String categoryID, List<String> ids) async {
+    // handle empty params
+    if (ids.isEmpty) return [];
+
+    List<ProductSubCategories> categories = [];
+
+    if (ids.length > 9) {
+      int end = 0;
+      for (int i = 0; i < ids.length; i = i + 9) {
+        if (end + 9 > ids.length)
+          end = ids.length;
+        else
+          end = end + 9;
+
+        QuerySnapshot snap = await getCollectionRef()
+            .where('category_id', isEqualTo: categoryID)
+            .where('uuid', whereIn: ids.sublist(i, end))
+            .getDocuments();
+        for (var j = 0; j < snap.documents.length; j++) {
+          ProductSubCategories _c =
+              ProductSubCategories.fromJson(snap.documents[j].data);
+          categories.add(_c);
+        }
+      }
+    } else {
+      QuerySnapshot snap = await getCollectionRef()
+          .where('category_id', isEqualTo: categoryID)
+          .where('uuid', whereIn: ids)
+          .getDocuments();
+      for (var j = 0; j < snap.documents.length; j++) {
+        ProductSubCategories _c =
+            ProductSubCategories.fromJson(snap.documents[j].data);
+        categories.add(_c);
+      }
+    }
+
+    return categories;
+  }
+
   Future<List<ProductSubCategories>> getSubCategoriesByIDs(
       List<String> ids) async {
     // handle empty params

@@ -6,6 +6,8 @@ class OrderProduct {
 
   @JsonKey(name: 'product_uuid', nullable: false)
   String productID;
+  @JsonKey(name: 'variant_id', nullable: false)
+  String variantID;
   @JsonKey(name: 'quantity', nullable: false)
   double quantity;
   @JsonKey(name: 'amount')

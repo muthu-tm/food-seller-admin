@@ -102,7 +102,6 @@ class _AuthPageState extends State<AuthPage> {
                                 style: TextStyle(
                                   color: CustomColors.grey,
                                   fontSize: 12,
-                                  
                                 ),
                               ),
                               shadowGradientText("Fourcup Inc.", 20.0),
@@ -153,7 +152,6 @@ class _AuthPageState extends State<AuthPage> {
         style: TextStyle(
           color: CustomColors.white,
           fontSize: size,
-          
         ),
       ),
     );
@@ -305,9 +303,6 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             ),
             child: TextFormField(
               textAlign: TextAlign.center,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(4),
-              ],
               obscureText: true,
               autofocus: false,
               controller: _pController,
@@ -381,7 +376,6 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18.0,
-                    
                     color: CustomColors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -400,7 +394,6 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                   AppLocalizations.of(context).translate('no_account'),
                   style: TextStyle(
                     fontSize: 13.0,
-                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.alertRed.withOpacity(0.7),
                   ),
@@ -504,8 +497,8 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
               AppLocalizations.of(context).translate('your_secret_key'), 2));
       return;
     } else {
-      String hashKey = HashGenerator.hmacGenerator(_pController.text,
-          _user.countryCode.toString() + _user.mobileNumber.toString());
+      String hashKey =
+          HashGenerator.hmacGenerator(_pController.text, _user.getID());
       if (hashKey != _user.password) {
         widget._scaffoldKey.currentState.showSnackBar(
             CustomSnackBar.errorSnackBar(

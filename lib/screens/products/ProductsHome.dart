@@ -28,7 +28,7 @@ class ProductsHome extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 5.0),
                   child: Card(
                     elevation: 2,
-                    color: CustomColors.primary,
+                    color: CustomColors.grey,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -41,28 +41,7 @@ class ProductsHome extends StatelessWidget {
                 ),
                 Card(
                   elevation: 2,
-                  color: CustomColors.lightGrey,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                  ),
-                  child: Container(
-                    child: ListTile(
-                      onTap: () {
-                        showSearch(context: context, delegate: Search());
-                      },
-                      leading: Text("Select & Load from ChipChop Products"),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 15,
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  elevation: 2,
-                  color: CustomColors.primary,
+                  color: CustomColors.grey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(10.0),
@@ -79,7 +58,7 @@ class ProductsHome extends StatelessWidget {
                           ),
                         );
                       },
-                      leading: Text("Add Custom Product"),
+                      leading: Text("Add Product"),
                       trailing: Icon(
                         Icons.arrow_forward_ios,
                         size: 15,

@@ -17,8 +17,7 @@ class OrderWidget extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  OrderDetailsScreen(order.userNumber, order.storeID, order),
+              builder: (context) => OrderDetailsScreen(order),
               settings: RouteSettings(name: '/orders/details'),
             ),
           );
@@ -38,17 +37,17 @@ class OrderWidget extends StatelessWidget {
                         Text(
                           "Store:",
                           style: TextStyle(
-                              color: CustomColors.black,
-                              fontSize: 14,
-                              ),
+                            color: CustomColors.black,
+                            fontSize: 14,
+                          ),
                         ),
                         Text(
                           order.storeName,
                           style: TextStyle(
-                              color: CustomColors.purple,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              ),
+                            color: CustomColors.purple,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
                         ),
                       ],
                     ),
@@ -61,17 +60,17 @@ class OrderWidget extends StatelessWidget {
                         Text(
                           "Status:",
                           style: TextStyle(
-                              color: CustomColors.black,
-                              fontSize: 14,
-                              ),
+                            color: CustomColors.black,
+                            fontSize: 14,
+                          ),
                         ),
                         Text(
-                          order.getStatus(),
+                          order.getStatus(order.status),
                           style: TextStyle(
-                              color: CustomColors.purple,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              ),
+                            color: CustomColors.purple,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
                         ),
                       ],
                     ),
@@ -91,16 +90,16 @@ class OrderWidget extends StatelessWidget {
                 title: Text(
                   "Order ID",
                   style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 14,
-                      ),
+                    color: CustomColors.blue,
+                    fontSize: 14,
+                  ),
                 ),
                 trailing: Text(
                   order.orderID,
                   style: TextStyle(
-                      color: CustomColors.black,
-                      fontSize: 12,
-                      ),
+                    color: CustomColors.black,
+                    fontSize: 12,
+                  ),
                 ),
               ),
               ListTile(
@@ -217,10 +216,7 @@ class OrderWidget extends StatelessWidget {
                 ),
                 title: Text(
                   "Location",
-                  style: TextStyle(
-                      
-                      color: CustomColors.black,
-                      fontSize: 16),
+                  style: TextStyle(color: CustomColors.black, fontSize: 16),
                 ),
                 trailing: Container(
                   width: 155,
@@ -247,7 +243,6 @@ class OrderWidget extends StatelessWidget {
                         "Map View",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            
                             fontSize: 16,
                             color: CustomColors.white,
                             fontWeight: FontWeight.bold),

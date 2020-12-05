@@ -1,6 +1,8 @@
+import 'package:chipchop_seller/db/models/product_sub_categories.dart';
 import 'package:chipchop_seller/db/models/store.dart';
-import 'package:chipchop_seller/screens/store/CategoriesProductsScreen.dart';
-import 'package:chipchop_seller/screens/store/SubCategoriesTab.dart';
+import 'package:chipchop_seller/screens/store/CategoriesProductsWidget.dart';
+import 'package:chipchop_seller/screens/store/SubCategoriesProductScreen.dart';
+import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
@@ -14,15 +16,14 @@ class StoreCategoriesScreen extends StatefulWidget {
   _StoreCategoriesScreenState createState() => _StoreCategoriesScreenState();
 }
 
-class _StoreCategoriesScreenState extends State<StoreCategoriesScreen>
-    with SingleTickerProviderStateMixin {
+class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  TabController _controller;
+
+  String _subCategoryID = "";
 
   @override
   void initState() {
     super.initState();
-    _controller = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -42,42 +43,75 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen>
           icon: Icon(Icons.arrow_back_ios, color: CustomColors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        bottom: TabBar(
-          controller: _controller,
-          labelColor: CustomColors.white,
-          indicatorWeight: 0,
-          indicator: BoxDecoration(
-            color: CustomColors.alertRed,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          tabs: [
-            Tab(
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  "Sub Categories",
-                ),
-              ),
-            ),
-            Tab(
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  "Products",
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
-      body: TabBarView(
-        controller: _controller,
+      body: Column(
         children: [
           SingleChildScrollView(
-            child: SubCategoriesTab(widget.categoryID, widget.store),
+            scrollDirection: Axis.horizontal,
+            child: FutureBuilder(
+              future: ProductSubCategories().getSubCategoriesForIDs(
+                  widget.categoryID, widget.store.availProductSubCategories),
+              builder: (context, AsyncSnapshot snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.waiting:
+                    return Center(
+                      child: Column(
+                        children: AsyncWidgets.asyncWaiting(),
+                      ),
+                    );
+                  default:
+                    if (snapshot.hasError)
+                      return Center(
+                        child: Column(
+                          children: AsyncWidgets.asyncError(),
+                        ),
+                      );
+                    else
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Wrap(
+                          alignment: WrapAlignment.start,
+                          runAlignment: WrapAlignment.start,
+                          spacing: 5.0,
+                          direction: Axis.horizontal,
+                          children: List<Widget>.generate(
+                            snapshot.data.length,
+                            (index) {
+                              ProductSubCategories _sc = snapshot.data[index];
+                              return ActionChip(
+                                elevation: 6.0,
+                                backgroundColor: _subCategoryID == _sc.uuid
+                                    ? CustomColors.primary
+                                    : Colors.white,
+                                onPressed: () {
+                                  setState(() {
+                                    _subCategoryID = _sc.uuid;
+                                  });
+                                },
+                                label: Text(
+                                  _sc.name,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: _subCategoryID == _sc.uuid
+                                          ? Colors.black54
+                                          : CustomColors.black),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                }
+              },
+            ),
           ),
-          CategoriesProductsScreen(widget.store.uuid,
-              widget.store.name, widget.categoryID),
+          _subCategoryID.isEmpty
+              ? CategoriesProductsWidget(
+                  widget.store.uuid, widget.store.name, widget.categoryID)
+              : SubCategoriesProductsWidget(widget.store.uuid,
+                  widget.store.name, widget.categoryID, _subCategoryID)
         ],
       ),
     );

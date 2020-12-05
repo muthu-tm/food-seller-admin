@@ -1,7 +1,10 @@
 import 'dart:math';
 
+import 'package:chipchop_seller/db/models/order_status.dart';
+import 'package:chipchop_seller/db/models/order_written_details.dart';
 import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -30,28 +33,20 @@ class Order {
   List<OrderProduct> products;
   @JsonKey(name: 'order_images', defaultValue: [""])
   List<String> orderImages;
-  @JsonKey(name: 'written_orders', defaultValue: "")
-  String writtenOrders;
+  @JsonKey(name: 'written_orders', nullable: false)
+  List<WrittenOrders> writtenOrders;
   @JsonKey(name: 'customer_notes', defaultValue: "")
   String customerNotes;
-  @JsonKey(name: 'status', defaultValue: 0)
-  int status; // 0 - Ordered,
+  @JsonKey(name: 'store_notes', defaultValue: "")
+  String storeNotes;
+  @JsonKey(name: 'status')
+  int status;
+  @JsonKey(name: 'status_details')
+  List<OrderStatus> statusDetails;
   @JsonKey(name: 'is_returnable', defaultValue: false)
   bool isReturnable;
   @JsonKey(name: 'return_days', defaultValue: false)
   int returnDays;
-  @JsonKey(name: 'confirmed_at', nullable: true)
-  int confirmedAt;
-  @JsonKey(name: 'dispatched_at', nullable: true)
-  int dispatchedAt;
-  @JsonKey(name: 'cancelled_at', nullable: true)
-  int cancelledAt;
-  @JsonKey(name: 'return_requested_at', nullable: true)
-  int returnRequestedAt;
-  @JsonKey(name: 'return_cancelled_at', nullable: true)
-  int returnCancelledAt;
-  @JsonKey(name: 'returned_at', nullable: true)
-  int returnedAt;
   @JsonKey(name: 'delivery')
   OrderDelivery delivery;
   @JsonKey(name: 'amount')
@@ -83,31 +78,86 @@ class Order {
   }
 
   String generateOrderID() {
-    return DateFormat('ddMMyy').format(this.createdAt) +
+    var _random = new Random();
+
+    return DateFormat('yyMMdd').format(this.createdAt) +
         "-" +
-        Random(100).nextInt(1000).toString() +
-        this.totalProducts.toString();
+        this.totalProducts.toString() +
+        (10 + _random.nextInt(10000 - 10)).toString();
   }
 
-  String getStatus() {
-    if (this.status == 0) {
-      return "Ordered";
-    } else if (this.status == 1) {
-      return "Confirmed";
-    } else if (this.status == 2) {
-      return "Cancelled By User";
-    } else if (this.status == 3) {
-      return "Cancelled By Store";
-    } else if (this.status == 4) {
-      return "DisPatched";
-    } else if (this.status == 5) {
-      return "Delivered";
-    } else if (this.status == 6) {
-      return "Return Requested";
-    } else if (this.status == 7) {
-      return "Return Cancelled";
-    } else {
-      return "Returned";
+  String getStatus(int status) {
+    switch (status) {
+      case 0:
+        return "Ordered";
+        break;
+      case 1:
+        return "Confirmed";
+        break;
+      case 2:
+        return "Cancelled By User";
+        break;
+      case 3:
+        return "Cancelled By Store";
+        break;
+      case 4:
+        return "DisPatched";
+        break;
+      case 5:
+        return "Delivered";
+        break;
+      case 6:
+        return "Return Requested";
+        break;
+      case 7:
+        return "Return Cancelled";
+        break;
+      default:
+        return "Returned";
+    }
+  }
+
+  Color getTextColor() {
+    switch (status) {
+      case 0:
+        return Colors.orange;
+        break;
+      case 1:
+      case 4:
+        return Colors.blue;
+        break;
+      case 2:
+      case 3:
+      case 7:
+        return Colors.red;
+        break;
+      case 5:
+        return Colors.green;
+        break;
+      default:
+        return Colors.black;
+    }
+  }
+
+  Color getBackGround() {
+    switch (status) {
+      case 0:
+        return Colors.orange[100];
+        break;
+      case 1:
+      case 4:
+        return Colors.blue[100];
+        break;
+      case 2:
+      case 3:
+      case 7:
+        return Colors.red[100];
+        break;
+      case 5:
+        return Colors.green[100];
+        break;
+      default:
+        return Colors.black45;
     }
   }
 
@@ -125,31 +175,30 @@ class Order {
     }
   }
 
-  Future<void> updateDeliveryDetails(
-      String buyerID, int status, DateTime eDelivery, String number) async {
-    String field = "confirmed_at";
-
-    if (status == 1) {
-      field = "confirmed_at";
-    } else if (status == 2 || status == 3) {
-      field = "cancelled_at";
-    } else if (status == 4) {
-      field = "dispatched_at";
-    } else if (status == 5) {
-      field = "delivery.delivered_at";
-    } else {
-      field = "returned_at";
-    }
-
+  Future<void> deliverOrder(String buyerID, DateTime dateTime, String notes,
+      String deliverredTo, String deliverredBy, String number) async {
     try {
+      List<OrderStatus> _newStatus = this.statusDetails;
+      _newStatus.add(
+        OrderStatus.fromJson({
+          'created_at': DateTime.now().millisecondsSinceEpoch,
+          'updated_by': cachedLocalUser.getFullName(),
+          'user_number': cachedLocalUser.getID(),
+          'status': 5
+        }),
+      );
+
       await this.getCollectionRef(buyerID).document(this.uuid).updateData(
         {
-          'status': status,
+          'status_details': _newStatus?.map((e) => e?.toJson())?.toList(),
+          'status': 5,
           'updated_at': DateTime.now(),
-          'delivery.expected_at':
-              eDelivery == null ? null : eDelivery.millisecondsSinceEpoch,
+          'delivery.delivered_at':
+              dateTime == null ? null : dateTime.millisecondsSinceEpoch,
+          'delivery.delivered_by': deliverredBy,
+          'delivery.delivered_to': deliverredTo,
+          'delivery.notes': notes,
           'delivery.delivery_contact': number,
-          field: DateTime.now().millisecondsSinceEpoch
         },
       );
     } catch (err) {
@@ -160,6 +209,76 @@ class Order {
       }, 'order');
       throw err;
     }
+  }
+
+  Future<void> updateDeliveryDetails(
+      String buyerID, int status, DateTime eDelivery, String number) async {
+    try {
+      if (status != this.status) {
+        List<OrderStatus> _newStatus = this.statusDetails;
+        _newStatus.add(
+          OrderStatus.fromJson({
+            'created_at': DateTime.now().millisecondsSinceEpoch,
+            'updated_by': cachedLocalUser.getFullName(),
+            'user_number': cachedLocalUser.getID(),
+            'status': status
+          }),
+        );
+
+        await this.getCollectionRef(buyerID).document(this.uuid).updateData(
+          {
+            'status_details': _newStatus?.map((e) => e?.toJson())?.toList(),
+            'status': status,
+            'updated_at': DateTime.now(),
+            'delivery.expected_at':
+                eDelivery == null ? null : eDelivery.millisecondsSinceEpoch,
+            'delivery.delivery_contact': number,
+          },
+        );
+      } else if (this.delivery.expectedAt !=
+              (eDelivery == null ? null : eDelivery.millisecondsSinceEpoch) ||
+          this.delivery.deliveryContact != number) {
+        await this.getCollectionRef(buyerID).document(this.uuid).updateData(
+          {
+            'updated_at': DateTime.now(),
+            'delivery.expected_at':
+                eDelivery == null ? null : eDelivery.millisecondsSinceEpoch,
+            'delivery.delivery_contact': number,
+          },
+        );
+      }
+    } catch (err) {
+      Analytics.sendAnalyticsEvent({
+        'type': 'order_delivery_update_error',
+        'order_id': this.uuid,
+        'error': err.toString()
+      }, 'order');
+      throw err;
+    }
+  }
+
+  Future<void> cancelOrder(bool isReturn, String notes) async {
+    List<OrderStatus> _newStatus = this.statusDetails;
+    _newStatus.add(
+      OrderStatus.fromJson({
+        'created_at': DateTime.now().millisecondsSinceEpoch,
+        'updated_by': cachedLocalUser.getFullName(),
+        'user_number': cachedLocalUser.getID(),
+        'status': isReturn ? 7 : 3
+      }),
+    );
+
+    await this
+        .getCollectionRef(this.userNumber)
+        .document(this.getID())
+        .updateData(
+      {
+        'status_details': _newStatus?.map((e) => e?.toJson())?.toList(),
+        'status': isReturn ? 7 : 3,
+        'updated_at': DateTime.now(),
+        'store_notes': notes
+      },
+    );
   }
 
   Future<void> updateAmountDetails(
@@ -184,20 +303,45 @@ class Order {
     }
   }
 
-  Stream<QuerySnapshot> streamOrders(String id) {
-    return getGroupQuery()
+  Future<List<Order>> getCurrentDayOrders(String id) async {
+    final now = DateTime.now();
+    final lastMidnight = new DateTime(now.year, now.month, now.day);
+
+    QuerySnapshot snap = await getGroupQuery()
         .where('store_uuid', isEqualTo: id)
-        .orderBy('created_at', descending: true)
-        .snapshots();
+        .where('created_at', isGreaterThan: lastMidnight)
+        .getDocuments();
+
+    List<Order> oList = [];
+    if (snap.documents.isNotEmpty) {
+      snap.documents.forEach((order) {
+        Order _order = Order.fromJson(order.data);
+        oList.add(_order);
+      });
+    }
+
+    return oList;
   }
 
-  Stream<QuerySnapshot> streamOrderByID(
-      String userID, String storeID, String uuid) {
-    return getGroupQuery()
-        .where('store_uuid', isEqualTo: storeID)
-        .where('user_number', isEqualTo: userID)
-        .where('uuid', isEqualTo: uuid)
-        .snapshots();
+  Stream<DocumentSnapshot> streamOrderByID(String userID, String uuid) {
+    return getCollectionRef(userID).document(uuid).snapshots();
+  }
+
+  Future<List<Map<String, dynamic>>> getByOrderID(String id) async {
+    QuerySnapshot snap = await getGroupQuery()
+        .where('store_uuid', whereIn: cachedLocalUser.stores)
+        .where('order_id', isGreaterThanOrEqualTo: id)
+        .getDocuments();
+
+    List<Map<String, dynamic>> oList = [];
+
+    if (snap.documents.isNotEmpty) {
+      snap.documents.forEach((order) {
+        oList.add(order.data);
+      });
+    }
+
+    return oList;
   }
 
   Stream<QuerySnapshot> streamOrdersByStatus(List<String> stores, int status) {
@@ -215,16 +359,24 @@ class Order {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getByOrderID(String id) async {
+  Stream<QuerySnapshot> streamOrdersForStore(String storeID, List<int> status) {
+    return getGroupQuery()
+        .where('store_uuid', isEqualTo: storeID)
+        .where('status', whereIn: status)
+        .orderBy('created_at', descending: true)
+        .snapshots();
+  }
+
+  Future<List<Order>> searchForOrder(String id) async {
     QuerySnapshot snap = await getGroupQuery()
         .where('store_uuid', whereIn: cachedLocalUser.stores)
-        .where('order_id', isGreaterThanOrEqualTo: id)
+        .where('order_id', isEqualTo: id)
         .getDocuments();
 
-    List<Map<String, dynamic>> oList = [];
+    List<Order> oList = [];
     if (snap.documents.isNotEmpty) {
       snap.documents.forEach((order) {
-        oList.add(order.data);
+        oList.add(Order.fromJson(order.data));
       });
     }
 

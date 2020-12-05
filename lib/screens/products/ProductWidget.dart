@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/products.dart';
+import 'package:chipchop_seller/db/models/user_activity_tracker.dart';
 import 'package:chipchop_seller/screens/products/EditProducts.dart';
 import 'package:chipchop_seller/screens/products/ProductDetailsScreen.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
@@ -16,67 +17,63 @@ class ProductWidget extends StatefulWidget {
 }
 
 class _ProductWidgetState extends State<ProductWidget> {
-  bool isSwitched = false;
+  String _variant = "0";
 
   @override
   void initState() {
     super.initState();
-    isSwitched = widget.product.isAvailable;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10.0),
+    return Padding(
+      padding: EdgeInsets.all(5.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10.0),
+          ),
+          color: CustomColors.white,
         ),
-        color: CustomColors.white,
-      ),
-      padding: EdgeInsets.all(2),
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ProductDetailsScreen(widget.product),
-              settings: RouteSettings(name: '/settings/products/view'),
-            ),
-          );
-        },
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            CachedNetworkImage(
-              imageUrl: widget.product.getProductImage(),
-              imageBuilder: (context, imageProvider) => Container(
-                width: 70,
-                height: 70,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5.0),
+            Padding(
+              padding: EdgeInsets.only(right: 5.0),
+              child: CachedNetworkImage(
+                imageUrl: widget.product.getProductImage(),
+                imageBuilder: (context, imageProvider) => Container(
+                  width: 80,
+                  height: 85,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(10.0),
+                    ),
+                    shape: BoxShape.rectangle,
+                    image:
+                        DecorationImage(fit: BoxFit.fill, image: imageProvider),
                   ),
-                  shape: BoxShape.rectangle,
-                  image:
-                      DecorationImage(fit: BoxFit.fill, image: imageProvider),
                 ),
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    CircularProgressIndicator(value: downloadProgress.progress),
+                errorWidget: (context, url, error) => Icon(
+                  Icons.error,
+                  size: 35,
+                ),
+                fadeOutDuration: Duration(seconds: 1),
+                fadeInDuration: Duration(seconds: 2),
               ),
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  CircularProgressIndicator(value: downloadProgress.progress),
-              errorWidget: (context, url, error) => Icon(
-                Icons.error,
-                size: 35,
-              ),
-              fadeOutDuration: Duration(seconds: 1),
-              fadeInDuration: Duration(seconds: 2),
             ),
             Flexible(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     widget.product.name,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: CustomColors.blue,
@@ -84,48 +81,225 @@ class _ProductWidgetState extends State<ProductWidget> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    "${widget.product.weight} ${widget.product.getUnit()} - Rs. ${widget.product.currentPrice.toString()}",
-                    style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 13.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  SizedBox(
+                    height: 2,
                   ),
+                  Row(
+                    children: [
+                      (widget.product.variants.length == 1)
+                          ? Container(
+                              height: 25,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)),
+                              // dropdown below..
+                              child: Text(
+                                "${widget.product.variants[0].weight} ${widget.product.variants[0].getUnit()}",
+                                style: TextStyle(
+                                  color: CustomColors.black,
+                                  fontSize: 13.0,
+                                ),
+                              ),
+                            )
+                          : Container(
+                              height: 25,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)),
+                              // dropdown below..
+                              child: DropdownButton<String>(
+                                value: _variant,
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: CustomColors.primary,
+                                ),
+                                iconSize: 30,
+                                underline: SizedBox(),
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    _variant = newValue;
+                                  });
+                                },
+                                items: List.generate(
+                                    widget.product.variants.length,
+                                    (int index) {
+                                  return DropdownMenuItem(
+                                    value: widget.product.variants[index].id,
+                                    child: Container(
+                                      child: Text(
+                                        "${widget.product.variants[index].weight} ${widget.product.variants[index].getUnit()}",
+                                        style: TextStyle(
+                                          color: CustomColors.black,
+                                          fontSize: 13.0,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                              ),
+                            ),
+                      SizedBox(width: 10),
+                      Text(
+                        " ₹ ${widget.product.variants[int.parse(_variant)].currentPrice.toString()}",
+                        style: TextStyle(
+                          color: CustomColors.black,
+                          fontSize: 12.0,
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: [
+                      InkWell(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.purple[200],
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5.0),
+                            ),
+                          ),
+                          padding: EdgeInsets.all(4),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: CustomColors.grey,
+                                radius: 10,
+                                child: Icon(
+                                  Icons.remove_red_eye,
+                                  color: CustomColors.lightGrey,
+                                  size: 15,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "Preview",
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        onTap: () {
+                          UserActivityTracker _activity = UserActivityTracker();
+                          _activity.keywords = "";
+                          _activity.storeID = widget.product.storeID;
+                          _activity.productID = widget.product.uuid;
+                          _activity.productName = widget.product.name;
+                          _activity.type = 2;
+                          _activity.create();
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ProductDetailsScreen(widget.product),
+                              settings: RouteSettings(name: '/products/view'),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      InkWell(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.orange[300],
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5.0),
+                            ),
+                          ),
+                          padding: EdgeInsets.all(4),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: CustomColors.grey,
+                                radius: 10,
+                                child: Icon(
+                                  Icons.edit,
+                                  color: CustomColors.lightGrey,
+                                  size: 10.0,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "Edit",
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  EditProducts(widget.product),
+                              settings: RouteSettings(name: '/products/edit'),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      InkWell(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: widget.product.variants[int.parse(_variant)]
+                                    .isAvailable
+                                ? Colors.greenAccent
+                                : Colors.red[400],
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5.0),
+                            ),
+                          ),
+                          padding: EdgeInsets.all(4),
+                          child: Row(
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.solidHandPointUp,
+                                color: CustomColors.grey,
+                                size: 15,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "In Stock",
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        onTap: () async {
+                          await widget.product.updateProductStatus(
+                              widget.product.uuid,
+                              _variant,
+                              !widget.product.variants[int.parse(_variant)]
+                                  .isAvailable);
+                        },
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
-            Column(
-              children: [
-                IconButton(
-                  icon: Icon(
-                    FontAwesomeIcons.solidEdit,
-                    color: CustomColors.alertRed,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditProducts(widget.product),
-                        settings:
-                            RouteSettings(name: '/settings/products/edit'),
-                      ),
-                    );
-                  },
-                ),
-                Switch(
-                  value: isSwitched,
-                  onChanged: (value) async {
-                    isSwitched = value;
-                    await widget.product
-                        .updateProductStatus(widget.product.uuid, value);
-                  },
-                  inactiveTrackColor: CustomColors.alertRed,
-                  activeTrackColor: CustomColors.primary,
-                  activeColor: Colors.green,
-                ),
-              ],
-            )
           ],
         ),
       ),

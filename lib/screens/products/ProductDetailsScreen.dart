@@ -1,18 +1,18 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:ui';
+
+import 'package:chipchop_seller/db/models/product_description.dart';
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/products/ProductFAQsWidget.dart';
+import 'package:chipchop_seller/screens/products/ProductReviewWidget.dart';
 import 'package:chipchop_seller/screens/store/StoreProfileWidget.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
-import 'package:chipchop_seller/screens/utils/ImageView.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../db/models/products.dart';
 import '../utils/CustomColors.dart';
-import 'ProductReviewWidget.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final Products product;
@@ -26,28 +26,18 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     with SingleTickerProviderStateMixin {
   TabController _controller;
+
+  String _variants = "0";
   Store store;
 
   List<Widget> list = [
     Tab(
-      icon: Icon(
-        Icons.card_travel,
-        size: 20,
-      ),
       text: "From Store",
     ),
     Tab(
-      icon: Icon(
-        FontAwesomeIcons.comments,
-        size: 20,
-      ),
       text: "Reviews",
     ),
     Tab(
-      icon: Icon(
-        FontAwesomeIcons.bookReader,
-        size: 20,
-      ),
       text: "FAQs",
     ),
   ];
@@ -80,7 +70,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10),
+            child: CarouselIndicatorSlider(widget.product.getProductImages()),
+          ),
+          widget.product.brandName != null &&
+                  widget.product.brandName.isNotEmpty
+              ? Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Text(
+                    widget.product.brandName,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black54,
+                    ),
+                  ),
+                )
+              : Container(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: Container(
               child: Text(
                 widget.product.name,
@@ -91,177 +99,145 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: CarouselIndicatorSlider(widget.product.getProductImages()),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.product.shortDetails,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 14,
-                color: CustomColors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    Text(
-                      "${widget.product.weight} ${widget.product.getUnit()}",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        color: CustomColors.black,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+          widget.product.shortDetails != null &&
+                  widget.product.shortDetails.isNotEmpty
+              ? Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    widget.product.shortDetails,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: CustomColors.black,
                     ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 10,
-                        ),
-                        widget.product.offer > 0
-                            ? Text(
-                                '₹ ${widget.product.originalPrice.toString()}',
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 18,
-                                    decoration: TextDecoration.lineThrough),
-                              )
-                            : Container(),
-                        SizedBox(
-                          width: 6,
-                        ),
-                        Text(
-                          '₹ ${widget.product.currentPrice.toString()}',
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700),
-                        )
-                      ],
+                  ),
+                )
+              : Container(),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                '₹ ${widget.product.variants[int.parse(_variants)].currentPrice.toString()}',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              widget.product.variants[int.parse(_variants)].offer > 0
+                  ? Text(
+                      '₹ ${widget.product.variants[int.parse(_variants)].originalPrice.toString()}',
+                      style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 14,
+                          decoration: TextDecoration.lineThrough),
                     )
-                  ],
-                ),
+                  : Container(),
+            ],
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                (widget.product.variants.length == 1)
+                    ? Container(
+                        height: 30,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          "${widget.product.variants[0].weight} ${widget.product.variants[0].getUnit()}",
+                          style: TextStyle(
+                            color: CustomColors.black,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: 30,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10)),
+                        // dropdown below..
+                        child: DropdownButton<String>(
+                          value: _variants,
+                          icon: Icon(
+                            Icons.keyboard_arrow_down,
+                            color: CustomColors.primary,
+                          ),
+                          iconSize: 30,
+                          underline: SizedBox(),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              _variants = newValue;
+                            });
+                          },
+                          items: List.generate(widget.product.variants.length,
+                              (int index) {
+                            return DropdownMenuItem(
+                              value: widget.product.variants[index].id,
+                              child: Container(
+                                child: Text(
+                                  "${widget.product.variants[index].weight} ${widget.product.variants[index].getUnit()}",
+                                  style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontSize: 14.0,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      ),
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: CustomColors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          width: 50,
-                          height: 30,
+          SizedBox(
+            height: 10,
+          ),
+          widget.product.productDescription != null &&
+                  widget.product.productDescription.isNotEmpty
+              ? Container(
+                  padding: EdgeInsets.all(5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Product Details",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Card(
+                        elevation: 2,
+                        child: Container(
                           decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                              color: CustomColors.white),
-                          child: Icon(
-                            Icons.update,
-                            size: 30,
-                            color: Color(0xFFAB436B),
+                            color: CustomColors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5),
+                            ),
                           ),
+                          child: getProductDetails(),
                         ),
-                        Text(
-                          widget.product.isReturnable
-                              ? "Returnable"
-                              : "Not Returnable",
-                          style: TextStyle(
-                            color: CustomColors.black,
-                          ),
-                        )
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          width: 50,
-                          height: 30,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                              color: CustomColors.white),
-                          child: Icon(
-                              widget.product.isDeliverable
-                                  ? FontAwesomeIcons.shippingFast
-                                  : Icons.transfer_within_a_station,
-                              size: 30,
-                              color: CustomColors.blue),
-                        ),
-                        Text(
-                          widget.product.isDeliverable
-                              ? "Home Delivery"
-                              : "Self Pickup",
-                          style: TextStyle(
-                            color: CustomColors.black,
-                          ),
-                        )
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          width: 50,
-                          height: 30,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                              color: CustomColors.white),
-                          child: Icon(
-                            widget.product.isAvailable
-                                ? Icons.sentiment_very_satisfied
-                                : Icons.sentiment_dissatisfied,
-                            size: 30,
-                            color: widget.product.isAvailable
-                                ? CustomColors.primary
-                                : CustomColors.alertRed,
-                          ),
-                        ),
-                        Text(
-                          widget.product.isAvailable
-                              ? "In Stock"
-                              : "Out Of Stock",
-                          style: TextStyle(
-                            color: CustomColors.black,
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                      )
+                    ],
+                  ),
+                )
+              : Container(),
+          SizedBox(
+            height: 10,
           ),
           Container(
             child: TabBar(
-                indicatorColor: CustomColors.alertRed,
-                labelColor: CustomColors.blueGreen,
+                indicator: BoxDecoration(color: Colors.blueAccent),
+                labelColor: CustomColors.white,
                 unselectedLabelColor: CustomColors.black,
                 controller: _controller,
                 tabs: list),
@@ -326,49 +302,48 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     );
   }
 
-  List<Widget> getImages() {
-    List<Widget> images = [];
-
-    for (var item in widget.product.getProductImages()) {
-      images.add(InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ImageView(
-                url: item,
+  Widget getProductDetails() {
+    return ListView.separated(
+      primary: false,
+      shrinkWrap: true,
+      itemCount: widget.product.productDescription.length,
+      separatorBuilder: (BuildContext context, int index) => Divider(
+        color: CustomColors.grey,
+        height: 0,
+      ),
+      itemBuilder: (BuildContext context, int index) {
+        ProductDescription desc = widget.product.productDescription[index];
+        return Container(
+          padding: EdgeInsets.fromLTRB(2, 10, 2, 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              desc.images != null && desc.images.isNotEmpty
+                  ? CarouselIndicatorSlider(desc.images)
+                  : Container(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      desc.title,
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Flexible(
+                    child: Text(
+                      desc.description,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
+                ],
               ),
-              settings: RouteSettings(name: '/products/image'),
-            ),
-          );
-        },
-        child: CachedNetworkImage(
-          imageUrl: item,
-          imageBuilder: (context, imageProvider) => Image(
-            height: 150,
-            width: double.infinity,
-            fit: BoxFit.contain,
-            image: imageProvider,
+            ],
           ),
-          progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-            child: SizedBox(
-              height: 50.0,
-              width: 50.0,
-              child: CircularProgressIndicator(
-                  value: downloadProgress.progress,
-                  valueColor: AlwaysStoppedAnimation(CustomColors.blue),
-                  strokeWidth: 2.0),
-            ),
-          ),
-          errorWidget: (context, url, error) => Icon(
-            Icons.error,
-            size: 35,
-          ),
-          fadeOutDuration: Duration(seconds: 1),
-          fadeInDuration: Duration(seconds: 2),
-        ),
-      ));
-    }
-    return images;
+        );
+      },
+    );
   }
 }
