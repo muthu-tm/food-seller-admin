@@ -46,7 +46,7 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
             : Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(20.0, 0, 0, 0),
+                    padding: EdgeInsets.fromLTRB(10.0, 10, 10, 5),
                     child: InkWell(
                         onTap: () {
                           Navigator.push(
@@ -60,10 +60,7 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                           height: 50,
                           padding: EdgeInsets.all(5.0),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.0),
-                                bottomLeft: Radius.circular(10.0),
-                              ),
+                              borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
                                   color: CustomColors.grey,
@@ -186,7 +183,9 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                 shrinkWrap: true,
                 primary: false,
                 itemCount: snapshot.data.documents.length,
-                separatorBuilder: (BuildContext context, int index) => Divider(color: CustomColors.black,),
+                separatorBuilder: (BuildContext context, int index) => Divider(
+                  color: CustomColors.black,
+                ),
                 itemBuilder: (BuildContext context, int index) {
                   Order order =
                       Order.fromJson(snapshot.data.documents[index].data);
