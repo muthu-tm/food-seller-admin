@@ -9,7 +9,6 @@ import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/url_launcher_utils.dart';
 import 'package:chipchop_seller/services/utils/DateUtils.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../utils/CustomColors.dart';
 
@@ -91,23 +90,18 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: InkWell(
-                    onTap: isWithinWorkingHours
-                        ? () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CustomersScreen(
-                                  widget.store.uuid,
-                                  widget.store.name,
-                                ),
-                                settings:
-                                    RouteSettings(name: '/customers/store'),
-                              ),
-                            );
-                          }
-                        : () {
-                            Fluttertoast.showToast(msg: 'Store is closed');
-                          },
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CustomersScreen(
+                            widget.store.uuid,
+                            widget.store.name,
+                          ),
+                          settings: RouteSettings(name: '/customers/store'),
+                        ),
+                      );
+                    },
                     child: Align(
                       alignment: Alignment.center,
                       child: Container(
@@ -146,14 +140,10 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: InkWell(
-                    onTap: isWithinWorkingHours
-                        ? () async {
-                            await UrlLauncherUtils.makePhoneCall(
-                                widget.store.contacts.first.contactNumber);
-                          }
-                        : () {
-                            Fluttertoast.showToast(msg: 'Store is closed');
-                          },
+                    onTap: () async {
+                      await UrlLauncherUtils.makePhoneCall(
+                          widget.store.contacts.first.contactNumber);
+                    },
                     child: Align(
                       alignment: Alignment.center,
                       child: Container(
@@ -281,202 +271,206 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
   }
 
   Widget storeDialog() {
-    return SingleChildScrollView(
-      child: AlertDialog(
-        backgroundColor: Colors.grey[100],
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(15.0),
-          ),
-        ),
-        content: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.95,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    widget.store.name,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  CarouselIndicatorSlider(widget.store.storeImages),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(Icons.calendar_today_outlined),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Flexible(
-                        child: Text(
-                          "Business / Working Days",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 14),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: selectedDays.toList(),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(Icons.alarm),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Flexible(
-                        child: Text(
-                          "Business / Working Time",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 14),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.grey[500],
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            DateUtils.getFormattedTime(widget.store.activeFrom),
-                          ),
-                        ),
-                      ),
-                      Text("To"),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.grey[500],
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            DateUtils.getFormattedTime(widget.store.activeTill),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(Icons.delivery_dining),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text("Delivery Time",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 14))
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.grey[500],
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(DateUtils.getFormattedTime(
-                              widget.store.deliveryDetails.deliveryFrom)),
-                        ),
-                      ),
-                      Text("To"),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.grey[500],
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(DateUtils.getFormattedTime(
-                              widget.store.deliveryDetails.deliveryTill)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+    return Center(
+      child: SingleChildScrollView(
+        child: AlertDialog(
+          backgroundColor: Colors.grey[100],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15.0),
             ),
-            SizedBox(height: 10),
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                decoration: BoxDecoration(
-                  color: Colors.red[400],
-                  border: Border.all(
-                    color: Colors.grey[500],
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                ),
-                child: Text(
-                  "Close",
-                  style: TextStyle(
-                    color: CustomColors.white,
-                  ),
+          ),
+          content: Column(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.95,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      widget.store.name,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    CarouselIndicatorSlider(widget.store.storeImages),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.calendar_today_outlined),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Flexible(
+                          child: Text(
+                            "Business / Working Days",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 14),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: selectedDays.toList(),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.alarm),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Flexible(
+                          child: Text(
+                            "Business / Working Time",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 14),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.grey[500],
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              DateUtils.getFormattedTime(
+                                  widget.store.activeFrom),
+                            ),
+                          ),
+                        ),
+                        Text("To"),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.grey[500],
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              DateUtils.getFormattedTime(
+                                  widget.store.activeTill),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.delivery_dining),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text("Delivery Time",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 14))
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.grey[500],
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(DateUtils.getFormattedTime(
+                                widget.store.deliveryDetails.deliveryFrom)),
+                          ),
+                        ),
+                        Text("To"),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.grey[500],
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(DateUtils.getFormattedTime(
+                                widget.store.deliveryDetails.deliveryTill)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            )
-          ],
+              SizedBox(height: 10),
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: BoxDecoration(
+                    color: Colors.red[400],
+                    border: Border.all(
+                      color: Colors.grey[500],
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    "Close",
+                    style: TextStyle(
+                      color: CustomColors.white,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
