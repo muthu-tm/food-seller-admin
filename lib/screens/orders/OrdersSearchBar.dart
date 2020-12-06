@@ -80,16 +80,17 @@ class _OrdersSearchBarState extends State<OrdersSearchBar> {
                     snapshot.hasData &&
                     _searchController.text != '') {
                   if (snapshot.data.isNotEmpty) {
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
+                    return ListView.separated(
                       shrinkWrap: true,
                       primary: false,
                       itemCount: snapshot.data.length,
+                      separatorBuilder: (BuildContext context, int index) =>
+                          Divider(
+                        color: CustomColors.black,
+                      ),
                       itemBuilder: (BuildContext context, int index) {
                         Order _order = snapshot.data[index];
-                        return Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: OrderWidget(_order));
+                        return OrderWidget(_order);
                       },
                     );
                   } else {
