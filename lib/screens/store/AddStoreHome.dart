@@ -143,8 +143,6 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
               userAccess.userNumber = cachedLocalUser.getID();
               userAccess.accessLevel = [0];
               store.usersAccess = [userAccess];
-              store.keywords =
-                  updatedAddress.city != null ? [updatedAddress.city] : [];
 
               Navigator.push(
                 context,
@@ -196,8 +194,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     padding: EdgeInsets.only(left: 10.0, top: 10),
                     child: Text(
                       "Store / Business Name",
-                      style:
-                          TextStyle(color: CustomColors.black, fontSize: 14),
+                      style: TextStyle(color: CustomColors.black, fontSize: 14),
                     ),
                   ),
                   Padding(
@@ -230,8 +227,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     padding: EdgeInsets.only(left: 10.0, top: 10),
                     child: Text(
                       "Short Description",
-                      style:
-                          TextStyle(color: CustomColors.black, fontSize: 14),
+                      style: TextStyle(color: CustomColors.black, fontSize: 14),
                     ),
                   ),
                   Padding(
@@ -592,8 +588,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     padding: EdgeInsets.only(left: 15.0, top: 10),
                     child: Text(
                       "Store Product Types",
-                      style:
-                          TextStyle(color: CustomColors.black, fontSize: 14),
+                      style: TextStyle(color: CustomColors.black, fontSize: 14),
                     ),
                   ),
                   Padding(
@@ -610,8 +605,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     padding: EdgeInsets.only(left: 15.0, top: 10),
                     child: Text(
                       "Select Store Categories",
-                      style:
-                          TextStyle(color: CustomColors.black, fontSize: 14),
+                      style: TextStyle(color: CustomColors.black, fontSize: 14),
                     ),
                   ),
                   Padding(
@@ -628,8 +622,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     padding: EdgeInsets.only(left: 15.0, top: 10),
                     child: Text(
                       "Select Sub-Categories",
-                      style:
-                          TextStyle(color: CustomColors.black, fontSize: 14),
+                      style: TextStyle(color: CustomColors.black, fontSize: 14),
                     ),
                   ),
                   Padding(
@@ -1313,6 +1306,7 @@ class _AddStoreStepTwoState extends State<AddStoreStepTwo> {
                 _store.deliveryDetails.deliveryChargesMax =
                     this.deliveryChargeMax;
                 _store.deliveryDetails.availableOptions = this.deliveryTemp;
+                _store.keywords = _store.name.split(" ");
 
                 Navigator.push(
                   context,

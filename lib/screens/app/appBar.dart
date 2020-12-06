@@ -48,7 +48,7 @@ Widget appBar(BuildContext context) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SearchAppBar(),
+                    builder: (context) => SearchAppBar(0, ''),
                     settings: RouteSettings(name: '/Search'),
                   ),
                 );

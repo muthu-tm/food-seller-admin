@@ -13,7 +13,7 @@ class SearchOptionsRadio extends StatelessWidget {
       elevation: 3.0,
       child: Container(
         height: 40.0,
-        width: MediaQuery.of(context).size.width * 0.33,
+        width: 110,
         child: Center(
           child: Text(
             _item.buttonText,
@@ -22,7 +22,7 @@ class SearchOptionsRadio extends StatelessWidget {
                 color:
                     _item.isSelected ? CustomColors.white : CustomColors.blue,
                 fontWeight: FontWeight.bold,
-                fontSize: 16.0),
+                fontSize: 13.0),
           ),
         ),
         decoration: BoxDecoration(

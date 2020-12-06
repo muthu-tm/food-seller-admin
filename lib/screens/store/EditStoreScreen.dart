@@ -145,7 +145,6 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
               store.availProductCategories = availProductCategories;
               store.availProductSubCategories = availProductSubCategories;
               store.address = updatedAddress;
-              store.keywords = [updatedAddress.city];
 
               Navigator.push(
                 context,
@@ -1315,11 +1314,14 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
                     this.deliveryChargeMax;
                 _store.deliveryDetails.availableOptions = this.deliveryTemp;
 
+                _store.keywords = _store.name.split(" ");
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => EditLocationPicker(_store),
-                    settings: RouteSettings(name: '/settings/store/edit/location'),
+                    settings:
+                        RouteSettings(name: '/settings/store/edit/location'),
                   ),
                 );
               } else {

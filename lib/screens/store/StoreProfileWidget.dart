@@ -1,9 +1,9 @@
 import 'package:chipchop_seller/db/models/store.dart';
+import 'package:chipchop_seller/screens/store/ViewStoreScreen.dart';
+import 'package:chipchop_seller/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
-import 'package:chipchop_seller/screens/utils/url_launcher_utils.dart';
 import 'package:chipchop_seller/services/utils/DateUtils.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class StoreProfileWidget extends StatelessWidget {
   StoreProfileWidget(this.store);
@@ -23,228 +23,195 @@ class StoreProfileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       primary: true,
-      child: Column(
-        children: [
-          ListTile(
-            leading: Icon(
-              FontAwesomeIcons.store,
-              color: CustomColors.primary,
-            ),
-            title: Text(
-              store.name,
-              style: TextStyle(
-                color: CustomColors.black,
-                fontSize: 13.0,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              FontAwesomeIcons.addressCard,
-              color: CustomColors.primary,
-            ),
-            title: Text(
-              store.address.toString(),
-              maxLines: 5,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: CustomColors.black,
-                fontSize: 13.0,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              FontAwesomeIcons.mobileAlt,
-              color: CustomColors.primary,
-            ),
-            title: Text(
-              "Contacts",
-              style: TextStyle(
-                  color: CustomColors.grey,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 60.0),
-            child: Container(
-              height: 100,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                primary: true,
-                shrinkWrap: true,
-                itemCount: store.contacts.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: CustomColors.white),
-                        child: RawMaterialButton(
-                          onPressed: () {
-                            UrlLauncherUtils.makePhoneCall(
-                                store.contacts[index].contactNumber);
-                          },
-                          shape: CircleBorder(),
-                          child: Icon(FontAwesomeIcons.image,
-                              color: CustomColors.blue),
-                        ),
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      store.name,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      store.address.city,
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ],
+                ),
+                InkWell(
+                  onTap: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewStoreScreen(store),
+                        settings: RouteSettings(name: '/store'),
                       ),
+                    );
+                  },
+                  child: Row(
+                    children: [
                       Text(
-                        store.contacts[index].contactName,
+                        "View Store",
                         style: TextStyle(
-                          color: CustomColors.black,
-                        ),
+                            fontSize: 12,
+                            color: Colors.black,
+                            decoration: TextDecoration.underline),
                       ),
-                      Text(
-                        store.contacts[index].contactNumber,
-                        style: TextStyle(
-                          color: CustomColors.black,
-                        ),
-                      )
+                      Icon(Icons.chevron_right)
                     ],
-                  );
-                },
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              FontAwesomeIcons.calendarCheck,
-              color: CustomColors.primary,
-            ),
-            title: Text(
-              "Business Days",
-              style: TextStyle(
-                  color: CustomColors.grey,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: CustomColors.grey, width: 1.0),
-            ),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: selectedDays.toList(),
+                  ),
                 ),
               ],
             ),
-          ),
-          ListTile(
-            leading: Icon(
-              FontAwesomeIcons.businessTime,
-              color: CustomColors.primary,
+            SizedBox(
+              height: 10,
             ),
-            title: Text(
-              "Active From: ",
-              style: TextStyle(
-                  color: CustomColors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500),
+            CarouselIndicatorSlider(store.storeImages),
+            SizedBox(
+              height: 10,
             ),
-            trailing: Text(
-              DateUtils.getFormattedTime(store.activeFrom),
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                color: CustomColors.black,
-                fontSize: 14.0,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Text(""),
-            title: Text(
-              "Active Till: ",
-              style: TextStyle(
-                  color: CustomColors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500),
-            ),
-            trailing: Text(
-              DateUtils.getFormattedTime(store.activeTill),
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                color: CustomColors.black,
-                fontSize: 14.0,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              FontAwesomeIcons.truck,
-              color: CustomColors.primary,
-            ),
-            title: Text(
-              "Delivery Details",
-              style: TextStyle(
-                  color: CustomColors.grey,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 60.0),
-            child: Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                ListTile(
-                  leading: Text(
-                    "Delivery From:",
-                    style: TextStyle(
-                      color: CustomColors.black,
-                    ),
-                  ),
-                  trailing: Text(
-                    DateUtils.getFormattedTime(
-                        store.deliveryDetails.deliveryFrom),
-                    style: TextStyle(
-                      color: CustomColors.black,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: Text(
-                    "Delivery Till:",
-                    style: TextStyle(
-                      color: CustomColors.black,
-                    ),
-                  ),
-                  trailing: Text(
-                    DateUtils.getFormattedTime(
-                        store.deliveryDetails.deliveryTill),
-                    style: TextStyle(
-                      color: CustomColors.black,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: Text(
-                    "Max Distance:",
-                    style: TextStyle(
-                      color: CustomColors.black,
-                    ),
-                  ),
-                  trailing: Text(
-                    '${store.deliveryDetails.maxDistance.toString()} km',
-                    style: TextStyle(
-                      color: CustomColors.black,
-                    ),
-                  ),
-                ),
+                Icon(Icons.calendar_today_outlined),
                 SizedBox(
-                  height: 60
+                  width: 20,
+                ),
+                Text(
+                  "Business / Working Days",
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 )
               ],
             ),
-          ),
-        ],
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: selectedDays.toList(),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.alarm),
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  "Business / Working Time",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey[500],
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      DateUtils.getFormattedTime(store.activeFrom),
+                    ),
+                  ),
+                ),
+                Text("To"),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey[500],
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      DateUtils.getFormattedTime(store.activeTill),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.delivery_dining),
+                SizedBox(
+                  width: 20,
+                ),
+                Text("Delivery Time",
+                    style: TextStyle(fontWeight: FontWeight.bold))
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey[500],
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(DateUtils.getFormattedTime(
+                        store.deliveryDetails.deliveryFrom)),
+                  ),
+                ),
+                Text("To"),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey[500],
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(DateUtils.getFormattedTime(
+                        store.deliveryDetails.deliveryTill)),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

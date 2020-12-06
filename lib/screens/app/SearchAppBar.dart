@@ -1,14 +1,22 @@
 import 'package:chipchop_seller/db/models/order.dart';
 import 'package:chipchop_seller/db/models/products.dart';
-import 'package:chipchop_seller/screens/app/SearchOptionsRadio.dart';
+import 'package:chipchop_seller/db/models/store.dart';
+import 'package:chipchop_seller/db/models/user_activity_tracker.dart';
 import 'package:chipchop_seller/screens/orders/OrderWidget.dart';
+import 'package:chipchop_seller/screens/app/RecentSearches.dart';
+import 'package:chipchop_seller/screens/app/SearchOptionsRadio.dart';
 import 'package:chipchop_seller/screens/products/ProductWidget.dart';
+import 'package:chipchop_seller/screens/store/StoreWidget.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:flutter/material.dart';
 
 class SearchAppBar extends StatefulWidget {
+  SearchAppBar(this.mode, this.searchKey);
+
+  final int mode;
+  final String searchKey;
   @override
   _SearchAppBarState createState() => new _SearchAppBarState();
 }
@@ -25,8 +33,37 @@ class _SearchAppBarState extends State<SearchAppBar> {
   @override
   void initState() {
     super.initState();
-    inOutList.add(CustomRadioModel(true, 'Product Name', ''));
-    inOutList.add(CustomRadioModel(false, 'Order ID', ''));
+
+    setState(() {
+      searchMode = widget.mode;
+    });
+
+    inOutList.add(
+      CustomRadioModel(widget.mode == 0, 'Store', ''),
+    );
+    inOutList.add(
+      CustomRadioModel(widget.mode == 1, 'Product', ''),
+    );
+    inOutList.add(
+      CustomRadioModel(widget.mode == 2, 'Order', ''),
+    );
+
+    if (widget.searchKey != "") {
+      _searchController.text = widget.searchKey;
+      _submit(widget.searchKey);
+    }
+  }
+
+  _submit(String searchKey) {
+    setState(
+      () {
+        searchMode == 0
+            ? snapshot = Store().getStoreByName(searchKey)
+            : searchMode == 1
+                ? snapshot = Products().getByNameRange(searchKey)
+                : snapshot = Order().getByOrderID(searchKey);
+      },
+    );
   }
 
   @override
@@ -46,26 +83,27 @@ class _SearchAppBarState extends State<SearchAppBar> {
             color: CustomColors.black,
           ),
           decoration: InputDecoration(
-            hintText:
-                searchMode == 0 ? "Type Product Full Name" : "Type Order ID",
+            hintText: searchMode == 0
+                ? "Type Store Name"
+                : searchMode == 1
+                    ? "Type Product Name"
+                    : "Type Order ID",
             hintStyle: TextStyle(color: CustomColors.black),
           ),
           onFieldSubmitted: (searchKey) {
-            if (searchKey.isEmpty || searchKey.trim().length < 2) {
+            if (searchKey.trim().isEmpty || searchKey.trim().length < 2) {
               _scaffoldKey.currentState.showSnackBar(
-                CustomSnackBar.errorSnackBar("Enter minimum 2 digits", 2),
-              );
+                  CustomSnackBar.errorSnackBar("Enter minimum 2 digits", 2));
               return null;
             } else {
-              setState(
-                () {
-                  searchMode == 0
-                      ? snapshot = Products().getByNameRange(searchKey)
-                      : snapshot = Order().getByOrderID(searchKey);
-                },
-              );
+              _submit(searchKey);
 
-              return null;
+              UserActivityTracker _activity = UserActivityTracker();
+              _activity.keywords = searchKey;
+              _activity.type = searchMode == 0
+                  ? 3
+                  : 4; // 3 - Store Search, 4 - product search
+              _activity.create();
             }
           },
         ),
@@ -95,7 +133,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
           children: <Widget>[
             ListTile(
               contentPadding:
-                  EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                  EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
               leading: InkWell(
                 onTap: () {
                   searchMode = 0;
@@ -105,10 +143,11 @@ class _SearchAppBarState extends State<SearchAppBar> {
                     () {
                       inOutList[0].isSelected = true;
                       inOutList[1].isSelected = false;
+                      inOutList[2].isSelected = false;
                     },
                   );
                 },
-                child: SearchOptionsRadio(inOutList[0], CustomColors.alertRed),
+                child: SearchOptionsRadio(inOutList[0], CustomColors.blueGreen),
               ),
               title: InkWell(
                 onTap: () {
@@ -119,10 +158,26 @@ class _SearchAppBarState extends State<SearchAppBar> {
                     () {
                       inOutList[0].isSelected = false;
                       inOutList[1].isSelected = true;
+                      inOutList[2].isSelected = false;
                     },
                   );
                 },
                 child: SearchOptionsRadio(inOutList[1], CustomColors.blue),
+              ),
+              trailing: InkWell(
+                onTap: () {
+                  searchMode = 2;
+                  _searchController.text = '';
+
+                  setState(
+                    () {
+                      inOutList[0].isSelected = false;
+                      inOutList[1].isSelected = false;
+                      inOutList[2].isSelected = true;
+                    },
+                  );
+                },
+                child: SearchOptionsRadio(inOutList[2], CustomColors.grey),
               ),
             ),
             Divider(),
@@ -140,14 +195,19 @@ class _SearchAppBarState extends State<SearchAppBar> {
                       primary: false,
                       itemCount: snapshot.data.length,
                       itemBuilder: (BuildContext context, int index) {
-                        if (inOutList[1].isSelected == true) {
-                          return OrderWidget(
-                            Order.fromJson(snapshot.data[index]),
+                        if (inOutList[0].isSelected == true) {
+                          return StoreWidget(
+                              Store.fromJson(snapshot.data[index]));
+                        } else if (inOutList[1].isSelected == true) {
+                          return Container(
+                            padding: EdgeInsets.all(5.0),
+                            width: 150,
+                            child: ProductWidget(
+                                Products.fromJson(snapshot.data[index])),
                           );
                         } else {
-                          return ProductWidget(
-                            Products.fromJson(snapshot.data[index]),
-                          );
+                          return OrderWidget(
+                              Order.fromJson(snapshot.data[index]));
                         }
                       },
                     );
@@ -158,8 +218,10 @@ class _SearchAppBarState extends State<SearchAppBar> {
                       children: <Widget>[
                         Text(
                           inOutList[0].isSelected == true
-                              ? "No Products Found"
-                              : "No Orders Found",
+                              ? "No Stores Found"
+                              : inOutList[1].isSelected == true
+                                  ? "No Products Found"
+                                  : "No Orders Found",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: CustomColors.alertRed,
@@ -167,9 +229,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(
-                          height: 5,
-                        ),
+                        Divider(),
                         Text(
                           "Try with different KEYWORDS..",
                           textAlign: TextAlign.center,
@@ -196,28 +256,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
                     children: AsyncWidgets.asyncWaiting(),
                   );
                 } else {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                        child: Text(
-                          "No Search Triggerred yet!",
-                          style: TextStyle(
-                              color: CustomColors.alertRed, fontSize: 16.0),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                        child: Text(
-                          "Try some keywords..",
-                          style: TextStyle(
-                              color: CustomColors.grey, fontSize: 16.0),
-                        ),
-                      ),
-                    ],
-                  );
+                  return UserRecentSearches();
                 }
               },
             ),

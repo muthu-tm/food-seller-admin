@@ -228,11 +228,7 @@ class _EditProductsState extends State<EditProducts> {
         _p.productSubCategory =
             _selectedSubCategory == "0" ? "" : _selectedSubCategory;
 
-        _p.keywords.add(_types[_selectedType]);
-        if (_selectedCategory != "0")
-          _p.keywords.add(_categories[_selectedCategory]);
-        if (_selectedSubCategory != "0")
-          _p.keywords.add(_subcategories[_selectedSubCategory]);
+        _p.keywords.addAll(pName.split(" "));
 
         _p.variants = _variants;
         if (_descs.isNotEmpty) {

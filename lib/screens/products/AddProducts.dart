@@ -240,12 +240,7 @@ class _AddProductState extends State<AddProduct> {
         _p.productCategory = _selectedCategory == "0" ? "" : _selectedCategory;
         _p.productSubCategory =
             _selectedSubCategory == "0" ? "" : _selectedSubCategory;
-        _p.keywords = this.keywords;
-        _p.keywords.add(_types[_selectedType]);
-        if (_selectedCategory != "0")
-          _p.keywords.add(_categories[_selectedCategory]);
-        if (_selectedSubCategory != "0")
-          _p.keywords.add(_subcategories[_selectedSubCategory]);
+        _p.keywords.addAll(pName.split(" "));
 
         _p.variants = _variants;
         if (_descs.isNotEmpty) {
