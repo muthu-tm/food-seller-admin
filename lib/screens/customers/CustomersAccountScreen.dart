@@ -26,7 +26,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          '${widget.customer.firstName}',
+          '${widget.customer.firstName} ${widget.customer.lastName ?? ""}',
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
@@ -41,7 +41,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: CustomColors.blueGreen,
+        backgroundColor: CustomColors.primary,
         onPressed: () {
           _scaffoldKey.currentState.showBottomSheet(
             (context) => AddUserTransaction(
@@ -116,7 +116,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                 padding: EdgeInsets.all(10),
                 height: 50,
                 child: Text(
-                  "Rs.0.00",
+                  "₹ 0.00",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: CustomColors.primary,
@@ -189,12 +189,12 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                     UserStoreWalletHistory.fromJson(
                         snapshot.data.documents[index].data);
 
-                Color tileColor = CustomColors.blueGreen;
-                Color textColor = CustomColors.white;
+                Color tileColor = CustomColors.primary.withOpacity(0.5);
+                Color textColor = CustomColors.lightGrey;
 
                 if (index % 2 == 0) {
                   tileColor = CustomColors.white;
-                  textColor = CustomColors.alertRed;
+                  textColor = CustomColors.black;
                 }
 
                 return Padding(
@@ -204,7 +204,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                     elevation: 3.0,
                     borderRadius: BorderRadius.circular(10.0),
                     child: Container(
-                      height: MediaQuery.of(context).size.width / 5,
+                      height: 90,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
@@ -221,28 +221,30 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                             ),
                           ),
                           Container(
-                            padding: EdgeInsets.only(left: 5, top: 5.0),
+                            padding: EdgeInsets.only(left: 0, top: 5.0),
                             width: MediaQuery.of(context).size.width / 1.5,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                history.details.isNotEmpty
+                                    ? Flexible(
+                                        child: Text(
+                                          history.details,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: textColor,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      )
+                                    : Container(),
                                 Text(
-                                  history.details,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: textColor,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  'At: ${DateUtils.formatDate(DateTime.fromMillisecondsSinceEpoch(history.createdAt))}',
+                                  '${DateUtils.formatDateTime(DateTime.fromMillisecondsSinceEpoch(history.createdAt))}',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                      fontSize: 12.0,
-                                      color: textColor,
-                                      fontWeight: FontWeight.bold),
+                                      fontSize: 12.0, color: textColor),
                                 ),
                                 Text(
                                   history.type == 0
@@ -254,17 +256,17 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                                               : "Offer",
                                   style: TextStyle(
                                       fontSize: 10.0,
-                                      color: CustomColors.alertRed
-                                          .withOpacity(0.7),
+                                      color: textColor,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(5.0),
+                          Flexible(
                             child: Text(
-                              '${history.amount}/-',
+                              '₹ ${history.amount}',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
                               style: TextStyle(
                                   fontSize: 14.0,
                                   color: textColor,
@@ -286,7 +288,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "No Transactions Found",
+                    "No Transactions Found !!",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: CustomColors.alertRed,
@@ -365,7 +367,7 @@ class _AdUserdTransactionState extends State<AddUserTransaction> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 320,
       decoration: BoxDecoration(
         color: CustomColors.lightGrey,
         borderRadius: BorderRadius.only(
@@ -500,20 +502,23 @@ class _AdUserdTransactionState extends State<AddUserTransaction> {
                 color: CustomColors.primary,
                 onPressed: () async {
                   try {
-                    UserStoreWalletHistory tran = new UserStoreWalletHistory();
+                    if (amount != 0) {
+                      UserStoreWalletHistory tran =
+                          new UserStoreWalletHistory();
 
-                    if (_selectedType == "1")
-                      tran.amount = this.amount * -1;
-                    else
-                      tran.amount = this.amount;
+                      if (_selectedType == "1")
+                        tran.amount = this.amount * -1;
+                      else
+                        tran.amount = this.amount;
 
-                    tran.details = this.details;
-                    tran.type = 2;
-                    tran.id = "";
-                    tran.storeUUID = widget.storeID;
-                    tran.createdAt = DateTime.now().millisecondsSinceEpoch;
-                    tran.addedBy = cachedLocalUser.getID();
-                    await tran.addTransaction(widget.storeID, widget.custID);
+                      tran.details = this.details;
+                      tran.type = 2;
+                      tran.id = "";
+                      tran.storeUUID = widget.storeID;
+                      tran.createdAt = DateTime.now().millisecondsSinceEpoch;
+                      tran.addedBy = cachedLocalUser.getID();
+                      await tran.addTransaction(widget.storeID, widget.custID);
+                    }
                     Navigator.pop(context);
                   } catch (err) {
                     Analytics.sendAnalyticsEvent({

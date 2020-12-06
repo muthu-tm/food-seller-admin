@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/app/bottomBar.dart';
 import 'package:chipchop_seller/screens/customers/CustomersScreen.dart';
-import 'package:chipchop_seller/screens/utils/AddStoreWidget.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/NoStoresWidget.dart';

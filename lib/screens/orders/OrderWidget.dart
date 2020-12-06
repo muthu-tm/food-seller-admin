@@ -1,7 +1,7 @@
 import 'package:chipchop_seller/db/models/order.dart';
 import 'package:chipchop_seller/screens/orders/OrderDetailsScreen.dart';
-import 'package:chipchop_seller/screens/orders/OrderLocationMapViewer.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/services/utils/DateUtils.dart';
 import 'package:flutter/material.dart';
 
 class OrderWidget extends StatelessWidget {
@@ -10,265 +10,283 @@ class OrderWidget extends StatelessWidget {
   final Order order;
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => OrderDetailsScreen(order),
-              settings: RouteSettings(name: '/orders/details'),
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OrderDetailsScreen(order),
+            settings: RouteSettings(name: '/orders/details'),
+          ),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  order.storeName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: CustomColors.purple),
+                ),
+              ),
             ),
-          );
-        },
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0, top: 2),
+                    child: Text(
+                      DateUtils.formatDateTime(order.createdAt),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: CustomColors.black,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "Show Details",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: CustomColors.blue,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      size: 25,
+                    ),
+                  ],
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Store:",
+                          "Order ID : ",
                           style: TextStyle(
+                            fontWeight: FontWeight.bold,
                             color: CustomColors.black,
                             fontSize: 14,
                           ),
                         ),
                         Text(
-                          order.storeName,
-                          style: TextStyle(
-                            color: CustomColors.purple,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Status:",
+                          order.orderID,
                           style: TextStyle(
                             color: CustomColors.black,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Text(
-                          order.getStatus(order.status),
-                          style: TextStyle(
-                            color: CustomColors.purple,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                            fontSize: 13,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.chevron_right, size: 35),
-                  ),
-                ],
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.confirmation_number,
-                  size: 35,
-                  color: CustomColors.blueGreen,
                 ),
-                title: Text(
-                  "Order ID",
-                  style: TextStyle(
-                    color: CustomColors.blue,
-                    fontSize: 14,
-                  ),
-                ),
-                trailing: Text(
-                  order.orderID,
-                  style: TextStyle(
-                    color: CustomColors.black,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.local_shipping,
-                  size: 35,
-                  color: CustomColors.blueGreen,
-                ),
-                title: Container(
-                  width: MediaQuery.of(context).size.width - 100,
-                  padding: EdgeInsets.only(right: 10, left: 10),
-                  decoration: BoxDecoration(
-                    color: CustomColors.lightGrey,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5),
-                    ),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 6,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                            ),
-                            child: Text(
-                              order.delivery.userLocation.userName,
-                              style: TextStyle(
-                                  color: CustomColors.blue, fontSize: 14),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(
-                                left: 8, right: 8, top: 4, bottom: 4),
-                            decoration: BoxDecoration(
-                              color: CustomColors.purple,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                            ),
-                            child: Text(
-                              order.delivery.userLocation.locationName,
-                              style: TextStyle(
-                                  color: CustomColors.white, fontSize: 10),
-                            ),
-                          )
-                        ],
-                      ),
-                      createAddressText(
-                          order.delivery.userLocation.address.street, 6),
-                      createAddressText(
-                          order.delivery.userLocation.address.city, 6),
-                      createAddressText(
-                          order.delivery.userLocation.address.pincode, 6),
-                      SizedBox(
-                        height: 6,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "LandMark : ",
-                              style: TextStyle(
-                                  fontSize: 12, color: CustomColors.blue),
-                            ),
-                            TextSpan(
-                              text:
-                                  order.delivery.userLocation.address.landmark,
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 12),
-                            ),
-                          ],
+                      Text(
+                        "Order Price : ",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: CustomColors.black,
+                          fontSize: 14,
                         ),
                       ),
-                      SizedBox(
-                        height: 6,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "Mobile : ",
-                              style: TextStyle(
-                                  fontSize: 12, color: CustomColors.blue),
-                            ),
-                            TextSpan(
-                              text: order.delivery.userLocation.userNumber,
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 12),
-                            ),
-                          ],
+                      Text(
+                        '₹ ${order.amount.orderAmount.toString()}',
+                        style: TextStyle(
+                          color: CustomColors.black,
+                          fontSize: 13,
                         ),
-                      ),
-                      SizedBox(
-                        height: 16,
                       ),
                     ],
                   ),
                 ),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.location_searching,
-                  size: 35,
-                  color: CustomColors.blueGreen,
-                ),
-                title: Text(
-                  "Location",
-                  style: TextStyle(color: CustomColors.black, fontSize: 16),
-                ),
-                trailing: Container(
-                  width: 155,
-                  child: FlatButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    color: CustomColors.blueGreen,
-                    onPressed: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              OrderLocationMapView(order.delivery.userLocation),
-                          settings: RouteSettings(name: '/orders/location'),
-                        ),
-                      );
-                    },
-                    label: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 5.0,
-                      ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Card(
+                    elevation: 0,
+                    color: order.getBackGround(),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        "Map View",
-                        textAlign: TextAlign.center,
+                        order.getStatus(order.status),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                            fontSize: 16,
-                            color: CustomColors.white,
-                            fontWeight: FontWeight.bold),
+                          color: order.getTextColor(),
+                          backgroundColor: order.getBackGround(),
+                          fontSize: 12,
+                        ),
                       ),
-                    ),
-                    icon: Icon(
-                      Icons.location_on,
-                      color: CustomColors.white,
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
+                order.status == 5
+                    ? Card(
+                        elevation: 0,
+                        color: order.getBackGround(),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            children: [
+                              SizedBox(width: 5),
+                              Text(
+                                "Delivered at : ",
+                                style: TextStyle(
+                                    color: order.getTextColor(),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                order.delivery.deliveredAt != null
+                                    ? DateUtils.formatDateTime(
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            order.delivery.deliveredAt))
+                                    : "",
+                                style: TextStyle(
+                                  color: order.getTextColor(),
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : (order.status < 2 || order.status == 4) &&
+                            order.delivery.expectedAt != null
+                        ? order.delivery.expectedAt <
+                                DateTime.now().millisecondsSinceEpoch
+                            ? Card(
+                                elevation: 0,
+                                color: Colors.red[100],
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SizedBox(width: 5),
+                                      Flexible(
+                                        child: Text(
+                                          "Late by ",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                      Text(
+                                        getArrival().inDays > 1
+                                            ? '${getArrival().inDays.toString()} Days'
+                                            : getArrival().inHours == 0
+                                                ? '${getArrival().inMinutes.toString()} Minutes'
+                                                : '${getArrival().inHours.toString()} Hours',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : Card(
+                                elevation: 0,
+                                color: order.getBackGround(),
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SizedBox(width: 5),
+                                      Flexible(
+                                        child: Text(
+                                          "Arriving in ",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: order.getTextColor(),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                      Text(
+                                        getArrival().inDays > 1
+                                            ? '${getArrival().inDays.toString()} Days'
+                                            : getArrival().inHours == 0
+                                                ? '${getArrival().inMinutes.toString()} Minutes'
+                                                : '${getArrival().inHours.toString()} Hours',
+                                        style: TextStyle(
+                                          color: order.getTextColor(),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                        : (order.status < 2 || order.status == 4) &&
+                                order.delivery.expectedAt == null
+                            ? Card(
+                                elevation: 0,
+                                color: order.getBackGround(),
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 10.0),
+                                  child: Text(
+                                    "Not Scheduled",
+                                    style: TextStyle(
+                                      color: order.getTextColor(),
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(),
+              ],
+            ),
+            SizedBox(height: 10),
+          ],
         ),
       ),
     );
   }
 
-  createAddressText(String strAddress, double topMargin) {
-    return Container(
-      margin: EdgeInsets.only(top: topMargin),
-      child: Text(
-        strAddress,
-        style: TextStyle(fontSize: 12, color: Colors.grey.shade800),
-      ),
+  Duration getArrival() {
+    return DateTime.now().difference(
+      DateTime.fromMillisecondsSinceEpoch(order.delivery.expectedAt),
     );
   }
 }
