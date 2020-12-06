@@ -192,6 +192,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                           _activity.storeID = widget.product.storeID;
                           _activity.productID = widget.product.uuid;
                           _activity.productName = widget.product.name;
+                          _activity.refImage = widget.product.getProductImage();
                           _activity.type = 2;
                           _activity.create();
 
