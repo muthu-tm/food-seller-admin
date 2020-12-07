@@ -99,7 +99,7 @@ Map<String, dynamic> _$StoreToJson(Store instance) => <String, dynamic>{
       'active_till': instance.activeTill,
       'address': instance.address?.toJson(),
       'geo_point': instance.geoPoint?.toJson(),
-      'is_active': instance.isActive,
+      'is_active': instance.isActive ?? true,
       'deliver_anywhere': instance.deliverAnywhere,
       'image': instance.image ?? "",
       'store_images': instance.storeImages == null ? [] : instance.storeImages,

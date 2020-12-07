@@ -125,17 +125,14 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 5.0),
-                                  child: Text(
-                                    _c.name,
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: CustomColors.black,
-                                        fontSize: 12),
-                                  ),
+                                Text(
+                                  _c.name,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: CustomColors.black,
+                                      fontSize: 12),
                                 )
                               ],
                             ),
