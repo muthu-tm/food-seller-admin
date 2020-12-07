@@ -228,7 +228,7 @@ class _EditProductsState extends State<EditProducts> {
         _p.productSubCategory =
             _selectedSubCategory == "0" ? "" : _selectedSubCategory;
 
-        _p.keywords.addAll(pName.split(" "));
+        _p.keywords = pName.split(" ");
 
         _p.variants = _variants;
         if (_descs.isNotEmpty) {
@@ -244,10 +244,10 @@ class _EditProductsState extends State<EditProducts> {
             CustomSnackBar.errorSnackBar("Fill Required fields", 2));
       }
     } catch (err) {
-      Navigator.pop(context);
       _scaffoldKey.currentState.showSnackBar(
         CustomSnackBar.errorSnackBar("Unable to create now! Try later!", 2),
       );
+      // Navigator.pop(context);
     }
   }
 

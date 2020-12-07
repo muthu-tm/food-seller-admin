@@ -57,12 +57,10 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
           } else {
             children = SliverStickyHeader(
               header: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Popular Products",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+                padding: EdgeInsets.all(5.0),
+                child: Text(
+                  "Popular Products",
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 color: Colors.white,
               ),
@@ -84,21 +82,6 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                           ),
                         ),
                         SizedBox(height: 20),
-                        Text(
-                          "No Worries!",
-                          style: TextStyle(
-                            color: CustomColors.grey,
-                            fontSize: 14.0,
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          "You could still order your favorite item with Written/Capture ORDER option!",
-                          style: TextStyle(
-                            color: CustomColors.blue,
-                            fontSize: 16.0,
-                          ),
-                        )
                       ],
                     ),
                   ),

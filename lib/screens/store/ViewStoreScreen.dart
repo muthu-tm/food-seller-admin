@@ -250,19 +250,19 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
           StoreCategoryWidget(widget.store),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 25,
+              height: 10,
             ),
           ),
           StorePopulartWidget(widget.store.uuid, widget.store.name),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 25,
+              height: 10,
             ),
           ),
           StoreProductWidget(widget.store.uuid, widget.store.name),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 80,
+              height: 20,
             ),
           ),
         ],

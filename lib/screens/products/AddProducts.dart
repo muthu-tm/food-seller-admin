@@ -240,7 +240,7 @@ class _AddProductState extends State<AddProduct> {
         _p.productCategory = _selectedCategory == "0" ? "" : _selectedCategory;
         _p.productSubCategory =
             _selectedSubCategory == "0" ? "" : _selectedSubCategory;
-        _p.keywords.addAll(pName.split(" "));
+        _p.keywords = pName.split(" ");
 
         _p.variants = _variants;
         if (_descs.isNotEmpty) {
@@ -259,7 +259,7 @@ class _AddProductState extends State<AddProduct> {
       _scaffoldKey.currentState.showSnackBar(
         CustomSnackBar.errorSnackBar("Unable to create now! Try later!", 2),
       );
-      Navigator.pop(context);
+      // Navigator.pop(context);
     }
   }
 

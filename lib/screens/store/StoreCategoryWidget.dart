@@ -53,12 +53,10 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
             else
               return SliverStickyHeader(
                 header: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Available Categories",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                  padding: EdgeInsets.all(5.0),
+                  child: Text(
+                    "Available Categories",
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   color: Colors.white,
                 ),
@@ -66,7 +64,6 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     crossAxisSpacing: 5,
-                    childAspectRatio: 0.78,
                     mainAxisSpacing: 10,
                   ),
                   delegate: SliverChildBuilderDelegate(
@@ -82,16 +79,19 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
                             ),
                           );
                         },
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10.0),
-                            ),
-                            color: CustomColors.white,
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                          alignment: Alignment.centerLeft,
-                          child: Center(
+                          child: Container(
+                            padding: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
+                              color: CustomColors.white,
+                            ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -119,15 +119,14 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
                                       width: 50.0,
                                       child: CircularProgressIndicator(
                                           value: downloadProgress.progress,
-                                          valueColor:
-                                              AlwaysStoppedAnimation(
-                                                  CustomColors.blue),
+                                          valueColor: AlwaysStoppedAnimation(
+                                              CustomColors.blue),
                                           strokeWidth: 2.0),
                                     ),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.all(5.0),
+                                  padding: EdgeInsets.only(top: 5.0),
                                   child: Text(
                                     _c.name,
                                     textAlign: TextAlign.center,
