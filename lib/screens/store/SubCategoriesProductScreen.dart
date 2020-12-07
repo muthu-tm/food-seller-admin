@@ -51,34 +51,14 @@ class _SubCategoriesProductsWidgetState
           } else {
             children = Container(
               padding: EdgeInsets.all(10),
-              color: CustomColors.white,
               width: MediaQuery.of(context).size.width * 0.9,
-              child: Column(
-                children: [
-                  Text(
-                    "No Products added By Store",
-                    style: TextStyle(
-                      color: CustomColors.alertRed,
-                      fontSize: 16.0,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    "No Worries!",
-                    style: TextStyle(
-                      color: CustomColors.grey,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    "You could still place Written/Captured ORDER !!",
-                    style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 16.0,
-                    ),
-                  )
-                ],
+              alignment: Alignment.center,
+              child: Text(
+                "No Products added By Store !!",
+                style: TextStyle(
+                  color: CustomColors.alertRed,
+                  fontSize: 16.0,
+                ),
               ),
             );
           }
