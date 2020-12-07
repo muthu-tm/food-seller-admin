@@ -53,7 +53,7 @@ class ProductsHome extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AddProduct(null),
+                            builder: (context) => AddProduct(),
                             settings: RouteSettings(name: '/products/add'),
                           ),
                         );

@@ -1,3 +1,4 @@
+import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -66,6 +67,50 @@ class ProductTypes extends Model {
         for (var i = 0; i < snap.documents.length; i++) {
           ProductTypes _s = ProductTypes.fromJson(snap.documents[i].data);
           types.add(_s);
+        }
+      }
+
+      return types;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<List<ProductTypes>> getProductTypesForStoreID(String id) async {
+    try {
+      List<ProductTypes> types = [];
+      if (id.trim().isNotEmpty && id.trim() != '0') {
+        Map<String, dynamic> storeData = await Store().getByID(id);
+
+        if (storeData != null) {
+          Store _s = Store.fromJson(storeData);
+          List<String> ids = _s.availProducts;
+
+          if (ids.length > 9) {
+            int end = 0;
+            for (int i = 0; i < ids.length; i = i + 9) {
+              if (end + 9 > ids.length)
+                end = ids.length;
+              else
+                end = end + 9;
+
+              QuerySnapshot snap = await getCollectionRef()
+                  .where('uuid', whereIn: ids.sublist(i, end))
+                  .getDocuments();
+              for (var j = 0; j < snap.documents.length; j++) {
+                ProductTypes _c = ProductTypes.fromJson(snap.documents[j].data);
+                types.add(_c);
+              }
+            }
+          } else {
+            QuerySnapshot snap = await getCollectionRef()
+                .where('uuid', whereIn: ids)
+                .getDocuments();
+            for (var j = 0; j < snap.documents.length; j++) {
+              ProductTypes _c = ProductTypes.fromJson(snap.documents[j].data);
+              types.add(_c);
+            }
+          }
         }
       }
 

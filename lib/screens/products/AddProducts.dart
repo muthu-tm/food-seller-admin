@@ -25,9 +25,6 @@ import '../../db/models/product_types.dart';
 import '../../db/models/store.dart';
 
 class AddProduct extends StatefulWidget {
-  AddProduct(this.product);
-
-  final Products product;
   @override
   _AddProductState createState() => _AddProductState();
 }
@@ -89,52 +86,11 @@ class _AddProductState extends State<AddProduct> {
 
     loadStores();
 
-    if (widget.product != null) {
-      this.imagePaths = widget.product.productImages;
-      this.pName = widget.product.name;
-      this.shortDetails = widget.product.shortDetails;
-      this.productType = widget.product.productType;
-      this.productCategory = widget.product.productCategory;
-      this.productSubCategory = widget.product.productSubCategory;
-      this.brandName = widget.product.brandName;
-      this._variants = widget.product.variants;
-      this.keywords = widget.product.keywords;
-      this.isAvailable = widget.product.isAvailable;
-      this.isDeliverable = widget.product.isDeliverable;
-      this.isPopular = widget.product.isPopular;
-      this.isReturnable = widget.product.isReturnable;
-      this.isReplaceable = widget.product.isReplaceable;
-      this.replaceWithinDays = widget.product.replaceWithin;
-      this.returnWithinDays = widget.product.returnWithin;
+    _variants = [
+      ProductVariants.fromJson({'id': "0"})
+    ];
 
-      widget.product.variants.forEach((element) {
-        TextEditingController _controller =
-            TextEditingController(text: element.currentPrice.toString());
-        vPriceControllers.add(_controller);
-      });
-
-      this._descs = widget.product.productDescription == null ||
-              widget.product.productDescription.isEmpty
-          ? [ProductDescription.fromJson({})]
-          : widget.product.productDescription;
-    } else {
-      _variants = [
-        ProductVariants.fromJson({'id': "0"})
-      ];
-
-      vPriceControllers = [TextEditingController(text: "0.00")];
-    }
-
-    loadProductTypes();
-    if (this.productType != "") {
-      onTypesDropdownItem(this.productType);
-      if (this.productCategory != "") _selectedCategory = this.productCategory;
-    }
-    if (this.productCategory != "") {
-      onCategoryDropdownItem(this.productCategory);
-      if (this.productSubCategory != "")
-        _selectedSubCategory = this.productSubCategory;
-    }
+    vPriceControllers = [TextEditingController(text: "0.00")];
   }
 
   @override
@@ -243,7 +199,7 @@ class _AddProductState extends State<AddProduct> {
         _p.keywords = pName.split(" ");
 
         _p.variants = _variants;
-        if (_descs.isNotEmpty) {
+        if (_descs.isNotEmpty && _descs.last.title.trim().isNotEmpty) {
           _p.productDescription = _descs;
         } else
           _p.productDescription = [];
@@ -1514,7 +1470,8 @@ class _AddProductState extends State<AddProduct> {
   }
 
   loadProductTypes() async {
-    List<ProductTypes> types = await ProductTypes().getProductTypes();
+    List<ProductTypes> types =
+        await ProductTypes().getProductTypesForStoreID(this._selectedStore);
     Map<String, String> ptypes = Map();
     if (types.length > 0) {
       types.forEach(
@@ -1538,6 +1495,8 @@ class _AddProductState extends State<AddProduct> {
         _selectedStore = uuid;
       },
     );
+
+    await loadProductTypes();
   }
 
   onTypesDropdownItem(String uuid) async {
@@ -1555,8 +1514,8 @@ class _AddProductState extends State<AddProduct> {
       return;
     }
 
-    List<ProductCategories> categories =
-        await ProductCategories().getCategoriesForTypes([uuid]);
+    List<ProductCategories> categories = await ProductCategories()
+        .getCategoriesForStoreID(this._selectedStore, uuid);
     Map<String, String> cList = Map();
     if (categories.length > 0) {
       categories.forEach(

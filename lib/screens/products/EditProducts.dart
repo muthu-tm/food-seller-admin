@@ -88,10 +88,6 @@ class _EditProductsState extends State<EditProducts> {
     super.initState();
 
     loadStores();
-    loadProductTypes();
-    onTypesDropdownItem(widget.product.productType);
-    if (widget.product.productCategory != "")
-      onCategoryDropdownItem(widget.product.productCategory);
 
     this.imagePaths = widget.product.productImages;
     this.primaryImage = widget.product.image;
@@ -231,7 +227,7 @@ class _EditProductsState extends State<EditProducts> {
         _p.keywords = pName.split(" ");
 
         _p.variants = _variants;
-        if (_descs.isNotEmpty) {
+        if (_descs.isNotEmpty && _descs.last.title.trim().isNotEmpty) {
           _p.productDescription = _descs;
         } else
           _p.productDescription = [];
@@ -1501,10 +1497,17 @@ class _EditProductsState extends State<EditProducts> {
     }
 
     _selectedStore = widget.product.storeID;
+
+    await loadProductTypes();
+    await onTypesDropdownItem(widget.product.productType);
+
+    if (widget.product.productCategory != "")
+      onCategoryDropdownItem(widget.product.productCategory);
   }
 
   loadProductTypes() async {
-    List<ProductTypes> types = await ProductTypes().getProductTypes();
+    List<ProductTypes> types =
+        await ProductTypes().getProductTypesForStoreID(this._selectedStore);
     Map<String, String> ptypes = Map();
     if (types.length > 0) {
       types.forEach(
@@ -1519,8 +1522,7 @@ class _EditProductsState extends State<EditProducts> {
         },
       );
     }
-
-    _selectedType = widget.product.productType;
+    if (this.productType != "") _selectedType = this.productType;
   }
 
   onStoreDropdownItem(String uuid) async {
@@ -1529,6 +1531,8 @@ class _EditProductsState extends State<EditProducts> {
         _selectedStore = uuid;
       },
     );
+
+    await loadProductTypes();
   }
 
   onTypesDropdownItem(String uuid) async {
@@ -1546,8 +1550,8 @@ class _EditProductsState extends State<EditProducts> {
       return;
     }
 
-    List<ProductCategories> categories =
-        await ProductCategories().getCategoriesForTypes([uuid]);
+    List<ProductCategories> categories = await ProductCategories()
+        .getCategoriesForStoreID(this._selectedStore, uuid);
     Map<String, String> cList = Map();
     if (categories.length > 0) {
       categories.forEach(
