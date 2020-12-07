@@ -21,6 +21,8 @@ class ProductCategories extends Model {
   String shortDetails;
   @JsonKey(name: 'product_images', defaultValue: [""])
   List<String> productImages;
+  @JsonKey(name: 'show_in_search', defaultValue: false)
+  bool showInSearch;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)

@@ -15,6 +15,10 @@ class ProductTypes extends Model {
   String uuid;
   @JsonKey(name: 'name', defaultValue: "")
   String name;
+  @JsonKey(name: 'show_in_dashboard', defaultValue: "")
+  bool showInDashboard;
+  @JsonKey(name: 'dashboard_order')
+  int dashboardOrder;
   @JsonKey(name: 'short_details', defaultValue: "")
   String shortDetails;
   @JsonKey(name: 'product_images', defaultValue: [""])
