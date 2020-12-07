@@ -1258,7 +1258,7 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Container(
           height: 40,
-          width: 120,
+          width: 160,
           padding: EdgeInsets.all(10),
           alignment: Alignment.center,
           decoration: BoxDecoration(
@@ -1266,7 +1266,7 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
               border: Border.all(color: CustomColors.black),
               borderRadius: BorderRadius.circular(10.0)),
           child: InkWell(
-            onTap: () {
+            onTap: () async {
               final FormState form = _formKey.currentState;
 
               if (form.validate()) {
@@ -1316,6 +1316,8 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
 
                 _store.keywords = _store.name.split(" ");
 
+                await _store.update(_store.toJson());
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -1329,7 +1331,7 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
                     CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
               }
             },
-            child: Text("Continue"),
+            child: Text("Save & Continue"),
           ),
         ),
         body: GestureDetector(
