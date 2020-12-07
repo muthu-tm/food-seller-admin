@@ -1234,6 +1234,10 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
     activeTill = '${tillTime.hour}:${tillTime.minute}';
     deliverFrom = '${deliverFromTime.hour}:${deliverFromTime.minute}';
     deliverTill = '${deliverTillTime.hour}:${deliverTillTime.minute}';
+
+    widget.store.workingDays.forEach((element) {
+      workingDays.add(element.toString());
+    });
   }
 
   @override
