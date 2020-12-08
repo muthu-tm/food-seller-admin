@@ -1238,6 +1238,15 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
     widget.store.workingDays.forEach((element) {
       workingDays.add(element.toString());
     });
+
+    deliveryCharge2 = widget.store.deliveryDetails.deliveryCharges02;
+    deliveryCharge5 = widget.store.deliveryDetails.deliveryCharges05;
+    deliveryCharge10 = widget.store.deliveryDetails.deliveryCharges10;
+    deliveryChargeMax = widget.store.deliveryDetails.deliveryChargesMax;
+
+    deliverAnywhere = widget.store.deliverAnywhere;
+    upiID = widget.store.upiID;
+    walletNumber = widget.store.walletNumber;
   }
 
   @override
