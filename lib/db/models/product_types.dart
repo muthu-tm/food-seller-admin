@@ -88,7 +88,7 @@ class ProductTypes extends Model {
 
         if (storeData != null) {
           Store _s = Store.fromJson(storeData);
-          List<String> ids = _s.availProducts;
+          List<String> ids = _s.availProducts.map((e) => e.uuid).toList();
 
           if (ids.length > 9) {
             int end = 0;

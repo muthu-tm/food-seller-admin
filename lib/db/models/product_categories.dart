@@ -1,4 +1,3 @@
-import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/services/utils/constants.dart';
 import './model.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -137,47 +136,39 @@ class ProductCategories extends Model {
   }
 
   Future<List<ProductCategories>> getCategoriesForStoreID(
-      String id, String typeID) async {
+      List<String> ids, String typeID) async {
     List<ProductCategories> categories = [];
     try {
-      if (id.trim().isNotEmpty && id.trim() != '0') {
-        Map<String, dynamic> storeData = await Store().getByID(id);
+      // handle empty params
+      if (ids.isEmpty) return [];
 
-        if (storeData != null) {
-          Store _s = Store.fromJson(storeData);
-          List<String> ids = _s.availProductCategories;
-          // handle empty params
-          if (ids.isEmpty) return [];
+      if (ids.length > 9) {
+        int end = 0;
+        for (int i = 0; i < ids.length; i = i + 9) {
+          if (end + 9 > ids.length)
+            end = ids.length;
+          else
+            end = end + 9;
 
-          if (ids.length > 9) {
-            int end = 0;
-            for (int i = 0; i < ids.length; i = i + 9) {
-              if (end + 9 > ids.length)
-                end = ids.length;
-              else
-                end = end + 9;
-
-              QuerySnapshot snap = await getCollectionRef()
-                  .where('uuid', whereIn: ids.sublist(i, end))
-                  .where('type_id', isEqualTo: typeID)
-                  .getDocuments();
-              for (var j = 0; j < snap.documents.length; j++) {
-                ProductCategories _c =
-                    ProductCategories.fromJson(snap.documents[j].data);
-                categories.add(_c);
-              }
-            }
-          } else {
-            QuerySnapshot snap = await getCollectionRef()
-                .where('uuid', whereIn: ids)
-                .where('type_id', isEqualTo: typeID)
-                .getDocuments();
-            for (var j = 0; j < snap.documents.length; j++) {
-              ProductCategories _c =
-                  ProductCategories.fromJson(snap.documents[j].data);
-              categories.add(_c);
-            }
+          QuerySnapshot snap = await getCollectionRef()
+              .where('uuid', whereIn: ids.sublist(i, end))
+              .where('type_id', isEqualTo: typeID)
+              .getDocuments();
+          for (var j = 0; j < snap.documents.length; j++) {
+            ProductCategories _c =
+                ProductCategories.fromJson(snap.documents[j].data);
+            categories.add(_c);
           }
+        }
+      } else {
+        QuerySnapshot snap = await getCollectionRef()
+            .where('uuid', whereIn: ids)
+            .where('type_id', isEqualTo: typeID)
+            .getDocuments();
+        for (var j = 0; j < snap.documents.length; j++) {
+          ProductCategories _c =
+              ProductCategories.fromJson(snap.documents[j].data);
+          categories.add(_c);
         }
       }
     } catch (err) {

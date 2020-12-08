@@ -153,7 +153,7 @@ class _StoreSettingsState extends State<StoreSettings> {
                             },
                             inactiveTrackColor: CustomColors.alertRed,
                             activeTrackColor: CustomColors.primary,
-                            activeColor: Colors.green,
+                            activeColor: Colors.white,
                           ),
                         ],
                       ),

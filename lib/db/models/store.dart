@@ -1,3 +1,4 @@
+import 'package:chipchop_seller/db/models/product_categories_map.dart';
 import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:chipchop_seller/services/utils/constants.dart';
@@ -26,11 +27,11 @@ class Store extends Model {
   @JsonKey(name: 'geo_point', defaultValue: "")
   GeoPointData geoPoint;
   @JsonKey(name: 'avail_products')
-  List<String> availProducts;
+  List<ProductCategoriesMap> availProducts;
   @JsonKey(name: 'avail_product_categories')
-  List<String> availProductCategories;
+  List<ProductCategoriesMap> availProductCategories;
   @JsonKey(name: 'avail_product_sub_categories')
-  List<String> availProductSubCategories;
+  List<ProductCategoriesMap> availProductSubCategories;
   @JsonKey(name: 'working_days')
   List<int> workingDays;
   @JsonKey(name: 'active_from')

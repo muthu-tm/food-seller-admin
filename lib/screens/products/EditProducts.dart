@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:chipchop_seller/db/models/product_categories.dart';
+import 'package:chipchop_seller/db/models/product_categories_map.dart';
 import 'package:chipchop_seller/db/models/product_description.dart';
 import 'package:chipchop_seller/db/models/product_sub_categories.dart';
-import 'package:chipchop_seller/db/models/product_types.dart';
 import 'package:chipchop_seller/db/models/product_variants.dart';
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/db/models/store.dart';
@@ -47,6 +47,11 @@ class _EditProductsState extends State<EditProducts> {
   Map<String, String> _types = {"0": "Choose Product Type"};
   Map<String, String> _categories = {"0": "Choose Product Category"};
   Map<String, String> _subcategories = {"0": "Choose Product SubCategory"};
+
+  Map<String, ProductCategoriesMap> type = {};
+  Map<String, ProductCategoriesMap> category = {};
+  Map<String, ProductCategoriesMap> subcategory = {};
+
   Map<String, String> _units = {
     "0": "Nos",
     "1": "Kg",
@@ -64,9 +69,9 @@ class _EditProductsState extends State<EditProducts> {
   String pName = "";
   String brandName = "";
   String shortDetails = "";
-  String productType = "";
-  String productCategory = "";
-  String productSubCategory = "";
+  ProductCategoriesMap productType;
+  ProductCategoriesMap productCategory;
+  ProductCategoriesMap productSubCategory;
   String storeID = "";
   double weight = 0.00;
   int unit = 0;
@@ -82,6 +87,8 @@ class _EditProductsState extends State<EditProducts> {
   bool isReturnable = true;
   bool isReplaceable = true;
   List<String> keywords = [];
+
+  Map<String, Store> _storeMap = {};
 
   @override
   void initState() {
@@ -219,10 +226,12 @@ class _EditProductsState extends State<EditProducts> {
         _p.replaceWithin = replaceWithinDays;
         _p.storeID = _selectedStore;
         _p.storeName = _stores[_selectedStore];
-        _p.productType = _selectedType == "0" ? "" : _selectedType;
-        _p.productCategory = _selectedCategory == "0" ? "" : _selectedCategory;
-        _p.productSubCategory =
-            _selectedSubCategory == "0" ? "" : _selectedSubCategory;
+        _p.productType = _selectedType == "0" ? null : type[_selectedType];
+        _p.productCategory =
+            _selectedCategory == "0" ? null : category[_selectedCategory];
+        _p.productSubCategory = _selectedSubCategory == "0"
+            ? null
+            : subcategory[_selectedSubCategory];
 
         _p.keywords = pName.split(" ");
 
@@ -253,43 +262,43 @@ class _EditProductsState extends State<EditProducts> {
         color: CustomColors.white,
         child: Column(
           children: [
-            ListTile(
-              leading: Icon(
-                Icons.store,
-                size: 35,
-                color: CustomColors.blue,
-              ),
-              title: Text(
-                "Store",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: CustomColors.black,
-                ),
-              ),
-            ),
-            ListTile(
-              title: Container(
-                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all()),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    isExpanded: true,
-                    items: _stores.entries.map(
-                      (f) {
-                        return DropdownMenuItem<String>(
-                          value: f.key,
-                          child: Text(f.value),
-                        );
-                      },
-                    ).toList(),
-                    onChanged: onStoreDropdownItem,
-                    value: _selectedStore,
-                  ),
-                ),
-              ),
-            ),
+            // ListTile(
+            //   leading: Icon(
+            //     Icons.store,
+            //     size: 35,
+            //     color: CustomColors.blue,
+            //   ),
+            //   title: Text(
+            //     "Store",
+            //     style: TextStyle(
+            //       fontSize: 16.0,
+            //       color: CustomColors.black,
+            //     ),
+            //   ),
+            // ),
+            // ListTile(
+            //   title: Container(
+            //     padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+            //     decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(10.0),
+            //         border: Border.all()),
+            //     child: DropdownButtonHideUnderline(
+            //       child: DropdownButton<String>(
+            //         isExpanded: true,
+            //         items: _stores.entries.map(
+            //           (f) {
+            //             return DropdownMenuItem<String>(
+            //               value: f.key,
+            //               child: Text(f.value),
+            //             );
+            //           },
+            //         ).toList(),
+            //         onChanged: onStoreDropdownItem,
+            //         value: _selectedStore,
+            //       ),
+            //     ),
+            //   ),
+            // ),
             ListTile(
               leading: Icon(
                 Icons.view_stream,
@@ -1486,6 +1495,7 @@ class _EditProductsState extends State<EditProducts> {
       stores.forEach(
         (b) {
           storeList[b.uuid] = b.name;
+          _storeMap[b.uuid] = b;
         },
       );
 
@@ -1499,30 +1509,48 @@ class _EditProductsState extends State<EditProducts> {
     _selectedStore = widget.product.storeID;
 
     await loadProductTypes();
-    await onTypesDropdownItem(widget.product.productType);
+    if (this.productType != null) _selectedType = this.productType.uuid;
+    await onTypesDropdownItem(widget.product.productType.uuid);
+    if (widget.product.productCategory != null)
+      _selectedCategory = widget.product.productCategory.uuid;
 
-    if (widget.product.productCategory != "")
-      onCategoryDropdownItem(widget.product.productCategory);
+    if (widget.product.productCategory != null) {
+      await onCategoryDropdownItem(widget.product.productCategory.uuid);
+      if (widget.product.productSubCategory != null)
+        _selectedSubCategory = widget.product.productSubCategory.uuid;
+    }
   }
 
   loadProductTypes() async {
-    List<ProductTypes> types =
-        await ProductTypes().getProductTypesForStoreID(this._selectedStore);
-    Map<String, String> ptypes = Map();
-    if (types.length > 0) {
-      types.forEach(
-        (b) {
-          ptypes[b.uuid] = b.name;
-        },
-      );
+    _selectedType = '0';
+    _types = {"0": "Choose Product Type"};
 
-      setState(
-        () {
-          _types = _types..addAll(ptypes);
-        },
-      );
+    if (_storeMap.containsKey(this._selectedStore)) {
+      List<ProductCategoriesMap> types =
+          _storeMap[this._selectedStore].availProducts;
+      Map<String, String> ptypes = Map();
+      if (types.length > 0) {
+        type.clear();
+        types.forEach(
+          (b) {
+            ptypes[b.uuid] = b.name;
+            type[b.uuid] = b;
+          },
+        );
+
+        setState(
+          () {
+            _types = _types..addAll(ptypes);
+          },
+        );
+      } else {
+        setState(
+          () {
+            _selectedType = '0';
+          },
+        );
+      }
     }
-    if (this.productType != "") _selectedType = this.productType;
   }
 
   onStoreDropdownItem(String uuid) async {
@@ -1550,32 +1578,37 @@ class _EditProductsState extends State<EditProducts> {
       return;
     }
 
-    List<ProductCategories> categories = await ProductCategories()
-        .getCategoriesForStoreID(this._selectedStore, uuid);
-    Map<String, String> cList = Map();
-    if (categories.length > 0) {
-      categories.forEach(
-        (b) {
-          cList[b.uuid] = b.name;
-        },
-      );
+    if (_storeMap.containsKey(this._selectedStore)) {
+      List<ProductCategoriesMap> _cat =
+          _storeMap[this._selectedStore].availProductCategories;
 
-      setState(
-        () {
-          _selectedType = uuid;
-          _categories = _categories..addAll(cList);
-        },
-      );
-    } else {
-      setState(
-        () {
-          _selectedType = uuid;
-        },
-      );
+      List<ProductCategories> categories = await ProductCategories()
+          .getCategoriesForStoreID(_cat.map((e) => e.uuid).toList(), uuid);
+      Map<String, String> cList = Map();
+      if (categories.length > 0) {
+        category.clear();
+        categories.forEach(
+          (b) {
+            cList[b.uuid] = b.name;
+            category[b.uuid] =
+                ProductCategoriesMap.fromJson({'uuid': b.uuid, 'name': b.name});
+          },
+        );
+
+        setState(
+          () {
+            _selectedType = uuid;
+            _categories = _categories..addAll(cList);
+          },
+        );
+      } else {
+        setState(
+          () {
+            _selectedType = uuid;
+          },
+        );
+      }
     }
-
-    if (widget.product.productCategory != "")
-      _selectedCategory = widget.product.productCategory;
   }
 
   onCategoryDropdownItem(String uuid) async {
@@ -1591,30 +1624,36 @@ class _EditProductsState extends State<EditProducts> {
       return;
     }
 
-    List<ProductSubCategories> subCategories =
-        await ProductSubCategories().getSubCategoriesByIDs([uuid]);
-    Map<String, String> scList = Map();
-    if (subCategories.length > 0) {
-      subCategories.forEach(
-        (b) {
-          scList[b.uuid] = b.name;
-        },
-      );
+    if (_storeMap.containsKey(this._selectedStore)) {
+      List<ProductCategoriesMap> _subCat =
+          _storeMap[this._selectedStore].availProductSubCategories;
 
-      _subcategories = _subcategories..addAll(scList);
-      setState(
-        () {
-          _selectedCategory = uuid;
-        },
-      );
-    } else {
-      setState(
-        () {
-          _selectedCategory = uuid;
-        },
-      );
+      List<ProductSubCategories> subCategories = await ProductSubCategories()
+          .getSubCategoriesForIDs(uuid, _subCat.map((e) => e.uuid).toList());
+      Map<String, String> scList = Map();
+      if (subCategories.length > 0) {
+        subcategory.clear();
+        subCategories.forEach(
+          (b) {
+            scList[b.uuid] = b.name;
+            subcategory[b.uuid] =
+                ProductCategoriesMap.fromJson({'uuid': b.uuid, 'name': b.name});
+          },
+        );
+
+        _subcategories = _subcategories..addAll(scList);
+        setState(
+          () {
+            _selectedCategory = uuid;
+          },
+        );
+      } else {
+        setState(
+          () {
+            _selectedCategory = uuid;
+          },
+        );
+      }
     }
-    if (widget.product.productSubCategory != "")
-      _selectedSubCategory = widget.product.productSubCategory;
   }
 }

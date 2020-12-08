@@ -5,6 +5,7 @@ import 'package:camera/camera.dart';
 import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/product_categories.dart';
+import 'package:chipchop_seller/db/models/product_categories_map.dart';
 import 'package:chipchop_seller/db/models/product_sub_categories.dart';
 import 'package:chipchop_seller/db/models/product_types.dart';
 import 'package:chipchop_seller/db/models/store.dart';
@@ -46,13 +47,9 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   String storeName = '';
   String shortDetails = '';
   String ownedBy = '';
-  List<String> availProducts = [];
-  List<String> availProductCategories = [];
-  List<String> availProductSubCategories = [];
-
-  Map<String, String> productTypes = {};
-  Map<String, String> productCategories = {};
-  Map<String, String> productSubCategories = {};
+  List<ProductCategoriesMap> availProducts = [];
+  List<ProductCategoriesMap> availProductCategories = [];
+  List<ProductCategoriesMap> availProductSubCategories = [];
 
   @override
   void initState() {
@@ -876,7 +873,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
 
   Widget getProductTypes(BuildContext context) {
     List<MultiSelectDialogItem> buildingDropdownItems = [];
-    Map<String, String> _productTypes = {};
+    Map<String, ProductCategoriesMap> _productTypes = {};
     return InkWell(
       onTap: () async {
         _productTypes.clear();
@@ -884,7 +881,8 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
         CustomDialogs.actionWaiting(context);
         List<ProductTypes> data = await ProductTypes().getProductTypes();
         data.forEach((element) {
-          _productTypes[element.uuid] = element.name;
+          _productTypes[element.uuid] = ProductCategoriesMap.fromJson(
+              {'uuid': element.uuid, 'name': element.name});
           buildingDropdownItems
               .add(MultiSelectDialogItem(element.uuid, element.name));
         });
@@ -893,26 +891,23 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
           context: context,
           builder: (BuildContext context) {
             return MultiSelectDialog(
-              title: "Product Types",
-              items: buildingDropdownItems,
-              initialSelectedValues: availProducts.toSet(),
-            );
+                title: "Product Types",
+                items: buildingDropdownItems,
+                initialSelectedValues:
+                    availProducts.map((e) => e.uuid).toSet());
           },
         );
 
         if (selectedValues != null) {
-          productTypes.clear();
+          availProducts.clear();
           selectedValues.forEach((element) {
             if (element != null) {
-              productTypes[element] = _productTypes[element];
+              availProducts.add(_productTypes[element]);
             }
           });
 
-          productCategories.clear();
           availProductCategories.clear();
-          setState(() {
-            availProducts = selectedValues.toList();
-          });
+          setState(() {});
         }
       },
       child: Padding(
@@ -922,8 +917,8 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Flexible(
-                  child: Text(productTypes.values.isNotEmpty
-                      ? productTypes.values.toString()
+                  child: Text(availProducts.isNotEmpty
+                      ? availProducts.map((e) => e.name).toString()
                       : "")),
               Icon(
                 Icons.keyboard_arrow_down,
@@ -937,9 +932,10 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   }
 
   Widget getProductCategories(BuildContext context) {
-    Map<String, String> _productCategories = {};
+    Map<String, ProductCategoriesMap> _productCategories = {};
     return FutureBuilder<List<ProductCategories>>(
-      future: ProductCategories().getCategoriesForTypes(availProducts),
+      future: ProductCategories()
+          .getCategoriesForTypes(availProducts.map((e) => e.uuid).toList()),
       builder: (BuildContext context,
           AsyncSnapshot<List<ProductCategories>> snapshot) {
         Widget children;
@@ -949,7 +945,8 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
             List<MultiSelectDialogItem> buildingDropdownItems = [];
             _productCategories.clear();
             snapshot.data.forEach((element) {
-              _productCategories[element.uuid] = element.name;
+              _productCategories[element.uuid] = ProductCategoriesMap.fromJson(
+                  {'uuid': element.uuid, 'name': element.name});
               buildingDropdownItems
                   .add(MultiSelectDialogItem(element.uuid, element.name));
             });
@@ -961,25 +958,23 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                       return MultiSelectDialog(
                         title: "Product Categories",
                         items: buildingDropdownItems,
-                        initialSelectedValues: availProductCategories.toSet(),
+                        initialSelectedValues:
+                            availProductCategories.map((e) => e.uuid).toSet(),
                       );
                     },
                   );
 
                   if (selectedValues != null) {
-                    productCategories.clear();
+                    availProductCategories.clear();
+
                     selectedValues.forEach((element) {
                       if (element != null) {
-                        productCategories[element] =
-                            _productCategories[element];
+                        availProductCategories.add(_productCategories[element]);
                       }
                     });
-                    productSubCategories.clear();
                     availProductSubCategories.clear();
 
-                    setState(() {
-                      availProductCategories = selectedValues.toList();
-                    });
+                    setState(() {});
                   }
                 },
                 child: Padding(
@@ -989,8 +984,10 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Flexible(
-                            child: Text(productCategories.values.isNotEmpty
-                                ? productCategories.values.toString()
+                            child: Text(availProductCategories.isNotEmpty
+                                ? availProductCategories
+                                    .map((e) => e.name)
+                                    .toString()
                                 : "")),
                         Icon(
                           Icons.keyboard_arrow_down,
@@ -1035,11 +1032,11 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   }
 
   Widget getProductSubCategories(BuildContext context) {
-    Map<String, String> _productSubCategories = {};
+    Map<String, ProductCategoriesMap> _productSubCategories = {};
 
     return FutureBuilder<List<ProductSubCategories>>(
-      future:
-          ProductSubCategories().getSubCategoriesByIDs(availProductCategories),
+      future: ProductSubCategories().getSubCategoriesByIDs(
+          availProductCategories.map((e) => e.uuid).toList()),
       builder: (BuildContext context,
           AsyncSnapshot<List<ProductSubCategories>> snapshot) {
         Widget children;
@@ -1049,7 +1046,9 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
             List<MultiSelectDialogItem> buildingDropdownItems = [];
             _productSubCategories.clear();
             snapshot.data.forEach((element) {
-              _productSubCategories[element.uuid] = element.name;
+              _productSubCategories[element.uuid] =
+                  ProductCategoriesMap.fromJson(
+                      {'uuid': element.uuid, 'name': element.name});
               buildingDropdownItems
                   .add(MultiSelectDialogItem(element.uuid, element.name));
             });
@@ -1061,23 +1060,23 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     return MultiSelectDialog(
                       title: "Product Sub-Categories",
                       items: buildingDropdownItems,
-                      initialSelectedValues: availProductSubCategories.toSet(),
+                      initialSelectedValues:
+                          availProductSubCategories.map((e) => e.uuid).toSet(),
                     );
                   },
                 );
 
                 if (selectedValues != null) {
-                  productSubCategories.clear();
+                  availProductSubCategories.clear();
+
                   selectedValues.forEach((element) {
                     if (element != null) {
-                      productSubCategories[element] =
-                          _productSubCategories[element];
+                      availProductSubCategories
+                          .add(_productSubCategories[element]);
                     }
                   });
 
-                  setState(() {
-                    availProductSubCategories = selectedValues.toList();
-                  });
+                  setState(() {});
                 }
               },
               child: Padding(
@@ -1087,8 +1086,10 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
-                          child: Text(productSubCategories.values.isNotEmpty
-                              ? productSubCategories.values.toString()
+                          child: Text(availProductSubCategories.isNotEmpty
+                              ? availProductSubCategories
+                                  .map((e) => e.name)
+                                  .toString()
                               : "")),
                       Icon(
                         Icons.keyboard_arrow_down,

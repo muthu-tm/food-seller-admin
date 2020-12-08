@@ -6,6 +6,7 @@ import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/delivery_details.dart';
 import 'package:chipchop_seller/db/models/product_categories.dart';
+import 'package:chipchop_seller/db/models/product_categories_map.dart';
 import 'package:chipchop_seller/db/models/product_sub_categories.dart';
 import 'package:chipchop_seller/db/models/product_types.dart';
 import 'package:chipchop_seller/db/models/store.dart';
@@ -47,12 +48,9 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   String shortDetails = '';
   String ownedBy = '';
 
-  Map<String, String> productTypes = {};
-  List<String> availProducts = [];
-  Map<String, String> productCategories = {};
-  List<String> availProductCategories = [];
-  Map<String, String> productSubCategories = {};
-  List<String> availProductSubCategories = [];
+  List<ProductCategoriesMap> availProducts = [];
+  List<ProductCategoriesMap> availProductCategories = [];
+  List<ProductCategoriesMap> availProductSubCategories = [];
 
   @override
   void initState() {
@@ -81,81 +79,81 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
         backgroundColor: CustomColors.primary,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Container(
-        height: 40,
-        width: 120,
-        padding: EdgeInsets.all(10),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: CustomColors.primary,
-            border: Border.all(color: CustomColors.black),
-            borderRadius: BorderRadius.circular(10.0)),
-        child: InkWell(
-          onTap: () {
-            final FormState form = _formKey.currentState;
+      floatingActionButton: InkWell(
+        onTap: () {
+          final FormState form = _formKey.currentState;
 
-            if (form.validate()) {
-              if (availProducts.length == 0) {
-                _scaffoldKey.currentState.showSnackBar(
-                  CustomSnackBar.errorSnackBar(
-                      "Please Select your Store Product Type!", 2),
-                );
-                return;
-              }
-
-              if (availProductCategories.length == 0) {
-                _scaffoldKey.currentState.showSnackBar(
-                  CustomSnackBar.errorSnackBar(
-                      "Please Select Store Categories!", 2),
-                );
-                return;
-              }
-
-              if (availProductSubCategories.length == 0) {
-                _scaffoldKey.currentState.showSnackBar(
-                  CustomSnackBar.errorSnackBar(
-                      "Please Select Store Sub-Categories!", 2),
-                );
-                return;
-              }
-
-              Store store = Store();
-              StoreContacts contacts = StoreContacts();
-              contacts.contactName = cachedLocalUser.firstName;
-              contacts.contactNumber = cachedLocalUser.getID();
-              contacts.isActive = true;
-              contacts.isVerfied = true;
-
-              store.name = this.storeName;
-              store.shortDetails = this.shortDetails;
-              store.ownedBy = this.ownedBy;
-              store.users = [cachedLocalUser.getID()];
-              store.image = primaryImage;
-              store.storeImages = imagePaths;
-              store.availProducts = this.availProducts;
-              store.availProductCategories = this.availProductCategories;
-              store.availProductSubCategories = this.availProductSubCategories;
-              store.address = updatedAddress;
-              store.contacts = [contacts];
-
-              StoreUserAccess userAccess = StoreUserAccess();
-              userAccess.positionName = "Owner";
-              userAccess.userNumber = cachedLocalUser.getID();
-              userAccess.accessLevel = [0];
-              store.usersAccess = [userAccess];
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddStoreStepTwo(store),
-                  settings: RouteSettings(name: '/settings/store/add/'),
-                ),
-              );
-            } else {
+          if (form.validate()) {
+            if (availProducts.length == 0) {
               _scaffoldKey.currentState.showSnackBar(
-                  CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
+                CustomSnackBar.errorSnackBar(
+                    "Please Select your Store Product Type!", 2),
+              );
+              return;
             }
-          },
+
+            if (availProductCategories.length == 0) {
+              _scaffoldKey.currentState.showSnackBar(
+                CustomSnackBar.errorSnackBar(
+                    "Please Select Store Categories!", 2),
+              );
+              return;
+            }
+
+            if (availProductSubCategories.length == 0) {
+              _scaffoldKey.currentState.showSnackBar(
+                CustomSnackBar.errorSnackBar(
+                    "Please Select Store Sub-Categories!", 2),
+              );
+              return;
+            }
+
+            Store store = Store();
+            StoreContacts contacts = StoreContacts();
+            contacts.contactName = cachedLocalUser.firstName;
+            contacts.contactNumber = cachedLocalUser.getID();
+            contacts.isActive = true;
+            contacts.isVerfied = true;
+
+            store.name = this.storeName;
+            store.shortDetails = this.shortDetails;
+            store.ownedBy = this.ownedBy;
+            store.users = [cachedLocalUser.getID()];
+            store.image = primaryImage;
+            store.storeImages = imagePaths;
+            store.availProducts = this.availProducts;
+            store.availProductCategories = this.availProductCategories;
+            store.availProductSubCategories = this.availProductSubCategories;
+            store.address = updatedAddress;
+            store.contacts = [contacts];
+
+            StoreUserAccess userAccess = StoreUserAccess();
+            userAccess.positionName = "Owner";
+            userAccess.userNumber = cachedLocalUser.getID();
+            userAccess.accessLevel = [0];
+            store.usersAccess = [userAccess];
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddStoreStepTwo(store),
+                settings: RouteSettings(name: '/settings/store/add/'),
+              ),
+            );
+          } else {
+            _scaffoldKey.currentState.showSnackBar(
+                CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
+          }
+        },
+        child: Container(
+          height: 40,
+          width: 120,
+          padding: EdgeInsets.all(10),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: CustomColors.primary,
+              border: Border.all(color: CustomColors.black),
+              borderRadius: BorderRadius.circular(10.0)),
           child: Text(
             "Continue",
           ),
@@ -894,7 +892,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
 
   Widget getProductTypes(BuildContext context) {
     List<MultiSelectDialogItem> buildingDropdownItems = [];
-    Map<String, String> _productTypes = {};
+    Map<String, ProductCategoriesMap> _productTypes = {};
     return InkWell(
       onTap: () async {
         _productTypes.clear();
@@ -902,7 +900,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
         CustomDialogs.actionWaiting(context);
         List<ProductTypes> data = await ProductTypes().getProductTypes();
         data.forEach((element) {
-          _productTypes[element.uuid] = element.name;
+          _productTypes[element.uuid] = ProductCategoriesMap.fromJson(
+              {'uuid': element.uuid, 'name': element.name});
           buildingDropdownItems
               .add(MultiSelectDialogItem(element.uuid, element.name));
         });
@@ -911,26 +910,23 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
           context: context,
           builder: (BuildContext context) {
             return MultiSelectDialog(
-              title: "Product Types",
-              items: buildingDropdownItems,
-              initialSelectedValues: availProducts.toSet(),
-            );
+                title: "Product Types",
+                items: buildingDropdownItems,
+                initialSelectedValues:
+                    availProducts.map((e) => e.uuid).toSet());
           },
         );
 
         if (selectedValues != null) {
-          productTypes.clear();
+          availProducts.clear();
           selectedValues.forEach((element) {
             if (element != null) {
-              productTypes[element] = _productTypes[element];
+              availProducts.add(_productTypes[element]);
             }
           });
 
-          productCategories.clear();
           availProductCategories.clear();
-          setState(() {
-            availProducts = selectedValues.toList();
-          });
+          setState(() {});
         }
       },
       child: Padding(
@@ -940,8 +936,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Flexible(
-                  child: Text(productTypes.values.isNotEmpty
-                      ? productTypes.values.toString()
+                  child: Text(availProducts.isNotEmpty
+                      ? availProducts.map((e) => e.name).toString()
                       : "")),
               Icon(
                 Icons.keyboard_arrow_down,
@@ -955,9 +951,10 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   }
 
   Widget getProductCategories(BuildContext context) {
-    Map<String, String> _productCategories = {};
+    Map<String, ProductCategoriesMap> _productCategories = {};
     return FutureBuilder<List<ProductCategories>>(
-      future: ProductCategories().getCategoriesForTypes(availProducts),
+      future: ProductCategories()
+          .getCategoriesForTypes(availProducts.map((e) => e.uuid).toList()),
       builder: (BuildContext context,
           AsyncSnapshot<List<ProductCategories>> snapshot) {
         Widget children;
@@ -967,7 +964,8 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             List<MultiSelectDialogItem> buildingDropdownItems = [];
             _productCategories.clear();
             snapshot.data.forEach((element) {
-              _productCategories[element.uuid] = element.name;
+              _productCategories[element.uuid] = ProductCategoriesMap.fromJson(
+                  {'uuid': element.uuid, 'name': element.name});
               buildingDropdownItems
                   .add(MultiSelectDialogItem(element.uuid, element.name));
             });
@@ -979,25 +977,22 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       return MultiSelectDialog(
                         title: "Product Categories",
                         items: buildingDropdownItems,
-                        initialSelectedValues: availProductCategories.toSet(),
+                        initialSelectedValues:
+                            availProductCategories.map((e) => e.uuid).toSet(),
                       );
                     },
                   );
 
                   if (selectedValues != null) {
-                    productCategories.clear();
+                    availProductCategories.clear();
                     selectedValues.forEach((element) {
                       if (element != null) {
-                        productCategories[element] =
-                            _productCategories[element];
+                        availProductCategories.add(_productCategories[element]);
                       }
                     });
-                    productSubCategories.clear();
                     availProductSubCategories.clear();
 
-                    setState(() {
-                      availProductCategories = selectedValues.toList();
-                    });
+                    setState(() {});
                   }
                 },
                 child: Padding(
@@ -1007,8 +1002,10 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Flexible(
-                            child: Text(productCategories.values.isNotEmpty
-                                ? productCategories.values.toString()
+                            child: Text(availProductCategories.isNotEmpty
+                                ? availProductCategories
+                                    .map((e) => e.name)
+                                    .toString()
                                 : "")),
                         Icon(
                           Icons.keyboard_arrow_down,
@@ -1053,11 +1050,11 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   }
 
   Widget getProductSubCategories(BuildContext context) {
-    Map<String, String> _productSubCategories = {};
+    Map<String, ProductCategoriesMap> _productSubCategories = {};
 
     return FutureBuilder<List<ProductSubCategories>>(
-      future:
-          ProductSubCategories().getSubCategoriesByIDs(availProductCategories),
+      future: ProductSubCategories().getSubCategoriesByIDs(
+          availProductCategories.map((e) => e.uuid).toList()),
       builder: (BuildContext context,
           AsyncSnapshot<List<ProductSubCategories>> snapshot) {
         Widget children;
@@ -1067,7 +1064,9 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
             List<MultiSelectDialogItem> buildingDropdownItems = [];
             _productSubCategories.clear();
             snapshot.data.forEach((element) {
-              _productSubCategories[element.uuid] = element.name;
+              _productSubCategories[element.uuid] =
+                  ProductCategoriesMap.fromJson(
+                      {'uuid': element.uuid, 'name': element.name});
               buildingDropdownItems
                   .add(MultiSelectDialogItem(element.uuid, element.name));
             });
@@ -1079,23 +1078,22 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     return MultiSelectDialog(
                       title: "Product Sub-Categories",
                       items: buildingDropdownItems,
-                      initialSelectedValues: availProductSubCategories.toSet(),
+                      initialSelectedValues:
+                          availProductSubCategories.map((e) => e.uuid).toSet(),
                     );
                   },
                 );
 
                 if (selectedValues != null) {
-                  productSubCategories.clear();
+                  availProductSubCategories.clear();
                   selectedValues.forEach((element) {
                     if (element != null) {
-                      productSubCategories[element] =
-                          _productSubCategories[element];
+                      availProductSubCategories
+                          .add(_productSubCategories[element]);
                     }
                   });
 
-                  setState(() {
-                    availProductSubCategories = selectedValues.toList();
-                  });
+                  setState(() {});
                 }
               },
               child: Padding(
@@ -1105,8 +1103,10 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
-                          child: Text(productSubCategories.values.isNotEmpty
-                              ? productSubCategories.values.toString()
+                          child: Text(availProductSubCategories.isNotEmpty
+                              ? availProductSubCategories
+                                  .map((e) => e.name)
+                                  .toString()
                               : "")),
                       Icon(
                         Icons.keyboard_arrow_down,
@@ -1248,80 +1248,78 @@ class _AddStoreStepTwoState extends State<AddStoreStepTwo> {
           backgroundColor: CustomColors.primary,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Container(
-          height: 40,
-          width: 120,
-          padding: EdgeInsets.all(10),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color: CustomColors.primary,
-              border: Border.all(color: CustomColors.black),
-              borderRadius: BorderRadius.circular(10.0)),
-          child: InkWell(
-            onTap: () {
-              final FormState form = _formKey.currentState;
+        floatingActionButton: InkWell(
+          onTap: () {
+            final FormState form = _formKey.currentState;
 
-              if (form.validate()) {
-                if (paymentOptions.length == 0) {
-                  _scaffoldKey.currentState.showSnackBar(
-                    CustomSnackBar.errorSnackBar(
-                        "Please Select atleast one Payment Option!", 2),
-                  );
-                  return;
-                }
-                if (workingDays.length == 0) {
-                  _scaffoldKey.currentState.showSnackBar(
-                    CustomSnackBar.errorSnackBar(
-                        "Please Set your Business Working Days!", 2),
-                  );
-                  return;
-                }
-
-                if (!deliverAnywhere && this.maxDistance == 0) {
-                  _scaffoldKey.currentState.showSnackBar(
-                    CustomSnackBar.errorSnackBar(
-                        "Please Set your Maximum Delivery Range!", 2),
-                  );
-                  return;
-                }
-
-                _store.deliverAnywhere = this.deliverAnywhere;
-                _store.upiID = upiID;
-                _store.walletNumber = walletNumber;
-
-                _store.availablePayments = paymentOptions;
-                _store.activeFrom = activeFrom;
-                _store.activeTill = activeTill;
-                List<int> workingDaysInt = workingDays.map(int.parse).toList();
-                _store.workingDays = workingDaysInt;
-
-                _store.deliveryDetails = DeliveryDetails();
-                _store.deliveryDetails.deliveryFrom = this.deliverFrom;
-                _store.deliveryDetails.deliveryTill = this.deliverTill;
-                _store.deliveryDetails.maxDistance = this.maxDistance;
-                _store.deliveryDetails.deliveryCharges02 = this.deliveryCharge2;
-                _store.deliveryDetails.deliveryCharges05 = this.deliveryCharge5;
-                _store.deliveryDetails.deliveryCharges10 =
-                    this.deliveryCharge10;
-                _store.deliveryDetails.deliveryChargesMax =
-                    this.deliveryChargeMax;
-                _store.deliveryDetails.availableOptions = this.deliveryTemp;
-                _store.keywords = _store.name.split(" ");
-                _store.isActive = true;
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LocationPicker(_store),
-                    settings:
-                        RouteSettings(name: '/settings/store/add/location'),
-                  ),
-                );
-              } else {
+            if (form.validate()) {
+              if (paymentOptions.length == 0) {
                 _scaffoldKey.currentState.showSnackBar(
-                    CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
+                  CustomSnackBar.errorSnackBar(
+                      "Please Select atleast one Payment Option!", 2),
+                );
+                return;
               }
-            },
+              if (workingDays.length == 0) {
+                _scaffoldKey.currentState.showSnackBar(
+                  CustomSnackBar.errorSnackBar(
+                      "Please Set your Business Working Days!", 2),
+                );
+                return;
+              }
+
+              if (!deliverAnywhere && this.maxDistance == 0) {
+                _scaffoldKey.currentState.showSnackBar(
+                  CustomSnackBar.errorSnackBar(
+                      "Please Set your Maximum Delivery Range!", 2),
+                );
+                return;
+              }
+
+              _store.deliverAnywhere = this.deliverAnywhere;
+              _store.upiID = upiID;
+              _store.walletNumber = walletNumber;
+
+              _store.availablePayments = paymentOptions;
+              _store.activeFrom = activeFrom;
+              _store.activeTill = activeTill;
+              List<int> workingDaysInt = workingDays.map(int.parse).toList();
+              _store.workingDays = workingDaysInt;
+
+              _store.deliveryDetails = DeliveryDetails();
+              _store.deliveryDetails.deliveryFrom = this.deliverFrom;
+              _store.deliveryDetails.deliveryTill = this.deliverTill;
+              _store.deliveryDetails.maxDistance = this.maxDistance;
+              _store.deliveryDetails.deliveryCharges02 = this.deliveryCharge2;
+              _store.deliveryDetails.deliveryCharges05 = this.deliveryCharge5;
+              _store.deliveryDetails.deliveryCharges10 = this.deliveryCharge10;
+              _store.deliveryDetails.deliveryChargesMax =
+                  this.deliveryChargeMax;
+              _store.deliveryDetails.availableOptions = this.deliveryTemp;
+              _store.keywords = _store.name.split(" ");
+              _store.isActive = true;
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LocationPicker(_store),
+                  settings: RouteSettings(name: '/settings/store/add/location'),
+                ),
+              );
+            } else {
+              _scaffoldKey.currentState.showSnackBar(
+                  CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
+            }
+          },
+          child: Container(
+            height: 40,
+            width: 120,
+            padding: EdgeInsets.all(10),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: CustomColors.primary,
+                border: Border.all(color: CustomColors.black),
+                borderRadius: BorderRadius.circular(10.0)),
             child: Text("Continue"),
           ),
         ),

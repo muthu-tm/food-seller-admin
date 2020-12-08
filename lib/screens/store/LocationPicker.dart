@@ -56,7 +56,7 @@ class LocationPickerState extends State<LocationPicker> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.blueGreen,
+        backgroundColor: CustomColors.primary,
         onPressed: () {
           if (geoData == null || geoData.geoHash.isEmpty) {
             _scaffoldKey.currentState.showSnackBar(
