@@ -64,6 +64,7 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     crossAxisSpacing: 5,
+                    childAspectRatio: 0.78,
                     mainAxisSpacing: 10,
                   ),
                   delegate: SliverChildBuilderDelegate(
