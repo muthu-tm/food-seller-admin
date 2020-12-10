@@ -1,12 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chipchop_seller/db/models/order_written_details.dart';
 import 'package:chipchop_seller/db/models/products.dart';
+import 'package:chipchop_seller/screens/orders/CapturedOrderWidget.dart';
 import 'package:chipchop_seller/screens/orders/OrderDeliveryDetailsScreen.dart';
 import 'package:chipchop_seller/screens/orders/OrdersView.dart';
+import 'package:chipchop_seller/screens/orders/WrittenOrderWidget.dart';
 import 'package:chipchop_seller/screens/products/ProductDetailsScreen.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_seller/screens/customers/OrderChatScreen.dart';
-import 'package:chipchop_seller/screens/utils/ImageView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +29,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
   TextEditingController _pController = TextEditingController();
 
   double wOrderAmount = 0.00;
+  double cOrderAmount = 0.00;
 
   @override
   void initState() {
@@ -42,7 +42,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          "Order - ${widget.order.orderID}",
+          "Order : ${widget.order.orderID}",
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
         leading: IconButton(
@@ -51,7 +51,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
         ),
         backgroundColor: CustomColors.primary,
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         backgroundColor: CustomColors.primary,
         onPressed: () {
           return _scaffoldKey.currentState.showBottomSheet(
@@ -75,11 +75,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
             },
           );
         },
-        label: Text(
-          "Chat with Store",
-          style: TextStyle(color: CustomColors.black),
-        ),
-        icon: Icon(Icons.chat_bubble, color: CustomColors.black),
+        child: Icon(Icons.question_answer_outlined, color: CustomColors.black),
       ),
       body: GestureDetector(
         onTap: () {
@@ -119,11 +115,20 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
           } else {
             Order order = Order.fromJson(snapshot.data.data);
             wOrderAmount = 0.00;
+            cOrderAmount = 0.00;
 
-            if (order.writtenOrders.length > 0 &&
+            if (order.writtenOrders != null &&
+                order.writtenOrders.length > 0 &&
                 order.writtenOrders.first.name.trim().isNotEmpty) {
               order.writtenOrders.forEach((element) {
                 wOrderAmount += element.price;
+              });
+            }
+
+            if (order.capturedOrders != null &&
+                order.capturedOrders.isNotEmpty) {
+              order.capturedOrders.forEach((element) {
+                cOrderAmount += element.price;
               });
             }
 
@@ -468,206 +473,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                     ),
                   ),
                 ),
-                order.orderImages.length > 0
-                    ? Column(
-                        children: [
-                          ListTile(
-                            title: Text("Ordered as Captured List"),
-                          ),
-                          SizedBox(
-                            height: 160,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              primary: true,
-                              shrinkWrap: true,
-                              itemCount: order.orderImages.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 10, right: 10, top: 5),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ImageView(
-                                            url: order.orderImages[index],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Container(
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        child: CachedNetworkImage(
-                                          imageUrl: order.orderImages[index],
-                                          imageBuilder:
-                                              (context, imageProvider) => Image(
-                                            fit: BoxFit.fill,
-                                            height: 150,
-                                            width: 150,
-                                            image: imageProvider,
-                                          ),
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              Center(
-                                            child: SizedBox(
-                                              height: 50.0,
-                                              width: 50.0,
-                                              child: CircularProgressIndicator(
-                                                  value:
-                                                      downloadProgress.progress,
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation(
-                                                          CustomColors.blue),
-                                                  strokeWidth: 2.0),
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(
-                                            Icons.error,
-                                            size: 35,
-                                          ),
-                                          fadeOutDuration: Duration(seconds: 1),
-                                          fadeInDuration: Duration(seconds: 2),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      )
-                    : Container(),
-                order.writtenOrders.isNotEmpty
-                    ? Column(
-                        children: [
-                          ListTile(
-                            title: Text("Ordered as Written List"),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 5.0),
-                            child: Container(
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: CustomColors.grey),
-                              child: ListView.separated(
-                                primary: false,
-                                shrinkWrap: true,
-                                itemCount: order.writtenOrders.length,
-                                separatorBuilder:
-                                    (BuildContext context, int index) =>
-                                        Divider(
-                                  color: CustomColors.white,
-                                  thickness: 2,
-                                ),
-                                itemBuilder: (BuildContext context, int index) {
-                                  WrittenOrders _wr =
-                                      order.writtenOrders[index];
-
-                                  return Container(
-                                      child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      ListTile(
-                                        leading: Text(
-                                          "Name : ",
-                                          style: TextStyle(
-                                              color: CustomColors.black,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        title: Text(
-                                          '${_wr.name}',
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                              color: CustomColors.black),
-                                        ),
-                                      ),
-                                      ListTile(
-                                        leading: Text(
-                                          "Quantity : ",
-                                          style: TextStyle(
-                                              color: CustomColors.black,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        title: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    '${_wr.weight}',
-                                                    textAlign: TextAlign.start,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      color: CustomColors.black,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 5.0),
-                                                  child: Text(
-                                                    _wr.getUnit(),
-                                                    textAlign: TextAlign.start,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      color: CustomColors.black,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              'X ${_wr.quantity.round()}',
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                color: CustomColors.black,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      ListTile(
-                                        leading: Text(
-                                          "Price : ",
-                                          style: TextStyle(
-                                              color: CustomColors.black,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        title: Text(
-                                          '₹ ${_wr.price.toStringAsFixed(2)}',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: CustomColors.black,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ));
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : Container(),
+                CapturedOrderWidget(order),
+                WrittenOrderWidget(order),
                 Card(
                   elevation: 2,
                   child: Container(
@@ -702,6 +509,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                       trailing: Text('₹ $wOrderAmount'),
                                     )
                                   : Container(),
+                              (order.capturedOrders != null &&
+                                      order.capturedOrders.isNotEmpty)
+                                  ? ListTile(
+                                      contentPadding: EdgeInsets.zero,
+                                      title: Text("Price for Captured List : "),
+                                      trailing: Text('₹ $cOrderAmount'),
+                                    )
+                                  : Container(),
                               ListTile(
                                 contentPadding: EdgeInsets.zero,
                                 title: Text("Wallet Amount : "),
@@ -719,11 +534,28 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                 title: Text(
                                   "Total Billed Amount : ",
                                   style: TextStyle(
-                                      color: CustomColors.black,
+                                      color: CustomColors.alertRed,
                                       fontWeight: FontWeight.w500),
                                 ),
                                 trailing: Text(
-                                    '₹ ${order.amount.orderAmount + order.amount.deliveryCharge - order.amount.walletAmount}'),
+                                    '₹ ${order.amount.orderAmount + wOrderAmount + cOrderAmount + order.amount.deliveryCharge - order.amount.walletAmount}',
+                                    style: TextStyle(
+                                      color: CustomColors.alertRed,
+                                    )),
+                              ),
+                              ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                title: Text(
+                                  "Received Amount : ",
+                                  style: TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                trailing:
+                                    Text('₹ ${order.amount.receivedAmount}',
+                                        style: TextStyle(
+                                          color: Colors.green,
+                                        )),
                               ),
                             ],
                           ),

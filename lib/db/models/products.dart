@@ -347,4 +347,24 @@ class Products extends Model {
       throw err;
     }
   }
+
+  Future<bool> removeByID(String uuid) async {
+    try {
+      DocumentSnapshot snap = await getCollectionRef().document(uuid).get();
+
+      if (snap.exists) {
+        await snap.reference.delete();
+        return true;
+      } 
+
+      return false;
+    } catch (err) {
+      Analytics.sendAnalyticsEvent({
+        'type': 'product_remove_error',
+        'product_id': uuid,
+        'error': err.toString()
+      }, 'product');
+      return false;
+    }
+  }
 }

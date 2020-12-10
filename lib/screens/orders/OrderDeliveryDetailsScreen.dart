@@ -36,11 +36,18 @@ class OrderDeliveryDetails extends StatelessWidget {
 
   Widget getBody(BuildContext context) {
     double wOrderAmount = 0.00;
+    double cOrderAmount = 0.00;
 
     if (order.writtenOrders.length > 0 &&
         order.writtenOrders.first.name.trim().isNotEmpty) {
       order.writtenOrders.forEach((element) {
         wOrderAmount += element.price;
+      });
+    }
+
+    if (order.capturedOrders != null && order.capturedOrders.isNotEmpty) {
+      order.capturedOrders.forEach((element) {
+        cOrderAmount += element.price;
       });
     }
 
@@ -254,6 +261,14 @@ class OrderDeliveryDetails extends StatelessWidget {
                                   trailing: Text('₹ $wOrderAmount'),
                                 )
                               : Container(),
+                          (order.capturedOrders != null &&
+                                  order.capturedOrders.isNotEmpty)
+                              ? ListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  title: Text("Price for Captured List : "),
+                                  trailing: Text('₹ $cOrderAmount'),
+                                )
+                              : Container(),
                           ListTile(
                             contentPadding: EdgeInsets.zero,
                             title: Text("Wallet Amount : "),
@@ -273,7 +288,7 @@ class OrderDeliveryDetails extends StatelessWidget {
                                   fontWeight: FontWeight.w500),
                             ),
                             trailing: Text(
-                                '₹ ${order.amount.orderAmount + order.amount.deliveryCharge - order.amount.walletAmount}',
+                                '₹ ${order.amount.orderAmount + wOrderAmount + cOrderAmount + order.amount.deliveryCharge - order.amount.walletAmount}',
                                 style: TextStyle(
                                   color: CustomColors.alertRed,
                                 )),
@@ -281,14 +296,14 @@ class OrderDeliveryDetails extends StatelessWidget {
                           ListTile(
                             contentPadding: EdgeInsets.zero,
                             title: Text(
-                              "Paid Amount : ",
+                              "Received Amount : ",
                               style: TextStyle(
-                                  color: CustomColors.primary,
+                                  color: Colors.green,
                                   fontWeight: FontWeight.w500),
                             ),
-                            trailing: Text('₹ ${order.amount.paidAmount}',
+                            trailing: Text('₹ ${order.amount.receivedAmount}',
                                 style: TextStyle(
-                                  color: CustomColors.primary,
+                                  color: Colors.green,
                                 )),
                           ),
                         ],

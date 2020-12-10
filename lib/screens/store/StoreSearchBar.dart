@@ -6,6 +6,7 @@ import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class StoreSearchBar extends StatefulWidget {
   StoreSearchBar(this.storeID, this.storeName);
@@ -302,15 +303,25 @@ class RecentProductsWidget extends StatelessWidget {
                                       Products _p = await Products()
                                           .getByProductID(_ua.productID);
 
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProductDetailsScreen(_p),
-                                          settings:
-                                              RouteSettings(name: '/products'),
-                                        ),
-                                      );
+                                      if (_p != null) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ProductDetailsScreen(_p),
+                                            settings: RouteSettings(
+                                                name: '/products'),
+                                          ),
+                                        );
+                                      } else {
+                                        Navigator.pop(context);
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                'Error, Unable to Load Product!',
+                                            backgroundColor:
+                                                CustomColors.alertRed,
+                                            textColor: CustomColors.white);
+                                      }
                                     },
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
