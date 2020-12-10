@@ -4,7 +4,9 @@ import 'package:chipchop_seller/db/models/user_activity_tracker.dart';
 import 'package:chipchop_seller/screens/products/EditProducts.dart';
 import 'package:chipchop_seller/screens/products/ProductDetailsScreen.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class StoreProductsCard extends StatefulWidget {
@@ -153,23 +155,25 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                 ),
               ],
             ),
-            widget.product.brandName != null && widget.product.brandName.isNotEmpty ?
-            Row(
-              children: [
-                SizedBox(width: 5),
-                Flexible(
-                  child: Text(
-                    widget.product.brandName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: CustomColors.black,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                ),
-              ],
-            ) : Container(),
+            widget.product.brandName != null &&
+                    widget.product.brandName.isNotEmpty
+                ? Row(
+                    children: [
+                      SizedBox(width: 5),
+                      Flexible(
+                        child: Text(
+                          widget.product.brandName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: CustomColors.black,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(),
             Flexible(
               child: Text(
                 widget.product.name,
@@ -186,6 +190,8 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               InkWell(
                 child: Container(
+                  width: 35,
+                  height: 30,
                   decoration: BoxDecoration(
                     color: Colors.orange[300],
                     borderRadius: BorderRadius.all(
@@ -193,28 +199,10 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                     ),
                   ),
                   padding: EdgeInsets.all(4),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: CustomColors.grey,
-                        radius: 10,
-                        child: Icon(
-                          Icons.edit,
-                          color: CustomColors.white,
-                          size: 10.0,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        "Edit",
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    ],
+                  child: Icon(
+                    Icons.edit,
+                    color: CustomColors.black,
+                    size: 20.0,
                   ),
                 ),
                 onTap: () {
@@ -227,16 +215,53 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                   );
                 },
               ),
-              SizedBox(
-                width: 5,
+              InkWell(
+                child: Container(
+                  width: 35,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: CustomColors.alertRed,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5.0),
+                    ),
+                  ),
+                  padding: EdgeInsets.all(4),
+                  child: Icon(
+                    Icons.delete_forever,
+                    color: CustomColors.white,
+                    size: 22.0,
+                  ),
+                ),
+                onTap: () async {
+                  CustomDialogs.confirm(context, 'Confirm !',
+                      "Are You Sure to Remove this Product ?", () async {
+                    bool res = await Products().removeByID(widget.product.uuid);
+                    Navigator.pop(context);
+
+                    if (res) {
+                      Fluttertoast.showToast(
+                          msg: 'Removed Successfully',
+                          backgroundColor: CustomColors.primary,
+                          textColor: CustomColors.black);
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: 'Error, Unable to Remove now !',
+                          backgroundColor: CustomColors.alertRed,
+                          textColor: CustomColors.white);
+                    }
+                  }, () {
+                    Navigator.pop(context);
+                  });
+                },
               ),
               InkWell(
                 child: Container(
+                  height: 30,
                   decoration: BoxDecoration(
                     color:
                         widget.product.variants[int.parse(_variant)].isAvailable
-                            ? Colors.greenAccent
-                            : Colors.red[400],
+                            ? Colors.green
+                            : Colors.red[300],
                     borderRadius: BorderRadius.all(
                       Radius.circular(5.0),
                     ),
@@ -246,14 +271,14 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                     children: [
                       Icon(
                         FontAwesomeIcons.solidHandPointUp,
-                        color: CustomColors.grey,
+                        color: CustomColors.white,
                         size: 15,
                       ),
                       SizedBox(
                         width: 5,
                       ),
                       Text(
-                        "In Stock",
+                        "Stock",
                         style: TextStyle(
                           fontSize: 12.0,
                           fontWeight: FontWeight.bold,
