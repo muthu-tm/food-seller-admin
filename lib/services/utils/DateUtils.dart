@@ -13,18 +13,26 @@ class DateUtils {
     return dateFormatter.format(DateTime.fromMillisecondsSinceEpoch(epoch));
   }
 
+  static getTimeAsDateTimeObject(String time) {
+    DateFormat dateFormat = new DateFormat.Hm();
+    DateTime now = DateTime.now();
+    DateTime formattedTime = dateFormat.parse(time);
+    return new DateTime(
+        now.year, now.month, now.day, formattedTime.hour, formattedTime.minute);
+  }
+
   static String durationInMinutesToHoursAndMinutes(int minutes) {
-    var d = Duration(minutes:minutes);
+    var d = Duration(minutes: minutes);
     List<String> parts = d.toString().split(':');
     return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
-}
+  }
 
   static getTimeInMinutes(String time) {
     List<String> val = time.split(':');
     return (int.parse(val[0]) * 60) + int.parse(val[1]);
   }
 
-  static getCurrentTimeInMinutes(){
+  static getCurrentTimeInMinutes() {
     return (DateTime.now().hour * 60) + DateTime.now().minute;
   }
 
@@ -79,8 +87,7 @@ class DateUtils {
     return DateTime(dateTime.year, dateTime.month, dateTime.day, 0, 0, 0, 0, 0);
   }
 
-  static List<int> getDaysInBeteween(
-      DateTime startDate, DateTime endDate) {
+  static List<int> getDaysInBeteween(DateTime startDate, DateTime endDate) {
     List<int> days = [];
 
     for (int index = 0;
