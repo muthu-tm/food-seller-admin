@@ -288,7 +288,7 @@ class OrderDeliveryDetails extends StatelessWidget {
                                   fontWeight: FontWeight.w500),
                             ),
                             trailing: Text(
-                                '₹ ${order.amount.orderAmount + order.amount.deliveryCharge - order.amount.walletAmount}',
+                                '₹ ${order.amount.orderAmount + wOrderAmount + cOrderAmount + order.amount.deliveryCharge - order.amount.walletAmount}',
                                 style: TextStyle(
                                   color: CustomColors.alertRed,
                                 )),
@@ -298,12 +298,12 @@ class OrderDeliveryDetails extends StatelessWidget {
                             title: Text(
                               "Received Amount : ",
                               style: TextStyle(
-                                  color: CustomColors.primary,
+                                  color: Colors.green,
                                   fontWeight: FontWeight.w500),
                             ),
                             trailing: Text('₹ ${order.amount.receivedAmount}',
                                 style: TextStyle(
-                                  color: CustomColors.primary,
+                                  color: Colors.green,
                                 )),
                           ),
                         ],
