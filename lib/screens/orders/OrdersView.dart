@@ -26,6 +26,8 @@ class _OrderViewScreenState extends State<OrderViewScreen> {
   DateTime deliveryDate;
   String dContact = cachedLocalUser.getID();
 
+  double rAmount = 0.00;
+
   Map<String, String> _orderStatus = {
     "0": "Ordered",
     "1": "Confirmed",
@@ -48,9 +50,9 @@ class _OrderViewScreenState extends State<OrderViewScreen> {
     selectedDate = widget.order.delivery.expectedAt == null
         ? null
         : DateTime.fromMillisecondsSinceEpoch(widget.order.delivery.expectedAt);
-    deliveryDate = widget.order.delivery.expectedAt == null
-        ? DateTime.now()
-        : DateTime.fromMillisecondsSinceEpoch(widget.order.delivery.expectedAt);
+    deliveryDate = DateTime.now();
+
+    rAmount = widget.order.amount.receivedAmount ?? 0.00;
   }
 
   @override
@@ -66,9 +68,18 @@ class _OrderViewScreenState extends State<OrderViewScreen> {
         ),
         backgroundColor: CustomColors.primary,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          child: getBody(context),
+      body: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: SingleChildScrollView(
+          child: Container(
+            child: getBody(context),
+          ),
         ),
       ),
     );
@@ -85,6 +96,23 @@ class _OrderViewScreenState extends State<OrderViewScreen> {
   }
 
   Widget getBody(BuildContext context) {
+    double wOrderAmount = 0.00;
+    double cOrderAmount = 0.00;
+
+    if (widget.order.writtenOrders.length > 0 &&
+        widget.order.writtenOrders.first.name.trim().isNotEmpty) {
+      widget.order.writtenOrders.forEach((element) {
+        wOrderAmount += element.price;
+      });
+    }
+
+    if (widget.order.capturedOrders != null &&
+        widget.order.capturedOrders.isNotEmpty) {
+      widget.order.capturedOrders.forEach((element) {
+        cOrderAmount += element.price;
+      });
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -308,7 +336,7 @@ class _OrderViewScreenState extends State<OrderViewScreen> {
                     leading: Container(
                       width: 100,
                       child: Text(
-                        "Deliverred At",
+                        "Delivered At",
                         style: TextStyle(
                           fontSize: 14,
                         ),
@@ -333,10 +361,7 @@ class _OrderViewScreenState extends State<OrderViewScreen> {
                         ),
                       ),
                       format: format,
-                      initialValue: widget.order.delivery.expectedAt != null
-                          ? DateTime.fromMillisecondsSinceEpoch(
-                              widget.order.delivery.expectedAt)
-                          : null,
+                      initialValue: DateTime.now(),
                       onShowPicker: (context, currentValue) async {
                         final date = await showDatePicker(
                           context: context,
@@ -388,8 +413,7 @@ class _OrderViewScreenState extends State<OrderViewScreen> {
                     ),
                   ),
                   ListTile(
-                    leading:
-                        Container(width: 100, child: Text("Deliverred By")),
+                    leading: Container(width: 100, child: Text("Delivered By")),
                     title: TextFormField(
                       initialValue: deliverredBy,
                       textAlign: TextAlign.start,
@@ -409,8 +433,7 @@ class _OrderViewScreenState extends State<OrderViewScreen> {
                     ),
                   ),
                   ListTile(
-                    leading:
-                        Container(width: 100, child: Text("Deliverred To")),
+                    leading: Container(width: 100, child: Text("Delivered To")),
                     title: TextFormField(
                       initialValue: deliverredTo,
                       textAlign: TextAlign.start,
@@ -429,66 +452,113 @@ class _OrderViewScreenState extends State<OrderViewScreen> {
                       },
                     ),
                   ),
+                  ListTile(
+                    leading: Container(
+                        width: 100, child: Text("Total Billed Amount")),
+                    title: Container(
+                      child: TextFormField(
+                        initialValue:
+                            '₹ ${widget.order.amount.orderAmount + wOrderAmount + cOrderAmount + widget.order.amount.deliveryCharge - widget.order.amount.walletAmount}',
+                        textAlign: TextAlign.start,
+                        autofocus: false,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          fillColor: CustomColors.lightGrey,
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: CustomColors.lightGreen),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading:
+                        Container(width: 100, child: Text("Received Amount")),
+                    title: Container(
+                      child: TextFormField(
+                        initialValue: rAmount.toStringAsFixed(2),
+                        textAlign: TextAlign.start,
+                        autofocus: false,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          fillColor: CustomColors.lightGrey,
+                          prefix: Text('₹'),
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: CustomColors.lightGreen),
+                          ),
+                        ),
+                        onChanged: (val) {
+                          this.rAmount = double.parse(val);
+                        },
+                      ),
+                    ),
+                  ),
                 ],
               )
             : Container(),
-        ListTile(
-          leading: Container(
-            width: 100,
-            child: Text(
-              "Expected Delivery Time",
-              style: TextStyle(
-                fontSize: 14,
-              ),
-            ),
-          ),
-          title: DateTimeField(
-            decoration: InputDecoration(
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              suffixIcon:
-                  Icon(Icons.date_range, color: CustomColors.blue, size: 30),
-              labelText: "Date & Time",
-              labelStyle: TextStyle(
-                fontSize: 12,
-                color: CustomColors.blue,
-              ),
-              fillColor: CustomColors.lightGrey,
-              filled: true,
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: CustomColors.white),
-              ),
-            ),
-            format: format,
-            initialValue: widget.order.delivery.expectedAt != null
-                ? DateTime.fromMillisecondsSinceEpoch(
-                    widget.order.delivery.expectedAt)
-                : null,
-            onShowPicker: (context, currentValue) async {
-              final date = await showDatePicker(
-                context: context,
-                firstDate: DateTime.now(),
-                initialDate: currentValue ?? DateTime.now(),
-                lastDate: DateTime.now().add(
-                  Duration(days: 30),
+        _currentStatus != "5"
+            ? ListTile(
+                leading: Container(
+                  width: 100,
+                  child: Text(
+                    "Expected Delivery Time",
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
                 ),
-              );
+                title: DateTimeField(
+                  decoration: InputDecoration(
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    suffixIcon: Icon(Icons.date_range,
+                        color: CustomColors.blue, size: 30),
+                    labelText: "Date & Time",
+                    labelStyle: TextStyle(
+                      fontSize: 12,
+                      color: CustomColors.blue,
+                    ),
+                    fillColor: CustomColors.lightGrey,
+                    filled: true,
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: CustomColors.white),
+                    ),
+                  ),
+                  format: format,
+                  initialValue: widget.order.delivery.expectedAt != null
+                      ? DateTime.fromMillisecondsSinceEpoch(
+                          widget.order.delivery.expectedAt)
+                      : null,
+                  onShowPicker: (context, currentValue) async {
+                    final date = await showDatePicker(
+                      context: context,
+                      firstDate: DateTime.now(),
+                      initialDate: currentValue ?? DateTime.now(),
+                      lastDate: DateTime.now().add(
+                        Duration(days: 30),
+                      ),
+                    );
 
-              if (date != null) {
-                final time = await showTimePicker(
-                  context: context,
-                  initialTime:
-                      TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-                );
-                selectedDate = DateTimeField.combine(date, time);
-                return selectedDate;
-              } else {
-                return currentValue;
-              }
-            },
-          ),
-        ),
+                    if (date != null) {
+                      final time = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.fromDateTime(
+                            currentValue ?? DateTime.now()),
+                      );
+                      selectedDate = DateTimeField.combine(date, time);
+                      return selectedDate;
+                    } else {
+                      return currentValue;
+                    }
+                  },
+                ),
+              )
+            : Container(),
         ListTile(
           leading: Container(
             width: 100,
@@ -537,8 +607,8 @@ class _OrderViewScreenState extends State<OrderViewScreen> {
 
               if (widget.order.status.toString() != _currentStatus &&
                   _currentStatus == "5") {
-                await widget.order.deliverOrder(widget.order.userNumber,
-                    deliveryDate, deliveryNotes, deliverredTo, deliverredBy, dContact);
+                await widget.order.deliverOrder(rAmount, deliveryDate,
+                    deliveryNotes, deliverredTo, deliverredBy, dContact);
               } else {
                 await widget.order.updateDeliveryDetails(
                     widget.order.userNumber,

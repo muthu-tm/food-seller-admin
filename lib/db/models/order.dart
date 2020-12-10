@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:chipchop_seller/db/models/order_captured_image.dart';
 import 'package:chipchop_seller/db/models/order_status.dart';
 import 'package:chipchop_seller/db/models/order_written_details.dart';
 import 'package:chipchop_seller/services/analytics/analytics.dart';
@@ -31,8 +32,8 @@ class Order {
   int totalProducts;
   @JsonKey(name: 'products', nullable: false)
   List<OrderProduct> products;
-  @JsonKey(name: 'order_images', defaultValue: [""])
-  List<String> orderImages;
+  @JsonKey(name: 'captured_order', defaultValue: [""])
+  List<CapturedOrders> capturedOrders;
   @JsonKey(name: 'written_orders', nullable: false)
   List<WrittenOrders> writtenOrders;
   @JsonKey(name: 'customer_notes', defaultValue: "")
@@ -162,20 +163,26 @@ class Order {
   }
 
   String getDeliveryType() {
-    if (this.delivery.deliveryType == 0) {
-      return "Pickup from Store";
-    } else if (this.delivery.deliveryType == 1) {
-      return "Instant Delivery";
-    } else if (this.delivery.deliveryType == 2) {
-      return "Same-Day Delivery";
-    } else if (this.delivery.deliveryType == 3) {
-      return "Scheduled Delivery";
-    } else {
-      return "Pickup from Store";
+    switch (this.delivery.deliveryType) {
+      case 0:
+        return "Pickup From Store";
+        break;
+      case 1:
+        return "Instant Delivery";
+        break;
+      case 2:
+        return "Standard Delivery";
+        break;
+      case 3:
+        return "Scheduled Delivery";
+        break;
+      default:
+        return "Standard Delivery";
+        break;
     }
   }
 
-  Future<void> deliverOrder(String buyerID, DateTime dateTime, String notes,
+  Future<void> deliverOrder(double rAmount, DateTime dateTime, String notes,
       String deliverredTo, String deliverredBy, String number) async {
     try {
       List<OrderStatus> _newStatus = this.statusDetails;
@@ -188,11 +195,15 @@ class Order {
         }),
       );
 
-      await this.getCollectionRef(buyerID).document(this.uuid).updateData(
+      await this
+          .getCollectionRef(this.userNumber)
+          .document(this.uuid)
+          .updateData(
         {
+          'updated_at': DateTime.now(),
           'status_details': _newStatus?.map((e) => e?.toJson())?.toList(),
           'status': 5,
-          'updated_at': DateTime.now(),
+          'amount.received_amount': rAmount,
           'delivery.delivered_at':
               dateTime == null ? null : dateTime.millisecondsSinceEpoch,
           'delivery.delivered_by': deliverredBy,
@@ -281,16 +292,36 @@ class Order {
     );
   }
 
-  Future<void> updateAmountDetails(
-      String buyerID, double oAmount, double dAmount, double rAmount) async {
+  Future<void> updateCapturedAmount(List<CapturedOrders> cOrder) async {
     try {
-      await this.getCollectionRef(buyerID).document(this.uuid).updateData(
+      await this
+          .getCollectionRef(this.userNumber)
+          .document(this.uuid)
+          .updateData(
         {
           'updated_at': DateTime.now(),
-          'amount.order_amount': oAmount,
-          'amount.delivery_charge': dAmount,
-          'delivery.delivery_charge': dAmount,
-          'amount.paid_amount': rAmount
+          'captured_order': cOrder?.map((e) => e?.toJson())?.toList(),
+        },
+      );
+    } catch (err) {
+      Analytics.sendAnalyticsEvent({
+        'type': 'order_amount_update_error',
+        'order_id': this.uuid,
+        'error': err.toString()
+      }, 'order');
+      throw err;
+    }
+  }
+
+  Future<void> updateWrittenAmount(List<WrittenOrders> wOrder) async {
+    try {
+      await this
+          .getCollectionRef(this.userNumber)
+          .document(this.uuid)
+          .updateData(
+        {
+          'updated_at': DateTime.now(),
+          'written_orders': wOrder?.map((e) => e?.toJson())?.toList(),
         },
       );
     } catch (err) {
