@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:chipchop_seller/screens/home/HomeScreen.dart';
+import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_seller/db/models/chipchop_config.dart';
@@ -36,9 +37,7 @@ class _UpdateAppState extends State<UpdateApp> {
       return;
       
     url = conf.appURL;
-
-    await sPref.setInt('referral_bonus', conf.referralBonus ?? 25);
-    await sPref.setInt('registration_bonus', conf.registrationBonus ?? 25);
+    noImagePlaceholder = conf.defaultImage;
 
     Version minAppVersion = Version.parse(conf.minVersion);
     Version latestAppVersion = Version.parse(conf.cVersion);

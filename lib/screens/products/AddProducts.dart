@@ -43,8 +43,8 @@ class _AddProductState extends State<AddProduct> {
     TextEditingController(text: "0.00")
   ];
 
-  List<String> imagePaths = [no_image_placeholder];
-  String primaryImage = no_image_placeholder;
+  List<String> imagePaths = [noImagePlaceholder];
+  String primaryImage = noImagePlaceholder;
 
   Map<String, String> _stores = {"0": "Choose your Store"};
   Map<String, String> _types = {"0": "Choose Product Type"};
@@ -707,10 +707,10 @@ class _AddProductState extends State<AddProduct> {
                                       }
 
                                       if (imagePaths[index] ==
-                                          no_image_placeholder) {
+                                          noImagePlaceholder) {
                                         setState(() {
                                           imagePaths
-                                              .remove(no_image_placeholder);
+                                              .remove(noImagePlaceholder);
                                         });
                                         return;
                                       }

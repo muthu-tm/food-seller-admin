@@ -36,7 +36,7 @@ class _EditProductsState extends State<EditProducts> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   List<String> imagePaths = [];
-  String primaryImage = no_image_placeholder;
+  String primaryImage = noImagePlaceholder;
 
   List<ProductVariants> _variants = [];
   List<ProductDescription> _descs = [ProductDescription.fromJson({})];
@@ -737,10 +737,10 @@ class _EditProductsState extends State<EditProducts> {
                                       }
 
                                       if (imagePaths[index] ==
-                                          no_image_placeholder) {
+                                          noImagePlaceholder) {
                                         setState(() {
                                           imagePaths
-                                              .remove(no_image_placeholder);
+                                              .remove(noImagePlaceholder);
                                         });
                                         return;
                                       }

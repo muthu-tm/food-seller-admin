@@ -73,7 +73,7 @@ class Products extends Model {
   List<String> getProductImages() {
     if (this.productImages.isEmpty) {
       return [
-        no_image_placeholder.replaceFirst(
+        noImagePlaceholder.replaceFirst(
             firebase_storage_path, image_kit_path + ik_medium_size)
       ];
     } else {
@@ -86,7 +86,7 @@ class Products extends Model {
         return images;
       } else
         return [
-          no_image_placeholder.replaceFirst(
+          noImagePlaceholder.replaceFirst(
               firebase_storage_path, image_kit_path + ik_medium_size)
         ];
     }
@@ -155,17 +155,12 @@ class Products extends Model {
   }
 
   String getProductImage() {
-    if (this.productImages.isEmpty) {
-      return no_image_placeholder.replaceFirst(
+    if (image != null && image.trim() != "")
+      return image.replaceFirst(
           firebase_storage_path, image_kit_path + ik_medium_size);
-    } else {
-      if (this.productImages.first != null && this.productImages.first != "")
-        return this.productImages.first.replaceFirst(
-            firebase_storage_path, image_kit_path + ik_medium_size);
-      else
-        return no_image_placeholder.replaceFirst(
-            firebase_storage_path, image_kit_path + ik_medium_size);
-    }
+    else
+      return noImagePlaceholder.replaceFirst(
+          firebase_storage_path, image_kit_path + ik_medium_size);
   }
 
   Stream<QuerySnapshot> streamProducts(String storeID) {
@@ -355,7 +350,7 @@ class Products extends Model {
       if (snap.exists) {
         await snap.reference.delete();
         return true;
-      } 
+      }
 
       return false;
     } catch (err) {

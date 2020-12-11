@@ -40,8 +40,8 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  List<String> imagePaths = [no_image_placeholder];
-  String primaryImage = no_image_placeholder;
+  List<String> imagePaths = [noImagePlaceholder];
+  String primaryImage = noImagePlaceholder;
 
   Address updatedAddress = Address();
   String storeName = '';
@@ -482,10 +482,10 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                                           }
 
                                           if (imagePaths[index] ==
-                                              no_image_placeholder) {
+                                              noImagePlaceholder) {
                                             setState(() {
                                               imagePaths
-                                                  .remove(no_image_placeholder);
+                                                  .remove(noImagePlaceholder);
                                             });
                                             return;
                                           }
