@@ -1,4 +1,3 @@
-import 'package:chipchop_seller/screens/home/HomeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_seller/db/models/user.dart';
@@ -281,9 +280,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (BuildContext context) => UpdateApp(
-          child: HomeScreen(),
-        ),
+        builder: (BuildContext context) => UpdateApp(),
       ),
       (Route<dynamic> route) => false,
     );

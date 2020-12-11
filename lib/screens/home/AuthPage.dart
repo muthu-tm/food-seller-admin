@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/user.dart';
-import 'package:chipchop_seller/screens/Home/HomeScreen.dart';
 import 'package:chipchop_seller/screens/Home/LoginPage.dart';
 import 'package:chipchop_seller/screens/Home/MobileSigninPage.dart';
 import 'package:chipchop_seller/screens/Home/update_app.dart';
@@ -12,7 +11,6 @@ import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_seller/services/controllers/auth/auth_controller.dart';
 import 'package:chipchop_seller/services/utils/hash_generator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -481,9 +479,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
     } else {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (BuildContext context) => UpdateApp(
-            child: HomeScreen(),
-          ),
+          builder: (BuildContext context) => UpdateApp(),
         ),
         (Route<dynamic> route) => false,
       );

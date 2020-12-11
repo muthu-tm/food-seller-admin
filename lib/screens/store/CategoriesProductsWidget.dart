@@ -50,7 +50,7 @@ class _CategoriesProductsWidgetState extends State<CategoriesProductsWidget> {
           } else {
             children = Container(
               padding: EdgeInsets.all(10),
-              width: MediaQuery.of(context).size.width * 0.9,
+              width: MediaQuery.of(context).size.width,
               alignment: Alignment.center,
               child: Text(
                 "No Products added By Store !!",

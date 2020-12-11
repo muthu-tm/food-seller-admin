@@ -1,4 +1,3 @@
-import 'package:chipchop_seller/screens/home/HomeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,8 +57,7 @@ class _LoginPageState extends State<LoginPage> {
         ? Scaffold(
             key: _scaffoldKey,
             backgroundColor: CustomColors.lightGrey,
-            bottomNavigationBar: 
-            Text(
+            bottomNavigationBar: Text(
               "Powered by Fourcup Inc.",
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -264,7 +262,6 @@ class _LoginPageState extends State<LoginPage> {
                     AppLocalizations.of(context).translate('no_account'),
                     style: TextStyle(
                       fontSize: 13.0,
-                      
                       color: CustomColors.alertRed,
                       fontWeight: FontWeight.bold,
                     ),
@@ -308,7 +305,6 @@ class _LoginPageState extends State<LoginPage> {
                 label: Text(
                   AppLocalizations.of(context).translate('help_support'),
                   style: TextStyle(
-                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.blue,
                     fontSize: 16.0,
@@ -396,9 +392,7 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (BuildContext context) => UpdateApp(
-              child: HomeScreen(),
-            ),
+            builder: (BuildContext context) => UpdateApp(),
           ),
           (Route<dynamic> route) => false,
         );

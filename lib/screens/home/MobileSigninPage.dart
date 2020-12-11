@@ -1,4 +1,3 @@
-import 'package:chipchop_seller/screens/home/HomeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -446,9 +445,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
 
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (BuildContext context) => UpdateApp(
-              child: HomeScreen(),
-            ),
+            builder: (BuildContext context) => UpdateApp(),
           ),
           (Route<dynamic> route) => false,
         );

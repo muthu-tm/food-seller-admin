@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chipchop_seller/screens/home/HomeScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_seller/db/models/chipchop_config.dart';
@@ -11,9 +12,6 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateApp extends StatefulWidget {
-  final Widget child;
-
-  UpdateApp({this.child});
 
   @override
   _UpdateAppState createState() => _UpdateAppState();
@@ -138,6 +136,6 @@ class _UpdateAppState extends State<UpdateApp> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.child;
+    return HomeScreen();
   }
 }

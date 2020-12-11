@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/product_categories.dart';
+import 'package:chipchop_seller/db/models/product_sub_categories.dart';
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/store/StoreCategoriesScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
@@ -53,10 +55,13 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
             else
               return SliverStickyHeader(
                 header: Container(
-                  padding: EdgeInsets.all(5.0),
-                  child: Text(
-                    "Available Categories",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Available Categories",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
                   ),
                   color: Colors.white,
                 ),
@@ -71,28 +76,35 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
                     (context, index) {
                       ProductCategories _c = snapshot.data[index];
                       return InkWell(
-                        onTap: () {
-                          Navigator.push(
+                        onTap: () async {
+                          CustomDialogs.actionWaiting(context);
+
+                          List<ProductSubCategories> subCat =
+                              await ProductSubCategories()
+                                  .getSubCategoriesForIDs(
+                                      _c.uuid,
+                                      widget.store.availProductSubCategories
+                                          .map((e) => e.uuid)
+                                          .toList());
+
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => StoreCategoriesScreen(
-                                  widget.store, _c.uuid, _c.name),
+                                  subCat, widget.store, _c.uuid, _c.name),
                             ),
                           );
                         },
-                        child: Card(
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                              color: CustomColors.white,
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.0),
                             ),
+                            color: CustomColors.white,
+                          ),
+                          alignment: Alignment.centerLeft,
+                          child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -126,13 +138,17 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
                                     ),
                                   ),
                                 ),
-                                Text(
-                                  _c.name,
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: CustomColors.black, fontSize: 12),
+                                Padding(
+                                  padding: EdgeInsets.all(5.0),
+                                  child: Text(
+                                    _c.name,
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: CustomColors.black,
+                                        fontSize: 12),
+                                  ),
                                 )
                               ],
                             ),

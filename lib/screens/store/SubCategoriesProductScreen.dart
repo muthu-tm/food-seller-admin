@@ -32,7 +32,7 @@ class _SubCategoriesProductsWidgetState
       builder: (BuildContext context, AsyncSnapshot<List<Products>> snapshot) {
         Widget children;
 
-        if (snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data.isNotEmpty) {
             children = Container(
               child: GridView.count(
@@ -51,7 +51,7 @@ class _SubCategoriesProductsWidgetState
           } else {
             children = Container(
               padding: EdgeInsets.all(10),
-              width: MediaQuery.of(context).size.width * 0.9,
+              width: MediaQuery.of(context).size.width,
               alignment: Alignment.center,
               child: Text(
                 "No Products added By Store !!",
