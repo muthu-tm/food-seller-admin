@@ -47,42 +47,71 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              height: 60,
-              padding: const EdgeInsets.all(5.0),
-              child: ListView.builder(
-                primary: true,
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: widget.subCategories.length,
-                padding: EdgeInsets.all(5),
-                itemBuilder: (BuildContext context, int index) {
-                  ProductSubCategories _sc = widget.subCategories[index];
-                  return Padding(
-                    padding: EdgeInsets.only(left: 5.0, right: 5),
-                    child: ActionChip(
-                      elevation: 6.0,
-                      backgroundColor: _subCategoryID == _sc.uuid
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: EdgeInsets.only(left: 10.0),
+                child: Row(
+                  children: [
+                    widget.subCategories.length > 0 ? ActionChip(
+                      elevation: 4.0,
+                      backgroundColor: _subCategoryID == ""
                           ? CustomColors.primary
                           : Colors.white,
                       onPressed: () {
                         setState(() {
-                          _subCategoryID = _sc.uuid;
+                          _subCategoryID = "";
                         });
                       },
                       label: Text(
-                        _sc.name,
-                        maxLines: 2,
+                        "All",
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                            color: _subCategoryID == _sc.uuid
-                                ? Colors.black54
-                                : CustomColors.black),
+                            color: CustomColors.black),
+                      ),
+                    ) : Container(),
+                    Container(
+                      height: 50,
+                      padding: EdgeInsets.only(right: 5),
+                      child: ListView.builder(
+                        primary: false,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: widget.subCategories.length,
+                        padding: EdgeInsets.all(5),
+                        itemBuilder: (BuildContext context, int index) {
+                          ProductSubCategories _sc =
+                              widget.subCategories[index];
+                          return Padding(
+                            padding: EdgeInsets.only(left: 5.0, right: 5),
+                            child: ActionChip(
+                              elevation: 4.0,
+                              backgroundColor: _subCategoryID == _sc.uuid
+                                  ? CustomColors.primary
+                                  : Colors.white,
+                              onPressed: () {
+                                setState(() {
+                                  _subCategoryID = _sc.uuid;
+                                });
+                              },
+                              label: Text(
+                                _sc.name,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: _subCategoryID == _sc.uuid
+                                        ? Colors.black54
+                                        : CustomColors.black),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  );
-                },
+                  ],
+                ),
               ),
             ),
             _subCategoryID.isEmpty

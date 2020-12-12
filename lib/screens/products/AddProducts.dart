@@ -156,6 +156,13 @@ class _AddProductState extends State<AddProduct> {
         return;
       }
 
+      if (_selectedCategory == "0") {
+        _scaffoldKey.currentState.showSnackBar(
+          CustomSnackBar.errorSnackBar("Please select Product Category!", 2),
+        );
+        return;
+      }
+
       if (_selectedStore == "0") {
         _scaffoldKey.currentState.showSnackBar(
           CustomSnackBar.errorSnackBar("Please select your store!", 2),
