@@ -34,7 +34,7 @@ class ProductsHome extends StatelessWidget {
                     ),
                     child: ExpansionTile(
                       backgroundColor: CustomColors.lightGrey,
-                      title: Text("View Products"),
+                      title: Text("View & Edit Products"),
                       children: [getStores(context)],
                     ),
                   ),
@@ -58,7 +58,7 @@ class ProductsHome extends StatelessWidget {
                           ),
                         );
                       },
-                      leading: Text("Add Product"),
+                      leading: Text("Add Products"),
                       trailing: Icon(
                         Icons.arrow_forward_ios,
                         size: 15,
