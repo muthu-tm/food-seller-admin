@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/db/models/user_activity_tracker.dart';
 import 'package:chipchop_seller/screens/products/ProductDetailsScreen.dart';
+import 'package:chipchop_seller/screens/products/ProductWidget.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
@@ -103,93 +104,8 @@ class _StoreSearchBarState extends State<StoreSearchBar> {
                       primary: false,
                       itemCount: snapshot.data.length,
                       itemBuilder: (BuildContext context, int index) {
-                        Products product =
-                            Products.fromJson(snapshot.data[index]);
-                        return Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                              color: CustomColors.white,
-                            ),
-                            child: InkWell(
-                              onTap: () async {
-                                UserActivityTracker _activity =
-                                    UserActivityTracker();
-                                _activity.keywords = "";
-                                _activity.storeID = product.storeID;
-                                _activity.productID = product.uuid;
-                                _activity.productName = product.name;
-                                _activity.refImage = product.getProductImage();
-                                _activity.type = 2;
-                                _activity.create();
-
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        ProductDetailsScreen(product),
-                                    settings: RouteSettings(
-                                        name: '/settings/products/view'),
-                                  ),
-                                );
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.all(10.0),
-                                    child: CachedNetworkImage(
-                                      imageUrl: product.getProductImage(),
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        width: 70,
-                                        height: 70,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(5.0),
-                                          ),
-                                          shape: BoxShape.rectangle,
-                                          image: DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image: imageProvider),
-                                        ),
-                                      ),
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          CircularProgressIndicator(
-                                              value: downloadProgress.progress),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(
-                                        Icons.error,
-                                        size: 35,
-                                      ),
-                                      fadeOutDuration: Duration(seconds: 1),
-                                      fadeInDuration: Duration(seconds: 2),
-                                    ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        product.name,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: CustomColors.blue,
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                        return ProductWidget(
+                          Products.fromJson(snapshot.data[index]),
                         );
                       },
                     );

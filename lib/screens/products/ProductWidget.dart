@@ -19,9 +19,13 @@ class ProductWidget extends StatefulWidget {
 class _ProductWidgetState extends State<ProductWidget> {
   String _variant = "0";
 
+  List<bool> inStock = [];
+
   @override
   void initState() {
     super.initState();
+
+    inStock = widget.product.variants.map((e) => e.isAvailable).toList();
   }
 
   @override
@@ -259,8 +263,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                       InkWell(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: widget.product.variants[int.parse(_variant)]
-                                    .isAvailable
+                            color: inStock[int.parse(_variant)]
                                 ? Colors.greenAccent
                                 : Colors.red[400],
                             borderRadius: BorderRadius.all(
@@ -289,11 +292,14 @@ class _ProductWidgetState extends State<ProductWidget> {
                           ),
                         ),
                         onTap: () async {
+                          bool _status = !widget.product
+                              .variants[int.parse(_variant)].isAvailable;
                           await widget.product.updateProductStatus(
-                              widget.product.uuid,
-                              _variant,
-                              !widget.product.variants[int.parse(_variant)]
-                                  .isAvailable);
+                              widget.product.uuid, _variant, _status);
+
+                          setState(() {
+                            inStock[int.parse(_variant)] = _status;
+                          });
                         },
                       ),
                     ],
