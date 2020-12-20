@@ -30,10 +30,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
 
   double wOrderAmount = 0.00;
   double cOrderAmount = 0.00;
+  bool isChatPressed;
 
   @override
   void initState() {
     super.initState();
+    isChatPressed = false;
   }
 
   @override
@@ -53,29 +55,42 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: CustomColors.primary,
-        onPressed: () {
-          return _scaffoldKey.currentState.showBottomSheet(
-            (context) {
-              return Builder(
-                builder: (BuildContext childContext) {
-                  return Container(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    decoration: BoxDecoration(
-                      color: CustomColors.lightGrey,
-                      border: Border.symmetric(
-                          horizontal: BorderSide(color: CustomColors.primary)),
-                    ),
-                    child: OrderChatScreen(
-                      buyerID: widget.order.userNumber,
-                      orderUUID: widget.order.uuid,
-                    ),
-                  );
-                },
-              );
-            },
-          );
-        },
-        child: Icon(Icons.question_answer_outlined, color: CustomColors.black),
+        onPressed: isChatPressed
+            ? () {
+                setState(() {
+                  isChatPressed = false;
+                });
+                Navigator.of(context).pop();
+              }
+            : () {
+                setState(() {
+                  isChatPressed = true;
+                });
+                return _scaffoldKey.currentState.showBottomSheet(
+                  (context) {
+                    return Builder(
+                      builder: (BuildContext childContext) {
+                        return Container(
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          decoration: BoxDecoration(
+                            color: CustomColors.lightGrey,
+                            border: Border.symmetric(
+                                horizontal:
+                                    BorderSide(color: CustomColors.primary)),
+                          ),
+                          child: OrderChatScreen(
+                            buyerID: widget.order.userNumber,
+                            orderUUID: widget.order.uuid,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+        child: isChatPressed
+            ? Icon(Icons.close, color: CustomColors.black)
+            : Icon(Icons.question_answer_outlined, color: CustomColors.black),
       ),
       body: GestureDetector(
         onTap: () {

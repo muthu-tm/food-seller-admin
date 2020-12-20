@@ -68,11 +68,12 @@ class LocationPickerState extends State<LocationPicker> {
           widget.store.geoPoint = geoData;
           try {
             widget.store.create();
-            Navigator.of(context).push(
+            Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (BuildContext context) => HomeScreen(),
-                settings: RouteSettings(name: '/'),
+                builder: (BuildContext context) => HomeScreen(0),
+                settings: RouteSettings(name: '/home'),
               ),
+              (Route<dynamic> route) => false,
             );
           } catch (err) {
             _scaffoldKey.currentState.showSnackBar(

@@ -10,8 +10,6 @@ import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../app_localizations.dart';
-
 class EditLocationPicker extends StatefulWidget {
   final Store store;
 
@@ -26,7 +24,6 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
   GoogleMapController mapController;
   GeoPointData geoData;
   Set<Marker> _markers = {};
-  String searchKey = "";
   Geoflutterfire geo = Geoflutterfire();
 
   @override
@@ -66,35 +63,74 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
         backgroundColor: CustomColors.primary,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.alertRed,
-        onPressed: () async {
-          if (geoData == null || geoData.geoHash.isEmpty) {
-            _scaffoldKey.currentState.showSnackBar(
-              CustomSnackBar.errorSnackBar(
-                  "Please PIN your location correctly!", 2),
-            );
-            return;
-          }
-          try {
-            await widget.store.updateLocation(geoData);
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => HomeScreen(),
-                settings: RouteSettings(name: '/'),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          InkWell(
+            onTap: () async {
+              if (geoData == null || geoData.geoHash.isEmpty) {
+                _scaffoldKey.currentState.showSnackBar(
+                  CustomSnackBar.errorSnackBar(
+                      "Please PIN your location correctly!", 2),
+                );
+                return;
+              }
+              try {
+                await widget.store.updateLocation(geoData);
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => HomeScreen(0),
+                    settings: RouteSettings(name: '/home'),
+                  ),
+                  (Route<dynamic> route) => false,
+                );
+              } catch (err) {
+                _scaffoldKey.currentState.showSnackBar(
+                  CustomSnackBar.errorSnackBar(
+                      "Sorry, Unable to update your store now. Please try again later!",
+                      2),
+                );
+              }
+            },
+            child: Container(
+              height: 40,
+              width: 120,
+              padding: EdgeInsets.all(10),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: CustomColors.alertRed,
+                  border: Border.all(color: CustomColors.black),
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: Text(
+                "Update",
+                style: TextStyle(color: CustomColors.white),
               ),
-            );
-          } catch (err) {
-            _scaffoldKey.currentState.showSnackBar(
-              CustomSnackBar.errorSnackBar(
-                  "Sorry, Unable to update your store now. Please try again later!",
-                  2),
-            );
-          }
-        },
-        label: Text(
-          "Update Location",
-        ),
+            ),
+          ),
+          SizedBox(width: 10),
+          InkWell(
+            onTap: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => HomeScreen(0),
+                  settings: RouteSettings(name: '/home'),
+                ),
+                (Route<dynamic> route) => false,
+              );
+            },
+            child: Container(
+              height: 40,
+              width: 100,
+              padding: EdgeInsets.all(10),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: CustomColors.primary,
+                  border: Border.all(color: CustomColors.black),
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: Text("Skip"),
+            ),
+          )
+        ],
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -125,30 +161,26 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
               left: 10,
               right: 80,
               child: Card(
-                elevation: 5.0,
-                color: CustomColors.white,
-                child: TextField(
-                  textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context)
-                        .translate('hint_search_with_picode'),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(5),
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () async {
-                        if (searchKey != "") await _searchAndNavigate();
-                      },
-                    ),
-                  ),
-                  autofocus: false,
-                  onChanged: (val) {
-                    setState(
-                      () {
-                        searchKey = val;
-                      },
-                    );
-                  },
+                elevation: 2,
+                child: Container(
+                  color: CustomColors.white,
+                  alignment: Alignment.topCenter,
+                  child: TextFormField(
+                      textAlignVertical: TextAlignVertical.center,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.search,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: "Search",
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(5),
+                      ),
+                      autofocus: false,
+                      onFieldSubmitted: (searchKey) async {
+                        if (searchKey != "")
+                          await _searchAndNavigate(searchKey);
+                      }),
                 ),
               ),
             ),
@@ -158,7 +190,7 @@ class _EditLocationPickerState extends State<EditLocationPicker> {
     );
   }
 
-  _searchAndNavigate() async {
+  _searchAndNavigate(String searchKey) async {
     try {
       List<Placemark> marks =
           await Geolocator().placemarkFromAddress(searchKey);

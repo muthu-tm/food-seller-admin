@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:chipchop_seller/db/models/product_description.dart';
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/db/models/store.dart';
@@ -9,6 +7,7 @@ import 'package:chipchop_seller/screens/store/StoreProfileWidget.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/screens/utils/ReadMoreText.dart';
 import 'package:flutter/material.dart';
 
 import '../../db/models/products.dart';
@@ -25,11 +24,12 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     with SingleTickerProviderStateMixin {
-  TabController _controller;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   String _variants = "0";
   Store store;
 
+  TabController _controller;
   List<Widget> list = [
     Tab(
       text: "From Store",
@@ -52,6 +52,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomColors.lightGrey,
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: CustomColors.primary,
         elevation: 0,
@@ -65,13 +66,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
   }
 
   Widget getBody(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double abovePadding = MediaQuery.of(context).padding.top;
+    double appBarHeight = AppBar().preferredSize.height;
+    double remainingHeight = screenHeight - abovePadding - appBarHeight;
+
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: EdgeInsets.all(10),
-            child: CarouselIndicatorSlider(widget.product.getProductImages()),
+            child: CarouselIndicatorSlider(
+                widget.product.getProductImages(), (remainingHeight) / 2),
           ),
           widget.product.brandName != null &&
                   widget.product.brandName.isNotEmpty
@@ -93,8 +100,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               child: Text(
                 widget.product.name,
                 style: TextStyle(
-                    color: CustomColors.blue,
-                    fontSize: 16,
+                    color: CustomColors.black,
+                    fontSize: 20,
                     fontWeight: FontWeight.w700),
               ),
             ),
@@ -103,12 +110,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                   widget.product.shortDetails.isNotEmpty
               ? Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Text(
+                  child: ReadMoreText(
                     widget.product.shortDetails,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: CustomColors.black,
-                    ),
+                    trimLines: 3,
+                    colorClickableText: Colors.redAccent,
+                    trimMode: TrimMode.Line,
+                    trimCollapsedText: '... read more',
+                    trimExpandedText: ' read less',
                   ),
                 )
               : Container(),
@@ -322,24 +330,28 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               desc.images != null && desc.images.isNotEmpty
                   ? CarouselIndicatorSlider(desc.images)
                   : Container(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Text(
-                      desc.title,
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        desc.title,
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      desc.description,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 14),
+                    Flexible(
+                      child: Text(
+                        desc.description,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 13),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

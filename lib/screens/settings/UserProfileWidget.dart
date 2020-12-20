@@ -156,7 +156,7 @@ class UserProfileWidget extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => ChangeSecret(),
                             settings: RouteSettings(
-                                name: '/settings/user/secret/edit'),
+                                name: '/settings/user/secret'),
                           ),
                         );
                       }

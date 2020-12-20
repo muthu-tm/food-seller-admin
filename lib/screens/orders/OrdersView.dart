@@ -1,5 +1,6 @@
 import 'package:chipchop_seller/db/models/order.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
+import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:chipchop_seller/services/utils/DateUtils.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
@@ -605,6 +606,8 @@ class _OrderViewScreenState extends State<OrderViewScreen> {
                 return;
               }
 
+              CustomDialogs.actionWaiting(context);
+
               if (widget.order.status.toString() != _currentStatus &&
                   _currentStatus == "5") {
                 await widget.order.deliverOrder(rAmount, deliveryDate,
@@ -617,11 +620,14 @@ class _OrderViewScreenState extends State<OrderViewScreen> {
                     dContact);
               }
 
+              Navigator.pop(context);
               Fluttertoast.showToast(
                   msg: 'Updated Delivery Details',
                   backgroundColor: CustomColors.primary,
                   textColor: CustomColors.black);
+              Navigator.pop(context);
             } catch (err) {
+              Navigator.pop(context);
               Fluttertoast.showToast(
                   msg: 'Error, Unable to Update Details',
                   backgroundColor: CustomColors.alertRed,

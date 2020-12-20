@@ -3,8 +3,6 @@ import 'package:chipchop_seller/screens/Home/AuthPage.dart';
 import 'package:chipchop_seller/screens/app/ContactAndSupportWidget.dart';
 import 'package:chipchop_seller/screens/app/ProfilePictureUpload.dart';
 import 'package:chipchop_seller/screens/home/HomeScreen.dart';
-import 'package:chipchop_seller/screens/orders/OrdersHomeScreen.dart';
-import 'package:chipchop_seller/screens/products/ProductsHome.dart';
 import 'package:chipchop_seller/screens/settings/StoreSettings.dart';
 import 'package:chipchop_seller/screens/settings/UserProfileSettings.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
@@ -179,7 +177,7 @@ Widget sideDrawer(BuildContext context) {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => HomeScreen(),
+                builder: (context) => HomeScreen(0),
                 settings: RouteSettings(name: '/home'),
               ),
               (Route<dynamic> route) => false,
@@ -189,16 +187,17 @@ Widget sideDrawer(BuildContext context) {
         Divider(indent: 65.0, color: CustomColors.black, thickness: 1.0),
         ListTile(
           onTap: () async {
-            Navigator.push(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => ProductsHome(),
+                builder: (context) => HomeScreen(1),
                 settings: RouteSettings(name: '/products'),
               ),
+              (Route<dynamic> route) => false,
             );
           },
-          leading:
-              Icon(FontAwesomeIcons.shoppingBasket, color: CustomColors.primary),
+          leading: Icon(FontAwesomeIcons.shoppingBasket,
+              color: CustomColors.primary),
           title: Text(
             "Product",
           ),
@@ -206,12 +205,13 @@ Widget sideDrawer(BuildContext context) {
         Divider(indent: 65.0, color: CustomColors.black, thickness: 1.0),
         ListTile(
           onTap: () async {
-            Navigator.push(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => OrdersHomeScreen(cachedLocalUser.stores),
+                builder: (context) => HomeScreen(3),
                 settings: RouteSettings(name: '/orders'),
               ),
+              (Route<dynamic> route) => false,
             );
           },
           leading: Icon(Icons.assessment, color: CustomColors.primary),
@@ -221,7 +221,8 @@ Widget sideDrawer(BuildContext context) {
         ),
         Divider(indent: 65.0, color: CustomColors.black, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.store_mall_directory, color: CustomColors.primary),
+          leading:
+              Icon(Icons.store_mall_directory, color: CustomColors.primary),
           title: Text(
             "Store settings",
           ),
@@ -305,7 +306,7 @@ Widget sideDrawer(BuildContext context) {
             applicationVersion: app_version,
             applicationLegalese:
                 AppLocalizations.of(context).translate('copyright'),
-            child:  Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
@@ -336,14 +337,15 @@ Widget sideDrawer(BuildContext context) {
               SizedBox(
                 height: 5,
               ),
-              Divider(height: 0,),
+              Divider(
+                height: 0,
+              ),
               ListTile(
                 leading: Text(""),
                 title: Text(
                   seller_app_name,
                   style: TextStyle(
                     color: CustomColors.blue,
-                    
                     fontSize: 14.0,
                     fontWeight: FontWeight.bold,
                   ),
@@ -368,7 +370,9 @@ Widget sideDrawer(BuildContext context) {
                   ),
                 ),
               ),
-              Divider(height: 0,),
+              Divider(
+                height: 0,
+              ),
             ],
           ),
         ),

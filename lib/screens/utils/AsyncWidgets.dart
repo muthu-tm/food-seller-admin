@@ -28,6 +28,30 @@ class AsyncWidgets {
     ];
   }
 
+  static asyncSearching(
+      {dotOneColor = CustomColors.primary,
+      dotTwoColor = CustomColors.alertRed,
+      dotThreeColor = CustomColors.black}) {
+    return <Widget>[
+      ColorLoader(
+        dotOneColor: dotOneColor,
+        dotTwoColor: dotTwoColor,
+        dotThreeColor: dotThreeColor,
+        dotIcon: Icon(Icons.arrow_forward_ios),
+      ),
+      GradientText(
+        'Searching...',
+        size: 16.0,
+        gradient: LinearGradient(
+          colors: [
+            CustomColors.primary,
+            CustomColors.alertRed,
+          ],
+        ),
+      ),
+    ];
+  }
+
   static asyncError() {
     return <Widget>[
       Icon(

@@ -205,7 +205,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                             MaterialPageRoute(
                               builder: (context) =>
                                   ProductDetailsScreen(widget.product),
-                              settings: RouteSettings(name: '/products/view'),
+                              settings: RouteSettings(name: '/store/products'),
                             ),
                           );
                         },

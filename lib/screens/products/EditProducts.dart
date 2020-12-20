@@ -22,6 +22,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 
 class EditProducts extends StatefulWidget {
   final Products product;
@@ -61,7 +62,6 @@ class _EditProductsState extends State<EditProducts> {
     "5": "m.litre"
   };
 
-  String _selectedStore = "0";
   String _selectedType = "0";
   String _selectedCategory = "0";
   String _selectedSubCategory = "0";
@@ -178,30 +178,24 @@ class _EditProductsState extends State<EditProducts> {
 
   _submit() async {
     try {
-      if (_selectedType == "0") {
+      if (_selectedType == "0" || _selectedType == null) {
         _scaffoldKey.currentState.showSnackBar(
           CustomSnackBar.errorSnackBar("Please select Product Type!", 2),
         );
         return;
       }
 
-      if (_selectedCategory == "0") {
+      if (_selectedCategory == "0" || _selectedCategory == null) {
         _scaffoldKey.currentState.showSnackBar(
           CustomSnackBar.errorSnackBar("Please select Product Category!", 2),
         );
         return;
       }
 
-      if (storeID == "0") {
+      if (_variants.isEmpty ||
+          (_variants.length == 1 && _variants.first.weight.toInt() == 0)) {
         _scaffoldKey.currentState.showSnackBar(
-          CustomSnackBar.errorSnackBar("Please select your store!", 2),
-        );
-        return;
-      }
-
-      if (_variants.length == 1 && _variants.first.weight.toInt() == 0) {
-        _scaffoldKey.currentState.showSnackBar(
-          CustomSnackBar.errorSnackBar("Please Fill Product Varients!", 2),
+          CustomSnackBar.errorSnackBar("Please Fill Product Variants!", 2),
         );
         return;
       }
@@ -231,8 +225,6 @@ class _EditProductsState extends State<EditProducts> {
         _p.returnWithin = returnWithinDays;
         _p.isReplaceable = isReplaceable;
         _p.replaceWithin = replaceWithinDays;
-        _p.storeID = _selectedStore;
-        _p.storeName = _stores[_selectedStore];
         _p.productType = _selectedType == "0" ? null : type[_selectedType];
         _p.productCategory =
             _selectedCategory == "0" ? null : category[_selectedCategory];
@@ -243,8 +235,11 @@ class _EditProductsState extends State<EditProducts> {
         _p.keywords = pName.split(" ");
 
         _p.variants = _variants;
-        if (_descs.isNotEmpty && _descs.last.title.trim().isNotEmpty) {
-          _p.productDescription = _descs;
+        if (_descs.isNotEmpty) {
+          if (_descs.length == 1 && _descs.first.title.trim().isEmpty)
+            _p.productDescription = [];
+          else
+            _p.productDescription = _descs;
         } else
           _p.productDescription = [];
         CustomDialogs.actionWaiting(context);
@@ -259,7 +254,6 @@ class _EditProductsState extends State<EditProducts> {
       _scaffoldKey.currentState.showSnackBar(
         CustomSnackBar.errorSnackBar("Unable to create now! Try later!", 2),
       );
-      // Navigator.pop(context);
     }
   }
 
@@ -269,388 +263,508 @@ class _EditProductsState extends State<EditProducts> {
         color: CustomColors.white,
         child: Column(
           children: [
-            // ListTile(
-            //   leading: Icon(
-            //     Icons.store,
-            //     size: 35,
-            //     color: CustomColors.blue,
-            //   ),
-            //   title: Text(
-            //     "Store",
-            //     style: TextStyle(
-            //       fontSize: 16.0,
-            //       color: CustomColors.black,
-            //     ),
-            //   ),
-            // ),
-            // ListTile(
-            //   title: Container(
-            //     padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-            //     decoration: BoxDecoration(
-            //         borderRadius: BorderRadius.circular(10.0),
-            //         border: Border.all()),
-            //     child: DropdownButtonHideUnderline(
-            //       child: DropdownButton<String>(
-            //         isExpanded: true,
-            //         items: _stores.entries.map(
-            //           (f) {
-            //             return DropdownMenuItem<String>(
-            //               value: f.key,
-            //               child: Text(f.value),
-            //             );
-            //           },
-            //         ).toList(),
-            //         onChanged: onStoreDropdownItem,
-            //         value: _selectedStore,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            ListTile(
-              leading: Icon(
-                Icons.view_stream,
-                size: 35,
-                color: CustomColors.blue,
-              ),
-              title: Text(
-                "Product Type",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: CustomColors.black,
-                ),
-              ),
-            ),
-            ListTile(
-              title: Container(
-                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all()),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    isExpanded: true,
-                    items: _types.entries.map(
-                      (f) {
-                        return DropdownMenuItem<String>(
-                          value: f.key,
-                          child: Text(f.value),
-                        );
-                      },
-                    ).toList(),
-                    onChanged: onTypesDropdownItem,
-                    value: _selectedType,
-                  ),
-                ),
-              ),
+            SizedBox(
+              height: 5,
             ),
             ListTile(
               leading: Icon(
-                Icons.menu,
-                size: 35,
-                color: CustomColors.blue,
-              ),
-              title: Text(
-                "Product Category",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: CustomColors.black,
-                ),
-              ),
-            ),
-            ListTile(
-              title: Container(
-                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all()),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    isExpanded: true,
-                    items: _categories.entries.map(
-                      (f) {
-                        return DropdownMenuItem<String>(
-                          value: f.key,
-                          child: Text(f.value),
-                        );
-                      },
-                    ).toList(),
-                    onChanged: onCategoryDropdownItem,
-                    value: _selectedCategory,
-                  ),
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.apps,
-                size: 35,
-                color: CustomColors.blue,
-              ),
-              title: Text(
-                "Product SubCategory",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: CustomColors.black,
-                ),
-              ),
-            ),
-            ListTile(
-              title: Container(
-                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all()),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    isExpanded: true,
-                    items: _subcategories.entries.map(
-                      (f) {
-                        return DropdownMenuItem<String>(
-                          value: f.key,
-                          child: Text(f.value),
-                        );
-                      },
-                    ).toList(),
-                    onChanged: (uuid) {
-                      setState(
-                        () {
-                          _selectedSubCategory = uuid;
-                        },
-                      );
-                    },
-                    value: _selectedSubCategory,
-                  ),
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.format_shapes,
-                size: 35,
-                color: CustomColors.blue,
-              ),
-              title: Text(
-                "Product Name",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: CustomColors.black,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: TextFormField(
-                initialValue: widget.product.name,
-                textAlign: TextAlign.start,
-                autofocus: false,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(color: CustomColors.black)),
-                  hintText: "Ex, Rice",
-                  fillColor: CustomColors.white,
-                  filled: true,
-                ),
-                validator: (name) {
-                  if (name.isEmpty) {
-                    return "Must not be empty";
-                  } else {
-                    this.pName = name;
-                    return null;
-                  }
-                },
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.business,
+                FontAwesomeIcons.storeAlt,
                 size: 35,
                 color: CustomColors.black,
               ),
-              title: Text(
-                "Product Brand Name",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: CustomColors.black,
+              title: Container(
+                child: TextFormField(
+                  initialValue: widget.product.storeName,
+                  textAlign: TextAlign.end,
+                  autofocus: false,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    fillColor: CustomColors.white,
+                    filled: true,
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: CustomColors.grey)),
+                  ),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: TextFormField(
-                initialValue: brandName,
-                textAlign: TextAlign.start,
-                autofocus: false,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(color: CustomColors.black)),
-                  hintText: "Ex, India Brand",
-                  fillColor: CustomColors.white,
-                  filled: true,
+              padding: EdgeInsets.all(15.0),
+              child: Container(
+                child: InputDecorator(
+                  decoration: InputDecoration(
+                    labelText: 'Category',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  child: Column(children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(color: CustomColors.grey),
+                      ),
+                      child: SearchableDropdown.single(
+                        icon: Container(),
+                        clearIcon: Icon(Icons.clear_all),
+                        onClear: () {
+                          onTypesDropdownItem('0');
+                        },
+                        underline: Container(),
+                        items: _types.entries.map(
+                          (f) {
+                            return DropdownMenuItem<String>(
+                              value: f.key,
+                              child: Text(f.value),
+                            );
+                          },
+                        ).toList(),
+                        displayItem: (item, selected) {
+                          return (Row(
+                            children: [
+                              selected
+                                  ? Icon(
+                                      Icons.radio_button_checked,
+                                      color: CustomColors.primary,
+                                    )
+                                  : Icon(
+                                      Icons.radio_button_unchecked,
+                                      color: Colors.grey,
+                                    ),
+                              SizedBox(width: 7),
+                              Expanded(
+                                child: item,
+                              ),
+                            ],
+                          ));
+                        },
+                        searchFn: (String keyword, items) {
+                          List<int> ret = List<int>();
+                          if (keyword != null &&
+                              items != null &&
+                              keyword.isNotEmpty) {
+                            keyword.split(" ").forEach((k) {
+                              int i = 0;
+                              items.forEach((item) {
+                                if (k.isNotEmpty &&
+                                    (_types[item.value.toString()]
+                                        .toLowerCase()
+                                        .contains(
+                                          k.toLowerCase(),
+                                        ))) {
+                                  ret.add(i);
+                                }
+                                i++;
+                              });
+                            });
+                          }
+                          if (keyword.isEmpty) {
+                            ret = Iterable<int>.generate(items.length).toList();
+                          }
+                          return (ret);
+                        },
+                        value: _selectedType,
+                        hint: "Select Type",
+                        searchHint: null,
+                        onChanged: onTypesDropdownItem,
+                        dialogBox: false,
+                        isExpanded: true,
+                        menuConstraints:
+                            BoxConstraints.tight(Size.fromHeight(250)),
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(color: CustomColors.grey),
+                      ),
+                      child: SearchableDropdown.single(
+                        icon: Container(),
+                        clearIcon: Icon(Icons.clear_all),
+                        onClear: () {
+                          onCategoryDropdownItem('0');
+                        },
+                        underline: Container(),
+                        items: _categories.entries.map(
+                          (f) {
+                            return DropdownMenuItem<String>(
+                              value: f.key,
+                              child: Text(f.value),
+                            );
+                          },
+                        ).toList(),
+                        displayItem: (item, selected) {
+                          return (Row(
+                            children: [
+                              selected
+                                  ? Icon(
+                                      Icons.radio_button_checked,
+                                      color: CustomColors.primary,
+                                    )
+                                  : Icon(
+                                      Icons.radio_button_unchecked,
+                                      color: Colors.grey,
+                                    ),
+                              SizedBox(width: 7),
+                              Expanded(
+                                child: item,
+                              ),
+                            ],
+                          ));
+                        },
+                        searchFn: (String keyword, items) {
+                          List<int> ret = List<int>();
+                          if (keyword != null &&
+                              items != null &&
+                              keyword.isNotEmpty) {
+                            keyword.split(" ").forEach((k) {
+                              int i = 0;
+                              items.forEach((item) {
+                                if (k.isNotEmpty &&
+                                    (_categories[item.value.toString()]
+                                        .toLowerCase()
+                                        .contains(
+                                          k.toLowerCase(),
+                                        ))) {
+                                  ret.add(i);
+                                }
+                                i++;
+                              });
+                            });
+                          }
+                          if (keyword.isEmpty) {
+                            ret = Iterable<int>.generate(items.length).toList();
+                          }
+                          return (ret);
+                        },
+                        value: _selectedCategory,
+                        hint: "Select Category",
+                        searchHint: null,
+                        onChanged: onCategoryDropdownItem,
+                        dialogBox: false,
+                        isExpanded: true,
+                        menuConstraints:
+                            BoxConstraints.tight(Size.fromHeight(250)),
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(color: CustomColors.grey),
+                      ),
+                      child: SearchableDropdown.single(
+                        icon: Container(),
+                        clearIcon: Icon(Icons.clear_all),
+                        onClear: () {
+                          setState(
+                            () {
+                              _selectedSubCategory = '0';
+                            },
+                          );
+                        },
+                        underline: Container(),
+                        items: _subcategories.entries.map(
+                          (f) {
+                            return DropdownMenuItem<String>(
+                              value: f.key,
+                              child: Text(f.value),
+                            );
+                          },
+                        ).toList(),
+                        displayItem: (item, selected) {
+                          return (Row(
+                            children: [
+                              selected
+                                  ? Icon(
+                                      Icons.radio_button_checked,
+                                      color: CustomColors.primary,
+                                    )
+                                  : Icon(
+                                      Icons.radio_button_unchecked,
+                                      color: Colors.grey,
+                                    ),
+                              SizedBox(width: 7),
+                              Expanded(
+                                child: item,
+                              ),
+                            ],
+                          ));
+                        },
+                        searchFn: (String keyword, items) {
+                          List<int> ret = List<int>();
+                          if (keyword != null &&
+                              items != null &&
+                              keyword.isNotEmpty) {
+                            keyword.split(" ").forEach((k) {
+                              int i = 0;
+                              items.forEach((item) {
+                                if (k.isNotEmpty &&
+                                    (_subcategories[item.value.toString()]
+                                        .toLowerCase()
+                                        .contains(
+                                          k.toLowerCase(),
+                                        ))) {
+                                  ret.add(i);
+                                }
+                                i++;
+                              });
+                            });
+                          }
+                          if (keyword.isEmpty) {
+                            ret = Iterable<int>.generate(items.length).toList();
+                          }
+                          return (ret);
+                        },
+                        value: _selectedSubCategory,
+                        hint: "Select Sub-Category",
+                        searchHint: null,
+                        onChanged: (uuid) {
+                          setState(
+                            () {
+                              _selectedSubCategory = uuid;
+                            },
+                          );
+                        },
+                        dialogBox: false,
+                        isExpanded: true,
+                        menuConstraints:
+                            BoxConstraints.tight(Size.fromHeight(250)),
+                      ),
+                    ),
+                  ]),
                 ),
-                validator: (brand) {
-                  if (brand.isEmpty) {
-                    this.brandName = "";
-                  } else {
-                    this.brandName = brand;
-                  }
-                  return null;
-                },
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: ListTile(
-                leading: Icon(
-                  Icons.image,
-                  size: 35,
-                  color: CustomColors.black,
+              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+              child: Container(
+                child: InputDecorator(
+                  decoration: InputDecoration(
+                    labelText: 'Product Info',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  child: Column(children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+                      child: TextFormField(
+                        initialValue: widget.product.name,
+                        textAlign: TextAlign.start,
+                        autofocus: false,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(5.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          hintText: "Product Name (Ex, Rice)",
+                          fillColor: CustomColors.white,
+                          filled: true,
+                        ),
+                        validator: (name) {
+                          if (name.isEmpty) {
+                            return "Must not be empty";
+                          } else {
+                            this.pName = name;
+                            return null;
+                          }
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+                      child: TextFormField(
+                        initialValue: brandName,
+                        textAlign: TextAlign.start,
+                        autofocus: false,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(5.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          hintText: "Brand Name (Ex, India Brand)",
+                          fillColor: CustomColors.white,
+                          filled: true,
+                        ),
+                        validator: (brand) {
+                          if (brand.isEmpty) {
+                            this.brandName = "";
+                          } else {
+                            this.brandName = brand;
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                      child: TextFormField(
+                        initialValue: widget.product.shortDetails,
+                        textAlign: TextAlign.start,
+                        autofocus: false,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 8,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(5.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          hintText: "Short Details (Ex, Boiled Rice)",
+                          fillColor: CustomColors.white,
+                          filled: true,
+                        ),
+                        validator: (details) {
+                          if (details.isEmpty) {
+                            this.shortDetails = "";
+                          } else {
+                            this.shortDetails = details;
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ]),
                 ),
-                title: Container(
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      color: Colors.green[300],
-                      borderRadius: BorderRadius.circular(5.0)),
-                  child: InkWell(
-                    onTap: () async {
-                      if (_selectedStore == "0") {
-                        Fluttertoast.showToast(
-                            msg: 'Please Select a Store First',
-                            backgroundColor: CustomColors.alertRed,
-                            textColor: CustomColors.white);
-                        return;
-                      }
-                      String imageUrl = '';
-                      try {
-                        ImagePicker imagePicker = ImagePicker();
-                        PickedFile pickedFile;
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.image,
+                size: 35,
+                color: CustomColors.black,
+              ),
+              title: Container(
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    color: Colors.green[300],
+                    borderRadius: BorderRadius.circular(5.0)),
+                child: InkWell(
+                  onTap: () async {
+                    String imageUrl = '';
+                    try {
+                      ImagePicker imagePicker = ImagePicker();
+                      PickedFile pickedFile;
 
-                        pickedFile = await imagePicker.getImage(
-                            source: ImageSource.gallery);
-                        if (pickedFile == null) return;
+                      pickedFile = await imagePicker.getImage(
+                          source: ImageSource.gallery);
+                      if (pickedFile == null) return;
 
+                      String fileName =
+                          DateTime.now().millisecondsSinceEpoch.toString();
+                      String fbFilePath =
+                          'products/${widget.product.storeID}/$fileName.png';
+                      CustomDialogs.actionWaiting(context);
+                      // Upload to storage
+                      imageUrl = await Uploader()
+                          .uploadImageFile(true, pickedFile.path, fbFilePath);
+                      Navigator.of(context).pop();
+                    } catch (err) {
+                      Fluttertoast.showToast(
+                          msg: 'This file is not an image',
+                          backgroundColor: CustomColors.alertRed,
+                          textColor: CustomColors.black);
+                    }
+                    if (imageUrl != "")
+                      setState(() {
+                        imagePaths.add(imageUrl);
+                      });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        FontAwesomeIcons.images,
+                        size: 20,
+                        color: CustomColors.black,
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        "Upload Image",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              trailing: Container(
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    color: Colors.green[300],
+                    borderRadius: BorderRadius.circular(5.0)),
+                child: InkWell(
+                  onTap: () async {
+                    String imageUrl = '';
+                    try {
+                      String tempPath = (await getTemporaryDirectory()).path;
+                      String filePath = '$tempPath/chipchop_image.png';
+                      if (File(filePath).existsSync())
+                        await File(filePath).delete();
+
+                      List<CameraDescription> cameras =
+                          await availableCameras();
+                      CameraDescription camera = cameras.first;
+
+                      var result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TakePicturePage(
+                            camera: camera,
+                            path: filePath,
+                          ),
+                        ),
+                      );
+                      if (result != null) {
                         String fileName =
                             DateTime.now().millisecondsSinceEpoch.toString();
                         String fbFilePath =
-                            'products/$_selectedStore/$fileName.png';
+                            'products/${widget.product.storeID}/$fileName.png';
                         CustomDialogs.actionWaiting(context);
                         // Upload to storage
                         imageUrl = await Uploader()
-                            .uploadImageFile(true, pickedFile.path, fbFilePath);
+                            .uploadImageFile(true, result, fbFilePath);
                         Navigator.of(context).pop();
-                      } catch (err) {
-                        Fluttertoast.showToast(
-                            msg: 'This file is not an image',
-                            backgroundColor: CustomColors.alertRed,
-                            textColor: CustomColors.black);
                       }
-                      if (imageUrl != "")
-                        setState(() {
-                          imagePaths.add(imageUrl);
-                        });
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.images,
-                          size: 20,
-                          color: CustomColors.black,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          "Upload Image",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                trailing: Container(
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      color: Colors.green[300],
-                      borderRadius: BorderRadius.circular(5.0)),
-                  child: InkWell(
-                    onTap: () async {
-                      if (_selectedStore == "0") {
-                        Fluttertoast.showToast(
-                            msg: 'Please Select a Store First',
-                            backgroundColor: CustomColors.alertRed,
-                            textColor: CustomColors.white);
-                        return;
-                      }
-
-                      String imageUrl = '';
-                      try {
-                        String tempPath = (await getTemporaryDirectory()).path;
-                        String filePath = '$tempPath/chipchop_image.png';
-                        if (File(filePath).existsSync())
-                          await File(filePath).delete();
-
-                        List<CameraDescription> cameras =
-                            await availableCameras();
-                        CameraDescription camera = cameras.first;
-
-                        var result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TakePicturePage(
-                              camera: camera,
-                              path: filePath,
-                            ),
-                          ),
-                        );
-                        if (result != null) {
-                          String fileName =
-                              DateTime.now().millisecondsSinceEpoch.toString();
-                          String fbFilePath =
-                              'products/$_selectedStore/$fileName.png';
-                          CustomDialogs.actionWaiting(context);
-                          // Upload to storage
-                          imageUrl = await Uploader()
-                              .uploadImageFile(true, result, fbFilePath);
-                          Navigator.of(context).pop();
-                        }
-                      } catch (err) {
-                        Fluttertoast.showToast(
-                            msg: 'This file is not an image',
-                            backgroundColor: CustomColors.alertRed,
-                            textColor: CustomColors.white);
-                      }
-                      if (imageUrl != "")
-                        setState(() {
-                          imagePaths.add(imageUrl);
-                        });
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.cameraRetro,
-                          size: 20,
-                          color: CustomColors.black,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          "Capture Image",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
+                    } catch (err) {
+                      Fluttertoast.showToast(
+                          msg: 'This file is not an image',
+                          backgroundColor: CustomColors.alertRed,
+                          textColor: CustomColors.white);
+                    }
+                    if (imageUrl != "")
+                      setState(() {
+                        imagePaths.add(imageUrl);
+                      });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        FontAwesomeIcons.cameraRetro,
+                        size: 20,
+                        color: CustomColors.black,
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        "Capture Image",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -746,8 +860,7 @@ class _EditProductsState extends State<EditProducts> {
                                       if (imagePaths[index] ==
                                           noImagePlaceholder) {
                                         setState(() {
-                                          imagePaths
-                                              .remove(noImagePlaceholder);
+                                          imagePaths.remove(noImagePlaceholder);
                                         });
                                         return;
                                       }
@@ -829,45 +942,6 @@ class _EditProductsState extends State<EditProducts> {
                       ),
                     ),
                   ),
-            ListTile(
-              leading: Icon(
-                Icons.description,
-                size: 35,
-                color: CustomColors.blue,
-              ),
-              title: Text(
-                "Product Details",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: CustomColors.black,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: TextFormField(
-                initialValue: widget.product.shortDetails,
-                textAlign: TextAlign.start,
-                autofocus: false,
-                keyboardType: TextInputType.text,
-                maxLines: 8,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustomColors.lightGreen)),
-                  hintText: "Ex, Rice",
-                  fillColor: CustomColors.white,
-                  filled: true,
-                ),
-                validator: (details) {
-                  if (details.isEmpty) {
-                    this.shortDetails = "";
-                  } else {
-                    this.shortDetails = details;
-                  }
-                  return null;
-                },
-              ),
-            ),
             SizedBox(height: 5),
             Padding(
               padding: EdgeInsets.all(15.0),
@@ -1026,53 +1100,15 @@ class _EditProductsState extends State<EditProducts> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Having many Varients ?",
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: CustomColors.black,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  Container(
-                    width: 135,
-                    child: FlatButton.icon(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      color: Colors.green,
-                      onPressed: () async {
-                        if (_variants.isNotEmpty &&
-                            _variants.last.weight.toInt() == 0) {
-                          Fluttertoast.showToast(
-                              msg: "Please fill the Product Varient");
-                          return;
-                        } else {
-                          setState(() {
-                            _variants.add(
-                              ProductVariants.fromJson(
-                                {'id': (_variants.length).toString()},
-                              ),
-                            );
-                            vPriceControllers
-                                .add(TextEditingController(text: "0.00"));
-                          });
-                        }
-                      },
-                      icon: Icon(Icons.add),
-                      label: Text(
-                        "Add",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Product Variants",
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: CustomColors.black,
+                      fontWeight: FontWeight.w600),
+                ),
               ),
             ),
             ListView.builder(
@@ -1083,11 +1119,12 @@ class _EditProductsState extends State<EditProducts> {
                 ProductVariants _pv = _variants[index];
 
                 return Padding(
+                  key: ObjectKey(_pv),
                   padding: EdgeInsets.all(10.0),
                   child: Container(
                     child: InputDecorator(
                       decoration: InputDecoration(
-                        labelText: 'Varient ${index + 1}',
+                        labelText: 'Variant ${index + 1}',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
@@ -1219,12 +1256,18 @@ class _EditProductsState extends State<EditProducts> {
                                 ),
                                 onChanged: (val) {
                                   if (_pv.originalPrice >= 0) {
+                                    double _cp =
+                                        (_pv.originalPrice - double.parse(val));
                                     vPriceControllers[index].text =
-                                        (_pv.originalPrice - double.parse(val))
-                                            .toString();
+                                        _cp.toString();
+
+                                    _pv.currentPrice = _cp;
                                   } else {
                                     vPriceControllers[index].text = "0.00";
+                                    _pv.currentPrice = 0.00;
                                   }
+
+                                  _pv.offer = double.parse(val);
                                 },
                                 validator: (offer) {
                                   if (offer.isEmpty &&
@@ -1313,6 +1356,9 @@ class _EditProductsState extends State<EditProducts> {
                                             fillColor: CustomColors.white,
                                             filled: true,
                                           ),
+                                          onChanged: (val) {
+                                            _pv.quantity = int.parse(val);
+                                          },
                                           validator: (quantity) {
                                             if (quantity.isEmpty) {
                                               _pv.quantity = 0;
@@ -1359,6 +1405,30 @@ class _EditProductsState extends State<EditProducts> {
                                   ],
                                 )
                               : Container(),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: InkWell(
+                                onTap: () {
+                                  vPriceControllers.removeAt(index);
+                                  setState(() {
+                                    _variants.removeAt(index);
+                                  });
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 100,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Text("Remove"),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -1368,51 +1438,57 @@ class _EditProductsState extends State<EditProducts> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Product Details",
-                    style: TextStyle(
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Container(
+                  width: 160,
+                  child: FlatButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    color: Colors.green,
+                    onPressed: () async {
+                      if (_variants.isNotEmpty &&
+                          _variants.last.weight.toInt() == 0) {
+                        Fluttertoast.showToast(
+                            msg: "Please fill the Product Variant");
+                        return;
+                      } else {
+                        setState(() {
+                          _variants.add(
+                            ProductVariants.fromJson(
+                              {'id': (_variants.length).toString()},
+                            ),
+                          );
+                          vPriceControllers
+                              .add(TextEditingController(text: "0.00"));
+                        });
+                      }
+                    },
+                    icon: Icon(Icons.add),
+                    label: Text(
+                      "Add Variant",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
                         fontSize: 14,
-                        color: CustomColors.black,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  Container(
-                    width: 135,
-                    child: FlatButton.icon(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      color: Colors.green,
-                      onPressed: () async {
-                        if (_descs.isNotEmpty &&
-                            _descs.last.title.trim().isEmpty) {
-                          Fluttertoast.showToast(
-                              msg: "Please fill the last Detail");
-                          return;
-                        } else {
-                          setState(() {
-                            _descs.add(
-                              ProductDescription.fromJson(
-                                {},
-                              ),
-                            );
-                          });
-                        }
-                      },
-                      icon: Icon(Icons.add),
-                      label: Text(
-                        "Add",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                        ),
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Product Details",
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: CustomColors.black,
+                      fontWeight: FontWeight.w600),
+                ),
               ),
             ),
             ListView.builder(
@@ -1423,6 +1499,7 @@ class _EditProductsState extends State<EditProducts> {
                 ProductDescription _pd = _descs[index];
 
                 return Padding(
+                  key: ObjectKey(_pd),
                   padding: EdgeInsets.all(10.0),
                   child: Container(
                     child: InputDecorator(
@@ -1481,12 +1558,75 @@ class _EditProductsState extends State<EditProducts> {
                               },
                             ),
                           ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _descs.removeAt(index);
+                                  });
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 100,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Text("Remove"),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
                 );
               },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Container(
+                  width: 160,
+                  child: FlatButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    color: Colors.green,
+                    onPressed: () async {
+                      if (_descs.isNotEmpty &&
+                          _descs.last.title.trim().isEmpty) {
+                        Fluttertoast.showToast(
+                            msg: "Please fill the last Detail");
+                        return;
+                      } else {
+                        setState(() {
+                          _descs.add(
+                            ProductDescription.fromJson(
+                              {},
+                            ),
+                          );
+                        });
+                      }
+                    },
+                    icon: Icon(Icons.add),
+                    label: Text(
+                      "Add Details",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
             SizedBox(height: 70)
           ],
@@ -1513,13 +1653,8 @@ class _EditProductsState extends State<EditProducts> {
       );
     }
 
-    _selectedStore = widget.product.storeID;
-
     await loadProductTypes();
-    if (this.productType != null) _selectedType = this.productType.uuid;
     await onTypesDropdownItem(widget.product.productType.uuid);
-    if (widget.product.productCategory != null)
-      _selectedCategory = widget.product.productCategory.uuid;
 
     if (widget.product.productCategory != null) {
       await onCategoryDropdownItem(widget.product.productCategory.uuid);
@@ -1532,9 +1667,9 @@ class _EditProductsState extends State<EditProducts> {
     _selectedType = '0';
     _types = {"0": "Choose Product Type"};
 
-    if (_storeMap.containsKey(this._selectedStore)) {
+    if (_storeMap.containsKey(widget.product.storeID)) {
       List<ProductCategoriesMap> types =
-          _storeMap[this._selectedStore].availProducts;
+          _storeMap[widget.product.storeID].availProducts;
       Map<String, String> ptypes = Map();
       if (types.length > 0) {
         type.clear();
@@ -1560,34 +1695,29 @@ class _EditProductsState extends State<EditProducts> {
     }
   }
 
-  onStoreDropdownItem(String uuid) async {
-    setState(
-      () {
-        _selectedStore = uuid;
-      },
-    );
-
-    await loadProductTypes();
-  }
-
   onTypesDropdownItem(String uuid) async {
+    // Do nothing for no change
+    if (_selectedType == uuid) {
+      return;
+    }
+
     _selectedSubCategory = '0';
     _selectedCategory = '0';
     _categories = {"0": "Choose Product Category"};
     _subcategories = {"0": "Choose Product SubCategory"};
 
-    if (uuid == "0") {
+    if (uuid == null || uuid == "0") {
       setState(
         () {
-          _selectedType = uuid;
+          _selectedType = '0';
         },
       );
       return;
     }
 
-    if (_storeMap.containsKey(this._selectedStore)) {
+    if (_storeMap.containsKey(widget.product.storeID)) {
       List<ProductCategoriesMap> _cat =
-          _storeMap[this._selectedStore].availProductCategories;
+          _storeMap[widget.product.storeID].availProductCategories;
 
       List<ProductCategories> categories = await ProductCategories()
           .getCategoriesForStoreID(_cat.map((e) => e.uuid).toList(), uuid);
@@ -1619,21 +1749,26 @@ class _EditProductsState extends State<EditProducts> {
   }
 
   onCategoryDropdownItem(String uuid) async {
+    // Do nothing for no change
+    if (_selectedCategory == uuid) {
+      return;
+    }
+
     _selectedSubCategory = '0';
     _subcategories = {"0": "Choose Product SubCategory"};
 
-    if (uuid == "0") {
+    if (uuid == null || uuid == "0") {
       setState(
         () {
-          _selectedCategory = uuid;
+          _selectedCategory = '0';
         },
       );
       return;
     }
 
-    if (_storeMap.containsKey(this._selectedStore)) {
+    if (_storeMap.containsKey(widget.product.storeID)) {
       List<ProductCategoriesMap> _subCat =
-          _storeMap[this._selectedStore].availProductSubCategories;
+          _storeMap[widget.product.storeID].availProductSubCategories;
 
       List<ProductSubCategories> subCategories = await ProductSubCategories()
           .getSubCategoriesForIDs(uuid, _subCat.map((e) => e.uuid).toList());

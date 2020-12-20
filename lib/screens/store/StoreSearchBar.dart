@@ -98,42 +98,63 @@ class _StoreSearchBarState extends State<StoreSearchBar> {
                     snapshot.hasData &&
                     _searchController.text != '') {
                   if (snapshot.data.isNotEmpty) {
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      primary: false,
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ProductWidget(
-                          Products.fromJson(snapshot.data[index]),
-                        );
-                      },
-                    );
-                  } else {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "No Results Found",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: CustomColors.alertRed,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    return Column(children: [
+                      ListTile(
+                        title: Text(
+                          "Your search results",
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Divider(),
-                        Text(
-                          "Try with different KEYWORDS..",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: CustomColors.blue,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
+                      ),
+                      ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        primary: false,
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ProductWidget(
+                            Products.fromJson(snapshot.data[index]),
+                          );
+                        },
+                      ),
+                    ]);
+                  } else {
+                    return Container(
+                      height: MediaQuery.of(context).size.height / 2,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "No Items found !!",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: CustomColors.alertRed,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.sentiment_neutral,
+                                  size: 30,
+                                  color: CustomColors.alertRed,
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              "Search for another Items",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: CustomColors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     );
                   }
                 } else if (snapshot.hasError) {
@@ -144,10 +165,13 @@ class _StoreSearchBarState extends State<StoreSearchBar> {
                   );
                 } else if (snapshot.connectionState ==
                     ConnectionState.waiting) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: AsyncWidgets.asyncWaiting(),
+                  return Container(
+                    height: MediaQuery.of(context).size.height / 2,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: AsyncWidgets.asyncSearching(),
+                    ),
                   );
                 } else {
                   return RecentProductsWidget(widget.storeID);
@@ -226,7 +250,7 @@ class RecentProductsWidget extends StatelessWidget {
                                             builder: (context) =>
                                                 ProductDetailsScreen(_p),
                                             settings: RouteSettings(
-                                                name: '/products'),
+                                                name: '/store/products'),
                                           ),
                                         );
                                       } else {

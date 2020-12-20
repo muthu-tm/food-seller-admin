@@ -49,7 +49,7 @@ Widget appBar(BuildContext context) {
                   context,
                   MaterialPageRoute(
                     builder: (context) => SearchAppBar(0, ''),
-                    settings: RouteSettings(name: '/Search'),
+                    settings: RouteSettings(name: '/search/store'),
                   ),
                 );
               },

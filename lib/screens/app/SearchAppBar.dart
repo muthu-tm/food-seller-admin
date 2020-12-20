@@ -189,28 +189,39 @@ class _SearchAppBarState extends State<SearchAppBar> {
                     snapshot.hasData &&
                     _searchController.text != '') {
                   if (snapshot.data.isNotEmpty) {
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      primary: false,
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        if (inOutList[0].isSelected == true) {
-                          return StoreWidget(
-                              Store.fromJson(snapshot.data[index]));
-                        } else if (inOutList[1].isSelected == true) {
-                          return Container(
-                            padding: EdgeInsets.all(5.0),
-                            width: 150,
-                            child: ProductWidget(
-                                Products.fromJson(snapshot.data[index])),
-                          );
-                        } else {
-                          return OrderWidget(
-                              Order.fromJson(snapshot.data[index]));
-                        }
-                      },
-                    );
+                    return Column(children: [
+                      ListTile(
+                        title: Text(
+                          "Recently Viewed Products",
+                          style: TextStyle(
+                              color: CustomColors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17),
+                        ),
+                      ),
+                      ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        primary: false,
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (inOutList[0].isSelected == true) {
+                            return StoreWidget(
+                                Store.fromJson(snapshot.data[index]));
+                          } else if (inOutList[1].isSelected == true) {
+                            return Container(
+                              padding: EdgeInsets.all(5.0),
+                              width: 150,
+                              child: ProductWidget(
+                                  Products.fromJson(snapshot.data[index])),
+                            );
+                          } else {
+                            return OrderWidget(
+                                Order.fromJson(snapshot.data[index]));
+                          }
+                        },
+                      ),
+                    ]);
                   } else {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -229,7 +240,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Divider(),
+                        SizedBox(height: 5,),
                         Text(
                           "Try with different KEYWORDS..",
                           textAlign: TextAlign.center,
@@ -250,10 +261,13 @@ class _SearchAppBarState extends State<SearchAppBar> {
                   );
                 } else if (snapshot.connectionState ==
                     ConnectionState.waiting) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: AsyncWidgets.asyncWaiting(),
+                  return Container(
+                    height: MediaQuery.of(context).size.height / 2,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: AsyncWidgets.asyncSearching(),
+                    ),
                   );
                 } else {
                   return UserRecentSearches();

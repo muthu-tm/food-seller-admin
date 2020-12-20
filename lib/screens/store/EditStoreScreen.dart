@@ -11,7 +11,6 @@ import 'package:chipchop_seller/db/models/product_types.dart';
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/app/TakePicturePage.dart';
 import 'package:chipchop_seller/screens/store/EditLocationPicker.dart';
-import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
@@ -26,6 +25,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 
 class EditStoreScreen extends StatefulWidget {
   final Store store;
@@ -47,23 +47,33 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   String storeName = '';
   String shortDetails = '';
   String ownedBy = '';
-  List<ProductCategoriesMap> availProducts = [];
-  List<ProductCategoriesMap> availProductCategories = [];
-  List<ProductCategoriesMap> availProductSubCategories = [];
+
+  Map<String, ProductCategoriesMap> availProducts = {
+    '0': ProductCategoriesMap.fromJson({'uuid': '0', 'name': 'Select Types'})
+  };
+  List<int> _selectedProducts = [0];
+  Map<String, ProductCategoriesMap> availProductCategories = {
+    '0': ProductCategoriesMap.fromJson(
+        {'uuid': '0', 'name': 'Select Categories'})
+  };
+  List<int> _selectedCategories = [0];
+  Map<String, ProductCategoriesMap> availProductSubCategories = {
+    '0': ProductCategoriesMap.fromJson(
+        {'uuid': '0', 'name': 'Select Sub-Categories'})
+  };
+  List<int> _selectedSubCategories = [0];
 
   @override
   void initState() {
     super.initState();
+
+    loadTypes();
 
     storeName = widget.store.name;
     shortDetails = widget.store.shortDetails;
 
     imagePaths = widget.store.storeImages;
     primaryImage = widget.store.image;
-
-    availProducts = widget.store.availProducts;
-    availProductCategories = widget.store.availProductCategories;
-    availProductSubCategories = widget.store.availProductSubCategories;
 
     ownedBy = widget.store.ownedBy;
   }
@@ -88,73 +98,100 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
         backgroundColor: CustomColors.primary,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Container(
-        height: 40,
-        width: 120,
-        padding: EdgeInsets.all(10),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: CustomColors.primary,
-            border: Border.all(color: CustomColors.black),
-            borderRadius: BorderRadius.circular(10.0)),
-        child: InkWell(
-          onTap: () {
-            final FormState form = _formKey.currentState;
+      floatingActionButton: InkWell(
+        onTap: () {
+          final FormState form = _formKey.currentState;
 
-            if (form.validate()) {
-              if (availProducts.length == 0) {
-                _scaffoldKey.currentState.showSnackBar(
-                  CustomSnackBar.errorSnackBar(
-                      "Please Select your Store Product Type!", 2),
-                );
-                return;
-              }
-
-              if (availProductCategories.length == 0) {
-                _scaffoldKey.currentState.showSnackBar(
-                  CustomSnackBar.errorSnackBar(
-                      "Please Select Store Categories!", 2),
-                );
-                return;
-              }
-
-              if (availProductSubCategories.length == 0) {
-                _scaffoldKey.currentState.showSnackBar(
-                  CustomSnackBar.errorSnackBar(
-                      "Please Select Store Sub-Categories!", 2),
-                );
-              }
-
-              if (primaryImage == "") {
-                _scaffoldKey.currentState.showSnackBar(
-                  CustomSnackBar.errorSnackBar("Please Set Primary Image!", 2),
-                );
-                return;
-              }
-
-              Store store = widget.store;
-              store.name = storeName;
-              store.image = primaryImage;
-              store.storeImages = imagePaths;
-              store.shortDetails = this.shortDetails;
-              store.ownedBy = ownedBy;
-              store.availProducts = availProducts;
-              store.availProductCategories = availProductCategories;
-              store.availProductSubCategories = availProductSubCategories;
-              store.address = updatedAddress;
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditStoreStepTwo(widget.store),
-                  settings: RouteSettings(name: '/settings/store/edit/'),
-                ),
-              );
-            } else {
+          if (form.validate()) {
+            _selectedProducts.remove(0);
+            if (_selectedProducts.length == 0) {
               _scaffoldKey.currentState.showSnackBar(
-                  CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
+                CustomSnackBar.errorSnackBar(
+                    "Please Select your Store Product Type!", 2),
+              );
+              return;
             }
-          },
+
+            _selectedCategories.remove(0);
+            if (_selectedCategories.length == 0) {
+              _scaffoldKey.currentState.showSnackBar(
+                CustomSnackBar.errorSnackBar(
+                    "Please Select Store Categories!", 2),
+              );
+              return;
+            }
+
+            _selectedSubCategories.remove(0);
+            if (_selectedSubCategories.length == 0) {
+              _scaffoldKey.currentState.showSnackBar(
+                CustomSnackBar.errorSnackBar(
+                    "Please Select Store Sub-Categories!", 2),
+              );
+              return;
+            }
+
+            if (primaryImage == "") {
+              _scaffoldKey.currentState.showSnackBar(
+                CustomSnackBar.errorSnackBar("Please Set Primary Image!", 2),
+              );
+              return;
+            }
+
+            Store store = widget.store;
+            store.name = storeName;
+            store.image = primaryImage;
+            store.storeImages = imagePaths;
+            store.shortDetails = this.shortDetails;
+            store.ownedBy = ownedBy;
+
+            Map<int, ProductCategoriesMap> _t =
+                availProducts.values.toList().asMap();
+            store.availProducts = [];
+
+            _selectedProducts.forEach((e) {
+              if (_t.containsKey(e)) store.availProducts.add(_t[e]);
+            });
+
+            Map<int, ProductCategoriesMap> _c =
+                availProductCategories.values.toList().asMap();
+            store.availProductCategories = [];
+
+            _selectedCategories.forEach((e) {
+              if (_c.containsKey(e)) store.availProductCategories.add(_c[e]);
+            });
+
+            Map<int, ProductCategoriesMap> _sc =
+                availProductSubCategories.values.toList().asMap();
+            store.availProductSubCategories = [];
+
+            _selectedSubCategories.forEach((e) {
+              if (_sc.containsKey(e))
+                store.availProductSubCategories.add(_sc[e]);
+            });
+
+            store.address = updatedAddress;
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditStoreStepTwo(widget.store),
+                settings: RouteSettings(name: '/settings/store/edit'),
+              ),
+            );
+          } else {
+            _scaffoldKey.currentState.showSnackBar(
+                CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
+          }
+        },
+        child: Container(
+          height: 40,
+          width: 120,
+          padding: EdgeInsets.all(10),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: CustomColors.primary,
+              border: Border.all(color: CustomColors.black),
+              borderRadius: BorderRadius.circular(10.0)),
           child: Text(
             "Continue",
           ),
@@ -184,7 +221,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                 Padding(
                   padding: EdgeInsets.only(left: 10.0, top: 10),
                   child: Text(
-                    "Store Name/Business Name",
+                    "Store / Business Name",
                     style: TextStyle(color: CustomColors.black, fontSize: 14),
                   ),
                 ),
@@ -578,11 +615,10 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                 Padding(
                   padding: EdgeInsets.only(left: 10.0, top: 10, right: 10),
                   child: Container(
-                    height: 40,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         border: Border.all()),
-                    child: getProductTypes(context),
+                    child: getProductTypes(),
                   ),
                 ),
                 Padding(
@@ -595,11 +631,10 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                 Padding(
                   padding: EdgeInsets.only(left: 10.0, top: 10, right: 10),
                   child: Container(
-                    height: 40,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         border: Border.all()),
-                    child: getProductCategories(context),
+                    child: getProductCategories(),
                   ),
                 ),
                 Padding(
@@ -612,11 +647,10 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                 Padding(
                   padding: EdgeInsets.only(left: 10.0, top: 10, right: 10),
                   child: Container(
-                    height: 40,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         border: Border.all()),
-                    child: getProductSubCategories(context),
+                    child: getProductSubCategories(),
                   ),
                 ),
                 Padding(
@@ -871,267 +905,420 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
     );
   }
 
-  Widget getProductTypes(BuildContext context) {
-    List<MultiSelectDialogItem> buildingDropdownItems = [];
-    Map<String, ProductCategoriesMap> _productTypes = {};
-    return InkWell(
-      onTap: () async {
-        _productTypes.clear();
-        buildingDropdownItems.clear();
-        CustomDialogs.actionWaiting(context);
-        List<ProductTypes> data = await ProductTypes().getProductTypes();
-        data.forEach((element) {
-          _productTypes[element.uuid] = ProductCategoriesMap.fromJson(
-              {'uuid': element.uuid, 'name': element.name});
-          buildingDropdownItems
-              .add(MultiSelectDialogItem(element.uuid, element.name));
-        });
-        Navigator.pop(context);
-        final selectedValues = await showDialog<Set<String>>(
-          context: context,
-          builder: (BuildContext context) {
-            return MultiSelectDialog(
-                title: "Product Types",
-                items: buildingDropdownItems,
-                initialSelectedValues:
-                    availProducts.map((e) => e.uuid).toSet());
-          },
+  loadTypes() async {
+    List<String> _productTypes =
+        widget.store.availProducts.map((value) => value.uuid).toList();
+
+    List<ProductTypes> data = await ProductTypes().getProductTypes();
+    data.forEach((element) {
+      availProducts[element.uuid] = ProductCategoriesMap.fromJson(
+          {'uuid': element.uuid, 'name': element.name});
+      if (_productTypes.contains(element.uuid)) {
+        _selectedProducts.add(availProducts.length - 1);
+      }
+    });
+
+    setState(() {
+      _selectedProducts.remove(0);
+    });
+
+    await loadCategories();
+  }
+
+  loadCategories() async {
+    List<String> _productCat =
+        widget.store.availProductCategories.map((value) => value.uuid).toList();
+
+    List<ProductCategories> data = await ProductCategories()
+        .getCategoriesForTypes(
+            widget.store.availProducts.map((value) => value.uuid).toList());
+    data.forEach((element) {
+      availProductCategories[element.uuid] = ProductCategoriesMap.fromJson(
+          {'uuid': element.uuid, 'name': element.name});
+      if (_productCat.contains(element.uuid)) {
+        _selectedCategories.add(availProductCategories.length - 1);
+      }
+    });
+
+    setState(() {
+      _selectedCategories.remove(0);
+    });
+
+    await loadSubCategories();
+  }
+
+  loadSubCategories() async {
+    List<String> _productCat = widget.store.availProductSubCategories
+        .map((value) => value.uuid)
+        .toList();
+
+    List<ProductSubCategories> data = await ProductSubCategories()
+        .getSubCategoriesByIDs(widget.store.availProductCategories
+            .map((value) => value.uuid)
+            .toList());
+    data.forEach((element) {
+      availProductSubCategories[element.uuid] = ProductCategoriesMap.fromJson(
+          {'uuid': element.uuid, 'name': element.name});
+      if (_productCat.contains(element.uuid)) {
+        _selectedSubCategories.add(availProductSubCategories.length - 1);
+      }
+    });
+
+    setState(() {
+      _selectedSubCategories.remove(0);
+    });
+  }
+
+  Widget getProductTypes() {
+    return SearchableDropdown.multiple(
+      icon: Container(),
+      clearIcon: Icon(Icons.clear_all),
+      onClear: () {
+        onTypesDropdownItem([]);
+      },
+      underline: Container(),
+      items: availProducts.values.map(
+        (f) {
+          return DropdownMenuItem<String>(
+            value: f.uuid,
+            child: Text(f.name),
+          );
+        },
+      ).toList(),
+      selectedItems: _selectedProducts,
+      hint: "Select Types",
+      searchHint: "Select Any",
+      onChanged: (value) {},
+      dialogBox: true,
+      displayItem: (item, selected) {
+        return Row(
+          children: [
+            selected
+                ? Icon(
+                    Icons.check_box,
+                    color: CustomColors.primary,
+                  )
+                : Icon(
+                    Icons.check_box_outline_blank,
+                    color: Colors.grey,
+                  ),
+            SizedBox(width: 7),
+            Expanded(
+              child: item,
+            ),
+          ],
         );
-
-        if (selectedValues != null) {
-          availProducts.clear();
-          selectedValues.forEach((element) {
-            if (element != null) {
-              availProducts.add(_productTypes[element]);
-            }
+      },
+      doneButton: (selectedItemsDone, doneContext) {
+        return RaisedButton(
+          onPressed: () {
+            Navigator.pop(doneContext);
+            onTypesDropdownItem(selectedItemsDone);
+          },
+          child: Text("Save"),
+        );
+      },
+      searchFn: (String keyword, items) {
+        List<int> ret = List<int>();
+        if (keyword != null && items != null && keyword.isNotEmpty) {
+          keyword.split(" ").forEach((k) {
+            int i = 0;
+            items.forEach((item) {
+              if (k.isNotEmpty &&
+                  (availProducts[item.value.toString()]
+                      .name
+                      .toLowerCase()
+                      .contains(
+                        k.toLowerCase(),
+                      ))) {
+                ret.add(i);
+              }
+              i++;
+            });
           });
-
-          availProductCategories.clear();
-          setState(() {});
         }
+        if (keyword.isEmpty) {
+          ret = Iterable<int>.generate(items.length).toList();
+        }
+        return (ret);
       },
-      child: Padding(
-        padding: EdgeInsets.all(10.0),
-        child: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                  child: Text(availProducts.isNotEmpty
-                      ? availProducts.map((e) => e.name).toString()
-                      : "")),
-              Icon(
-                Icons.keyboard_arrow_down,
-                color: CustomColors.black,
-              ),
-            ],
-          ),
-        ),
-      ),
+      isExpanded: true,
     );
   }
 
-  Widget getProductCategories(BuildContext context) {
-    Map<String, ProductCategoriesMap> _productCategories = {};
-    return FutureBuilder<List<ProductCategories>>(
-      future: ProductCategories()
-          .getCategoriesForTypes(availProducts.map((e) => e.uuid).toList()),
-      builder: (BuildContext context,
-          AsyncSnapshot<List<ProductCategories>> snapshot) {
-        Widget children;
-
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            List<MultiSelectDialogItem> buildingDropdownItems = [];
-            _productCategories.clear();
-            snapshot.data.forEach((element) {
-              _productCategories[element.uuid] = ProductCategoriesMap.fromJson(
-                  {'uuid': element.uuid, 'name': element.name});
-              buildingDropdownItems
-                  .add(MultiSelectDialogItem(element.uuid, element.name));
-            });
-            return InkWell(
-                onTap: () async {
-                  final selectedValues = await showDialog<Set<String>>(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return MultiSelectDialog(
-                        title: "Product Categories",
-                        items: buildingDropdownItems,
-                        initialSelectedValues:
-                            availProductCategories.map((e) => e.uuid).toSet(),
-                      );
-                    },
-                  );
-
-                  if (selectedValues != null) {
-                    availProductCategories.clear();
-
-                    selectedValues.forEach((element) {
-                      if (element != null) {
-                        availProductCategories.add(_productCategories[element]);
-                      }
-                    });
-                    availProductSubCategories.clear();
-
-                    setState(() {});
-                  }
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                            child: Text(availProductCategories.isNotEmpty
-                                ? availProductCategories
-                                    .map((e) => e.name)
-                                    .toString()
-                                : "")),
-                        Icon(
-                          Icons.keyboard_arrow_down,
-                          color: CustomColors.black,
-                        ),
-                      ],
-                    ),
-                  ),
-                ));
-          } else {
-            children = Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(width: 2),
-                  Flexible(child: Text("No Categories Available !!")),
-                  Icon(
-                    Icons.keyboard_arrow_down,
-                    color: CustomColors.black,
-                  ),
-                ],
-              ),
-            );
-          }
-        } else if (snapshot.hasError) {
-          children = Center(
-            child: Column(
-              children: AsyncWidgets.asyncError(),
-            ),
-          );
-        } else {
-          children = Center(
-            child: Column(
-              children: AsyncWidgets.asyncWaiting(),
-            ),
-          );
-        }
-
-        return children;
+  Widget getProductCategories() {
+    return SearchableDropdown.multiple(
+      icon: Container(),
+      clearIcon: Icon(Icons.clear_all),
+      onClear: () {
+        onCategoryDropdownItem([]);
       },
+      underline: Container(),
+      items: availProductCategories.values.map(
+        (f) {
+          return DropdownMenuItem<String>(
+            value: f.uuid,
+            child: Text(f.name),
+          );
+        },
+      ).toList(),
+      selectedItems: _selectedCategories,
+      hint: "Select Categories",
+      searchHint: "Select Any",
+      onChanged: (value) {},
+      dialogBox: true,
+      displayItem: (item, selected) {
+        return Row(
+          children: [
+            selected
+                ? Icon(
+                    Icons.check_box,
+                    color: CustomColors.primary,
+                  )
+                : Icon(
+                    Icons.check_box_outline_blank,
+                    color: Colors.grey,
+                  ),
+            SizedBox(width: 7),
+            Expanded(
+              child: item,
+            ),
+          ],
+        );
+      },
+      doneButton: (selectedItemsDone, doneContext) {
+        return RaisedButton(
+          onPressed: () {
+            Navigator.pop(doneContext);
+            onCategoryDropdownItem(selectedItemsDone);
+          },
+          child: Text("Save"),
+        );
+      },
+      searchFn: (String keyword, items) {
+        List<int> ret = List<int>();
+        if (keyword != null && items != null && keyword.isNotEmpty) {
+          keyword.split(" ").forEach((k) {
+            int i = 0;
+            items.forEach((item) {
+              if (k.isNotEmpty &&
+                  (availProductCategories[item.value.toString()]
+                      .name
+                      .toLowerCase()
+                      .contains(
+                        k.toLowerCase(),
+                      ))) {
+                ret.add(i);
+              }
+              i++;
+            });
+          });
+        }
+        if (keyword.isEmpty) {
+          ret = Iterable<int>.generate(items.length).toList();
+        }
+        return (ret);
+      },
+      isExpanded: true,
     );
   }
 
-  Widget getProductSubCategories(BuildContext context) {
-    Map<String, ProductCategoriesMap> _productSubCategories = {};
-
-    return FutureBuilder<List<ProductSubCategories>>(
-      future: ProductSubCategories().getSubCategoriesByIDs(
-          availProductCategories.map((e) => e.uuid).toList()),
-      builder: (BuildContext context,
-          AsyncSnapshot<List<ProductSubCategories>> snapshot) {
-        Widget children;
-
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            List<MultiSelectDialogItem> buildingDropdownItems = [];
-            _productSubCategories.clear();
-            snapshot.data.forEach((element) {
-              _productSubCategories[element.uuid] =
-                  ProductCategoriesMap.fromJson(
-                      {'uuid': element.uuid, 'name': element.name});
-              buildingDropdownItems
-                  .add(MultiSelectDialogItem(element.uuid, element.name));
-            });
-            return InkWell(
-              onTap: () async {
-                final selectedValues = await showDialog<Set<String>>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return MultiSelectDialog(
-                      title: "Product Sub-Categories",
-                      items: buildingDropdownItems,
-                      initialSelectedValues:
-                          availProductSubCategories.map((e) => e.uuid).toSet(),
-                    );
-                  },
-                );
-
-                if (selectedValues != null) {
-                  availProductSubCategories.clear();
-
-                  selectedValues.forEach((element) {
-                    if (element != null) {
-                      availProductSubCategories
-                          .add(_productSubCategories[element]);
-                    }
-                  });
-
-                  setState(() {});
-                }
-              },
-              child: Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                          child: Text(availProductSubCategories.isNotEmpty
-                              ? availProductSubCategories
-                                  .map((e) => e.name)
-                                  .toString()
-                              : "")),
-                      Icon(
-                        Icons.keyboard_arrow_down,
-                        color: CustomColors.black,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          } else {
-            children = Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(width: 2),
-                  Flexible(child: Text("No Sub-Categories Available !!")),
-                  Icon(
-                    Icons.keyboard_arrow_down,
-                    color: CustomColors.black,
-                  ),
-                ],
-              ),
-            );
-          }
-        } else if (snapshot.hasError) {
-          children = Center(
-            child: Column(
-              children: AsyncWidgets.asyncError(),
-            ),
-          );
-        } else {
-          children = Center(
-            child: Column(
-              children: AsyncWidgets.asyncWaiting(),
-            ),
-          );
-        }
-
-        return children;
+  Widget getProductSubCategories() {
+    return SearchableDropdown.multiple(
+      icon: Container(),
+      clearIcon: Icon(Icons.clear_all),
+      onClear: () {
+        setState(() {
+          _selectedSubCategories.clear();
+        });
       },
+      underline: Container(),
+      items: availProductSubCategories.values.map(
+        (f) {
+          return DropdownMenuItem<String>(
+            value: f.uuid,
+            child: Text(f.name),
+          );
+        },
+      ).toList(),
+      selectedItems: _selectedSubCategories,
+      hint: "Select Sub-Categories",
+      searchHint: "Select Any",
+      onChanged: (value) {},
+      dialogBox: true,
+      displayItem: (item, selected) {
+        return Row(
+          children: [
+            selected
+                ? Icon(
+                    Icons.check_box,
+                    color: CustomColors.primary,
+                  )
+                : Icon(
+                    Icons.check_box_outline_blank,
+                    color: Colors.grey,
+                  ),
+            SizedBox(width: 7),
+            Expanded(
+              child: item,
+            ),
+          ],
+        );
+      },
+      doneButton: (selectedItemsDone, doneContext) {
+        return RaisedButton(
+          onPressed: () {
+            Navigator.pop(doneContext);
+            selectedItemsDone.remove(0);
+            setState(() {
+              _selectedSubCategories = selectedItemsDone;
+            });
+          },
+          child: Text("Save"),
+        );
+      },
+      searchFn: (String keyword, items) {
+        List<int> ret = List<int>();
+        if (keyword != null && items != null && keyword.isNotEmpty) {
+          keyword.split(" ").forEach((k) {
+            int i = 0;
+            items.forEach((item) {
+              if (k.isNotEmpty &&
+                  (availProductSubCategories[item.value.toString()]
+                      .name
+                      .toLowerCase()
+                      .contains(
+                        k.toLowerCase(),
+                      ))) {
+                ret.add(i);
+              }
+              i++;
+            });
+          });
+        }
+        if (keyword.isEmpty) {
+          ret = Iterable<int>.generate(items.length).toList();
+        }
+        return (ret);
+      },
+      isExpanded: true,
     );
+  }
+
+  onTypesDropdownItem(List<int> ids) async {
+    // Do nothing for no change
+    if (_selectedProducts == ids) {
+      return;
+    }
+
+    _selectedCategories = [0];
+    _selectedSubCategories = [0];
+    availProductCategories = {
+      '0': ProductCategoriesMap.fromJson(
+          {'uuid': '0', 'name': 'Select Categories'})
+    };
+    availProductSubCategories = {
+      '0': ProductCategoriesMap.fromJson(
+          {'uuid': '0', 'name': 'Select Sub-Categories'})
+    };
+
+    if (ids == null || ids.isEmpty) {
+      setState(
+        () {
+          _selectedProducts.clear();
+        },
+      );
+      return;
+    }
+
+    ids.remove(0);
+
+    Map<int, ProductCategoriesMap> _val = availProducts.values.toList().asMap();
+    List<String> uuids = [];
+
+    ids.forEach((e) {
+      if (_val.containsKey(e)) uuids.add(_val[e].uuid);
+    });
+
+    List<ProductCategories> categories =
+        await ProductCategories().getCategoriesForTypes(uuids);
+
+    if (categories.length > 0) {
+      categories.forEach(
+        (b) {
+          availProductCategories[b.uuid] =
+              ProductCategoriesMap.fromJson({'uuid': b.uuid, 'name': b.name});
+        },
+      );
+
+      setState(
+        () {
+          _selectedProducts = ids;
+        },
+      );
+    } else {
+      setState(
+        () {
+          _selectedProducts = ids;
+        },
+      );
+    }
+  }
+
+  onCategoryDropdownItem(List<int> ids) async {
+    // Do nothing for no change
+    if (_selectedCategories == ids) {
+      return;
+    }
+
+    _selectedSubCategories = [0];
+    availProductSubCategories = {
+      '0': ProductCategoriesMap.fromJson(
+          {'uuid': '0', 'name': 'Select Sub-Categories'})
+    };
+
+    if (ids == null || ids.isEmpty) {
+      setState(
+        () {
+          _selectedCategories.clear();
+        },
+      );
+      return;
+    }
+
+    ids.remove(0);
+
+    Map<int, ProductCategoriesMap> _val =
+        availProductCategories.values.toList().asMap();
+    List<String> uuids = [];
+
+    ids.forEach((e) {
+      if (_val.containsKey(e)) uuids.add(_val[e].uuid);
+    });
+
+    List<ProductSubCategories> subCategories =
+        await ProductSubCategories().getSubCategoriesByIDs(uuids);
+
+    if (subCategories.length > 0) {
+      subCategories.forEach(
+        (b) {
+          availProductSubCategories[b.uuid] =
+              ProductCategoriesMap.fromJson({'uuid': b.uuid, 'name': b.name});
+        },
+      );
+
+      setState(
+        () {
+          _selectedCategories = ids;
+        },
+      );
+    } else {
+      setState(
+        () {
+          _selectedCategories = ids;
+        },
+      );
+    }
   }
 }
 
@@ -1168,7 +1355,7 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
   bool _isCheckedCard;
   bool _isCheckedBank;
 
-  List<String> workingDays = ['1', '2', '3', '4', '5'];
+  List<String> workingDays = [];
   TimeOfDay fromTime = TimeOfDay(hour: 9, minute: 0);
   TimeOfDay tillTime = TimeOfDay(hour: 18, minute: 0);
   TimeOfDay deliverFromTime = TimeOfDay(hour: 09, minute: 00);
@@ -1270,82 +1457,80 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
           backgroundColor: CustomColors.primary,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Container(
-          height: 40,
-          width: 160,
-          padding: EdgeInsets.all(10),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color: CustomColors.primary,
-              border: Border.all(color: CustomColors.black),
-              borderRadius: BorderRadius.circular(10.0)),
-          child: InkWell(
-            onTap: () async {
-              final FormState form = _formKey.currentState;
+        floatingActionButton: InkWell(
+          onTap: () async {
+            final FormState form = _formKey.currentState;
 
-              if (form.validate()) {
-                if (paymentOptions.length == 0) {
-                  _scaffoldKey.currentState.showSnackBar(
-                    CustomSnackBar.errorSnackBar(
-                        "Please Select atleast one Payment Option!", 2),
-                  );
-                  return;
-                }
-                if (workingDays.length == 0) {
-                  _scaffoldKey.currentState.showSnackBar(
-                    CustomSnackBar.errorSnackBar(
-                        "Please Set your Business Working Days!", 2),
-                  );
-                  return;
-                }
-
-                if (!deliverAnywhere && this.maxDistance == 0) {
-                  _scaffoldKey.currentState.showSnackBar(
-                    CustomSnackBar.errorSnackBar(
-                        "Please Set your Maximum Delivery Range!", 2),
-                  );
-                  return;
-                }
-
-                _store.deliverAnywhere = this.deliverAnywhere;
-                _store.upiID = upiID;
-                _store.walletNumber = walletNumber;
-
-                _store.availablePayments = paymentOptions;
-                _store.activeFrom = activeFrom;
-                _store.activeTill = activeTill;
-                List<int> workingDaysInt = workingDays.map(int.parse).toList();
-                _store.workingDays = workingDaysInt;
-
-                _store.deliveryDetails.deliveryFrom = this.deliverFrom;
-                _store.deliveryDetails.deliveryTill = this.deliverTill;
-                _store.deliveryDetails.maxDistance = this.maxDistance;
-                _store.deliveryDetails.deliveryCharges02 = this.deliveryCharge2;
-                _store.deliveryDetails.deliveryCharges05 = this.deliveryCharge5;
-                _store.deliveryDetails.deliveryCharges10 =
-                    this.deliveryCharge10;
-                _store.deliveryDetails.deliveryChargesMax =
-                    this.deliveryChargeMax;
-                _store.deliveryDetails.availableOptions = this.deliveryTemp;
-
-                _store.keywords = _store.name.split(" ");
-
-                await _store.update(_store.toJson());
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditLocationPicker(_store),
-                    settings:
-                        RouteSettings(name: '/settings/store/edit/location'),
-                  ),
-                );
-              } else {
+            if (form.validate()) {
+              if (paymentOptions.length == 0) {
                 _scaffoldKey.currentState.showSnackBar(
-                    CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
+                  CustomSnackBar.errorSnackBar(
+                      "Please Select atleast one Payment Option!", 2),
+                );
+                return;
               }
-            },
-            child: Text("Save & Continue"),
+              if (workingDays.length == 0) {
+                _scaffoldKey.currentState.showSnackBar(
+                  CustomSnackBar.errorSnackBar(
+                      "Please Set your Business Working Days!", 2),
+                );
+                return;
+              }
+
+              if (!deliverAnywhere && this.maxDistance == 0) {
+                _scaffoldKey.currentState.showSnackBar(
+                  CustomSnackBar.errorSnackBar(
+                      "Please Set your Maximum Delivery Range!", 2),
+                );
+                return;
+              }
+
+              _store.deliverAnywhere = this.deliverAnywhere;
+              _store.upiID = upiID;
+              _store.walletNumber = walletNumber;
+
+              _store.availablePayments = paymentOptions;
+              _store.activeFrom = activeFrom;
+              _store.activeTill = activeTill;
+              List<int> workingDaysInt = workingDays.map(int.parse).toList();
+              _store.workingDays = workingDaysInt;
+
+              _store.deliveryDetails.deliveryFrom = this.deliverFrom;
+              _store.deliveryDetails.deliveryTill = this.deliverTill;
+              _store.deliveryDetails.maxDistance = this.maxDistance;
+              _store.deliveryDetails.deliveryCharges02 = this.deliveryCharge2;
+              _store.deliveryDetails.deliveryCharges05 = this.deliveryCharge5;
+              _store.deliveryDetails.deliveryCharges10 = this.deliveryCharge10;
+              _store.deliveryDetails.deliveryChargesMax =
+                  this.deliveryChargeMax;
+              _store.deliveryDetails.availableOptions = this.deliveryTemp;
+              _store.keywords = _store.name.split(" ");
+
+              await _store.update(_store.toJson());
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditLocationPicker(_store),
+                  settings:
+                      RouteSettings(name: '/settings/store/edit/location'),
+                ),
+              );
+            } else {
+              _scaffoldKey.currentState.showSnackBar(
+                  CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
+            }
+          },
+          child: Container(
+            height: 40,
+            width: 120,
+            padding: EdgeInsets.all(10),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: CustomColors.primary,
+                border: Border.all(color: CustomColors.black),
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Text("Continue"),
           ),
         ),
         body: GestureDetector(

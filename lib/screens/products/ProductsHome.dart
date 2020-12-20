@@ -1,8 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/store.dart';
-import 'package:chipchop_seller/screens/app/appBar.dart';
-import 'package:chipchop_seller/screens/app/bottomBar.dart';
-import 'package:chipchop_seller/screens/app/sideDrawer.dart';
 import 'package:chipchop_seller/screens/products/AddProducts.dart';
 import 'package:chipchop_seller/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
@@ -14,63 +11,52 @@ import 'package:flutter/material.dart';
 class ProductsHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      initialIndex: 0,
-      child: Scaffold(
-        drawer: sideDrawer(context),
-        appBar: appBar(context),
-        body: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5.0),
-                  child: Card(
-                    elevation: 2,
-                    color: CustomColors.grey,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: ExpansionTile(
-                      backgroundColor: CustomColors.lightGrey,
-                      title: Text("View & Edit Products"),
-                      children: [getStores(context)],
-                    ),
-                  ),
-                ),
-                Card(
-                  elevation: 2,
-                  color: CustomColors.grey,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                  ),
-                  child: Container(
-                    child: ListTile(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddProduct(),
-                            settings: RouteSettings(name: '/products/add'),
-                          ),
-                        );
-                      },
-                      leading: Text("Add Products"),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 15,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+    return Container(
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: Card(
+              elevation: 2,
+              color: CustomColors.grey,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: ExpansionTile(
+                backgroundColor: CustomColors.lightGrey,
+                title: Text("View & Edit Products"),
+                children: [getStores(context)],
+              ),
             ),
           ),
-        ),
-        bottomNavigationBar: bottomBar(context),
+          Card(
+            elevation: 2,
+            color: CustomColors.grey,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+            child: Container(
+              child: ListTile(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddProduct(),
+                      settings: RouteSettings(name: '/products/add'),
+                    ),
+                  );
+                },
+                leading: Text("Add Products"),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 15,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

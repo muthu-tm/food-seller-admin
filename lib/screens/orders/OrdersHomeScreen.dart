@@ -1,9 +1,7 @@
-import 'package:chipchop_seller/screens/app/appBar.dart';
-import 'package:chipchop_seller/screens/app/bottomBar.dart';
-import 'package:chipchop_seller/screens/app/sideDrawer.dart';
 import 'package:chipchop_seller/screens/orders/OrderWidget.dart';
 import 'package:chipchop_seller/screens/orders/OrdersSearchBar.dart';
 import 'package:chipchop_seller/screens/utils/NoStoresWidget.dart';
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -12,9 +10,6 @@ import '../utils/AsyncWidgets.dart';
 import '../utils/CustomColors.dart';
 
 class OrdersHomeScreen extends StatefulWidget {
-  OrdersHomeScreen(this.stores);
-
-  final List<String> stores;
   @override
   _OrdersHomeScreenState createState() => _OrdersHomeScreenState();
 }
@@ -35,112 +30,105 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(context),
-      drawer: sideDrawer(context),
-      body: SingleChildScrollView(
-        child: widget.stores == null || widget.stores.isEmpty
-            ? Center(
-                child: NoStoresWidget(),
-              )
-            : Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(10.0, 10, 10, 5),
-                    child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OrdersSearchBar(),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          height: 50,
-                          padding: EdgeInsets.all(5.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: CustomColors.grey,
-                                  blurRadius: 5.0,
-                                  spreadRadius: 0.5,
-                                )
-                              ],
-                              color: CustomColors.white),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.search,
-                                color: CustomColors.primary,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 5.0),
-                                child: Text(
-                                  "Search with Order ID",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: "Georgia",
-                                      color: CustomColors.black),
-                                ),
-                              )
-                            ],
+    return cachedLocalUser.stores == null || cachedLocalUser.stores.isEmpty
+        ? Center(
+            child: NoStoresWidget(),
+          )
+        : Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(10.0, 10, 10, 5),
+                child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrdersSearchBar(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 50,
+                      padding: EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: CustomColors.grey,
+                              blurRadius: 5.0,
+                              spreadRadius: 0.5,
+                            )
+                          ],
+                          color: CustomColors.white),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.search,
+                            color: CustomColors.primary,
                           ),
-                        )),
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Container(
-                        width: 210,
-                        height: 40,
-                        child: DropdownButtonFormField(
-                          decoration: InputDecoration(
-                            labelText: "Filter",
-                            labelStyle: TextStyle(
-                              color: CustomColors.blue,
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Text(
+                              "Search with Order ID",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: "Georgia",
+                                  color: CustomColors.black),
                             ),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            fillColor: CustomColors.white,
-                            filled: true,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 5.0, horizontal: 10.0),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(color: CustomColors.white),
-                            ),
-                          ),
-                          items: _selectedFilter.entries.map(
-                            (f) {
-                              return DropdownMenuItem<String>(
-                                value: f.key,
-                                child: Text(f.value),
-                              );
-                            },
-                          ).toList(),
-                          onChanged: (newVal) {
-                            setState(() {
-                              filterBy = newVal;
-                            });
-                          },
-                          value: filterBy,
+                          )
+                        ],
+                      ),
+                    )),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Container(
+                    width: 210,
+                    height: 40,
+                    child: DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        labelText: "Filter",
+                        labelStyle: TextStyle(
+                          color: CustomColors.blue,
+                        ),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        fillColor: CustomColors.white,
+                        filled: true,
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 5.0, horizontal: 10.0),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: CustomColors.white),
                         ),
                       ),
+                      items: _selectedFilter.entries.map(
+                        (f) {
+                          return DropdownMenuItem<String>(
+                            value: f.key,
+                            child: Text(f.value),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (newVal) {
+                        setState(() {
+                          filterBy = newVal;
+                        });
+                      },
+                      value: filterBy,
                     ),
                   ),
-                  getBody(context)
-                ],
+                ),
               ),
-      ),
-      bottomNavigationBar: bottomBar(context),
-    );
+              getBody(context)
+            ],
+          );
   }
 
   Widget getBody(BuildContext context) {
     return StreamBuilder(
-      stream: Order().streamOrdersByStatus(
-          widget.stores, filterBy == "0" ? null : (int.parse(filterBy) - 1)),
+      stream: Order().streamOrdersByStatus(cachedLocalUser.stores,
+          filterBy == "0" ? null : (int.parse(filterBy) - 1)),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget child;
 

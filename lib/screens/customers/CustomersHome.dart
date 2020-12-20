@@ -1,34 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_seller/db/models/store.dart';
-import 'package:chipchop_seller/screens/app/bottomBar.dart';
 import 'package:chipchop_seller/screens/customers/CustomersScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
-import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/NoStoresWidget.dart';
 import 'package:flutter/material.dart';
 
 class CustomersHome extends StatelessWidget {
-  CustomersHome();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Your Stores",
-          textAlign: TextAlign.start,
-          style: TextStyle(color: CustomColors.black, fontSize: 16),
-        ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: CustomColors.black,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        backgroundColor: CustomColors.primary,
-      ),
-      body: FutureBuilder(
+    return FutureBuilder(
         future: Store().getStoresForUser(),
         builder: (context, AsyncSnapshot<List<Store>> snapshot) {
           Widget child;
@@ -56,7 +37,7 @@ class CustomersHome extends StatelessWidget {
                               builder: (context) =>
                                   CustomersScreen(_s.uuid, _s.name),
                               settings: RouteSettings(
-                                  name: '/customers/store/customer'),
+                                  name: '/customers/store'),
                             ),
                           );
                         },
@@ -109,8 +90,6 @@ class CustomersHome extends StatelessWidget {
           }
           return child;
         },
-      ),
-      bottomNavigationBar: bottomBar(context),
     );
   }
 }

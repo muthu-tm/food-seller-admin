@@ -13,7 +13,6 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateApp extends StatefulWidget {
-
   @override
   _UpdateAppState createState() => _UpdateAppState();
 }
@@ -33,9 +32,8 @@ class _UpdateAppState extends State<UpdateApp> {
 
     ChipChopConfig conf =
         await ChipChopConfig().getConfigByPlatform(Platform.operatingSystem);
-    if (conf == null)
-      return;
-      
+    if (conf == null) return;
+
     url = conf.appURL;
     noImagePlaceholder = conf.defaultImage;
 
@@ -135,6 +133,6 @@ class _UpdateAppState extends State<UpdateApp> {
 
   @override
   Widget build(BuildContext context) {
-    return HomeScreen();
+    return HomeScreen(0);
   }
 }
