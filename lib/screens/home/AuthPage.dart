@@ -322,21 +322,19 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              (widget._user.preferences.isfingerAuthEnabled)
-                  ? FlatButton(
-                      onPressed: () async {
-                        await biometric();
-                      },
-                      child: Text(
-                        "Fingerprint",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: CustomColors.grey,
-                          fontSize: 11.0,
-                        ),
-                      ),
-                    )
-                  : Container(),
+              FlatButton(
+                onPressed: () async {
+                  await biometric();
+                },
+                child: Text(
+                  "Use Fingerprint",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    color: CustomColors.black,
+                    fontSize: 11.0,
+                  ),
+                ),
+              ),
               FlatButton(
                 onPressed: () {
                   Navigator.of(context).push(

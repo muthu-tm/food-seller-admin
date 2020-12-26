@@ -80,8 +80,8 @@ class _AddProductState extends State<AddProduct> {
   bool isAvailable = true;
   bool isDeliverable = true;
   bool isPopular = false;
-  bool isReturnable = true;
-  bool isReplaceable = true;
+  bool isReturnable = false;
+  bool isReplaceable = false;
   List<String> keywords = [];
 
   Map<String, Store> _storeMap = {};
@@ -124,11 +124,7 @@ class _AddProductState extends State<AddProduct> {
         onPressed: () async {
           await _submit();
         },
-        icon: Icon(
-          Icons.done_all,
-          size: 35,
-        ),
-        label: Text("Save"),
+        label: Text("Add Product"),
       ),
       body: GestureDetector(
         onTap: () {
@@ -1443,52 +1439,54 @@ class _AddProductState extends State<AddProduct> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  width: 160,
-                  child: FlatButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    color: Colors.green,
-                    onPressed: () async {
-                      if (_variants.isNotEmpty &&
-                          _variants.last.weight.toInt() == 0) {
-                        Fluttertoast.showToast(
-                            msg: "Please fill the Product Variant");
-                        return;
-                      } else {
-                        setState(() {
-                          _variants.add(
-                            ProductVariants.fromJson(
-                              {'id': (_variants.length).toString()},
-                            ),
-                          );
-                          vPriceControllers
-                              .add(TextEditingController(text: "0.00"));
-                        });
-                      }
-                    },
-                    icon: Icon(Icons.add),
-                    label: Text(
-                      "Add Variant",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                        child:
+                            Text("More Varients Available for this Product ?")),
+                    FlatButton.icon(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      color: Colors.green,
+                      onPressed: () async {
+                        if (_variants.isNotEmpty &&
+                            _variants.last.weight.toInt() == 0) {
+                          Fluttertoast.showToast(
+                              msg: "Please fill the Product Variant");
+                          return;
+                        } else {
+                          setState(() {
+                            _variants.add(
+                              ProductVariants.fromJson(
+                                {'id': (_variants.length).toString()},
+                              ),
+                            );
+                            vPriceControllers
+                                .add(TextEditingController(text: "0.00"));
+                          });
+                        }
+                      },
+                      icon: Icon(Icons.add),
+                      label: Text(
+                        "ADD",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
+                  ]),
             ),
+            SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Product Details",
+                  "Product Description",
                   style: TextStyle(
                       fontSize: 14,
                       color: CustomColors.black,

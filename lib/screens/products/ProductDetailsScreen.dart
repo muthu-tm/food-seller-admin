@@ -9,6 +9,7 @@ import 'package:chipchop_seller/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/ReadMoreText.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../db/models/products.dart';
 import '../utils/CustomColors.dart';
@@ -27,8 +28,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   String _variants = "0";
-  Store store;
-
   TabController _controller;
   List<Widget> list = [
     Tab(
@@ -61,7 +60,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: SingleChildScrollView(child: getBody(context)),
+      body: SingleChildScrollView(primary: true, child: getBody(context)),
     );
   }
 
@@ -211,6 +210,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
           SizedBox(
             height: 10,
           ),
+          getHighlightedDetails(),
+          SizedBox(
+            height: 10,
+          ),
           widget.product.productDescription != null &&
                   widget.product.productDescription.isNotEmpty
               ? Container(
@@ -278,13 +281,87 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
       builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.isNotEmpty) {
-            store = Store.fromJson(snapshot.data);
-            return SingleChildScrollView(child: StoreProfileWidget(store));
+            Store _s = Store.fromJson(snapshot.data);
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  StoreProfileWidget(_s),
+                  Container(
+                    color: CustomColors.lightGrey,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    child: Column(
+                      children: [
+                        _s.availablePayments.contains(0)
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    FontAwesomeIcons.moneyBill,
+                                    size: 20,
+                                    color: Colors.green,
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text(
+                                    "Cash On Delivery",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    FontAwesomeIcons.moneyBill,
+                                    size: 20,
+                                    color: Colors.red,
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text(
+                                    "COD Not Available",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        widget.product.isDeliverable
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.pedal_bike,
+                                    size: 20,
+                                    color: CustomColors.blue,
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text(
+                                    "Minimum Delivery Charge\* :  ${_s.deliveryDetails.deliveryCharges02}",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )
+                            : Container()
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            );
           } else {
             return Container(
               padding: EdgeInsets.all(10),
               color: CustomColors.white,
-              width: MediaQuery.of(context).size.width * 0.9,
+              width: MediaQuery.of(context).size.width,
               child: Text(
                 "Unable to load Store Details",
                 style: TextStyle(
@@ -308,6 +385,54 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
           );
         }
       },
+    );
+  }
+
+  Widget getHighlightedDetails() {
+    return Card(
+      child: Column(
+        children: [
+          widget.product.isAvailable
+              ? ListTile(
+                  leading: Icon(
+                    FontAwesomeIcons.smile,
+                    color: CustomColors.blueGreen,
+                  ),
+                  title: Text("Product In Stock"),
+                )
+              : ListTile(
+                  leading: Icon(
+                    Icons.face,
+                    color: CustomColors.alertRed,
+                  ),
+                  title: Text("No Stock"),
+                ),
+          widget.product.isDeliverable
+              ? ListTile(
+                  leading: Icon(
+                    Icons.pedal_bike,
+                    color: CustomColors.blue,
+                  ),
+                  title: Text("Home Delivery Available"),
+                )
+              : ListTile(
+                  leading: Icon(Icons.self_improvement),
+                  title: Text("Only Self Pickup From Store"),
+                ),
+          widget.product.isReturnable
+              ? ListTile(
+                  leading: Icon(Icons.bike_scooter),
+                  title: Text("Product Returnable"),
+                )
+              : Container(),
+          widget.product.isReplaceable
+              ? ListTile(
+                  leading: Icon(Icons.repeat_one_on),
+                  title: Text("Product Replaceable"),
+                )
+              : Container(),
+        ],
+      ),
     );
   }
 
