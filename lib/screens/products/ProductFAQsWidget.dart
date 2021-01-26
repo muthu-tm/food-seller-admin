@@ -116,7 +116,7 @@ class ProductFAQsWidget extends StatelessWidget {
                                 textColor: Colors.black);
                           } catch (err) {
                             Fluttertoast.showToast(
-                                msg: 'Unabe to ask now!',
+                                msg: 'Unable to ask now!',
                                 backgroundColor: CustomColors.alertRed,
                                 textColor: Colors.white);
                           }
@@ -233,7 +233,7 @@ class ProductFAQsWidget extends StatelessWidget {
                                 textColor: Colors.black);
                           } catch (err) {
                             Fluttertoast.showToast(
-                                msg: 'Unabe to Answer now!',
+                                msg: 'Unable to Answer now!',
                                 backgroundColor: CustomColors.alertRed,
                                 textColor: Colors.white);
                           }

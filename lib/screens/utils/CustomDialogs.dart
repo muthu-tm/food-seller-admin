@@ -42,57 +42,55 @@ class CustomDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return SimpleDialog(
-            key: key,
-            elevation: 0,
-            contentPadding: EdgeInsets.all(1),
-            backgroundColor: Colors.transparent,
-            children: <Widget>[
-              Container(
-                alignment: Alignment.center,
-                width: 60,
-                height: 60,
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      width: 60,
-                      height: 60,
-                      padding: EdgeInsets.all(10),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
+          key: key,
+          elevation: 0,
+          contentPadding: EdgeInsets.all(1),
+          backgroundColor: Colors.transparent,
+          children: <Widget>[
+            Container(
+              alignment: Alignment.center,
+              width: 60,
+              height: 60,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    width: 60,
+                    height: 60,
+                    padding: EdgeInsets.all(10),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: CustomColors.lightGrey
-                      ),
-                      child: ClipRRect(
-                        child: Image.asset(
-                          "images/icons/logo.png",
-                          height: 35,
-                          width: 35,
-                        ),
+                        color: CustomColors.lightGrey),
+                    child: ClipRRect(
+                      child: Image.asset(
+                        "images/icons/logo.png",
+                        height: 35,
+                        width: 35,
                       ),
                     ),
-                    Positioned(
-                      top: 7.5,
-                      left: 7.5,
-                      child: SizedBox(
-                        width: 45,
-                        height: 45,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 3,
-                          backgroundColor: CustomColors.alertRed,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(CustomColors.primary),
-                        ),
+                  ),
+                  Positioned(
+                    top: 7.5,
+                    left: 7.5,
+                    child: SizedBox(
+                      width: 45,
+                      height: 45,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 3,
+                        backgroundColor: CustomColors.alertRed,
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(CustomColors.primary),
                       ),
                     ),
-                  ],
-                ),
-              )
-            ],
+                  ),
+                ],
+              ),
+            )
+          ],
         );
       },
     );
   }
-
 
   static waiting(BuildContext context, String title, String description) {
     return showDialog(
@@ -159,7 +157,7 @@ class CustomDialogs {
     return showDialog(
       context: context,
       barrierDismissible: true,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
           elevation: 10.0,
           title: new Text(
@@ -176,8 +174,8 @@ class CustomDialogs {
                 Container(
                   child: Text(
                     description,
-                    style: TextStyle(
-                        color: CustomColors.primary, fontSize: 20.0),
+                    style:
+                        TextStyle(color: CustomColors.primary, fontSize: 20.0),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -190,8 +188,7 @@ class CustomDialogs {
               splashColor: CustomColors.blue,
               child: Text(
                 'NO',
-                style:
-                    TextStyle(color: CustomColors.blue, fontSize: 18.0),
+                style: TextStyle(color: CustomColors.blue, fontSize: 18.0),
                 textAlign: TextAlign.center,
               ),
               onPressed: noAction,
@@ -201,8 +198,7 @@ class CustomDialogs {
               splashColor: CustomColors.alertRed,
               child: Text(
                 'YES',
-                style: TextStyle(
-                    color: CustomColors.alertRed, fontSize: 18.0),
+                style: TextStyle(color: CustomColors.alertRed, fontSize: 18.0),
                 textAlign: TextAlign.center,
               ),
               onPressed: yesAction,

@@ -198,72 +198,70 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                 }
 
                 return Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Material(
-                    color: tileColor,
-                    elevation: 3.0,
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Container(
-                      height: 90,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: tileColor,
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: Icon(
-                              Icons.local_offer,
-                              size: 35.0,
-                              color: CustomColors.alertRed.withOpacity(0.6),
+                    padding: EdgeInsets.all(5.0),
+                    child: Material(
+                      color: tileColor,
+                      elevation: 3.0,
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Container(
+                        padding: EdgeInsets.all(5.0),
+                        height: 90,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: tileColor,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(left: 5, right: 5),
+                              child: Icon(
+                                Icons.local_offer,
+                                size: 35.0,
+                                color: CustomColors.alertRed.withOpacity(0.6),
+                              ),
                             ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(left: 0, top: 5.0),
-                            width: MediaQuery.of(context).size.width / 1.5,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                history.details.isNotEmpty
-                                    ? Flexible(
-                                        child: Text(
-                                          history.details,
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                              fontSize: 16.0,
-                                              color: textColor,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      )
-                                    : Container(),
-                                Text(
-                                  '${DateUtils.formatDateTime(DateTime.fromMillisecondsSinceEpoch(history.createdAt))}',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                      fontSize: 12.0, color: textColor),
-                                ),
-                                Text(
-                                  history.type == 0
-                                      ? "Order Debit"
-                                      : history.type == 1
-                                          ? "Order Credit"
-                                          : history.type == 2
-                                              ? "Store Transaction"
-                                              : "Offer",
-                                  style: TextStyle(
-                                      fontSize: 10.0,
-                                      color: textColor,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  history.details.isNotEmpty
+                                      ? Flexible(
+                                          child: Text(
+                                            history.details,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: textColor,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        )
+                                      : Container(),
+                                  Text(
+                                    '${DateUtils.formatDateTime(DateTime.fromMillisecondsSinceEpoch(history.createdAt))}',
+                                    style: TextStyle(
+                                        fontSize: 12.0, color: textColor),
+                                  ),
+                                  Text(
+                                    history.type == 0
+                                        ? "Order Debit"
+                                        : history.type == 1
+                                            ? "Order Credit"
+                                            : history.type == 2
+                                                ? "Store Transaction"
+                                                : "Offer",
+                                    style: TextStyle(
+                                        fontSize: 10.0,
+                                        color: textColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Flexible(
-                            child: Text(
+                            Text(
                               '₹ ${history.amount}',
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
@@ -272,12 +270,10 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                                   color: textColor,
                                   fontWeight: FontWeight.bold),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                );
+                    ),);
               },
             );
           } else {

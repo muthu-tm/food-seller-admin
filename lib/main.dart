@@ -9,6 +9,8 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+
 void main() {
   runApp(MyApp());
 }
@@ -50,6 +52,7 @@ class _MyAppState extends State<MyApp> {
     Analytics.setupAnalytics(analytics, observer);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       locale: this.locale,
       title: seller_app_name,
       theme: ThemeData(

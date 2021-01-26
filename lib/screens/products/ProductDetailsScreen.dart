@@ -392,7 +392,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     return Card(
       child: Column(
         children: [
-          widget.product.isAvailable
+          widget.product.variants[int.parse(_variants)].isAvailable
               ? ListTile(
                   leading: Icon(
                     FontAwesomeIcons.smile,

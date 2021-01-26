@@ -224,7 +224,7 @@ Widget sideDrawer(BuildContext context) {
           leading:
               Icon(Icons.store_mall_directory, color: CustomColors.primary),
           title: Text(
-            "Store settings",
+            "My Stores",
           ),
           onTap: () async {
             Navigator.push(

@@ -76,6 +76,8 @@ class UserStoreWalletHistory {
   }
 
   Stream<QuerySnapshot> streamUsersStoreWallet(String storeID, String custID) {
-    return getCollectionRef(storeID, custID).snapshots();
+    return getCollectionRef(storeID, custID)
+        .orderBy('created_at', descending: true)
+        .snapshots();
   }
 }

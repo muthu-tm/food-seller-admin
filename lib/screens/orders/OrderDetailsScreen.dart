@@ -16,9 +16,12 @@ import '../utils/AsyncWidgets.dart';
 import '../utils/CustomColors.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
-  OrderDetailsScreen(this.order);
+  OrderDetailsScreen(this.orderID, this.uuid, this.custID);
 
-  final Order order;
+  final String orderID;
+  final String uuid;
+  final String custID;
+
   @override
   _OrderDetailsScreenState createState() => _OrderDetailsScreenState();
 }
@@ -44,7 +47,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          "Order : ${widget.order.orderID}",
+          "Order : ${widget.orderID}",
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
         leading: IconButton(
@@ -79,8 +82,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                     BorderSide(color: CustomColors.primary)),
                           ),
                           child: OrderChatScreen(
-                            buyerID: widget.order.userNumber,
-                            orderUUID: widget.order.uuid,
+                            buyerID: widget.custID,
+                            orderUUID: widget.uuid,
                           ),
                         );
                       },
@@ -111,8 +114,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
 
   Widget getBody(BuildContext context) {
     return StreamBuilder(
-      stream:
-          Order().streamOrderByID(widget.order.userNumber, widget.order.uuid),
+      stream: Order().streamOrderByID(widget.custID, widget.uuid),
       builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         Widget child;
 

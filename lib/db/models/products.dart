@@ -55,8 +55,6 @@ class Products extends Model {
   bool isReplaceable;
   @JsonKey(name: 'replace_within', defaultValue: false)
   int replaceWithin;
-  @JsonKey(name: 'is_available')
-  bool isAvailable;
   @JsonKey(name: 'is_deliverable')
   bool isDeliverable;
   @JsonKey(name: 'is_popular')
@@ -152,6 +150,15 @@ class Products extends Model {
     } catch (err) {
       throw err;
     }
+  }
+
+  String getSmallProductImage() {
+    if (image != null && image.trim() != "")
+      return image.replaceFirst(
+          firebase_storage_path, image_kit_path + ik_small_size);
+    else
+      return noImagePlaceholder.replaceFirst(
+          firebase_storage_path, image_kit_path + ik_small_size);
   }
 
   String getProductImage() {
@@ -251,28 +258,6 @@ class Products extends Model {
         'product_id': uuid,
         'error': err.toString()
       }, 'product');
-      throw err;
-    }
-  }
-
-  Stream<QuerySnapshot> streamAvailableProducts(String storeID) {
-    try {
-      return getCollectionRef()
-          .where('store_uuid', isEqualTo: storeID)
-          .where('is_available', isEqualTo: true)
-          .snapshots();
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  Stream<QuerySnapshot> streamUnAvailableProducts(String storeID) {
-    try {
-      return getCollectionRef()
-          .where('store_uuid', isEqualTo: storeID)
-          .where('is_available', isEqualTo: false)
-          .snapshots();
-    } catch (err) {
       throw err;
     }
   }

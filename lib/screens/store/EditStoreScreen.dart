@@ -292,284 +292,357 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                       "Store Images",
                       style: TextStyle(color: CustomColors.black, fontSize: 14),
                     ),
-                    title: Container(
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          color: Colors.green[300],
-                          borderRadius: BorderRadius.circular(5.0)),
-                      child: InkWell(
-                        onTap: () async {
-                          String imageUrl = '';
-                          try {
-                            ImagePicker imagePicker = ImagePicker();
-                            PickedFile pickedFile;
-
-                            pickedFile = await imagePicker.getImage(
-                                source: ImageSource.gallery);
-                            if (pickedFile == null) return;
-
-                            String fileName = DateTime.now()
-                                .millisecondsSinceEpoch
-                                .toString();
-                            String fbFilePath =
-                                'store_profile/${cachedLocalUser.getID()}/$fileName.png';
-                            CustomDialogs.actionWaiting(context);
-                            // Upload to storage
-                            imageUrl = await Uploader().uploadImageFile(
-                                true, pickedFile.path, fbFilePath);
-                            Navigator.of(context).pop();
-                          } catch (err) {
-                            Fluttertoast.showToast(
-                                msg: 'This file is not an image',
-                                backgroundColor: CustomColors.alertRed,
-                                textColor: CustomColors.black);
-                          }
-                          if (imageUrl != "")
-                            setState(() {
-                              imagePaths.add(imageUrl);
-                            });
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              FontAwesomeIcons.fileUpload,
-                              size: 20,
-                              color: CustomColors.black,
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              "Upload",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    trailing: Container(
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          color: Colors.green[300],
-                          borderRadius: BorderRadius.circular(5.0)),
-                      child: InkWell(
-                        onTap: () async {
-                          String imageUrl = '';
-                          try {
-                            String tempPath =
-                                (await getTemporaryDirectory()).path;
-                            String filePath = '$tempPath/chipchop_image.png';
-                            if (File(filePath).existsSync())
-                              await File(filePath).delete();
-
-                            List<CameraDescription> cameras =
-                                await availableCameras();
-                            CameraDescription camera = cameras.first;
-
-                            var result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TakePicturePage(
-                                  camera: camera,
-                                  path: filePath,
-                                ),
-                              ),
-                            );
-                            if (result != null) {
-                              String fileName = DateTime.now()
-                                  .millisecondsSinceEpoch
-                                  .toString();
-                              String fbFilePath =
-                                  'store_profile/${cachedLocalUser.getID()}/$fileName.png';
-                              CustomDialogs.actionWaiting(context);
-                              // Upload to storage
-                              imageUrl = await Uploader()
-                                  .uploadImageFile(true, result, fbFilePath);
-                              Navigator.of(context).pop();
-                            }
-                          } catch (err) {
-                            Fluttertoast.showToast(
-                                msg: 'This file is not an image',
-                                backgroundColor: CustomColors.alertRed,
-                                textColor: CustomColors.white);
-                          }
-                          if (imageUrl != "")
-                            setState(() {
-                              imagePaths.add(imageUrl);
-                            });
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              FontAwesomeIcons.cameraRetro,
-                              size: 20,
-                              color: CustomColors.black,
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              "Capture",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ),
                 ),
                 imagePaths.length > 0
-                    ? SizedBox(
+                    ? Container(
                         height: 160,
-                        child: ListView.builder(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           primary: true,
-                          shrinkWrap: true,
-                          itemCount: imagePaths.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              child: Stack(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 10, right: 10, top: 5),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ImageView(
-                                              url: imagePaths[index],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: Container(
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          child: CachedNetworkImage(
-                                            imageUrl: imagePaths[index],
-                                            imageBuilder:
-                                                (context, imageProvider) =>
-                                                    Image(
-                                              fit: BoxFit.fill,
-                                              height: 150,
-                                              width: 150,
-                                              image: imageProvider,
-                                            ),
-                                            progressIndicatorBuilder: (context,
-                                                    url, downloadProgress) =>
-                                                Center(
-                                              child: SizedBox(
-                                                height: 50.0,
-                                                width: 50.0,
-                                                child: CircularProgressIndicator(
-                                                    value: downloadProgress
-                                                        .progress,
-                                                    valueColor:
-                                                        AlwaysStoppedAnimation(
-                                                            CustomColors.black),
-                                                    strokeWidth: 2.0),
+                          child: Row(
+                            children: [
+                              ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                primary: false,
+                                shrinkWrap: true,
+                                itemCount: imagePaths.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Container(
+                                    child: Stack(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 10, right: 10, top: 5),
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ImageView(
+                                                    url: imagePaths[index],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: imagePaths[index],
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Image(
+                                                    fit: BoxFit.fill,
+                                                    height: 150,
+                                                    width: 150,
+                                                    image: imageProvider,
+                                                  ),
+                                                  progressIndicatorBuilder:
+                                                      (context, url,
+                                                              downloadProgress) =>
+                                                          Center(
+                                                    child: SizedBox(
+                                                      height: 50.0,
+                                                      width: 50.0,
+                                                      child: CircularProgressIndicator(
+                                                          value:
+                                                              downloadProgress
+                                                                  .progress,
+                                                          valueColor:
+                                                              AlwaysStoppedAnimation(
+                                                                  CustomColors
+                                                                      .black),
+                                                          strokeWidth: 2.0),
+                                                    ),
+                                                  ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(
+                                                    Icons.error,
+                                                    size: 35,
+                                                  ),
+                                                  fadeOutDuration:
+                                                      Duration(seconds: 1),
+                                                  fadeInDuration:
+                                                      Duration(seconds: 2),
+                                                ),
                                               ),
                                             ),
-                                            errorWidget:
-                                                (context, url, error) => Icon(
-                                              Icons.error,
-                                              size: 35,
-                                            ),
-                                            fadeOutDuration:
-                                                Duration(seconds: 1),
-                                            fadeInDuration:
-                                                Duration(seconds: 2),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 5,
-                                    right: 10,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: CustomColors.alertRed,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: InkWell(
-                                        child: Icon(
-                                          Icons.close,
-                                          size: 25,
-                                          color: CustomColors.white,
-                                        ),
-                                        onTap: () async {
-                                          if (primaryImage ==
-                                              imagePaths[index]) {
-                                            Fluttertoast.showToast(
-                                                msg:
-                                                    'You cannot remove Primary Image');
+                                        Positioned(
+                                          top: 5,
+                                          right: 10,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: CustomColors.alertRed,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            child: InkWell(
+                                              child: Icon(
+                                                Icons.close,
+                                                size: 25,
+                                                color: CustomColors.white,
+                                              ),
+                                              onTap: () async {
+                                                if (primaryImage ==
+                                                    imagePaths[index]) {
+                                                  Fluttertoast.showToast(
+                                                      msg:
+                                                          'You cannot remove Primary Image');
 
-                                            return;
-                                          }
+                                                  return;
+                                                }
 
-                                          if (imagePaths[index] ==
-                                              noImagePlaceholder) {
-                                            setState(() {
-                                              imagePaths
-                                                  .remove(noImagePlaceholder);
-                                            });
-                                            return;
-                                          }
-                                          CustomDialogs.actionWaiting(context);
-                                          bool res = await StorageUtils()
-                                              .removeFile(imagePaths[index]);
-                                          Navigator.of(context).pop();
-                                          if (res)
-                                            setState(() {
-                                              imagePaths
-                                                  .remove(imagePaths[index]);
-                                            });
-                                          else
-                                            Fluttertoast.showToast(
-                                                msg: 'Unable to remove image');
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 5,
-                                    left: 8,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: CustomColors.white,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: InkWell(
-                                        child: Icon(
-                                          primaryImage == imagePaths[index]
-                                              ? Icons.check_box
-                                              : Icons.check_box_outline_blank,
-                                          size: 25,
-                                          color: CustomColors.primary,
+                                                if (imagePaths[index] ==
+                                                    noImagePlaceholder) {
+                                                  setState(() {
+                                                    imagePaths.remove(
+                                                        noImagePlaceholder);
+                                                  });
+                                                  return;
+                                                }
+                                                CustomDialogs.actionWaiting(
+                                                    context);
+                                                bool res = await StorageUtils()
+                                                    .removeFile(
+                                                        imagePaths[index]);
+                                                Navigator.of(context).pop();
+                                                if (res)
+                                                  setState(() {
+                                                    imagePaths.remove(
+                                                        imagePaths[index]);
+                                                  });
+                                                else
+                                                  Fluttertoast.showToast(
+                                                      msg:
+                                                          'Unable to remove image');
+                                              },
+                                            ),
+                                          ),
                                         ),
-                                        onTap: () async {
-                                          setState(() {
-                                            primaryImage = imagePaths[index];
-                                          });
-                                        },
-                                      ),
+                                        Positioned(
+                                          top: 5,
+                                          left: 8,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: CustomColors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            child: InkWell(
+                                              child: Icon(
+                                                primaryImage ==
+                                                        imagePaths[index]
+                                                    ? Icons.check_box
+                                                    : Icons
+                                                        .check_box_outline_blank,
+                                                size: 25,
+                                                color: CustomColors.primary,
+                                              ),
+                                              onTap: () async {
+                                                setState(() {
+                                                  primaryImage =
+                                                      imagePaths[index];
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                  )
-                                ],
+                                  );
+                                },
                               ),
-                            );
-                          },
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: 5, right: 10, top: 5, bottom: 5),
+                                child: Container(
+                                  height: 120,
+                                  width: 130,
+                                  decoration: BoxDecoration(
+                                    color: CustomColors.grey,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Container(
+                                          width: 100,
+                                          padding: EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              color: CustomColors.primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0)),
+                                          child: InkWell(
+                                            onTap: () async {
+                                              String imageUrl = '';
+                                              try {
+                                                ImagePicker imagePicker =
+                                                    ImagePicker();
+                                                PickedFile pickedFile;
+
+                                                pickedFile =
+                                                    await imagePicker.getImage(
+                                                        source: ImageSource
+                                                            .gallery);
+                                                if (pickedFile == null) return;
+
+                                                String fileName = DateTime.now()
+                                                    .millisecondsSinceEpoch
+                                                    .toString();
+                                                String fbFilePath =
+                                                    'store_profile/${cachedLocalUser.getID()}/$fileName.png';
+                                                CustomDialogs.actionWaiting(
+                                                    context);
+                                                // Upload to storage
+                                                imageUrl = await Uploader()
+                                                    .uploadImageFile(
+                                                        true,
+                                                        pickedFile.path,
+                                                        fbFilePath);
+                                                Navigator.of(context).pop();
+                                              } catch (err) {
+                                                Fluttertoast.showToast(
+                                                    msg:
+                                                        'This file is not an image',
+                                                    backgroundColor:
+                                                        CustomColors.alertRed,
+                                                    textColor:
+                                                        CustomColors.black);
+                                              }
+                                              if (imageUrl != "")
+                                                setState(() {
+                                                  imagePaths.add(imageUrl);
+                                                });
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  FontAwesomeIcons.fileUpload,
+                                                  size: 20,
+                                                  color: CustomColors.black,
+                                                ),
+                                                SizedBox(
+                                                  width: 8,
+                                                ),
+                                                Text(
+                                                  "Upload",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 100,
+                                          padding: EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              color: CustomColors.primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0)),
+                                          child: InkWell(
+                                            onTap: () async {
+                                              String imageUrl = '';
+                                              try {
+                                                String tempPath =
+                                                    (await getTemporaryDirectory())
+                                                        .path;
+                                                String filePath =
+                                                    '$tempPath/chipchop_image.png';
+                                                if (File(filePath).existsSync())
+                                                  await File(filePath).delete();
+
+                                                List<CameraDescription>
+                                                    cameras =
+                                                    await availableCameras();
+                                                CameraDescription camera =
+                                                    cameras.first;
+
+                                                var result =
+                                                    await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        TakePicturePage(
+                                                      camera: camera,
+                                                      path: filePath,
+                                                    ),
+                                                  ),
+                                                );
+                                                if (result != null) {
+                                                  String fileName = DateTime
+                                                          .now()
+                                                      .millisecondsSinceEpoch
+                                                      .toString();
+                                                  String fbFilePath =
+                                                      'store_profile/${cachedLocalUser.getID()}/$fileName.png';
+                                                  CustomDialogs.actionWaiting(
+                                                      context);
+                                                  // Upload to storage
+                                                  imageUrl = await Uploader()
+                                                      .uploadImageFile(true,
+                                                          result, fbFilePath);
+                                                  Navigator.of(context).pop();
+                                                }
+                                              } catch (err) {
+                                                Fluttertoast.showToast(
+                                                    msg:
+                                                        'This file is not an image',
+                                                    backgroundColor:
+                                                        CustomColors.alertRed,
+                                                    textColor:
+                                                        CustomColors.white);
+                                              }
+                                              if (imageUrl != "")
+                                                setState(() {
+                                                  imagePaths.add(imageUrl);
+                                                });
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  FontAwesomeIcons.cameraRetro,
+                                                  size: 20,
+                                                  color: CustomColors.black,
+                                                ),
+                                                SizedBox(
+                                                  width: 8,
+                                                ),
+                                                Text(
+                                                  "Capture",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ]),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       )
                     : Padding(
@@ -1462,6 +1535,14 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
             final FormState form = _formKey.currentState;
 
             if (form.validate()) {
+              if (deliveryTemp.length == 0) {
+                _scaffoldKey.currentState.showSnackBar(
+                  CustomSnackBar.errorSnackBar(
+                      "Please Select atleast one Delivery Option!", 2),
+                );
+                return;
+              }
+
               if (paymentOptions.length == 0) {
                 _scaffoldKey.currentState.showSnackBar(
                   CustomSnackBar.errorSnackBar(
@@ -1697,7 +1778,7 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
                     padding: EdgeInsets.only(left: 15.0, top: 10),
                     child: Card(
                       color: CustomColors.grey,
-                      elevation: 2,
+                      elevation: 3,
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: Column(
@@ -1705,7 +1786,7 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
                             Row(
                               children: [
                                 Icon(Icons.radio_button_off_rounded),
-                                SizedBox(width: 2),
+                                SizedBox(width: 3),
                                 Text(
                                   "ChipChop Easy Delivery Service",
                                   style: TextStyle(
@@ -1715,6 +1796,7 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
                                 ),
                               ],
                             ),
+                            SizedBox(height: 5),
                             Text(
                               "You store & pack your orders at your location. Our delivery agent pick them from your address & deliver to customer safely.",
                               style: TextStyle(
@@ -1730,7 +1812,7 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
                     padding: EdgeInsets.only(left: 15.0, top: 10),
                     child: Card(
                       color: CustomColors.lightGrey,
-                      elevation: 2,
+                      elevation: 3,
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: Column(
@@ -1739,7 +1821,7 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
                               children: [
                                 Icon(Icons.radio_button_on_rounded,
                                     color: CustomColors.primary),
-                                SizedBox(width: 2),
+                                SizedBox(width: 3),
                                 Text(
                                   "Ship & Deliver your Own",
                                   style: TextStyle(
@@ -1747,6 +1829,7 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
                                 ),
                               ],
                             ),
+                            SizedBox(height: 5),
                             Text(
                               "You store & pack your orders at your location. Also deliver the orders to customers safely using your own employees or via Third-party couriers couriers.",
                               style: TextStyle(

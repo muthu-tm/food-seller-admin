@@ -77,7 +77,6 @@ class _AddProductState extends State<AddProduct> {
   String storeID = "";
   int replaceWithinDays = 0;
   int returnWithinDays = 0;
-  bool isAvailable = true;
   bool isDeliverable = true;
   bool isPopular = false;
   bool isReturnable = false;
@@ -192,7 +191,6 @@ class _AddProductState extends State<AddProduct> {
         _p.shortDetails = shortDetails;
         _p.productImages = imagePaths;
         _p.image = primaryImage;
-        _p.isAvailable = isAvailable;
         _p.isDeliverable = isDeliverable;
         _p.isPopular = isPopular;
         _p.isReturnable = isReturnable;
@@ -274,6 +272,7 @@ class _AddProductState extends State<AddProduct> {
                 child: InputDecorator(
                   decoration: InputDecoration(
                     labelText: 'Category',
+                    labelStyle: TextStyle(fontWeight: FontWeight.w700),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -349,10 +348,8 @@ class _AddProductState extends State<AddProduct> {
                           hint: "Select Type",
                           searchHint: null,
                           onChanged: onTypesDropdownItem,
-                          dialogBox: false,
+                          dialogBox: true,
                           isExpanded: true,
-                          menuConstraints:
-                              BoxConstraints.tight(Size.fromHeight(250)),
                         ),
                       ),
                       SizedBox(height: 5),
@@ -425,10 +422,8 @@ class _AddProductState extends State<AddProduct> {
                           hint: "Select Category",
                           searchHint: null,
                           onChanged: onCategoryDropdownItem,
-                          dialogBox: false,
+                          dialogBox: true,
                           isExpanded: true,
-                          menuConstraints:
-                              BoxConstraints.tight(Size.fromHeight(250)),
                         ),
                       ),
                       SizedBox(height: 5),
@@ -511,10 +506,8 @@ class _AddProductState extends State<AddProduct> {
                               },
                             );
                           },
-                          dialogBox: false,
+                          dialogBox: true,
                           isExpanded: true,
-                          menuConstraints:
-                              BoxConstraints.tight(Size.fromHeight(250)),
                         ),
                       ),
                     ],
@@ -528,6 +521,7 @@ class _AddProductState extends State<AddProduct> {
                 child: InputDecorator(
                   decoration: InputDecoration(
                     labelText: 'Product Info',
+                    labelStyle: TextStyle(fontWeight: FontWeight.w700),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -547,6 +541,7 @@ class _AddProductState extends State<AddProduct> {
                                 borderSide:
                                     BorderSide(color: CustomColors.lightGreen)),
                             hintText: "Product Name (Ex, Rice)",
+                            contentPadding: EdgeInsets.all(10),
                             fillColor: CustomColors.white,
                             filled: true,
                           ),
@@ -573,6 +568,7 @@ class _AddProductState extends State<AddProduct> {
                                 borderSide:
                                     BorderSide(color: CustomColors.lightGreen)),
                             hintText: "Brand Name (Ex, India Brand)",
+                            contentPadding: EdgeInsets.all(10),
                             fillColor: CustomColors.white,
                             filled: true,
                           ),
@@ -601,6 +597,7 @@ class _AddProductState extends State<AddProduct> {
                                 borderSide:
                                     BorderSide(color: CustomColors.lightGreen)),
                             hintText: "Short Details (Ex, Boiled Rice)",
+                            contentPadding: EdgeInsets.all(10),
                             fillColor: CustomColors.white,
                             filled: true,
                           ),
@@ -620,294 +617,365 @@ class _AddProductState extends State<AddProduct> {
               ),
             ),
             ListTile(
-              leading: Icon(
-                Icons.image,
-                size: 35,
-                color: CustomColors.black,
-              ),
-              title: Container(
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    color: Colors.green[300],
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: InkWell(
-                  onTap: () async {
-                    if (_selectedStore == "0") {
-                      Fluttertoast.showToast(
-                          msg: 'Please Select a Store First',
-                          backgroundColor: CustomColors.alertRed,
-                          textColor: CustomColors.white);
-                      return;
-                    }
-                    String imageUrl = '';
-                    try {
-                      ImagePicker imagePicker = ImagePicker();
-                      PickedFile pickedFile;
-
-                      pickedFile = await imagePicker.getImage(
-                          source: ImageSource.gallery);
-                      if (pickedFile == null) return;
-
-                      String fileName =
-                          DateTime.now().millisecondsSinceEpoch.toString();
-                      String fbFilePath =
-                          'products/$_selectedStore/$fileName.png';
-                      CustomDialogs.actionWaiting(context);
-                      // Upload to storage
-                      imageUrl = await Uploader()
-                          .uploadImageFile(true, pickedFile.path, fbFilePath);
-                      Navigator.of(context).pop();
-                    } catch (err) {
-                      Fluttertoast.showToast(
-                          msg: 'This file is not an image',
-                          backgroundColor: CustomColors.alertRed,
-                          textColor: CustomColors.black);
-                    }
-                    if (imageUrl != "")
-                      setState(() {
-                        imagePaths.add(imageUrl);
-                      });
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.images,
-                        size: 20,
-                        color: CustomColors.black,
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        "Upload Image",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              trailing: Container(
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    color: Colors.green[300],
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: InkWell(
-                  onTap: () async {
-                    if (_selectedStore == "0") {
-                      Fluttertoast.showToast(
-                          msg: 'Please Select a Store First',
-                          backgroundColor: CustomColors.alertRed,
-                          textColor: CustomColors.white);
-                      return;
-                    }
-
-                    String imageUrl = '';
-                    try {
-                      String tempPath = (await getTemporaryDirectory()).path;
-                      String filePath = '$tempPath/chipchop_image.png';
-                      if (File(filePath).existsSync())
-                        await File(filePath).delete();
-
-                      List<CameraDescription> cameras =
-                          await availableCameras();
-                      CameraDescription camera = cameras.first;
-
-                      var result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TakePicturePage(
-                            camera: camera,
-                            path: filePath,
-                          ),
-                        ),
-                      );
-                      if (result != null) {
-                        String fileName =
-                            DateTime.now().millisecondsSinceEpoch.toString();
-                        String fbFilePath =
-                            'products/$_selectedStore/$fileName.png';
-                        CustomDialogs.actionWaiting(context);
-                        // Upload to storage
-                        imageUrl = await Uploader()
-                            .uploadImageFile(true, result, fbFilePath);
-                        Navigator.of(context).pop();
-                      }
-                    } catch (err) {
-                      Fluttertoast.showToast(
-                          msg: 'This file is not an image',
-                          backgroundColor: CustomColors.alertRed,
-                          textColor: CustomColors.white);
-                    }
-                    if (imageUrl != "")
-                      setState(() {
-                        imagePaths.add(imageUrl);
-                      });
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.cameraRetro,
-                        size: 20,
-                        color: CustomColors.black,
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        "Capture Image",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
+              title: Text(
+                "Product Images",
+                style: TextStyle(fontWeight: FontWeight.w700),
               ),
             ),
             imagePaths.length > 0
-                ? SizedBox(
+                ? Container(
                     height: 160,
-                    child: ListView.builder(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       primary: true,
-                      shrinkWrap: true,
-                      itemCount: imagePaths.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          child: Stack(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: 10, right: 10, top: 5),
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ImageView(
-                                          url: imagePaths[index],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: Container(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      child: CachedNetworkImage(
-                                        imageUrl: imagePaths[index],
-                                        imageBuilder:
-                                            (context, imageProvider) => Image(
-                                          fit: BoxFit.fill,
-                                          height: 150,
-                                          width: 150,
-                                          image: imageProvider,
-                                        ),
-                                        progressIndicatorBuilder:
-                                            (context, url, downloadProgress) =>
-                                                Center(
-                                          child: SizedBox(
-                                            height: 50.0,
-                                            width: 50.0,
-                                            child: CircularProgressIndicator(
-                                                value:
-                                                    downloadProgress.progress,
-                                                valueColor:
-                                                    AlwaysStoppedAnimation(
-                                                        CustomColors.black),
-                                                strokeWidth: 2.0),
+                      child: Row(
+                        children: [
+                          ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            primary: true,
+                            shrinkWrap: true,
+                            itemCount: imagePaths.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                child: Stack(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 10, right: 10, top: 5),
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ImageView(
+                                                url: imagePaths[index],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            child: CachedNetworkImage(
+                                              imageUrl: imagePaths[index],
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Image(
+                                                fit: BoxFit.fill,
+                                                height: 150,
+                                                width: 150,
+                                                image: imageProvider,
+                                              ),
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      Center(
+                                                child: SizedBox(
+                                                  height: 50.0,
+                                                  width: 50.0,
+                                                  child: CircularProgressIndicator(
+                                                      value: downloadProgress
+                                                          .progress,
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation(
+                                                              CustomColors
+                                                                  .black),
+                                                      strokeWidth: 2.0),
+                                                ),
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) => Icon(
+                                                Icons.error,
+                                                size: 35,
+                                              ),
+                                              fadeOutDuration:
+                                                  Duration(seconds: 1),
+                                              fadeInDuration:
+                                                  Duration(seconds: 2),
+                                            ),
                                           ),
                                         ),
-                                        errorWidget: (context, url, error) =>
-                                            Icon(
-                                          Icons.error,
-                                          size: 35,
-                                        ),
-                                        fadeOutDuration: Duration(seconds: 1),
-                                        fadeInDuration: Duration(seconds: 2),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 5,
-                                right: 10,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.alertRed,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: InkWell(
-                                    child: Icon(
-                                      Icons.close,
-                                      size: 25,
-                                      color: CustomColors.white,
-                                    ),
-                                    onTap: () async {
-                                      if (primaryImage == imagePaths[index]) {
-                                        Fluttertoast.showToast(
-                                            msg:
-                                                'You cannot remove Primary Image');
+                                    Positioned(
+                                      top: 5,
+                                      right: 10,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: CustomColors.alertRed,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: InkWell(
+                                          child: Icon(
+                                            Icons.close,
+                                            size: 25,
+                                            color: CustomColors.white,
+                                          ),
+                                          onTap: () async {
+                                            if (primaryImage ==
+                                                imagePaths[index]) {
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      'You cannot remove Primary Image');
 
-                                        return;
-                                      }
+                                              return;
+                                            }
 
-                                      if (imagePaths[index] ==
-                                          noImagePlaceholder) {
-                                        setState(() {
-                                          imagePaths.remove(noImagePlaceholder);
-                                        });
-                                        return;
-                                      }
-                                      CustomDialogs.actionWaiting(context);
-                                      bool res = await StorageUtils()
-                                          .removeFile(imagePaths[index]);
-                                      Navigator.of(context).pop();
-                                      if (res)
-                                        setState(() {
-                                          imagePaths.remove(imagePaths[index]);
-                                        });
-                                      else
-                                        Fluttertoast.showToast(
-                                            msg: 'Unable to remove image');
-                                    },
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 5,
-                                left: 8,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: InkWell(
-                                    child: Icon(
-                                      primaryImage == imagePaths[index]
-                                          ? Icons.check_box
-                                          : Icons.check_box_outline_blank,
-                                      size: 25,
-                                      color: CustomColors.primary,
+                                            if (imagePaths[index] ==
+                                                noImagePlaceholder) {
+                                              setState(() {
+                                                imagePaths
+                                                    .remove(noImagePlaceholder);
+                                              });
+                                              return;
+                                            }
+                                            CustomDialogs.actionWaiting(
+                                                context);
+                                            bool res = await StorageUtils()
+                                                .removeFile(imagePaths[index]);
+                                            Navigator.of(context).pop();
+                                            if (res)
+                                              setState(() {
+                                                imagePaths
+                                                    .remove(imagePaths[index]);
+                                              });
+                                            else
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      'Unable to remove image');
+                                          },
+                                        ),
+                                      ),
                                     ),
-                                    onTap: () async {
-                                      setState(() {
-                                        primaryImage = imagePaths[index];
-                                      });
-                                    },
-                                  ),
+                                    Positioned(
+                                      top: 5,
+                                      left: 8,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: CustomColors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: InkWell(
+                                          child: Icon(
+                                            primaryImage == imagePaths[index]
+                                                ? Icons.check_box
+                                                : Icons.check_box_outline_blank,
+                                            size: 25,
+                                            color: CustomColors.primary,
+                                          ),
+                                          onTap: () async {
+                                            setState(() {
+                                              primaryImage = imagePaths[index];
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
+                              );
+                            },
                           ),
-                        );
-                      },
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 5, right: 10, top: 5, bottom: 5),
+                            child: Container(
+                              height: 120,
+                              width: 130,
+                              decoration: BoxDecoration(
+                                color: CustomColors.grey,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      width: 100,
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                          color: CustomColors.primary,
+                                          borderRadius:
+                                              BorderRadius.circular(5.0)),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          if (_selectedStore == "0") {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    'Please Select a Store First',
+                                                backgroundColor:
+                                                    CustomColors.alertRed,
+                                                textColor: CustomColors.white);
+                                            return;
+                                          }
+                                          String imageUrl = '';
+                                          try {
+                                            ImagePicker imagePicker =
+                                                ImagePicker();
+                                            PickedFile pickedFile;
+
+                                            pickedFile =
+                                                await imagePicker.getImage(
+                                                    source:
+                                                        ImageSource.gallery);
+                                            if (pickedFile == null) return;
+
+                                            String fileName = DateTime.now()
+                                                .millisecondsSinceEpoch
+                                                .toString();
+                                            String fbFilePath =
+                                                'products/$_selectedStore/$fileName.png';
+                                            CustomDialogs.actionWaiting(
+                                                context);
+                                            // Upload to storage
+                                            imageUrl = await Uploader()
+                                                .uploadImageFile(
+                                                    true,
+                                                    pickedFile.path,
+                                                    fbFilePath);
+                                            Navigator.of(context).pop();
+                                          } catch (err) {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    'This file is not an image',
+                                                backgroundColor:
+                                                    CustomColors.alertRed,
+                                                textColor: CustomColors.black);
+                                          }
+                                          if (imageUrl != "")
+                                            setState(() {
+                                              imagePaths.add(imageUrl);
+                                            });
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              FontAwesomeIcons.fileUpload,
+                                              size: 20,
+                                              color: CustomColors.black,
+                                            ),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            Text(
+                                              "Upload",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 100,
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                          color: CustomColors.primary,
+                                          borderRadius:
+                                              BorderRadius.circular(5.0)),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          if (_selectedStore == "0") {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    'Please Select a Store First',
+                                                backgroundColor:
+                                                    CustomColors.alertRed,
+                                                textColor: CustomColors.white);
+                                            return;
+                                          }
+
+                                          String imageUrl = '';
+                                          try {
+                                            String tempPath =
+                                                (await getTemporaryDirectory())
+                                                    .path;
+                                            String filePath =
+                                                '$tempPath/chipchop_image.png';
+                                            if (File(filePath).existsSync())
+                                              await File(filePath).delete();
+
+                                            List<CameraDescription> cameras =
+                                                await availableCameras();
+                                            CameraDescription camera =
+                                                cameras.first;
+
+                                            var result = await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    TakePicturePage(
+                                                  camera: camera,
+                                                  path: filePath,
+                                                ),
+                                              ),
+                                            );
+                                            if (result != null) {
+                                              String fileName = DateTime.now()
+                                                  .millisecondsSinceEpoch
+                                                  .toString();
+                                              String fbFilePath =
+                                                  'products/$_selectedStore/$fileName.png';
+                                              CustomDialogs.actionWaiting(
+                                                  context);
+                                              // Upload to storage
+                                              imageUrl = await Uploader()
+                                                  .uploadImageFile(
+                                                      true, result, fbFilePath);
+                                              Navigator.of(context).pop();
+                                            }
+                                          } catch (err) {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    'This file is not an image',
+                                                backgroundColor:
+                                                    CustomColors.alertRed,
+                                                textColor: CustomColors.white);
+                                          }
+                                          if (imageUrl != "")
+                                            setState(() {
+                                              imagePaths.add(imageUrl);
+                                            });
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              FontAwesomeIcons.cameraRetro,
+                                              size: 20,
+                                              color: CustomColors.black,
+                                            ),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            Text(
+                                              "Capture",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 : Padding(
@@ -950,6 +1018,7 @@ class _AddProductState extends State<AddProduct> {
                 child: InputDecorator(
                   decoration: InputDecoration(
                     labelText: 'Inventory',
+                    labelStyle: TextStyle(fontWeight: FontWeight.w700),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -1108,7 +1177,7 @@ class _AddProductState extends State<AddProduct> {
                   style: TextStyle(
                       fontSize: 14,
                       color: CustomColors.black,
-                      fontWeight: FontWeight.w600),
+                      fontWeight: FontWeight.w700),
                 ),
               ),
             ),
@@ -1126,6 +1195,7 @@ class _AddProductState extends State<AddProduct> {
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: 'Variant ${index + 1}',
+                        labelStyle: TextStyle(fontWeight: FontWeight.w700),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
@@ -1144,6 +1214,7 @@ class _AddProductState extends State<AddProduct> {
                                       borderSide: BorderSide(
                                           color: CustomColors.lightGreen)),
                                   labelText: "Weight",
+                                  contentPadding: EdgeInsets.all(10),
                                   labelStyle: TextStyle(
                                       fontSize: 13, color: CustomColors.black),
                                   fillColor: CustomColors.white,
@@ -1172,6 +1243,7 @@ class _AddProductState extends State<AddProduct> {
                                       borderSide: BorderSide(
                                           color: CustomColors.lightGreen)),
                                   labelText: "Unit",
+                                  contentPadding: EdgeInsets.all(10),
                                   labelStyle: TextStyle(
                                       fontSize: 13, color: CustomColors.black),
                                   fillColor: CustomColors.white,
@@ -1209,6 +1281,7 @@ class _AddProductState extends State<AddProduct> {
                                       borderSide: BorderSide(
                                           color: CustomColors.lightGreen)),
                                   labelText: "Product MRP",
+                                  contentPadding: EdgeInsets.all(10),
                                   labelStyle: TextStyle(
                                       fontSize: 13, color: CustomColors.black),
                                   fillColor: CustomColors.white,
@@ -1250,6 +1323,7 @@ class _AddProductState extends State<AddProduct> {
                                       borderSide: BorderSide(
                                           color: CustomColors.lightGreen)),
                                   labelText: "Offer Price",
+                                  contentPadding: EdgeInsets.all(10),
                                   labelStyle: TextStyle(
                                       fontSize: 13, color: CustomColors.black),
                                   fillColor: CustomColors.white,
@@ -1296,6 +1370,7 @@ class _AddProductState extends State<AddProduct> {
                                       borderSide: BorderSide(
                                           color: CustomColors.lightGreen)),
                                   labelText: "Selling Price",
+                                  contentPadding: EdgeInsets.all(10),
                                   labelStyle: TextStyle(
                                       fontSize: 13, color: CustomColors.black),
                                   fillColor: CustomColors.white,
@@ -1333,7 +1408,7 @@ class _AddProductState extends State<AddProduct> {
                               activeColor: Colors.white,
                             ),
                           ),
-                          isAvailable
+                          _pv.isAvailable
                               ? Row(
                                   children: [
                                     Flexible(
@@ -1351,6 +1426,7 @@ class _AddProductState extends State<AddProduct> {
                                                     color: CustomColors
                                                         .lightGreen)),
                                             labelText: "Available Quantity",
+                                            contentPadding: EdgeInsets.all(10),
                                             labelStyle: TextStyle(
                                                 fontSize: 13,
                                                 color: CustomColors.black),
@@ -1380,6 +1456,7 @@ class _AddProductState extends State<AddProduct> {
                                                   color:
                                                       CustomColors.lightGreen)),
                                           labelText: "Unit",
+                                          contentPadding: EdgeInsets.all(10),
                                           labelStyle: TextStyle(
                                               fontSize: 13,
                                               color: CustomColors.black),
@@ -1490,7 +1567,7 @@ class _AddProductState extends State<AddProduct> {
                   style: TextStyle(
                       fontSize: 14,
                       color: CustomColors.black,
-                      fontWeight: FontWeight.w600),
+                      fontWeight: FontWeight.w700),
                 ),
               ),
             ),
@@ -1507,7 +1584,8 @@ class _AddProductState extends State<AddProduct> {
                   child: Container(
                     child: InputDecorator(
                       decoration: InputDecoration(
-                        labelText: 'Detail : ${index + 1}',
+                        labelText: 'Description : ${index + 1}',
+                        labelStyle: TextStyle(fontWeight: FontWeight.w700),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
@@ -1526,6 +1604,7 @@ class _AddProductState extends State<AddProduct> {
                                     borderSide: BorderSide(
                                         color: CustomColors.lightGreen)),
                                 labelText: "Title",
+                                contentPadding: EdgeInsets.all(10),
                                 labelStyle: TextStyle(
                                     fontSize: 13, color: CustomColors.black),
                                 fillColor: CustomColors.white,
@@ -1551,6 +1630,7 @@ class _AddProductState extends State<AddProduct> {
                                     borderSide: BorderSide(
                                         color: CustomColors.lightGreen)),
                                 labelText: "Description",
+                                contentPadding: EdgeInsets.all(10),
                                 labelStyle: TextStyle(
                                     fontSize: 13, color: CustomColors.black),
                                 fillColor: CustomColors.white,
