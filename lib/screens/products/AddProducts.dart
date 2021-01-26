@@ -286,7 +286,8 @@ class _AddProductState extends State<AddProduct> {
                         ),
                         child: SearchableDropdown.single(
                           icon: Container(),
-                          clearIcon: Icon(Icons.clear_all),
+                          clearIcon: Icon(Icons.clear_all,
+                              color: CustomColors.alertRed),
                           onClear: () {
                             onTypesDropdownItem('0');
                           },
@@ -360,7 +361,8 @@ class _AddProductState extends State<AddProduct> {
                         ),
                         child: SearchableDropdown.single(
                           icon: Container(),
-                          clearIcon: Icon(Icons.clear_all),
+                          clearIcon: Icon(Icons.clear_all,
+                              color: CustomColors.alertRed),
                           onClear: () {
                             onCategoryDropdownItem('0');
                           },
@@ -434,7 +436,8 @@ class _AddProductState extends State<AddProduct> {
                         ),
                         child: SearchableDropdown.single(
                           icon: Container(),
-                          clearIcon: Icon(Icons.clear_all),
+                          clearIcon: Icon(Icons.clear_all,
+                              color: CustomColors.alertRed),
                           onClear: () {
                             setState(
                               () {
