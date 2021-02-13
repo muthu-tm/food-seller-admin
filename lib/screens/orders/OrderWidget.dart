@@ -1,8 +1,10 @@
 import 'package:chipchop_seller/db/models/order.dart';
 import 'package:chipchop_seller/screens/orders/OrderDetailsScreen.dart';
+import 'package:chipchop_seller/screens/orders/OrderLocationMapViewer.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/services/utils/DateUtils.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class OrderWidget extends StatelessWidget {
   OrderWidget(this.order);
@@ -294,7 +296,87 @@ class OrderWidget extends StatelessWidget {
                             : Container(),
               ],
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 5),
+            order.delivery.deliveryType != 0
+                ? InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              OrderLocationMapView(order.delivery.userLocation),
+                          settings: RouteSettings(name: '/orders/location'),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        SizedBox(width: 10),
+                        Container(
+                          padding: EdgeInsets.all(3.0),
+                          decoration: BoxDecoration(
+                            color: order.status < 2 || order.status == 4
+                                ? CustomColors.primary
+                                : order.status == 2 || order.status == 3
+                                    ? CustomColors.alertRed
+                                    : CustomColors.black,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Icon(
+                            FontAwesomeIcons.mapPin,
+                            size: 15,
+                            color: CustomColors.white,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          "Locate Delivery Address",
+                          style: TextStyle(
+                              color: order.status < 2 || order.status == 4
+                                  ? CustomColors.positiveGreen
+                                  : order.status == 2 || order.status == 3
+                                      ? CustomColors.alertRed
+                                      : CustomColors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  )
+                : Row(
+                    children: [
+                      SizedBox(width: 10),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(3, 1, 5, 4),
+                        decoration: BoxDecoration(
+                          color: order.status < 2 || order.status == 4
+                              ? CustomColors.primary
+                              : order.status == 2 || order.status == 3
+                                  ? CustomColors.alertRed
+                                  : CustomColors.black,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Icon(
+                          FontAwesomeIcons.shoppingBasket,
+                          size: 15,
+                          color: CustomColors.white,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        "Pickup From Store",
+                        style: TextStyle(
+                            color: order.status < 2 || order.status == 4
+                                ? CustomColors.positiveGreen
+                                : order.status == 2 || order.status == 3
+                                    ? CustomColors.alertRed
+                                    : CustomColors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+            SizedBox(height: 5),
           ],
         ),
       ),

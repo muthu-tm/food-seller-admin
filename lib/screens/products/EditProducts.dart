@@ -187,7 +187,7 @@ class _EditProductsState extends State<EditProducts> {
       }
 
       if (_variants.isEmpty ||
-          (_variants.length == 1 && _variants.first.weight.toInt() == 0)) {
+          (_variants.length == 1 && _variants.first.weight.toDouble() <= 0)) {
         _scaffoldKey.currentState.showSnackBar(
           CustomSnackBar.errorSnackBar("Please Fill Product Variants!", 2),
         );
@@ -1516,7 +1516,7 @@ class _EditProductsState extends State<EditProducts> {
                       color: Colors.green,
                       onPressed: () async {
                         if (_variants.isNotEmpty &&
-                            _variants.last.weight.toInt() == 0) {
+                            _variants.last.weight.toDouble() <= 0) {
                           Fluttertoast.showToast(
                               msg: "Please fill the Product Variant");
                           return;

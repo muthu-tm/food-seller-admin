@@ -49,7 +49,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(8.0,4,8,0),
+              padding: const EdgeInsets.fromLTRB(8.0, 4, 8, 0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -190,7 +190,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                           ? InkWell(
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.fromLTRB(4.0, 0, 0, 0),
+                                    const EdgeInsets.fromLTRB(1.0, 0, 0, 0),
                                 child: Row(
                                   children: [
                                     Text(
@@ -200,7 +200,10 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                                         fontSize: 13.0,
                                       ),
                                     ),
-                                    Icon(Icons.keyboard_arrow_down)
+                                    Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: CustomColors.primary,
+                                    )
                                   ],
                                 ),
                               ),
@@ -425,7 +428,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                               },
                             )
                           : Padding(
-                              padding: const EdgeInsets.fromLTRB(4.0, 0, 0, 0),
+                              padding: const EdgeInsets.fromLTRB(1.0, 0, 0, 0),
                               child: Text(
                                 "${widget.product.variants[int.parse(_variant)].weight} ${widget.product.variants[int.parse(_variant)].getUnit()}",
                                 style: TextStyle(
@@ -436,12 +439,12 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                             ),
                       Flexible(
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(2.0, 0, 2, 0),
+                          padding: const EdgeInsets.fromLTRB(1.0, 0, 1, 0),
                           child: Text(
                             "₹ ${widget.product.variants[int.parse(_variant)].currentPrice.toString()}",
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.red,
                               fontSize: 13.0,
                             ),
                           ),

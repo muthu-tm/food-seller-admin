@@ -36,10 +36,13 @@ class _SubCategoriesProductsWidgetState
           if (snapshot.data.isNotEmpty) {
             children = Container(
               child: GridView.count(
+                physics: ScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                primary: true,
                 crossAxisCount: 2,
-                crossAxisSpacing: 10,
+                crossAxisSpacing: 8,
                 shrinkWrap: true,
-                mainAxisSpacing: 10,
+                mainAxisSpacing: 0,
                 children: List.generate(
                   snapshot.data.length,
                   (index) {

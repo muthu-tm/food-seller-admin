@@ -1,6 +1,7 @@
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/screens/orders/CapturedOrderWidget.dart';
 import 'package:chipchop_seller/screens/orders/OrderDeliveryDetailsScreen.dart';
+import 'package:chipchop_seller/screens/orders/OrderLocationMapViewer.dart';
 import 'package:chipchop_seller/screens/orders/OrdersView.dart';
 import 'package:chipchop_seller/screens/orders/WrittenOrderWidget.dart';
 import 'package:chipchop_seller/screens/products/ProductDetailsScreen.dart';
@@ -9,6 +10,7 @@ import 'package:chipchop_seller/screens/customers/OrderChatScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../db/models/order.dart';
 import '../../services/utils/DateUtils.dart';
@@ -204,6 +206,55 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                         ),
                       )
                     : Container(),
+                order.delivery.deliveryType != 0
+                    ? InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OrderLocationMapView(
+                                  order.delivery.userLocation),
+                              settings: RouteSettings(name: '/orders/location'),
+                            ),
+                          );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(width: 10),
+                            Container(
+                              padding: EdgeInsets.all(3.0),
+                              decoration: BoxDecoration(
+                                color: order.status < 2 || order.status == 4
+                                    ? CustomColors.primary
+                                    : order.status == 2 || order.status == 3
+                                        ? CustomColors.alertRed
+                                        : CustomColors.black,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Icon(
+                                FontAwesomeIcons.mapPin,
+                                size: 15,
+                                color: CustomColors.white,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              "Locate Delivery Address",
+                              style: TextStyle(
+                                  color: order.status < 2 || order.status == 4
+                                      ? CustomColors.positiveGreen
+                                      : order.status == 2 || order.status == 3
+                                          ? CustomColors.alertRed
+                                          : CustomColors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(width: 10),
+                          ],
+                        ),
+                      )
+                    : Container(),
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
                   child: ListView.builder(
@@ -313,7 +364,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                 SizedBox(
                   height: 10,
                 ),
-                Padding(
+                order.products.length > 0 ? Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Container(
                     decoration: BoxDecoration(
@@ -489,7 +540,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                       ],
                     ),
                   ),
-                ),
+                ) : Container(),
                 CapturedOrderWidget(order),
                 WrittenOrderWidget(order),
                 Card(
