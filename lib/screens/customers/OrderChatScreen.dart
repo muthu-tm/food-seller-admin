@@ -131,7 +131,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   }
 
   Widget buildItem(int index, DocumentSnapshot document) {
-    if (document.data['sender_type'] == 1) {
+    if (document.data()['sender_type'] == 1) {
       // Right (my message)
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -139,11 +139,11 @@ class OrderChatScreenState extends State<OrderChatScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              document.data['msg_type'] == 0
+              document.data()['msg_type'] == 0
                   // Text
                   ? Container(
                       child: Text(
-                        document.data['content'],
+                        document.data()['content'],
                         style: TextStyle(color: CustomColors.white),
                       ),
                       padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
@@ -184,7 +184,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                               ),
                               clipBehavior: Clip.hardEdge,
                             ),
-                            imageUrl: document.data['content'],
+                            imageUrl: document.data()['content'],
                             width: 200.0,
                             height: 200.0,
                             fit: BoxFit.cover,
@@ -197,7 +197,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ImageView(
-                                url: document.data['content'],
+                                url: document.data()['content'],
                               ),
                             ),
                           );
@@ -215,7 +215,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                   child: Text(
                     DateUtils.formatDateTime(
                       DateTime.fromMillisecondsSinceEpoch(
-                        (document.data['created_at'] as Timestamp)
+                        (document.data()['created_at'] as Timestamp)
                             .millisecondsSinceEpoch,
                       ),
                     ),
@@ -236,10 +236,10 @@ class OrderChatScreenState extends State<OrderChatScreen> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              document.data['msg_type'] == 0
+              document.data()['msg_type'] == 0
                   ? Container(
                       child: Text(
-                        document.data['content'],
+                        document.data()['content'],
                         style: TextStyle(color: Colors.white),
                       ),
                       padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
@@ -280,7 +280,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                               ),
                               clipBehavior: Clip.hardEdge,
                             ),
-                            imageUrl: document.data['content'],
+                            imageUrl: document.data()['content'],
                             width: 200.0,
                             height: 200.0,
                             fit: BoxFit.cover,
@@ -293,7 +293,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ImageView(
-                                url: document.data['content'],
+                                url: document.data()['content'],
                               ),
                             ),
                           );
@@ -311,7 +311,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                   child: Text(
                     DateUtils.formatDateTime(
                       DateTime.fromMillisecondsSinceEpoch(
-                        (document.data['created_at'] as Timestamp)
+                        (document.data()['created_at'] as Timestamp)
                             .millisecondsSinceEpoch,
                       ),
                     ),
@@ -331,8 +331,8 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   bool isLastMessageLeft(int index) {
     if ((index > 0 &&
             listMessage != null &&
-            listMessage[index - 1].data['sender_type'] != 0 &&
-            listMessage[index - 1].data['from'] == cachedLocalUser.getID()) ||
+            listMessage[index - 1].data()['sender_type'] != 0 &&
+            listMessage[index - 1].data()['from'] == cachedLocalUser.getID()) ||
         index == 0) {
       return true;
     } else {
@@ -343,8 +343,8 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   bool isLastMessageRight(int index) {
     if ((index > 0 &&
             listMessage != null &&
-            listMessage[index - 1].data['sender_type'] != 1 &&
-            listMessage[index - 1].data['from'] != cachedLocalUser.getID()) ||
+            listMessage[index - 1].data()['sender_type'] != 1 &&
+            listMessage[index - 1].data()['from'] != cachedLocalUser.getID()) ||
         index == 0) {
       return true;
     } else {
@@ -510,7 +510,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
             ),
           );
         } else {
-          if (snapshot.data.documents.isEmpty) {
+          if (snapshot.data.docs.isEmpty) {
             return Padding(
               padding: EdgeInsets.all(10.0),
               child: Container(
@@ -524,7 +524,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
             );
           }
           listMessage.clear();
-          listMessage.addAll(snapshot.data.documents);
+          listMessage.addAll(snapshot.data.docs);
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -532,8 +532,8 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                 child: ListView.builder(
                   padding: EdgeInsets.all(10.0),
                   itemBuilder: (context, index) =>
-                      buildItem(index, snapshot.data.documents[index]),
-                  itemCount: snapshot.data.documents.length,
+                      buildItem(index, snapshot.data.docs[index]),
+                  itemCount: snapshot.data.docs.length,
                   reverse: true,
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,

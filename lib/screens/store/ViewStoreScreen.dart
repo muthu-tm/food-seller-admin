@@ -2,15 +2,16 @@ import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/customers/CustomersScreen.dart';
 import 'package:chipchop_seller/screens/store/StoreSearchBar.dart';
 import 'package:chipchop_seller/screens/store/StoreCategoryWidget.dart';
-import 'package:chipchop_seller/screens/store/StorePopularWidet.dart';
-import 'package:chipchop_seller/screens/store/StoreProductsWidget.dart';
+import 'package:chipchop_seller/screens/store/TopSellingProductsWidget.dart';
 import 'package:chipchop_seller/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/url_launcher_utils.dart';
 import 'package:chipchop_seller/services/utils/DateUtils.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../utils/CustomColors.dart';
+import 'StoreAllProductsWidget.dart';
 
 class ViewStoreScreen extends StatefulWidget {
   ViewStoreScreen(this.store);
@@ -57,159 +58,228 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
 
     return Padding(
-      padding: const EdgeInsets.only(left: 48),
-      child: Container(
-        padding: new EdgeInsets.only(top: statusBarHeight),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.store.address.street + ', ' + widget.store.address.city,
-              style: TextStyle(fontSize: 14, color: Colors.black),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                (businessDays &&
-                        currentTime.isBefore(DateUtils.getTimeAsDateTimeObject(
-                            widget.store.activeFrom)))
-                    ? Text(
-                        "Opening in ${currentTime.difference(DateUtils.getTimeAsDateTimeObject(widget.store.activeFrom)).abs().toString().substring(0, 4)} hours")
-                    : isWithinWorkingHours
-                        ? Text(
-                            "Closing in ${DateUtils.durationInMinutesToHoursAndMinutes(DateUtils.getTimeInMinutes(widget.store.activeTill) - DateUtils.getCurrentTimeInMinutes())} hours",
-                            style: TextStyle(color: CustomColors.alertRed),
-                          )
-                        : Text("Store Closed"),
-              ],
-            ),
-            Text(
-              "Minimum delivery charge \u20B9 ${widget.store.deliveryDetails.deliveryCharges02.toString()}",
-              style: TextStyle(fontSize: 14, color: Colors.black),
-            ),
-            Row(
-              children: [
-                Text("Need Help?"),
-                SizedBox(
-                  width: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CustomersScreen(
-                            widget.store.uuid,
-                            widget.store.name,
-                          ),
-                          settings: RouteSettings(name: '/customers/store'),
+      padding: EdgeInsets.only(top: statusBarHeight),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 40),
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.store.address.street +
+                        ', ' +
+                        widget.store.address.city,
+                    style: TextStyle(fontSize: 10, color: Colors.black),
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Need Help? Contact Store!",
+                          style: TextStyle(fontSize: 8, color: Colors.black),
                         ),
-                      );
-                    },
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.250,
-                        height: 30,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.chat,
-                              size: 15,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Chat",
+                        InkWell(
+                          onTap: () async {
+                            await showDialog(
+                                context: _scaffoldKey.currentContext,
+                                builder: (context) {
+                                  return storeDialog();
+                                });
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 5, left: 5.0),
+                            child: Text(
+                              "More about store!",
                               style: TextStyle(
-                                  fontSize: 14, color: CustomColors.black),
+                                  decoration: TextDecoration.underline,
+                                  color: Colors.redAccent,
+                                  fontSize: 10),
                             ),
+                          ),
+                        ),
+                      ]),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(children: [
+                        InkWell(
+                          onTap: isWithinWorkingHours
+                              ? () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CustomersScreen(
+                                        widget.store.uuid,
+                                        widget.store.name,
+                                      ),
+                                      settings:
+                                          RouteSettings(name: '/store/chat'),
+                                    ),
+                                  );
+                                }
+                              : () {
+                                  Fluttertoast.showToast(
+                                      msg: 'Store is closed');
+                                },
+                          child: Card(
+                            elevation: 3,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.150,
+                              height: 20,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(20),
+                                      ),
+                                    ),
+                                    child: Icon(
+                                      Icons.chat_bubble,
+                                      color: Colors.white,
+                                      size: 8,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "Chat",
+                                    style: TextStyle(
+                                        fontSize: 10,
+                                        color: CustomColors.black),
+                                  ),
+                                ],
+                              ),
+                              decoration: BoxDecoration(
+                                color: isWithinWorkingHours
+                                    ? Colors.cyanAccent[400]
+                                    : Colors.grey,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2),
+                          child: InkWell(
+                            onTap: isWithinWorkingHours
+                                ? () async {
+                                    await UrlLauncherUtils.makePhoneCall(widget
+                                        .store.contacts.first.contactNumber);
+                                  }
+                                : () {
+                                    Fluttertoast.showToast(
+                                        msg: 'Store is closed');
+                                  },
+                            child: Card(
+                              elevation: 3,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: Container(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.150,
+                                height: 20,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(3),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(20),
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.call,
+                                        color: Colors.white,
+                                        size: 8,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      "Call",
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          color: CustomColors.black),
+                                    ),
+                                  ],
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isWithinWorkingHours
+                                      ? Colors.amber[200]
+                                      : Colors.grey,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            (businessDays &&
+                                    currentTime.isBefore(
+                                        DateUtils.getTimeAsDateTimeObject(
+                                            widget.store.activeFrom)))
+                                ? Text(
+                                    "Opening in ${currentTime.difference(DateUtils.getTimeAsDateTimeObject(widget.store.activeFrom)).abs().toString().substring(0, 4)} hours",
+                                    style: TextStyle(
+                                        fontSize: 10,
+                                        color: CustomColors.black),
+                                  )
+                                : isWithinWorkingHours
+                                    ? Text(
+                                        "Closing in ${DateUtils.durationInMinutesToHoursAndMinutes(DateUtils.getTimeInMinutes(widget.store.activeTill) - DateUtils.getCurrentTimeInMinutes())} hours",
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            color: CustomColors.alertRed),
+                                      )
+                                    : Text(
+                                        "Store Closed",
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            color: CustomColors.alertRed),
+                                      ),
                           ],
                         ),
-                        decoration: BoxDecoration(
-                          color: isWithinWorkingHours
-                              ? Colors.greenAccent[200]
-                              : Colors.grey,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: InkWell(
-                    onTap: () async {
-                      await UrlLauncherUtils.makePhoneCall(
-                          widget.store.contacts.first.contactNumber);
-                    },
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.250,
-                        height: 30,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.call,
-                              size: 15,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              "Contact",
-                              style: TextStyle(
-                                  fontSize: 14, color: CustomColors.black),
-                            ),
-                          ],
-                        ),
-                        decoration: BoxDecoration(
-                          color: isWithinWorkingHours
-                              ? Colors.red[100]
-                              : Colors.grey,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                      ),
-                    ),
+                  SizedBox(
+                    height: 1,
                   ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: FlatButton(
-                  onPressed: () async {
-                    await showDialog(
-                        context: _scaffoldKey.currentContext,
-                        builder: (context) {
-                          return storeDialog();
-                        });
-                  },
-                  child: Text(
-                    "View more store details",
-                    style: TextStyle(
-                        decoration: TextDecoration.underline, fontSize: 12),
-                  ),
-                ),
+                ],
               ),
-            )
-          ],
-        ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+        ],
       ),
     );
   }
@@ -235,17 +305,17 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
             title: fixedAppBar(context),
             leading: IconButton(
                 icon: Icon(
-                  Icons.arrow_back_ios_outlined,
+                  Icons.arrow_back,
                   color: Colors.black,
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 }),
-            leadingWidth: 30,
+            leadingWidth: 25,
             pinned: true,
             floating: true,
             backgroundColor: CustomColors.primary,
-            expandedHeight: 185.0,
+            expandedHeight: 110.0,
             flexibleSpace: FlexibleSpaceBar(
               background: flexibleAppBar(context),
             ),
@@ -260,16 +330,24 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
               height: 10,
             ),
           ),
-          StorePopulartWidget(widget.store.uuid, widget.store.name),
+          TopSellingProductsWidget(widget.store.uuid, widget.store.name),
           SliverToBoxAdapter(
             child: SizedBox(
               height: 10,
             ),
           ),
-          StoreProductWidget(widget.store.uuid, widget.store.name),
+          StoreAllProductsWidget(
+              widget.store.availProductCategories, widget.store.uuid),
+          // StorePopulartWidget(widget.store.uuid, widget.store.name),
+          // SliverToBoxAdapter(
+          //   child: SizedBox(
+          //     height: 25,
+          //   ),
+          // ),
+          // StoreProductWidget(widget.store.uuid, widget.store.name),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 20,
+              height: 40,
             ),
           ),
         ],
@@ -278,236 +356,308 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
   }
 
   Widget storeDialog() {
-    return Center(
-      child: SingleChildScrollView(
-        child: AlertDialog(
-          backgroundColor: Colors.grey[100],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(15.0),
-            ),
-          ),
-          content: Column(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.95,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      widget.store.name,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    CarouselIndicatorSlider(widget.store.storeImages),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(Icons.calendar_today_outlined),
-                        SizedBox(
-                          width: 10,
+    return AlertDialog(
+      backgroundColor: Colors.grey[300],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
+        ),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          widget.store.name,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
                         ),
-                        Flexible(
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          padding: EdgeInsets.all(0),
+                          icon: Container(
+                            padding: EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.0),
+                              ),
+                            ),
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 15,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  widget.store.shortDetails.isNotEmpty
+                      ? Flexible(
                           child: Text(
-                            "Business / Working Days",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14),
+                          widget.store.shortDetails,
+                          maxLines: 2,
+                          style: TextStyle(fontSize: 10),
+                        ))
+                      : Container(),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  widget.store.address.street.isNotEmpty
+                      ? Flexible(
+                          child: Text(
+                            widget.store.address.street,
+                            maxLines: 1,
+                            style: TextStyle(fontSize: 12),
                           ),
                         )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: selectedDays.toList(),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(Icons.alarm),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Flexible(
+                      : Container(),
+                  widget.store.address.city.isNotEmpty
+                      ? Flexible(
                           child: Text(
-                            "Business / Working Time",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14),
+                            "${widget.store.address.city}, ${widget.store.address.pincode}",
+                            maxLines: 1,
+                            style: TextStyle(fontSize: 12),
                           ),
                         )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.grey[500],
+                      : Container(),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Wrap(
+                    spacing: 3,
+                    runSpacing: 5,
+                    alignment: WrapAlignment.center,
+                    runAlignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      if (widget.store.deliveryDetails.availableOptions
+                          .contains(0))
+                        Card(
+                          elevation: 3,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.greenAccent[100],
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.0),
+                              ),
                             ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(4.0),
                             child: Text(
-                              DateUtils.getFormattedTime(
-                                  widget.store.activeFrom),
+                              "Pick-up from store",
+                              style: TextStyle(fontSize: 8),
                             ),
                           ),
                         ),
-                        Text("To"),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.grey[500],
+                      if (widget.store.deliveryDetails.availableOptions
+                          .contains(1))
+                        Card(
+                          elevation: 3,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.yellow[200],
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.0),
+                              ),
                             ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(4.0),
                             child: Text(
-                              DateUtils.getFormattedTime(
-                                  widget.store.activeTill),
+                              "Instant delivery",
+                              style: TextStyle(fontSize: 8),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(Icons.delivery_dining),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text("Delivery Time",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14))
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.grey[500],
+                      if (widget.store.deliveryDetails.availableOptions
+                          .contains(2))
+                        Card(
+                          elevation: 3,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.pinkAccent[100],
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.0),
+                              ),
                             ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20),
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              "Standard delivery",
+                              style: TextStyle(fontSize: 8),
                             ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(DateUtils.getFormattedTime(
-                                widget.store.deliveryDetails.deliveryFrom)),
                           ),
                         ),
-                        Text("To"),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.grey[500],
+                      if (widget.store.deliveryDetails.availableOptions
+                          .contains(3))
+                        Card(
+                          elevation: 3,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.red[200],
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.0),
+                              ),
                             ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20),
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              "Scheduled delivery",
+                              style: TextStyle(fontSize: 8),
                             ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(DateUtils.getFormattedTime(
-                                widget.store.deliveryDetails.deliveryTill)),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  CarouselIndicatorSlider(
+                      widget.store.storeImages,
+                      MediaQuery.of(context).size.height * 0.25,
+                      Colors.grey[500]),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[500],
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20.0),
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(5.0),
+                        child: Icon(
+                          Icons.date_range,
+                          size: 18,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Business / Working Days",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: selectedDays.toList(),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(Icons.alarm_on_rounded),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Business / Working Time",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          DateUtils.getFormattedTime(widget.store.activeFrom),
+                        ),
+                      ),
+                      Text("-"),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          DateUtils.getFormattedTime(widget.store.activeTill),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(Icons.local_taxi_outlined),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text("Delivery Time",
+                          style: TextStyle(fontWeight: FontWeight.bold))
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(DateUtils.getFormattedTime(
+                            widget.store.deliveryDetails.deliveryFrom)),
+                      ),
+                      Text("-"),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(DateUtils.getFormattedTime(
+                            widget.store.deliveryDetails.deliveryTill)),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              SizedBox(height: 10),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: BoxDecoration(
-                    color: Colors.red[400],
-                    border: Border.all(
-                      color: Colors.grey[500],
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    "Close",
-                    style: TextStyle(
-                      color: CustomColors.white,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
+            ),
+            SizedBox(height: 5),
+          ],
         ),
       ),
     );
   }
 
   Iterable<Widget> get selectedDays sync* {
-    for (MapEntry days in tempCollectionDays.entries) {
-      yield Transform(
-        transform: Matrix4.identity()..scale(0.8),
-        child: ChoiceChip(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          label: Text(
-            days.value,
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-          ),
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          labelPadding: EdgeInsets.all(2),
-          selected: widget.store.workingDays.contains(int.parse(days.key)),
-          elevation: 2.0,
-          selectedColor: CustomColors.primary,
-          backgroundColor: CustomColors.white,
-          labelStyle: TextStyle(
-              color: widget.store.workingDays.contains(int.parse(days.key))
-                  ? Colors.black
-                  : CustomColors.black),
-        ),
-      );
-    }
+    List workingDays = [];
+    widget.store.workingDays.forEach((element) {
+      if (tempCollectionDays.keys.contains(element.toString())) {
+        workingDays.add(tempCollectionDays[element.toString()]);
+      }
+    });
+    yield Text(workingDays.join(", "));
   }
 }
 
@@ -520,6 +670,7 @@ class SearchBar extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
+      padding: EdgeInsets.only(top: 5, bottom: 5),
       color: Colors.white,
       child: Padding(
         padding: EdgeInsets.all(10.0),
@@ -533,10 +684,10 @@ class SearchBar extends SliverPersistentHeaderDelegate {
               );
             },
             child: Container(
-              height: 50,
-              padding: EdgeInsets.all(5.0),
+              height: 40,
+              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
               decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey[500]),
+                  border: Border.all(color: Colors.black87),
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                   color: CustomColors.white),
               child: Row(
@@ -544,13 +695,13 @@ class SearchBar extends SliverPersistentHeaderDelegate {
                   Container(
                     padding: EdgeInsets.all(3.0),
                     decoration: BoxDecoration(
-                        color: CustomColors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: CustomColors.black)),
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     child: Icon(
                       Icons.search,
-                      size: 15,
-                      color: CustomColors.black,
+                      size: 12,
+                      color: CustomColors.white,
                     ),
                   ),
                   Padding(
@@ -558,7 +709,7 @@ class SearchBar extends SliverPersistentHeaderDelegate {
                     child: Text(
                       "Search for an item",
                       style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontFamily: "Georgia",
                           color: CustomColors.grey),
                     ),

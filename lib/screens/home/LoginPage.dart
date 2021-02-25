@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:chipchop_seller/db/models/user.dart';
+import 'package:chipchop_seller/db/models/user.dart' as u;
 import 'package:chipchop_seller/screens/app/ContactAndSupportWidget.dart';
 import 'package:chipchop_seller/screens/home/update_app.dart';
 import 'package:chipchop_seller/screens/home/MobileSigninPage.dart';
@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  User _user;
+  u.User _user;
 
   String number = "";
   int countryCode = 91;
@@ -328,7 +328,7 @@ class _LoginPageState extends State<LoginPage> {
       number = _nController.text;
       try {
         Map<String, dynamic> _uJSON =
-            await User().getByID(countryCode.toString() + number);
+            await u.User().getByID(countryCode.toString() + number);
         if (_uJSON == null) {
           Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
           _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
@@ -336,7 +336,7 @@ class _LoginPageState extends State<LoginPage> {
               2));
           return;
         } else {
-          this._user = User.fromJson(_uJSON);
+          this._user = u.User.fromJson(_uJSON);
           _verifyPhoneNumber();
         }
       } on PlatformException catch (err) {
@@ -376,7 +376,7 @@ class _LoginPageState extends State<LoginPage> {
       AuthCredential authCredential, BuildContext context) async {
     FirebaseAuth.instance
         .signInWithCredential(authCredential)
-        .then((AuthResult authResult) async {
+        .then((UserCredential authResult) async {
       final SharedPreferences prefs = await _prefs;
       prefs.setString("mobile_number", countryCode.toString() + number);
 
@@ -414,7 +414,7 @@ class _LoginPageState extends State<LoginPage> {
     CustomDialogs.showLoadingDialog(context, _keyLoader);
   }
 
-  _verificationFailed(AuthException authException, BuildContext context) {
+  _verificationFailed(dynamic authException, BuildContext context) {
     Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
     _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
         AppLocalizations.of(context).translate('verification_failed') +

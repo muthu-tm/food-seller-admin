@@ -47,8 +47,8 @@ class ProductReviews {
 
   Future<void> create(String productID) async {
     try {
-      DocumentReference docRef = getCollectionRef(productID).document();
-      this.uuid = docRef.documentID;
+      DocumentReference docRef = getCollectionRef(productID).doc();
+      this.uuid = docRef.id;
       this.createdTime = DateTime.now().millisecondsSinceEpoch;
       this.updatedAt = DateTime.now();
       this.userName = cachedLocalUser.firstName;
@@ -57,13 +57,13 @@ class ProductReviews {
 
       WriteBatch _batch = Model.db.batch();
 
-      _batch.setData(docRef, this.toJson());
+      _batch.set(docRef, this.toJson());
       DocumentReference _productDocRef = Products().getDocumentRef(productID);
       DocumentSnapshot docSnap = await _productDocRef.get();
-      Products _p = Products.fromJson(docSnap.data);
+      Products _p = Products.fromJson(docSnap.data());
       double newTotalRating = _p.totalRatings + this.rating;
       double newRating = (newTotalRating / (_p.totalReviews + 1));
-      _batch.updateData(Products().getDocumentRef(productID), {
+      _batch.update(Products().getDocumentRef(productID), {
         'rating': newRating,
         'total_ratings': newTotalRating,
         'total_reviews': _p.totalReviews + 1,
@@ -88,10 +88,10 @@ class ProductReviews {
 
   Future<void> update(String productID, String id) async {
     try {
-      DocumentReference docRef = getCollectionRef(productID).document(id);
+      DocumentReference docRef = getCollectionRef(productID).doc(id);
       this.updatedAt = DateTime.now();
 
-      await docRef.updateData(this.toJson());
+      await docRef.update(this.toJson());
     } catch (err) {
       Analytics.reportError({
         'type': 'product_review_update_error',
@@ -107,12 +107,11 @@ class ProductReviews {
     try {
       QuerySnapshot qSnap = await getCollectionRef(productID)
           .orderBy('created_time', descending: true)
-          .getDocuments();
+          .get();
       List<ProductReviews> reviews = [];
 
-      for (var i = 0; i < qSnap.documents.length; i++) {
-        ProductReviews _review =
-            ProductReviews.fromJson(qSnap.documents[i].data);
+      for (var i = 0; i < qSnap.docs.length; i++) {
+        ProductReviews _review = ProductReviews.fromJson(qSnap.docs[i].data());
         reviews.add(_review);
       }
 

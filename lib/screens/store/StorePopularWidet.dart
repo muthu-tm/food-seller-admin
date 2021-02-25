@@ -29,7 +29,7 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
         Widget children;
 
         if (snapshot.hasData) {
-          if (snapshot.data.documents.isNotEmpty) {
+          if (snapshot.data.docs.isNotEmpty) {
             children = SliverStickyHeader(
               header: Container(
                 child: Padding(
@@ -49,9 +49,9 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                 ),
                 delegate: SliverChildBuilderDelegate((context, index) {
                   Products _p =
-                      Products.fromJson(snapshot.data.documents[index].data);
+                      Products.fromJson(snapshot.data.docs[index].data());
                   return StoreProductsCard(_p);
-                }, childCount: snapshot.data.documents.length),
+                }, childCount: snapshot.data.docs.length),
               ),
             );
           } else {

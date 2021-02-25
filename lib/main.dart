@@ -1,8 +1,10 @@
 import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/screens/Home/AuthPage.dart';
+import 'package:chipchop_seller/screens/home/LoginPage.dart';
 import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -11,11 +13,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
-void main() {
-  runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String userID = prefs.getString('mobile_number') ?? "";
+  String userName = prefs.getString('user_name') ?? "";
+  String userImage = prefs.getString('user_profile_pic') ?? "";
+  runApp(MyApp(userID, userName, userImage));
 }
 
 class MyApp extends StatefulWidget {
+  MyApp(this.userID, this.userName, this.userImage);
+
+  final String userImage;
+  final String userName;
+  final String userID;
+
   @override
   _MyAppState createState() => _MyAppState();
 
@@ -80,7 +94,9 @@ class _MyAppState extends State<MyApp> {
         return supportedLocales.first;
       },
       navigatorObservers: <NavigatorObserver>[observer],
-      home: AuthPage(),
+      home: (widget.userID != "")
+          ? AuthPage()
+          : LoginPage(true, null),
     );
   }
 

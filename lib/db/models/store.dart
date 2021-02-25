@@ -116,8 +116,7 @@ class Store extends Model {
         return images;
       } else
         return [
-          noImagePlaceholder.replaceFirst(
-              firebase_storage_path, image_kit_path)
+          noImagePlaceholder.replaceFirst(firebase_storage_path, image_kit_path)
         ];
     }
   }
@@ -130,7 +129,7 @@ class Store extends Model {
   }
 
   DocumentReference getDocumentReference(String uuid) {
-    return _storeCollRef.document(uuid);
+    return _storeCollRef.doc(uuid);
   }
 
   String getID() {
@@ -147,14 +146,14 @@ class Store extends Model {
 
     WriteBatch bWrite = Model.db.batch();
 
-    DocumentReference docRef = this.getCollectionRef().document();
-    this.uuid = docRef.documentID;
+    DocumentReference docRef = this.getCollectionRef().doc();
+    this.uuid = docRef.id;
     try {
-      bWrite.setData(docRef, this.toJson());
+      bWrite.set(docRef, this.toJson());
       cachedLocalUser.stores == null
           ? cachedLocalUser.stores = [this.uuid]
           : cachedLocalUser.stores.add(this.uuid);
-      bWrite.updateData(
+      bWrite.update(
           cachedLocalUser.getDocumentReference(cachedLocalUser.getID()),
           {'stores': cachedLocalUser.stores});
       await bWrite.commit();
@@ -192,12 +191,12 @@ class Store extends Model {
     try {
       QuerySnapshot snap = await getCollectionRef()
           .where('users', arrayContains: cachedLocalUser.getID())
-          .getDocuments();
+          .get();
 
       List<Store> stores = [];
-      if (snap.documents.isNotEmpty) {
-        for (var i = 0; i < snap.documents.length; i++) {
-          Store _s = Store.fromJson(snap.documents[i].data);
+      if (snap.docs.isNotEmpty) {
+        for (var i = 0; i < snap.docs.length; i++) {
+          Store _s = Store.fromJson(snap.docs[i].data());
           stores.add(_s);
         }
       }
@@ -212,11 +211,15 @@ class Store extends Model {
     List<Map<String, dynamic>> stores = [];
 
     QuerySnapshot snap = await getCollectionRef()
-        .where('keywords', arrayContainsAny: searchKey.split(' '))
-        .getDocuments();
-    if (snap.documents.isNotEmpty) {
-      for (var i = 0; i < snap.documents.length; i++) {
-        stores.add(snap.documents[i].data);
+        .where(
+          'keywords',
+          arrayContainsAny:
+              searchKey.split(" ").map((e) => e.toLowerCase()).toList(),
+        )
+        .get();
+    if (snap.docs.isNotEmpty) {
+      for (var i = 0; i < snap.docs.length; i++) {
+        stores.add(snap.docs[i].data());
       }
     }
 
@@ -226,8 +229,8 @@ class Store extends Model {
   Future updateStoreStatus(String docID, bool isLive) async {
     try {
       await getCollectionRef()
-          .document(docID)
-          .updateData({'is_active': isLive, 'updated_at': DateTime.now()});
+          .doc(docID)
+          .update({'is_active': isLive, 'updated_at': DateTime.now()});
     } catch (err) {
       Analytics.reportError({
         'type': 'store_status_update_error',

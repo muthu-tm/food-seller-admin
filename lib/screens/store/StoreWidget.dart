@@ -18,7 +18,9 @@ class StoreWidget extends StatelessWidget {
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.20,
-      child: Container(child: _getStoreBody()),
+      child: Container(
+        child: _getStoreBody(),
+      ),
       actions: <Widget>[
         IconSlideAction(
           caption: 'Chats',

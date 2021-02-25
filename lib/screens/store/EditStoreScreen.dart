@@ -170,6 +170,8 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
             });
 
             store.address = updatedAddress;
+            store.keywords =
+                storeName.split(" ").map((e) => e.toLowerCase()).toList();
 
             Navigator.push(
               context,

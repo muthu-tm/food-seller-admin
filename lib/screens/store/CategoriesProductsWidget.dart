@@ -1,4 +1,6 @@
 import 'package:chipchop_seller/db/models/products.dart';
+import 'package:chipchop_seller/db/models/user_activity_tracker.dart';
+import 'package:chipchop_seller/screens/products/ProductDetailsScreen.dart';
 import 'package:chipchop_seller/screens/store/StoreProductsCard.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
@@ -45,7 +47,27 @@ class _CategoriesProductsWidgetState extends State<CategoriesProductsWidget> {
                   (index) {
                     Products product = snapshot.data[index];
 
-                    return StoreProductsCard(product);
+                    return InkWell(
+                      onTap: () {
+                        UserActivityTracker _activity = UserActivityTracker();
+                        _activity.keywords = "";
+                        _activity.storeID = product.storeID;
+                        _activity.productID = product.uuid;
+                        _activity.productName = product.name;
+                        _activity.refImage = product.getProductImage();
+                        _activity.type = 2;
+                        _activity.create();
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailsScreen(product),
+                            settings: RouteSettings(name: '/store/products'),
+                          ),
+                        );
+                      },
+                      child: StoreProductsCard(product),
+                    );
                   },
                 ),
               ),

@@ -17,11 +17,10 @@ class Uploader {
         imageFile = File(localFilePath);
 
       if (imageFile != null) {
-        StorageReference reference =
-            FirebaseStorage.instance.ref().child(filePath);
-        StorageUploadTask uploadTask = reference.putFile(imageFile);
-        StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-        return await storageTaskSnapshot.ref.getDownloadURL();
+        UploadTask task =
+            FirebaseStorage.instance.ref().child(filePath).putFile(imageFile);
+        TaskSnapshot taskSnapshot = await task;
+        return await taskSnapshot.ref.getDownloadURL();
       }
 
       return "";
@@ -70,16 +69,17 @@ class Uploader {
   Future<void> uploadImage(int type, String fileDir, File fileToUpload,
       String fileName, int id, Function onUploaded) async {
     String filePath = '$fileDir/$fileName.png';
-    StorageReference reference = FirebaseStorage.instance.ref().child(filePath);
-    StorageUploadTask uploadTask = reference.putFile(fileToUpload);
-    StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+    UploadTask uploadTask =
+        FirebaseStorage.instance.ref().child(filePath).putFile(fileToUpload);
+    TaskSnapshot taskSnapshot = await uploadTask;
 
     try {
-      var profilePathUrl = await storageTaskSnapshot.ref.getDownloadURL();
+      var profilePathUrl = await taskSnapshot.ref.getDownloadURL();
       if (type == 0) {
         await updateUserData('profile_path', profilePathUrl);
         cachedLocalUser.profilePath = profilePathUrl;
-      } else await updateStoreData('store_profile', fileName, id, profilePathUrl);
+      } else
+        await updateStoreData('store_profile', fileName, id, profilePathUrl);
     } catch (err) {
       Analytics.reportError({
         "type": 'image_upload_error',
@@ -91,8 +91,7 @@ class Uploader {
     onUploaded();
   }
 
-  Future<void> updateUserData(
-      String field, String profilePathUrl) async {
+  Future<void> updateUserData(String field, String profilePathUrl) async {
     try {
       await cachedLocalUser.update({field: profilePathUrl});
     } catch (err) {

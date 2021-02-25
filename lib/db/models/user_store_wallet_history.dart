@@ -1,5 +1,6 @@
 import 'package:chipchop_seller/db/models/customers.dart';
 import 'package:chipchop_seller/db/models/model.dart';
+import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -37,10 +38,18 @@ class UserStoreWalletHistory {
   CollectionReference getCollectionRef(String storeID, String custID) {
     return Model.db
         .collection("stores")
-        .document(storeID)
+        .doc(storeID)
         .collection("customers")
-        .document(custID)
+        .doc(custID)
         .collection('user_store_wallet');
+  }
+
+  DocumentReference getDocumentRef(String storeID) {
+    return Model.db
+        .collection("stores")
+        .doc(storeID)
+        .collection("customers")
+        .doc(cachedLocalUser.getID());
   }
 
   String getID() {
@@ -51,20 +60,20 @@ class UserStoreWalletHistory {
     try {
       DocumentReference custDocRef = Model.db
           .collection("stores")
-          .document(storeID)
+          .doc(storeID)
           .collection("customers")
-          .document(custID);
+          .doc(custID);
 
       await Model.db.runTransaction((tx) {
         return tx.get(custDocRef).then((doc) async {
-          Customers cust = Customers.fromJson(doc.data);
+          Customers cust = Customers.fromJson(doc.data());
 
           cust.availableBalance += this.amount;
           if (!this.amount.isNegative) cust.totalAmount += this.amount;
 
           Model().txCreate(
               tx,
-              this.getCollectionRef(storeID, custID).document(getID()),
+              this.getCollectionRef(storeID, custID).doc(getID()),
               this.toJson());
 
           Model().txUpdate(tx, custDocRef, cust.toJson());
@@ -79,5 +88,13 @@ class UserStoreWalletHistory {
     return getCollectionRef(storeID, custID)
         .orderBy('created_at', descending: true)
         .snapshots();
+  }
+
+  Future<Customers> getStoreCustomer(String storeID) async {
+    DocumentSnapshot snap = await getDocumentRef(storeID).get();
+    if (snap.exists)
+      return Customers.fromJson(snap.data());
+    else
+      return null;
   }
 }

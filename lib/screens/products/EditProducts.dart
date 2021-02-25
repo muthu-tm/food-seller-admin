@@ -225,7 +225,7 @@ class _EditProductsState extends State<EditProducts> {
             ? null
             : subcategory[_selectedSubCategory];
 
-        _p.keywords = pName.split(" ");
+        _p.keywords = pName.split(" ").map((e) => e.toLowerCase()).toList();
 
         _p.variants = _variants;
         if (_descs.isNotEmpty) {

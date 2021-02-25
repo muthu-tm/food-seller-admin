@@ -56,15 +56,15 @@ class _StoreSettingsState extends State<StoreSettings> {
         Widget children;
 
         if (snapshot.hasData) {
-          if (snapshot.data.documents.isNotEmpty) {
+          if (snapshot.data.docs.isNotEmpty) {
             children = ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               primary: false,
-              itemCount: snapshot.data.documents.length,
+              itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int index) {
                 Store store =
-                    Store.fromJson(snapshot.data.documents[index].data);
+                    Store.fromJson(snapshot.data.docs[index].data());
                 return Slidable(
                   actionPane: SlidableDrawerActionPane(),
                   actionExtentRatio: 0.20,

@@ -31,7 +31,7 @@ class _StoreSearchBarState extends State<StoreSearchBar> {
 
   void _submit(String key) {
     setState(() {
-      snapshot = Products().getByNameRange(key);
+      snapshot = Products().getByNameForStore(key, widget.storeID);
     });
   }
 

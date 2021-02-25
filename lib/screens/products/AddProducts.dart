@@ -207,7 +207,7 @@ class _AddProductState extends State<AddProduct> {
             (_selectedSubCategory == "0" && _selectedSubCategory == null)
                 ? null
                 : subcategory[_selectedSubCategory];
-        _p.keywords = pName.split(" ");
+        _p.keywords = pName.split(" ").map((e) => e.toLowerCase()).toList();
 
         _p.variants = _variants;
         if (_descs.isNotEmpty && _descs.last.title.trim().isNotEmpty) {

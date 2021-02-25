@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:chipchop_seller/db/models/user.dart';
+import 'package:chipchop_seller/db/models/user.dart' as u;
 import 'package:chipchop_seller/screens/home/update_app.dart';
 import 'package:chipchop_seller/screens/home/PhoneAuthVerify.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
@@ -378,7 +378,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
       CustomDialogs.actionWaiting(context);
       this.number = _phoneNumberController.text;
 
-      var data = await User().getByID(countryCode.toString() + number);
+      var data = await u.User().getByID(countryCode.toString() + number);
       if (data != null) {
         Analytics.reportError({
           "type": 'sign_up_error',
@@ -415,7 +415,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
       AuthCredential authCredential, BuildContext context) async {
     FirebaseAuth.instance
         .signInWithCredential(authCredential)
-        .then((AuthResult authResult) async {
+        .then((UserCredential authResult) async {
       dynamic result = await _authController.registerWithMobileNumber(
           int.parse(number),
           countryCode,
@@ -458,7 +458,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
     CustomDialogs.actionWaiting(context);
   }
 
-  _verificationFailed(AuthException authException, BuildContext context) {
+  _verificationFailed(dynamic authException, BuildContext context) {
     Navigator.pop(context);
     _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
         "Verification Failed:" + authException.message.toString(), 2));

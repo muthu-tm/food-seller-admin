@@ -85,7 +85,7 @@ class User extends Model {
   }
 
   DocumentReference getDocumentReference(String id) {
-    return _userCollRef.document(id);
+    return _userCollRef.doc(id);
   }
 
   String getID() {

@@ -2,7 +2,7 @@ import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/user_preferences.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:chipchop_seller/services/utils/hash_generator.dart';
-import 'package:chipchop_seller/db/models/user.dart';
+import 'package:chipchop_seller/db/models/user.dart' as u;
 import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/fcm/user_token.dart';
 import 'package:chipchop_seller/services/utils/response_utils.dart';
@@ -13,7 +13,7 @@ class AuthController {
   dynamic registerWithMobileNumber(int mobileNumber, int countryCode,
       String passkey, String firstName, String lastName, String uid) async {
     try {
-      User user = User();
+      u.User user = u.User();
       String hKey = HashGenerator.hmacGenerator(
           passkey, countryCode.toString() + mobileNumber.toString());
       user.password = hKey;
@@ -54,7 +54,7 @@ class AuthController {
     }
   }
 
-  dynamic signInWithMobileNumber(User user) async {
+  dynamic signInWithMobileNumber(u.User user) async {
     try {
       var platformData = await UserFCM().getPlatformDetails();
 

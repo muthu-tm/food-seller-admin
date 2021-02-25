@@ -132,7 +132,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
               ),
             );
           } else {
-            Order order = Order.fromJson(snapshot.data.data);
+            Order order = Order.fromJson(snapshot.data.data());
             wOrderAmount = 0.00;
             cOrderAmount = 0.00;
 
@@ -364,66 +364,113 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                 SizedBox(
                   height: 10,
                 ),
-                order.products.length > 0 ? Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: CustomColors.grey,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text("Ordered as Products"),
-                        ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          primary: false,
-                          itemCount: order.products.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return FutureBuilder(
-                              future: Products().getByProductID(
-                                  order.products[index].productID),
-                              builder:
-                                  (context, AsyncSnapshot<Products> snapshot) {
-                                Widget child;
-                                if (snapshot.hasData) {
-                                  Products _p = snapshot.data;
-                                  child = Card(
-                                    child: Container(
-                                      padding: EdgeInsets.fromLTRB(15, 5, 5, 0),
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              '${_p.name}',
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  color: CustomColors.black,
-                                                  fontWeight: FontWeight.bold),
+                order.products.length > 0
+                    ? Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: CustomColors.grey,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                            children: [
+                              ListTile(
+                                title: Text("Ordered as Products"),
+                              ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                primary: false,
+                                itemCount: order.products.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return FutureBuilder(
+                                    future: Products().getByProductID(
+                                        order.products[index].productID),
+                                    builder: (context,
+                                        AsyncSnapshot<Products> snapshot) {
+                                      Widget child;
+                                      if (snapshot.hasData) {
+                                        Products _p = snapshot.data;
+                                        child = Card(
+                                          child: Container(
+                                            padding: EdgeInsets.fromLTRB(
+                                                15, 5, 5, 0),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
                                             ),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Text(
-                                                      '${_p.variants[int.parse(order.products[index].variantID)].weight}',
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Flexible(
+                                                  child: Text(
+                                                    '${_p.name}',
+                                                    textAlign: TextAlign.start,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 2,
+                                                    style: TextStyle(
+                                                        color:
+                                                            CustomColors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Align(
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Text(
+                                                            '${_p.variants[int.parse(order.products[index].variantID)].weight}',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: TextStyle(
+                                                              color:
+                                                                  CustomColors
+                                                                      .black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  5.0),
+                                                          child: Text(
+                                                            _p.variants[int.parse(order
+                                                                    .products[
+                                                                        index]
+                                                                    .variantID)]
+                                                                .getUnit(),
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: TextStyle(
+                                                              color:
+                                                                  CustomColors
+                                                                      .black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                      'X ${order.products[index].quantity.round()}',
                                                       textAlign:
                                                           TextAlign.start,
                                                       overflow:
@@ -433,114 +480,86 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                             CustomColors.black,
                                                       ),
                                                     ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.all(5.0),
-                                                    child: Text(
-                                                      _p.variants[int.parse(
-                                                              order
-                                                                  .products[
-                                                                      index]
-                                                                  .variantID)]
-                                                          .getUnit(),
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                        color:
-                                                            CustomColors.black,
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Align(
+                                                      alignment:
+                                                          Alignment.centerRight,
+                                                      child: Text(
+                                                        '₹ ${order.products[index].amount}',
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: CustomColors
+                                                              .black,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                'X ${order.products[index].quantity.round()}',
-                                                textAlign: TextAlign.start,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  color: CustomColors.black,
+                                                  ],
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: Text(
-                                                  '₹ ${order.products[index].amount}',
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: CustomColors.black,
+                                                Align(
+                                                  alignment:
+                                                      Alignment.bottomRight,
+                                                  child: FlatButton(
+                                                    onPressed: () async {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ProductDetailsScreen(
+                                                                  _p),
+                                                          settings: RouteSettings(
+                                                              name:
+                                                                  '/store/products'),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Text("Show Details",
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline,
+                                                            color: Colors.indigo
+                                                                .shade700)),
+                                                    splashColor:
+                                                        Colors.transparent,
+                                                    highlightColor:
+                                                        Colors.transparent,
                                                   ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Align(
-                                            alignment: Alignment.bottomRight,
-                                            child: FlatButton(
-                                              onPressed: () async {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ProductDetailsScreen(
-                                                            _p),
-                                                    settings: RouteSettings(
-                                                        name:
-                                                            '/store/products'),
-                                                  ),
-                                                );
-                                              },
-                                              child: Text("Show Details",
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      decoration: TextDecoration
-                                                          .underline,
-                                                      color: Colors
-                                                          .indigo.shade700)),
-                                              splashColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
+                                                )
+                                              ],
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                } else if (snapshot.hasError) {
-                                  child = Center(
-                                    child: Column(
-                                      children: AsyncWidgets.asyncError(),
-                                    ),
-                                  );
-                                } else {
-                                  child = Center(
-                                    child: Column(
-                                      children: AsyncWidgets.asyncWaiting(),
-                                    ),
-                                  );
-                                }
+                                          ),
+                                        );
+                                      } else if (snapshot.hasError) {
+                                        child = Center(
+                                          child: Column(
+                                            children: AsyncWidgets.asyncError(),
+                                          ),
+                                        );
+                                      } else {
+                                        child = Center(
+                                          child: Column(
+                                            children:
+                                                AsyncWidgets.asyncWaiting(),
+                                          ),
+                                        );
+                                      }
 
-                                return child;
-                              },
-                            );
-                          },
+                                      return child;
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                ) : Container(),
+                      )
+                    : Container(),
                 CapturedOrderWidget(order),
                 WrittenOrderWidget(order),
                 Card(

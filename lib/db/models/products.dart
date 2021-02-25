@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_seller/db/models/model.dart';
 import 'package:chipchop_seller/services/utils/constants.dart';
 import 'package:chipchop_seller/db/models/product_categories_map.dart';
+import 'package:chipchop_seller/db/models/geopoint_data.dart';
 part 'products.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -61,6 +62,8 @@ class Products extends Model {
   bool isPopular;
   @JsonKey(name: 'keywords', defaultValue: [""])
   List<String> keywords;
+  @JsonKey(name: 'geo_point', defaultValue: "")
+  GeoPointData geoPoint;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)
@@ -123,7 +126,7 @@ class Products extends Model {
   }
 
   DocumentReference getDocumentReference(String uuid) {
-    return _productsCollRef.document(uuid);
+    return _productsCollRef.doc(uuid);
   }
 
   String getID() {
@@ -136,12 +139,12 @@ class Products extends Model {
 
   Future<void> create() async {
     try {
-      DocumentReference docRef = getCollectionRef().document();
+      DocumentReference docRef = getCollectionRef().doc();
       this.createdAt = DateTime.now();
       this.updatedAt = DateTime.now();
-      this.uuid = docRef.documentID;
+      this.uuid = docRef.id;
 
-      await docRef.setData(this.toJson());
+      await docRef.set(this.toJson());
       Analytics.sendAnalyticsEvent({
         'type': 'product_create',
         'store_id': this.storeID,
@@ -213,9 +216,9 @@ class Products extends Model {
       QuerySnapshot snap = await getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)
           .where('product_category.uuid', isEqualTo: categoryID)
-          .getDocuments();
-      for (var j = 0; j < snap.documents.length; j++) {
-        Products _c = Products.fromJson(snap.documents[j].data);
+          .get();
+      for (var j = 0; j < snap.docs.length; j++) {
+        Products _c = Products.fromJson(snap.docs[j].data());
         products.add(_c);
       }
 
@@ -233,9 +236,9 @@ class Products extends Model {
           .where('store_uuid', isEqualTo: storeID)
           .where('product_category.uuid', isEqualTo: categoryID)
           .where('product_sub_category.uuid', isEqualTo: subCategoryID)
-          .getDocuments();
-      for (var j = 0; j < snap.documents.length; j++) {
-        Products _c = Products.fromJson(snap.documents[j].data);
+          .get();
+      for (var j = 0; j < snap.docs.length; j++) {
+        Products _c = Products.fromJson(snap.docs[j].data());
         products.add(_c);
       }
 
@@ -247,9 +250,9 @@ class Products extends Model {
 
   Future<Products> getByProductID(String uuid) async {
     try {
-      DocumentSnapshot snap = await getCollectionRef().document(uuid).get();
+      DocumentSnapshot snap = await getCollectionRef().doc(uuid).get();
 
-      if (snap.exists) return Products.fromJson(snap.data);
+      if (snap.exists) return Products.fromJson(snap.data());
 
       return null;
     } catch (err) {
@@ -280,12 +283,16 @@ class Products extends Model {
       for (var i = 0; i < cachedLocalUser.stores.length; i++) {
         QuerySnapshot snap = await getCollectionRef()
             .where('store_uuid', isEqualTo: cachedLocalUser.stores[i])
-            .where('keywords', arrayContainsAny: searchKey.split(" "))
-            .getDocuments();
+            .where(
+              'keywords',
+              arrayContainsAny:
+                  searchKey.split(" ").map((e) => e.toLowerCase()).toList(),
+            )
+            .get();
 
-        if (snap.documents.isNotEmpty) {
-          snap.documents.forEach((p) {
-            pList.add(p.data);
+        if (snap.docs.isNotEmpty) {
+          snap.docs.forEach((p) {
+            pList.add(p.data());
           });
         }
       }
@@ -312,7 +319,7 @@ class Products extends Model {
         }
       });
 
-      await getDocumentReference(docID).updateData(
+      await getDocumentReference(docID).update(
         {
           'variants': _newVariants?.map((e) => e?.toJson())?.toList(),
           'updated_at': DateTime.now()
@@ -330,7 +337,7 @@ class Products extends Model {
 
   Future<bool> removeByID(String uuid) async {
     try {
-      DocumentSnapshot snap = await getCollectionRef().document(uuid).get();
+      DocumentSnapshot snap = await getCollectionRef().doc(uuid).get();
 
       if (snap.exists) {
         await snap.reference.delete();
@@ -346,5 +353,126 @@ class Products extends Model {
       }, 'product');
       return false;
     }
+  }
+
+  Future<List<Products>> getProductsForStore(String storeID) async {
+    try {
+      List<Products> products = [];
+      QuerySnapshot snap = await getCollectionRef()
+          .where('store_uuid', isEqualTo: storeID)
+          .get();
+      for (var j = 0; j < snap.docs.length; j++) {
+        Products _c = Products.fromJson(snap.docs[j].data());
+        products.add(_c);
+      }
+
+      return products;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<List<Products>> getTopSellingProducts(
+      List<String> ids, int limit) async {
+    try {
+      List<Products> products = [];
+
+      if (ids.length > 9) {
+        int end = 0;
+        for (int i = 0; i < ids.length; i = i + 9) {
+          if (end + 9 > ids.length)
+            end = ids.length;
+          else
+            end = end + 9;
+
+          QuerySnapshot snap = await getCollectionRef()
+              .where('store_uuid', whereIn: ids.sublist(i, end))
+              .where('orders', isGreaterThan: 0)
+              .orderBy('orders', descending: true)
+              .limit(limit)
+              .get();
+          for (var j = 0; j < snap.docs.length; j++) {
+            Products _p = Products.fromJson(snap.docs[j].data());
+            products.add(_p);
+          }
+        }
+      } else {
+        QuerySnapshot snap = await getCollectionRef()
+            .where('store_uuid', whereIn: ids)
+            .where('orders', isGreaterThan: 0)
+            .orderBy('orders', descending: true)
+            .limit(limit)
+            .get();
+
+        for (var j = 0; j < snap.docs.length; j++) {
+          Products _p = Products.fromJson(snap.docs[j].data());
+          products.add(_p);
+        }
+      }
+
+      return products;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<List<Products>> getPopularProducts(List<String> ids) async {
+    try {
+      List<Products> products = [];
+
+      if (ids.length > 9) {
+        int end = 0;
+        for (int i = 0; i < ids.length; i = i + 9) {
+          if (end + 9 > ids.length)
+            end = ids.length;
+          else
+            end = end + 9;
+
+          QuerySnapshot snap = await getCollectionRef()
+              .where('store_uuid', whereIn: ids.sublist(i, end))
+              .where('is_popular', isEqualTo: true)
+              .get();
+          for (var j = 0; j < snap.docs.length; j++) {
+            Products _p = Products.fromJson(snap.docs[j].data());
+            products.add(_p);
+          }
+        }
+      } else {
+        QuerySnapshot snap = await getCollectionRef()
+            .where('store_uuid', whereIn: ids)
+            .where('is_popular', isEqualTo: true)
+            .get();
+
+        for (var j = 0; j < snap.docs.length; j++) {
+          Products _p = Products.fromJson(snap.docs[j].data());
+          products.add(_p);
+        }
+      }
+
+      return products;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getByNameForStore(
+      String searchKey, String storeID) async {
+    QuerySnapshot snap = await getCollectionRef()
+        .where(
+          'keywords',
+          arrayContainsAny:
+              searchKey.split(" ").map((e) => e.toLowerCase()).toList(),
+        )
+        .where('store_uuid', isEqualTo: storeID)
+        .get();
+
+    List<Map<String, dynamic>> pList = [];
+    if (snap.docs.isNotEmpty) {
+      snap.docs.forEach((p) {
+        pList.add(p.data());
+      });
+    }
+
+    return pList;
   }
 }

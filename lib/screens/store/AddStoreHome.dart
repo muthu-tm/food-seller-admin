@@ -1517,7 +1517,7 @@ class _AddStoreStepTwoState extends State<AddStoreStepTwo> {
               _store.deliveryDetails.deliveryChargesMax =
                   this.deliveryChargeMax;
               _store.deliveryDetails.availableOptions = this.deliveryTemp;
-              _store.keywords = _store.name.split(" ");
+              _store.keywords = _store.name.split(" ").map((e) => e.toLowerCase()).toList();
               _store.isActive = true;
 
               Navigator.push(

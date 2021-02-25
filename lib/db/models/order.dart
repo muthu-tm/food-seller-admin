@@ -63,7 +63,7 @@ class Order {
   Map<String, dynamic> toJson() => _$OrderToJson(this);
 
   CollectionReference getCollectionRef(String buyerID) {
-    return Model.db.collection('buyers').document(buyerID).collection("orders");
+    return Model.db.collection('buyers').doc(buyerID).collection("orders");
   }
 
   Query getGroupQuery() {
@@ -71,7 +71,7 @@ class Order {
   }
 
   DocumentReference getDocumentReference(String buyerID, String id) {
-    return getCollectionRef(buyerID).document(id);
+    return getCollectionRef(buyerID).doc(id);
   }
 
   String getID() {
@@ -195,10 +195,7 @@ class Order {
         }),
       );
 
-      await this
-          .getCollectionRef(this.userNumber)
-          .document(this.uuid)
-          .updateData(
+      await this.getCollectionRef(this.userNumber).doc(this.uuid).update(
         {
           'updated_at': DateTime.now(),
           'status_details': _newStatus?.map((e) => e?.toJson())?.toList(),
@@ -236,7 +233,7 @@ class Order {
           }),
         );
 
-        await this.getCollectionRef(buyerID).document(this.uuid).updateData(
+        await this.getCollectionRef(buyerID).doc(this.uuid).update(
           {
             'status_details': _newStatus?.map((e) => e?.toJson())?.toList(),
             'status': status,
@@ -249,7 +246,7 @@ class Order {
       } else if (this.delivery.expectedAt !=
               (eDelivery == null ? null : eDelivery.millisecondsSinceEpoch) ||
           this.delivery.deliveryContact != number) {
-        await this.getCollectionRef(buyerID).document(this.uuid).updateData(
+        await this.getCollectionRef(buyerID).doc(this.uuid).update(
           {
             'updated_at': DateTime.now(),
             'delivery.expected_at':
@@ -279,10 +276,7 @@ class Order {
       }),
     );
 
-    await this
-        .getCollectionRef(this.userNumber)
-        .document(this.getID())
-        .updateData(
+    await this.getCollectionRef(this.userNumber).doc(this.getID()).update(
       {
         'status_details': _newStatus?.map((e) => e?.toJson())?.toList(),
         'status': isReturn ? 7 : 3,
@@ -294,10 +288,7 @@ class Order {
 
   Future<void> updateCapturedAmount(List<CapturedOrders> cOrder) async {
     try {
-      await this
-          .getCollectionRef(this.userNumber)
-          .document(this.uuid)
-          .updateData(
+      await this.getCollectionRef(this.userNumber).doc(this.uuid).update(
         {
           'updated_at': DateTime.now(),
           'captured_order': cOrder?.map((e) => e?.toJson())?.toList(),
@@ -315,10 +306,7 @@ class Order {
 
   Future<void> updateWrittenAmount(List<WrittenOrders> wOrder) async {
     try {
-      await this
-          .getCollectionRef(this.userNumber)
-          .document(this.uuid)
-          .updateData(
+      await this.getCollectionRef(this.userNumber).doc(this.uuid).update(
         {
           'updated_at': DateTime.now(),
           'written_orders': wOrder?.map((e) => e?.toJson())?.toList(),
@@ -341,12 +329,12 @@ class Order {
     QuerySnapshot snap = await getGroupQuery()
         .where('store_uuid', isEqualTo: id)
         .where('created_at', isGreaterThan: lastMidnight)
-        .getDocuments();
+        .get();
 
     List<Order> oList = [];
-    if (snap.documents.isNotEmpty) {
-      snap.documents.forEach((order) {
-        Order _order = Order.fromJson(order.data);
+    if (snap.docs.isNotEmpty) {
+      snap.docs.forEach((order) {
+        Order _order = Order.fromJson(order.data());
         oList.add(_order);
       });
     }
@@ -355,20 +343,20 @@ class Order {
   }
 
   Stream<DocumentSnapshot> streamOrderByID(String userID, String uuid) {
-    return getCollectionRef(userID).document(uuid).snapshots();
+    return getCollectionRef(userID).doc(uuid).snapshots();
   }
 
   Future<List<Map<String, dynamic>>> getByOrderID(String id) async {
     QuerySnapshot snap = await getGroupQuery()
         .where('store_uuid', whereIn: cachedLocalUser.stores)
         .where('order_id', isGreaterThanOrEqualTo: id)
-        .getDocuments();
+        .get();
 
     List<Map<String, dynamic>> oList = [];
 
-    if (snap.documents.isNotEmpty) {
-      snap.documents.forEach((order) {
-        oList.add(order.data);
+    if (snap.docs.isNotEmpty) {
+      snap.docs.forEach((order) {
+        oList.add(order.data());
       });
     }
 
@@ -402,12 +390,16 @@ class Order {
     QuerySnapshot snap = await getGroupQuery()
         .where('store_uuid', whereIn: cachedLocalUser.stores)
         .where('order_id', isEqualTo: id)
-        .getDocuments();
+        .get();
 
     List<Order> oList = [];
-    if (snap.documents.isNotEmpty) {
-      snap.documents.forEach((order) {
-        oList.add(Order.fromJson(order.data));
+    if (snap.docs.isNotEmpty) {
+      snap.docs.forEach((order) {
+        oList.add(
+          Order.fromJson(
+            order.data(),
+          ),
+        );
       });
     }
 

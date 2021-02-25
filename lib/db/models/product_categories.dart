@@ -52,7 +52,7 @@ class ProductCategories extends Model {
   }
 
   DocumentReference getDocumentReference(String uuid) {
-    return getCollectionRef().document(uuid);
+    return getCollectionRef().doc(uuid);
   }
 
   String getID() {
@@ -76,20 +76,18 @@ class ProductCategories extends Model {
 
         QuerySnapshot snap = await getCollectionRef()
             .where('type_id', whereIn: ids.sublist(i, end))
-            .getDocuments();
-        for (var j = 0; j < snap.documents.length; j++) {
+            .get();
+        for (var j = 0; j < snap.docs.length; j++) {
           ProductCategories _c =
-              ProductCategories.fromJson(snap.documents[j].data);
+              ProductCategories.fromJson(snap.docs[j].data());
           categories.add(_c);
         }
       }
     } else {
-      QuerySnapshot snap = await getCollectionRef()
-          .where('type_id', whereIn: ids)
-          .getDocuments();
-      for (var j = 0; j < snap.documents.length; j++) {
-        ProductCategories _c =
-            ProductCategories.fromJson(snap.documents[j].data);
+      QuerySnapshot snap =
+          await getCollectionRef().where('type_id', whereIn: ids).get();
+      for (var j = 0; j < snap.docs.length; j++) {
+        ProductCategories _c = ProductCategories.fromJson(snap.docs[j].data());
         categories.add(_c);
       }
     }
@@ -113,19 +111,19 @@ class ProductCategories extends Model {
 
           QuerySnapshot snap = await getCollectionRef()
               .where('uuid', whereIn: ids.sublist(i, end))
-              .getDocuments();
-          for (var j = 0; j < snap.documents.length; j++) {
+              .get();
+          for (var j = 0; j < snap.docs.length; j++) {
             ProductCategories _c =
-                ProductCategories.fromJson(snap.documents[j].data);
+                ProductCategories.fromJson(snap.docs[j].data());
             categories.add(_c);
           }
         }
       } else {
         QuerySnapshot snap =
-            await getCollectionRef().where('uuid', whereIn: ids).getDocuments();
-        for (var j = 0; j < snap.documents.length; j++) {
+            await getCollectionRef().where('uuid', whereIn: ids).get();
+        for (var j = 0; j < snap.docs.length; j++) {
           ProductCategories _c =
-              ProductCategories.fromJson(snap.documents[j].data);
+              ProductCategories.fromJson(snap.docs[j].data());
           categories.add(_c);
         }
       }
@@ -153,10 +151,10 @@ class ProductCategories extends Model {
           QuerySnapshot snap = await getCollectionRef()
               .where('uuid', whereIn: ids.sublist(i, end))
               .where('type_id', isEqualTo: typeID)
-              .getDocuments();
-          for (var j = 0; j < snap.documents.length; j++) {
+              .get();
+          for (var j = 0; j < snap.docs.length; j++) {
             ProductCategories _c =
-                ProductCategories.fromJson(snap.documents[j].data);
+                ProductCategories.fromJson(snap.docs[j].data());
             categories.add(_c);
           }
         }
@@ -164,10 +162,10 @@ class ProductCategories extends Model {
         QuerySnapshot snap = await getCollectionRef()
             .where('uuid', whereIn: ids)
             .where('type_id', isEqualTo: typeID)
-            .getDocuments();
-        for (var j = 0; j < snap.documents.length; j++) {
+            .get();
+        for (var j = 0; j < snap.docs.length; j++) {
           ProductCategories _c =
-              ProductCategories.fromJson(snap.documents[j].data);
+              ProductCategories.fromJson(snap.docs[j].data());
           categories.add(_c);
         }
       }

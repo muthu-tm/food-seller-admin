@@ -70,8 +70,8 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
         Widget widget;
 
         if (snapshot.hasData) {
-          if (snapshot.data.exists && snapshot.data.data.isNotEmpty) {
-            Customers _cust = Customers.fromJson(snapshot.data.data);
+          if (snapshot.data.exists && snapshot.data.data().isNotEmpty) {
+            Customers _cust = Customers.fromJson(snapshot.data.data());
             double amount = _cust.availableBalance;
 
             widget = Padding(
@@ -178,16 +178,16 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
         Widget widget;
 
         if (snapshot.hasData) {
-          if (snapshot.data.documents.length > 0) {
+          if (snapshot.data.docs.length > 0) {
             widget = ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               primary: false,
-              itemCount: snapshot.data.documents.length,
+              itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int index) {
                 UserStoreWalletHistory history =
                     UserStoreWalletHistory.fromJson(
-                        snapshot.data.documents[index].data);
+                        snapshot.data.docs[index].data());
 
                 Color tileColor = CustomColors.primary.withOpacity(0.5);
                 Color textColor = CustomColors.lightGrey;
@@ -198,82 +198,83 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                 }
 
                 return Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Material(
-                      color: tileColor,
-                      elevation: 3.0,
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Container(
-                        padding: EdgeInsets.all(5.0),
-                        height: 90,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: tileColor,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(left: 5, right: 5),
-                              child: Icon(
-                                Icons.local_offer,
-                                size: 35.0,
-                                color: CustomColors.alertRed.withOpacity(0.6),
-                              ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  history.details.isNotEmpty
-                                      ? Flexible(
-                                          child: Text(
-                                            history.details,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                                fontSize: 16.0,
-                                                color: textColor,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        )
-                                      : Container(),
-                                  Text(
-                                    '${DateUtils.formatDateTime(DateTime.fromMillisecondsSinceEpoch(history.createdAt))}',
-                                    style: TextStyle(
-                                        fontSize: 12.0, color: textColor),
-                                  ),
-                                  Text(
-                                    history.type == 0
-                                        ? "Order Debit"
-                                        : history.type == 1
-                                            ? "Order Credit"
-                                            : history.type == 2
-                                                ? "Store Transaction"
-                                                : "Offer",
-                                    style: TextStyle(
-                                        fontSize: 10.0,
-                                        color: textColor,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Text(
-                              '₹ ${history.amount}',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: textColor,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
+                  padding: EdgeInsets.all(5.0),
+                  child: Material(
+                    color: tileColor,
+                    elevation: 3.0,
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Container(
+                      padding: EdgeInsets.all(5.0),
+                      height: 90,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: tileColor,
                       ),
-                    ),);
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: 5, right: 5),
+                            child: Icon(
+                              Icons.local_offer,
+                              size: 35.0,
+                              color: CustomColors.alertRed.withOpacity(0.6),
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                history.details.isNotEmpty
+                                    ? Flexible(
+                                        child: Text(
+                                          history.details,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: textColor,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      )
+                                    : Container(),
+                                Text(
+                                  '${DateUtils.formatDateTime(DateTime.fromMillisecondsSinceEpoch(history.createdAt))}',
+                                  style: TextStyle(
+                                      fontSize: 12.0, color: textColor),
+                                ),
+                                Text(
+                                  history.type == 0
+                                      ? "Order Debit"
+                                      : history.type == 1
+                                          ? "Order Credit"
+                                          : history.type == 2
+                                              ? "Store Transaction"
+                                              : "Offer",
+                                  style: TextStyle(
+                                      fontSize: 10.0,
+                                      color: textColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            '₹ ${history.amount}',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(
+                                fontSize: 14.0,
+                                color: textColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
               },
             );
           } else {

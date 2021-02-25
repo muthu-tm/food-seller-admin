@@ -133,7 +133,7 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
         Widget child;
 
         if (snapshot.hasData) {
-          if (snapshot.data.documents.length == 0) {
+          if (snapshot.data.docs.length == 0) {
             child = Container(
               child: Center(
                 child: Column(
@@ -170,13 +170,13 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
               child: ListView.separated(
                 shrinkWrap: true,
                 primary: false,
-                itemCount: snapshot.data.documents.length,
+                itemCount: snapshot.data.docs.length,
                 separatorBuilder: (BuildContext context, int index) => Divider(
                   color: CustomColors.black,
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   Order order =
-                      Order.fromJson(snapshot.data.documents[index].data);
+                      Order.fromJson(snapshot.data.docs[index].data());
 
                   return OrderWidget(order);
                 },

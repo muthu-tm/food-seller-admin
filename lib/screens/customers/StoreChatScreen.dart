@@ -118,11 +118,10 @@ class StoreChatScreenState extends State<StoreChatScreen> {
     try {
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       String filePath = 'store_chats/$storeID/$fileName.png';
-      StorageReference reference =
-          FirebaseStorage.instance.ref().child(filePath);
-      StorageUploadTask uploadTask = reference.putFile(imageFile);
-      StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-      String imageUrl = await storageTaskSnapshot.ref.getDownloadURL();
+      UploadTask uploadTask =
+          FirebaseStorage.instance.ref().child(filePath).putFile(imageFile);
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String imageUrl = await taskSnapshot.ref.getDownloadURL();
       await onSendMessage(imageUrl, 1);
       setState(() {
         isLoading = false;
@@ -157,7 +156,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
   }
 
   Widget buildItem(int index, DocumentSnapshot document) {
-    if (document.data['sender_type'] == 1) {
+    if (document.data()['sender_type'] == 1) {
       // Right (my message)
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -165,11 +164,11 @@ class StoreChatScreenState extends State<StoreChatScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              document.data['msg_type'] == 0
+              document.data()['msg_type'] == 0
                   // Text
                   ? Container(
                       child: Text(
-                        document.data['content'],
+                        document.data()['content'],
                         style: TextStyle(color: CustomColors.white),
                       ),
                       padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
@@ -215,7 +214,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                               ),
                               clipBehavior: Clip.hardEdge,
                             ),
-                            imageUrl: document.data['content'],
+                            imageUrl: document.data()['content'],
                             width: 200.0,
                             height: 200.0,
                             fit: BoxFit.cover,
@@ -228,7 +227,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ImageView(
-                                url: document.data['content'],
+                                url: document.data()['content'],
                               ),
                             ),
                           );
@@ -246,7 +245,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                   child: Text(
                     DateUtils.formatDateTime(
                       DateTime.fromMillisecondsSinceEpoch(
-                        (document.data['created_at'] as Timestamp)
+                        (document.data()['created_at'] as Timestamp)
                             .millisecondsSinceEpoch,
                       ),
                     ),
@@ -267,10 +266,10 @@ class StoreChatScreenState extends State<StoreChatScreen> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              document.data['msg_type'] == 0
+              document.data()['msg_type'] == 0
                   ? Container(
                       child: Text(
-                        document.data['content'],
+                        document.data()['content'],
                         style: TextStyle(color: CustomColors.white),
                       ),
                       padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
@@ -316,7 +315,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                               ),
                               clipBehavior: Clip.hardEdge,
                             ),
-                            imageUrl: document.data['content'],
+                            imageUrl: document.data()['content'],
                             width: 200.0,
                             height: 200.0,
                             fit: BoxFit.cover,
@@ -329,7 +328,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ImageView(
-                                url: document.data['content'],
+                                url: document.data()['content'],
                               ),
                             ),
                           );
@@ -347,7 +346,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                   child: Text(
                     DateUtils.formatDateTime(
                       DateTime.fromMillisecondsSinceEpoch(
-                        (document.data['created_at'] as Timestamp)
+                        (document.data()['created_at'] as Timestamp)
                             .millisecondsSinceEpoch,
                       ),
                     ),
@@ -367,8 +366,8 @@ class StoreChatScreenState extends State<StoreChatScreen> {
   bool isLastMessageLeft(int index) {
     if ((index > 0 &&
             listMessage != null &&
-            listMessage[index - 1].data['sender_type'] != 0 &&
-            listMessage[index - 1].data['from'] == cachedLocalUser.getID()) ||
+            listMessage[index - 1].data()['sender_type'] != 0 &&
+            listMessage[index - 1].data()['from'] == cachedLocalUser.getID()) ||
         index == 0) {
       return true;
     } else {
@@ -379,8 +378,8 @@ class StoreChatScreenState extends State<StoreChatScreen> {
   bool isLastMessageRight(int index) {
     if ((index > 0 &&
             listMessage != null &&
-            listMessage[index - 1].data['sender_type'] != 1 &&
-            listMessage[index - 1].data['from'] != cachedLocalUser.getID()) ||
+            listMessage[index - 1].data()['sender_type'] != 1 &&
+            listMessage[index - 1].data()['from'] != cachedLocalUser.getID()) ||
         index == 0) {
       return true;
     } else {
@@ -558,7 +557,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
             ),
           );
         } else {
-          if (snapshot.data.documents.isEmpty) {
+          if (snapshot.data.docs.isEmpty) {
             return Container(
                 alignment: AlignmentDirectional.center,
                 height: 200,
@@ -569,15 +568,15 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                 ));
           }
           listMessage.clear();
-          listMessage.addAll(snapshot.data.documents);
+          listMessage.addAll(snapshot.data.docs);
           return Column(
             children: [
               Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.all(10.0),
                   itemBuilder: (context, index) =>
-                      buildItem(index, snapshot.data.documents[index]),
-                  itemCount: snapshot.data.documents.length,
+                      buildItem(index, snapshot.data.docs[index]),
+                  itemCount: snapshot.data.docs.length,
                   reverse: true,
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,

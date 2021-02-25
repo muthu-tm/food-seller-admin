@@ -1,5 +1,7 @@
 import 'package:chipchop_seller/db/models/chat_temp.dart';
 import 'package:chipchop_seller/db/models/customers.dart';
+import 'package:chipchop_seller/screens/app/appBar.dart';
+import 'package:chipchop_seller/screens/app/sideDrawer.dart';
 import 'package:chipchop_seller/screens/customers/CustomersAccountScreen.dart';
 import 'package:chipchop_seller/screens/customers/StoreChatScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
@@ -15,162 +17,192 @@ class CustomersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          '$storeName',
-          textAlign: TextAlign.start,
-          style: TextStyle(color: CustomColors.black, fontSize: 16),
-        ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: CustomColors.black,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        backgroundColor: CustomColors.primary,
-      ),
-      body: StreamBuilder(
+      appBar: appBar(context),
+      drawer: sideDrawer(context),
+      body: Container(
+        child: StreamBuilder(
           stream: Customers().streamStoreCustomers(storeID),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             Widget child;
 
             if (snapshot.hasData) {
-              if (snapshot.data.documents.length == 0) {
+              if (snapshot.data.docs.length == 0) {
                 child = Center(
                   child: Container(
                     child: Text(
-                      "No Customers",
+                      "No Customers !!",
                       style: TextStyle(color: CustomColors.black),
                     ),
                   ),
                 );
               } else {
-                child = Container(
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    primary: true,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      Customers cust = Customers.fromJson(
-                          snapshot.data.documents[index].data);
-                      return Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Card(
-                          child: Column(
+                child = ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  primary: true,
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    Customers cust =
+                        Customers.fromJson(snapshot.data.docs[index].data());
+                    return Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Card(
+                        elevation: 3,
+                        child: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              ListTile(
-                                leading: Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.grey,
-                                    borderRadius: BorderRadius.circular(40.0),
-                                  ),
-                                  child: Icon(
-                                    Icons.person,
-                                    color: CustomColors.primary,
-                                  ),
-                                ),
-                                title: Text(cust.firstName),
-                                trailing: (cust.hasStoreUnread)
-                                    ? Icon(
-                                        Icons.question_answer,
-                                        color: CustomColors.alertRed,
-                                      )
-                                    : Text(""),
-                                subtitle: Text(
-                                  cust.contactNumber,
-                                ),
-                              ),
                               Row(
-                                children: <Widget>[
-                                  Spacer(
-                                    flex: 2,
-                                  ),
-                                  FlatButton.icon(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => StoreChatScreen(
-                                            storeID: storeID,
-                                            custID: cust.contactNumber,
-                                            custName: cust.firstName +
-                                                ' ' +
-                                                cust.lastName,
-                                          ),
-                                          settings: RouteSettings(
-                                              name: '/customers/chats'),
-                                        ),
-                                      ).then((value) async {
-                                        await ChatTemplate().updateToRead(
-                                            storeID,
-                                            snapshot.data.documents[index]
-                                                .documentID);
-                                      });
-                                    },
-                                    icon: Icon(
-                                      Icons.question_answer,
-                                      color: CustomColors.alertRed,
-                                    ),
-                                    label: Text(
-                                      "Chats",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.indigo.shade700),
-                                    ),
-                                    splashColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                  ),
-                                  Spacer(
-                                    flex: 3,
-                                  ),
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
                                   Container(
-                                    height: 20,
-                                    width: 1,
-                                    color: Colors.grey,
+                                    height: 60,
+                                    width: 60,
+                                    decoration: BoxDecoration(
+                                      color: CustomColors.grey,
+                                      borderRadius: BorderRadius.circular(40.0),
+                                    ),
+                                    child: Icon(
+                                      Icons.person,
+                                      color: CustomColors.primary,
+                                    ),
                                   ),
-                                  Spacer(
-                                    flex: 3,
+                                  SizedBox(
+                                    width: 5,
                                   ),
-                                  FlatButton.icon(
-                                    onPressed: () async {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              CustomersAccountScreen(cust),
-                                          settings: RouteSettings(
-                                              name: '/customers/accounts'),
+                                  Flexible(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(cust.firstName +
+                                                " " +
+                                                cust.lastName ??
+                                            ""),
+                                        Text(
+                                          cust.contactNumber,
                                         ),
-                                      );
-                                    },
-                                    icon: Icon(
-                                      Icons.account_balance_wallet,
-                                      color: CustomColors.alertRed,
+                                      ],
                                     ),
-                                    label: Text(
-                                      "Accounts",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.indigo.shade700),
-                                    ),
-                                    splashColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                  ),
-                                  Spacer(
-                                    flex: 2,
                                   ),
                                 ],
                               ),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Container(
+                                      width: 100,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: Colors.yellow[200],
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  StoreChatScreen(
+                                                storeID: storeID,
+                                                custID: cust.contactNumber,
+                                                custName: cust.firstName +
+                                                    ' ' +
+                                                    cust.lastName,
+                                              ),
+                                              settings: RouteSettings(
+                                                  name: '/customers/store/chats'),
+                                            ),
+                                          ).then((value) async {
+                                            await ChatTemplate().updateToRead(
+                                                storeID,
+                                                snapshot.data.docs[index]
+                                                    .id);
+                                          });
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            (cust.hasStoreUnread)
+                                                ? Icon(
+                                                    Icons.mark_chat_unread,
+                                                    color: Colors.red[500],
+                                                  )
+                                                : Icon(
+                                                    Icons.mark_chat_read,
+                                                    color: Colors.black,
+                                                  ),
+                                            SizedBox(
+                                              width: 15,
+                                            ),
+                                            Text(
+                                              "Chats",
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black),
+                                            ),
+                                          ],
+                                        ),
+                                      )),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Container(
+                                    width: 100,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: Colors.green[200],
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                CustomersAccountScreen(cust),
+                                            settings: RouteSettings(
+                                                name: '/customers/store/accounts'),
+                                          ),
+                                        );
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.account_balance_wallet,
+                                            color: CustomColors.black,
+                                          ),
+                                          SizedBox(
+                                            width: 15,
+                                          ),
+                                          Text(
+                                            "Wallet",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.black),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 );
               }
             } else if (snapshot.hasError) {
@@ -187,7 +219,9 @@ class CustomersScreen extends StatelessWidget {
               );
             }
             return child;
-          }),
+          },
+        ),
+      ),
     );
   }
 }

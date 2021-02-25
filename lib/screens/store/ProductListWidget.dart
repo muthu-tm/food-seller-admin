@@ -7,70 +7,108 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class StoreProductsCard extends StatefulWidget {
-  StoreProductsCard(this.product);
+class ProductListWidget extends StatefulWidget {
+  ProductListWidget(this.product);
 
   final Products product;
+
   @override
-  _StoreProductsCardState createState() => _StoreProductsCardState();
+  _ProductListWidgetState createState() => _ProductListWidgetState();
 }
 
-class _StoreProductsCardState extends State<StoreProductsCard> {
+class _ProductListWidgetState extends State<ProductListWidget> {
   String _variant = "0";
 
   String getVariantID(String id) {
     return id.split("_")[1];
   }
 
-  String getCartID() {
-    return '${widget.product.uuid}_$_variant';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 215,
-      child: Column(
+      height: 115,
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+          Padding(
+            padding: const EdgeInsets.only(left: 5.0, right: 5),
             child: Container(
-              height: 170,
+              height: 100,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: CachedNetworkImage(
+                  height: 100,
+                  width: 100,
+                  fit: BoxFit.fill,
+                  imageUrl: widget.product.getProductImage(),
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      CircularProgressIndicator(
+                          value: downloadProgress.progress),
+                  errorWidget: (context, url, error) => Icon(
+                    Icons.error,
+                    size: 35,
+                  ),
+                  fadeOutDuration: Duration(seconds: 1),
+                  fadeInDuration: Duration(seconds: 2),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: 5),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Row(
                   children: [
-                    Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: CachedNetworkImage(
-                          height: 90,
-                          width: 110,
-                          fit: BoxFit.fill,
-                          imageUrl: widget.product.getProductImage(),
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) =>
-                                  CircularProgressIndicator(
-                                      value: downloadProgress.progress),
-                          errorWidget: (context, url, error) => Icon(
-                            Icons.error,
-                            size: 35,
-                          ),
-                          fadeOutDuration: Duration(seconds: 1),
-                          fadeInDuration: Duration(seconds: 2),
+                    Flexible(
+                      child: Text(
+                        "${widget.product.name.trim()}",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11.0,
                         ),
                       ),
                     ),
+                    SizedBox(width: 75)
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        "${widget.product.shortDetails.trim()}",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 10.0,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 75)
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     widget.product.variants.length > 1
                         ? InkWell(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
                                   "${widget.product.variants[int.parse(_variant)].weight} ${widget.product.variants[int.parse(_variant)].getUnit()}",
@@ -81,7 +119,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                                 ),
                                 Icon(
                                   Icons.keyboard_arrow_down,
-                                  color: Colors.green[400],
+                                  color: Colors.redAccent,
                                 )
                               ],
                             ),
@@ -256,10 +294,10 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                                                       MainAxisSize.min,
                                                   children: [
                                                     Text(
-                                                      '₹ ${data.currentPrice.toString()}',
+                                                      '₹ ${data.currentPrice.toStringAsFixed(2)}',
                                                       style: TextStyle(
                                                           color: Colors.red,
-                                                          fontSize: 18,
+                                                          fontSize: 14,
                                                           fontWeight:
                                                               FontWeight.w500),
                                                     ),
@@ -268,11 +306,11 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                                                     ),
                                                     data.offer > 0
                                                         ? Text(
-                                                            '₹ ${data.originalPrice.toString()}',
+                                                            '₹ ${data.originalPrice.toStringAsFixed(2)}',
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .black54,
-                                                                fontSize: 14,
+                                                                fontSize: 12,
                                                                 decoration:
                                                                     TextDecoration
                                                                         .lineThrough),
@@ -301,182 +339,196 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                               );
                             },
                           )
-                        : Padding(
-                            padding: const EdgeInsets.fromLTRB(0.0, 0, 0, 0),
-                            child: Text(
-                              "${widget.product.variants[int.parse(_variant)].weight} ${widget.product.variants[int.parse(_variant)].getUnit()}",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 13.0,
-                              ),
+                        : Text(
+                            "${widget.product.variants[int.parse(_variant)].weight} ${widget.product.variants[int.parse(_variant)].getUnit()}",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 13.0,
                             ),
                           ),
-                    Flexible(
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           widget.product.variants[int.parse(_variant)].offer > 0
-                              ? Row(
-                                  children: [
-                                    Text(
-                                      '₹ ${widget.product.variants[int.parse(_variant)].originalPrice.toString()}',
-                                      style: TextStyle(
-                                          color: Colors.black54,
-                                          fontSize: 12,
-                                          decoration:
-                                              TextDecoration.lineThrough),
+                              ? Flexible(
+                                  child: Text(
+                                    "₹ ${widget.product.variants[int.parse(_variant)].originalPrice.toStringAsFixed(2)}",
+                                    style: TextStyle(
+                                      decoration: TextDecoration.lineThrough,
+                                      color: Colors.black,
+                                      fontSize: 10.0,
                                     ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                  ],
+                                  ),
                                 )
                               : Container(),
-                          Text(
-                            '₹ ${widget.product.variants[int.parse(_variant)].currentPrice.toString()}',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500),
+                          Flexible(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(5.0, 0, 0, 0),
+                              child: Text(
+                                "₹ ${widget.product.variants[int.parse(_variant)].currentPrice.toStringAsFixed(2)}",
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 13.0,
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 4, 8, 0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                              child: Container(
-                                width: 35,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  color: Colors.orange[300],
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(5.0),
-                                  ),
-                                ),
-                                padding: EdgeInsets.all(4),
-                                child: Icon(
-                                  Icons.edit,
-                                  color: CustomColors.black,
-                                  size: 20.0,
-                                ),
-                              ),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        EditProducts(widget.product),
-                                    settings:
-                                        RouteSettings(name: '/products/edit'),
-                                  ),
-                                );
-                              },
-                            ),
-                            InkWell(
-                              child: Container(
-                                width: 35,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  color: CustomColors.alertRed,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(5.0),
-                                  ),
-                                ),
-                                padding: EdgeInsets.all(4),
-                                child: Icon(
-                                  Icons.delete_forever,
-                                  color: CustomColors.white,
-                                  size: 22.0,
-                                ),
-                              ),
-                              onTap: () async {
-                                CustomDialogs.confirm(context, 'Confirm !',
-                                    "Are You Sure to Remove this Product ?",
-                                    () async {
-                                  bool res = await Products()
-                                      .removeByID(widget.product.uuid);
-                                  Navigator.pop(context);
-
-                                  if (res) {
-                                    Fluttertoast.showToast(
-                                        msg: 'Removed Successfully',
-                                        backgroundColor: CustomColors.primary,
-                                        textColor: CustomColors.black);
-                                  } else {
-                                    Fluttertoast.showToast(
-                                        msg: 'Error, Unable to Remove now !',
-                                        backgroundColor: CustomColors.alertRed,
-                                        textColor: CustomColors.white);
-                                  }
-                                }, () {
-                                  Navigator.pop(context);
-                                });
-                              },
-                            ),
-                            InkWell(
-                              child: Container(
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  color: widget
-                                          .product
-                                          .variants[int.parse(_variant)]
-                                          .isAvailable
-                                      ? Colors.green
-                                      : Colors.red[300],
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(5.0),
-                                  ),
-                                ),
-                                padding: EdgeInsets.all(4),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      FontAwesomeIcons.solidHandPointUp,
-                                      color: CustomColors.white,
-                                      size: 15,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      "Stock",
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              onTap: () async {
-                                await widget.product.updateProductStatus(
-                                    widget.product.uuid,
-                                    _variant,
-                                    !widget
-                                        .product
-                                        .variants[int.parse(_variant)]
-                                        .isAvailable);
-                              },
-                            ),
-                          ]),
-                    ),
                   ],
-                ),
-              ),
+                )
+              ],
             ),
           ),
-          Text(
-            "${widget.product.name}",
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 12.0,
-            ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 4, 4, 4),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                    child: Container(
+                      width: 70,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: Colors.orange[300],
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5.0),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.edit,
+                            color: CustomColors.white,
+                            size: 15,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "Edit",
+                            style: TextStyle(
+                                fontSize: 10.0, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditProducts(widget.product),
+                          settings: RouteSettings(name: '/products/edit'),
+                        ),
+                      );
+                    },
+                  ),
+                  InkWell(
+                    child: Container(
+                      width: 70,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: Colors.redAccent,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5.0),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.delete_forever,
+                            color: CustomColors.white,
+                            size: 15,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "Remove",
+                            style: TextStyle(
+                                fontSize: 10.0, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                    onTap: () async {
+                      CustomDialogs.confirm(context, 'Confirm !',
+                          "Are You Sure to Remove this Product ?", () async {
+                        bool res =
+                            await Products().removeByID(widget.product.uuid);
+                        Navigator.pop(context);
+
+                        if (res) {
+                          Fluttertoast.showToast(
+                              msg: 'Removed Successfully',
+                              backgroundColor: CustomColors.primary,
+                              textColor: CustomColors.black);
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: 'Error, Unable to Remove now !',
+                              backgroundColor: CustomColors.alertRed,
+                              textColor: CustomColors.white);
+                        }
+                      }, () {
+                        Navigator.pop(context);
+                      });
+                    },
+                  ),
+                  InkWell(
+                    child: Container(
+                      height: 25,
+                      width: 70,
+                      decoration: BoxDecoration(
+                        color: widget.product.variants[int.parse(_variant)]
+                                .isAvailable
+                            ? Colors.green
+                            : Colors.red[300],
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5.0),
+                        ),
+                      ),
+                      padding: EdgeInsets.all(4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.solidHandPointUp,
+                            color: CustomColors.white,
+                            size: 15,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "Stock",
+                            style: TextStyle(
+                                fontSize: 10.0, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                    onTap: () async {
+                      await widget.product.updateProductStatus(
+                          widget.product.uuid,
+                          _variant,
+                          !widget.product.variants[int.parse(_variant)]
+                              .isAvailable);
+                    },
+                  ),
+                ]),
           ),
         ],
       ),

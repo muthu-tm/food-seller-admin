@@ -17,6 +17,7 @@ import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/NoStoresWidget.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -25,6 +26,55 @@ import 'package:google_fonts/google_fonts.dart';
 
 bool newStoreNotification = false;
 bool newOrderNotification = false;
+
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage event) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  Map<String, dynamic> msg = event.data;
+
+  switch (msg['data']['screen']) {
+    case "store-chat":
+      navigatorKey.currentState.push(MaterialPageRoute(
+        builder: (context) => StoreChatScreen(
+            storeID: msg['data']['store_uuid'],
+            custID: msg['data']['customer_uuid'],
+            custName: msg['data']['customer_name'] ?? ''),
+        settings: RouteSettings(name: '/customers/store/chats'),
+      ));
+      break;
+    case "order":
+      navigatorKey.currentState.push(MaterialPageRoute(
+        builder: (context) => OrderDetailsScreen(msg['data']['order_id'],
+            msg['data']['order_uuid'], msg['data']['customer_id']),
+        settings: RouteSettings(name: '/orders/details'),
+      ));
+      break;
+    case "product":
+      Products _p = await Products().getByProductID(msg['data']['product_id']);
+      if (_p != null) {
+        navigatorKey.currentState.push(MaterialPageRoute(
+          builder: (context) => ProductDetailsScreen(_p),
+          settings: RouteSettings(name: '/store/products'),
+        ));
+      }
+      break;
+  }
+
+  if (msg['type'] == '100') {
+    await ChatTemplate().updateToUnRead(
+      msg['data']['store_uuid'],
+      msg['data']['customer_uuid'],
+    );
+
+    newStoreNotification = true;
+  } else if (msg['type'] == '000' || msg['type'] == '001') {
+    // Order update || Order chat
+    newOrderNotification = true;
+  }
+}
 
 class HomeScreen extends StatefulWidget {
   HomeScreen(this.index);
@@ -35,8 +85,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
   bool _newStoreNotification = false;
   bool _newOrderNotification = false;
 
@@ -50,69 +98,52 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _newStoreNotification = newStoreNotification;
     _newOrderNotification = newOrderNotification;
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        if (message['data']['type'] == '100') {
-          await ChatTemplate().updateToUnRead(
-            message['data']['store_uuid'],
-            message['data']['customer_uuid'],
-          );
-          setState(() {
-            _newStoreNotification = true;
-            newStoreNotification = true;
-          });
-        } else if (message['data']['type'] == '000' ||
-            message['data']['type'] == '001') {
-          // Order update || Order chat
-          setState(() {
-            _newOrderNotification = true;
-            newOrderNotification = true;
-          });
-        }
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        if (message['data']['type'] == '100') {
-          await ChatTemplate().updateToUnRead(
-            message['data']['store_uuid'],
-            message['data']['customer_uuid'],
-          );
 
-          setState(() {
-            _newStoreNotification = true;
-            newStoreNotification = true;
-          });
-        } else if (message['data']['type'] == '000' ||
-            message['data']['type'] == '001') {
-          // Order update || Order chat
-          setState(() {
-            _newOrderNotification = true;
-            newOrderNotification = true;
-          });
-        }
-        print("onLaunch: $message");
-      },
-      onResume: (Map<String, dynamic> message) async {
-        await fcmMessageHandler(message, context);
-        if (message['data']['type'] == '100') {
-          await ChatTemplate().updateToUnRead(
-            message['data']['store_uuid'],
-            message['data']['customer_uuid'],
-          );
+    FirebaseMessaging.onMessage.listen((event) async {
+      Map<String, dynamic> message = event.data;
 
-          setState(() {
-            _newStoreNotification = true;
-            newStoreNotification = true;
-          });
-        } else if (message['data']['type'] == '000' ||
-            message['data']['type'] == '001') {
-          // Order update || Order chat
-          setState(() {
-            _newOrderNotification = true;
-            newOrderNotification = true;
-          });
-        }
-      },
-    );
+      if (message['type'] == '100') {
+        await ChatTemplate().updateToUnRead(
+          message['store_uuid'],
+          message['data']['customer_uuid'],
+        );
+        setState(() {
+          _newStoreNotification = true;
+          newStoreNotification = true;
+        });
+      } else if (message['type'] == '000' || message['type'] == '001') {
+        // Order update || Order chat
+        setState(() {
+          _newOrderNotification = true;
+          newOrderNotification = true;
+        });
+      }
+    });
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+    FirebaseMessaging.onMessageOpenedApp.listen((event) async {
+      Map<String, dynamic> message = event.data;
+
+      if (message['type'] == '100') {
+        await ChatTemplate().updateToUnRead(
+          message['store_uuid'],
+          message['data']['customer_uuid'],
+        );
+
+        setState(() {
+          _newStoreNotification = true;
+          newStoreNotification = true;
+        });
+      } else if (message['type'] == '000' || message['type'] == '001') {
+        // Order update || Order chat
+        setState(() {
+          _newOrderNotification = true;
+          newOrderNotification = true;
+        });
+      }
+      print("onLaunch: $message");
+    });
   }
 
   Future<void> fcmMessageHandler(msg, context) async {
@@ -151,7 +182,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _selectedIndex = index;
     });
   }
-
   Future<bool> onWillPop() {
     if (backPressCounter < 1) {
       backPressCounter++;

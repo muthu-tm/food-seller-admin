@@ -32,18 +32,18 @@ class ChatTemplate {
   CollectionReference getOrderCollectionRef(String custID, String orderID) {
     return Model.db
         .collection("buyers")
-        .document(custID)
+        .doc(custID)
         .collection("orders")
-        .document(orderID)
+        .doc(orderID)
         .collection("order_chats");
   }
 
   CollectionReference getStoreCollectionRef(String storeID, String custID) {
     return Model.db
         .collection("stores")
-        .document(storeID)
+        .doc(storeID)
         .collection("customers")
-        .document(custID)
+        .doc(custID)
         .collection("chats");
   }
 
@@ -53,26 +53,26 @@ class ChatTemplate {
     this.from = cachedLocalUser.getID();
 
     await getOrderCollectionRef(custID, orderUUID)
-        .document(this.createdAt.millisecondsSinceEpoch.toString())
-        .setData(this.toJson());
+        .doc(this.createdAt.millisecondsSinceEpoch.toString())
+        .set(this.toJson());
   }
 
   Future<void> updateToRead(String storeID, String custID) async {
     await Model.db
         .collection("stores")
-        .document(storeID)
+        .doc(storeID)
         .collection("customers")
-        .document(custID)
-        .updateData({'has_store_unread': false, 'updated_at': DateTime.now()});
+        .doc(custID)
+        .update({'has_store_unread': false, 'updated_at': DateTime.now()});
   }
 
   Future<void> updateToUnRead(String storeID, String custID) async {
     await Model.db
         .collection("stores")
-        .document(storeID)
+        .doc(storeID)
         .collection("customers")
-        .document(custID)
-        .updateData({'has_store_unread': true, 'updated_at': DateTime.now()});
+        .doc(custID)
+        .update({'has_store_unread': true, 'updated_at': DateTime.now()});
   }
 
   Stream<QuerySnapshot> streamOrderChats(
@@ -89,8 +89,8 @@ class ChatTemplate {
     this.from = cachedLocalUser.getID();
 
     await getStoreCollectionRef(storeID, custID)
-        .document(this.createdAt.millisecondsSinceEpoch.toString())
-        .setData(this.toJson());
+        .doc(this.createdAt.millisecondsSinceEpoch.toString())
+        .set(this.toJson());
   }
 
   Stream<QuerySnapshot> streamStoreChats(
@@ -105,23 +105,23 @@ class ChatTemplate {
     try {
       QuerySnapshot snap = await Model.db
           .collection('stores')
-          .document(storeID)
+          .doc(storeID)
           .collection('customers')
           .orderBy('created_at', descending: true)
-          .getDocuments();
+          .get();
 
-      if (snap.documents.isEmpty) return [];
+      if (snap.docs.isEmpty) return [];
 
       List<User> _buyers = [];
 
-      for (var i = 0; i < snap.documents.length; i++) {
+      for (var i = 0; i < snap.docs.length; i++) {
         DocumentSnapshot custSnap = await Model.db
             .collection('buyers')
-            .document(snap.documents[i].data['contact_numer'])
+            .doc(snap.docs[i].data()['contact_numer'])
             .get();
 
         if (custSnap.exists) {
-          User _u = User.fromJson(custSnap.data);
+          User _u = User.fromJson(custSnap.data());
           _buyers.add(_u);
         }
       }

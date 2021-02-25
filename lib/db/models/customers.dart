@@ -36,10 +36,7 @@ class Customers {
   Map<String, dynamic> toJson() => _$CustomersToJson(this);
 
   CollectionReference getCollectionRef(String storeID) {
-    return Model.db
-        .collection("stores")
-        .document(storeID)
-        .collection("customers");
+    return Model.db.collection("stores").doc(storeID).collection("customers");
   }
 
   Stream<QuerySnapshot> streamStoreCustomers(String storeID) {
@@ -47,8 +44,6 @@ class Customers {
   }
 
   Stream<DocumentSnapshot> streamUsersData(String storeID, String custID) {
-    return getCollectionRef(storeID)
-        .document(custID)
-        .snapshots();
+    return getCollectionRef(storeID).doc(custID).snapshots();
   }
 }

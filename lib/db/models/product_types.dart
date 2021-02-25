@@ -51,7 +51,7 @@ class ProductTypes extends Model {
   }
 
   DocumentReference getDocumentReference(String uuid) {
-    return _storeCollRef.document(uuid);
+    return _storeCollRef.doc(uuid);
   }
 
   String getID() {
@@ -64,12 +64,12 @@ class ProductTypes extends Model {
 
   Future<List<ProductTypes>> getProductTypes() async {
     try {
-      QuerySnapshot snap = await getCollectionRef().getDocuments();
+      QuerySnapshot snap = await getCollectionRef().get();
 
       List<ProductTypes> types = [];
-      if (snap.documents.isNotEmpty) {
-        for (var i = 0; i < snap.documents.length; i++) {
-          ProductTypes _s = ProductTypes.fromJson(snap.documents[i].data);
+      if (snap.docs.isNotEmpty) {
+        for (var i = 0; i < snap.docs.length; i++) {
+          ProductTypes _s = ProductTypes.fromJson(snap.docs[i].data());
           types.add(_s);
         }
       }
@@ -100,18 +100,17 @@ class ProductTypes extends Model {
 
               QuerySnapshot snap = await getCollectionRef()
                   .where('uuid', whereIn: ids.sublist(i, end))
-                  .getDocuments();
-              for (var j = 0; j < snap.documents.length; j++) {
-                ProductTypes _c = ProductTypes.fromJson(snap.documents[j].data);
+                  .get();
+              for (var j = 0; j < snap.docs.length; j++) {
+                ProductTypes _c = ProductTypes.fromJson(snap.docs[j].data());
                 types.add(_c);
               }
             }
           } else {
-            QuerySnapshot snap = await getCollectionRef()
-                .where('uuid', whereIn: ids)
-                .getDocuments();
-            for (var j = 0; j < snap.documents.length; j++) {
-              ProductTypes _c = ProductTypes.fromJson(snap.documents[j].data);
+            QuerySnapshot snap =
+                await getCollectionRef().where('uuid', whereIn: ids).get();
+            for (var j = 0; j < snap.docs.length; j++) {
+              ProductTypes _c = ProductTypes.fromJson(snap.docs[j].data());
               types.add(_c);
             }
           }
