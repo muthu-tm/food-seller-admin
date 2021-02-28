@@ -1,4 +1,3 @@
-import 'package:chipchop_seller/services/controllers/user/user_service.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 
