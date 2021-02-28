@@ -11,7 +11,7 @@ import 'package:chipchop_seller/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_seller/screens/products/ProductDetailsScreen.dart';
 import 'package:chipchop_seller/screens/products/ProductsHome.dart';
 import 'package:chipchop_seller/screens/settings/SettingsHome.dart';
-import 'package:chipchop_seller/screens/store/StoreSearchBar.dart';
+import 'package:chipchop_seller/screens/store/RecentProductsWidget.dart';
 import 'package:chipchop_seller/screens/store/StoreWidget.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
