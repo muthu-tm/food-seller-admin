@@ -127,10 +127,13 @@ class ProductCategories extends Model {
           categories.add(_c);
         }
       }
+
+      categories.sort((a, b) => a.name.compareTo(b.name));
+
+      return categories;
     } catch (err) {
       throw err;
     }
-    return categories;
   }
 
   Future<List<ProductCategories>> getCategoriesForStoreID(

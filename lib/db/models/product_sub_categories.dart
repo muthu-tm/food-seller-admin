@@ -77,6 +77,8 @@ class ProductSubCategories extends Model {
       }
     }
 
+    categories.sort((a, b) => a.name.compareTo(b.name));
+
     return categories;
   }
 
