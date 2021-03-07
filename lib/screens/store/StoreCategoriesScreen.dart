@@ -21,9 +21,12 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   String _subCategoryID = "";
+  bool isListView;
 
   @override
   void initState() {
+    isListView = true;
+
     super.initState();
   }
 
@@ -32,11 +35,56 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          widget.categoryName,
-          textAlign: TextAlign.start,
-          style: TextStyle(color: CustomColors.black, fontSize: 16),
+        centerTitle: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              widget.categoryName,
+              textAlign: TextAlign.start,
+              style: TextStyle(color: CustomColors.black, fontSize: 16),
+            ),
+            Container(
+              height: 30,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: Colors.black),
+              ),
+              child: Row(children: [
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      isListView = !isListView;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: Icon(Icons.grid_view,
+                        size: 20,
+                        color: isListView ? Colors.black : Colors.white),
+                  ),
+                ),
+                VerticalDivider(
+                  width: 1,
+                  thickness: 1,
+                  color: Colors.black,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      isListView = !isListView;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.5),
+                    child: Icon(Icons.list,
+                        size: 25,
+                        color: isListView ? Colors.white : Colors.black),
+                  ),
+                ),
+              ]),
+            )
+          ],
         ),
         backgroundColor: CustomColors.primary,
         automaticallyImplyLeading: false,
@@ -55,23 +103,24 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
                 padding: EdgeInsets.only(left: 10.0),
                 child: Row(
                   children: [
-                    widget.subCategories.length > 0 ? ActionChip(
-                      elevation: 4.0,
-                      backgroundColor: _subCategoryID == ""
-                          ? CustomColors.primary
-                          : Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          _subCategoryID = "";
-                        });
-                      },
-                      label: Text(
-                        "All",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            color: CustomColors.black),
-                      ),
-                    ) : Container(),
+                    widget.subCategories.length > 0
+                        ? ActionChip(
+                            elevation: 4.0,
+                            backgroundColor: _subCategoryID == ""
+                                ? CustomColors.primary
+                                : Colors.white,
+                            onPressed: () {
+                              setState(() {
+                                _subCategoryID = "";
+                              });
+                            },
+                            label: Text(
+                              "All",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(color: CustomColors.black),
+                            ),
+                          )
+                        : Container(),
                     Container(
                       height: 50,
                       padding: EdgeInsets.only(right: 5),
@@ -116,9 +165,9 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
             ),
             _subCategoryID.isEmpty
                 ? CategoriesProductsWidget(
-                    widget.store.uuid, widget.store.name, widget.categoryID)
+                    widget.store.uuid, widget.store.name, widget.categoryID, isListView)
                 : SubCategoriesProductsWidget(widget.store.uuid,
-                    widget.store.name, widget.categoryID, _subCategoryID)
+                    widget.store.name, widget.categoryID, _subCategoryID, isListView)
           ],
         ),
       ),

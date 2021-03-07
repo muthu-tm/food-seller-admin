@@ -489,6 +489,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
             style: TextStyle(
               color: Colors.black,
               fontSize: 12.0,
+              fontWeight: FontWeight.bold
             ),
           ),
         ],
