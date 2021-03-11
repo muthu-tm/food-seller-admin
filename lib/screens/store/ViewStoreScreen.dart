@@ -552,10 +552,9 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                   SizedBox(
                     height: 5,
                   ),
-                  CarouselIndicatorSlider(
-                      widget.store.storeImages,
-                      MediaQuery.of(context).size.height * 0.25,
-                      Colors.grey[500]),
+                  CarouselIndicatorSlider(widget.store.storeImages,
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      bg: Colors.grey[500]),
                   SizedBox(
                     height: 5,
                   ),

@@ -32,7 +32,7 @@ class CustomersHome extends StatelessWidget {
                   ),
                   ListView.builder(
                     scrollDirection: Axis.vertical,
-                    primary: true,
+                    primary: false,
                     shrinkWrap: true,
                     itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, int index) {

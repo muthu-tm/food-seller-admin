@@ -374,33 +374,51 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           widget.product.variants[int.parse(_variant)].offer > 0
-                              ? Flexible(
-                                  child: Text(
-                                    "₹ ${widget.product.variants[int.parse(_variant)].originalPrice.toStringAsFixed(2)}",
-                                    style: TextStyle(
-                                      decoration: TextDecoration.lineThrough,
-                                      color: Colors.black,
-                                      fontSize: 10.0,
+                              ? Row(
+                                  children: [
+                                    Text(
+                                      "₹ ${widget.product.variants[int.parse(_variant)].originalPrice.toStringAsFixed(2)}",
+                                      style: TextStyle(
+                                        decoration: TextDecoration.lineThrough,
+                                        color: Colors.black,
+                                        fontSize: 10.0,
+                                      ),
                                     ),
-                                  ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                  ],
                                 )
                               : Container(),
                           Flexible(
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(5.0, 0, 0, 0),
-                              child: Text(
-                                "₹ ${widget.product.variants[int.parse(_variant)].currentPrice.toStringAsFixed(2)}",
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 13.0,
-                                ),
+                            child: Text(
+                              "₹ ${widget.product.variants[int.parse(_variant)].currentPrice.toStringAsFixed(2)}",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 13.0,
                               ),
                             ),
                           ),
                         ],
                       ),
                     ),
+                    widget.product.variants[int.parse(_variant)].offer > 0
+                        ? Flexible(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(1.0, 0, 5, 0),
+                              child: Text(
+                                "You save ₹ ${widget.product.variants[int.parse(_variant)].offer} of total price ",
+                                maxLines: 2,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green,
+                                  fontSize: 8.0,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
                   ],
                 )
               ],

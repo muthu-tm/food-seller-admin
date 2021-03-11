@@ -485,7 +485,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           ListView.builder(
                             scrollDirection: Axis.vertical,
-                            primary: true,
+                            primary: false,
                             shrinkWrap: true,
                             itemCount: snapshot.data.length,
                             itemBuilder: (BuildContext context, int index) {
