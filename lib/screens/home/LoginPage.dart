@@ -11,7 +11,6 @@ import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_seller/services/controllers/auth/auth_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:chipchop_seller/app_localizations.dart';
 
 // ENTER MOBILE NUMBER TO SEND OTP to LOGIN SCREEN
 
@@ -168,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                       size: 25.0,
                     ),
                     hintText:
-                        AppLocalizations.of(context).translate('mobile_number'),
+                        "Mobile Number",
                     hintStyle: TextStyle(fontSize: 16.0, color: Colors.black26),
                     fillColor: CustomColors.white,
                     filled: true,
@@ -199,23 +198,20 @@ class _LoginPageState extends State<LoginPage> {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: AppLocalizations.of(context)
-                                .translate('we_will_send'),
+                            text: "We will send",
                             style: TextStyle(
                                 color: CustomColors.blue,
                                 fontWeight: FontWeight.w400),
                           ),
                           TextSpan(
-                            text: AppLocalizations.of(context)
-                                .translate('one_time_password'),
+                            text: " OTP",
                             style: TextStyle(
                                 color: CustomColors.alertRed,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w700),
                           ),
                           TextSpan(
-                            text: AppLocalizations.of(context)
-                                .translate('to_mobile_no'),
+                            text: " to this Mobile Number",
                             style: TextStyle(
                                 color: CustomColors.blue,
                                 fontWeight: FontWeight.w400),
@@ -239,7 +235,7 @@ class _LoginPageState extends State<LoginPage> {
                     _submit();
                   },
                   child: Text(
-                    AppLocalizations.of(context).translate('get_otp'),
+                    "Get OTP",
                     style: TextStyle(
                       fontSize: 18.0,
                       color: CustomColors.white,
@@ -258,7 +254,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    AppLocalizations.of(context).translate('no_account'),
+                    "Don't have an account?",
                     style: TextStyle(
                       fontSize: 13.0,
                       color: CustomColors.alertRed,
@@ -275,7 +271,7 @@ class _LoginPageState extends State<LoginPage> {
                       );
                     },
                     child: Text(
-                      AppLocalizations.of(context).translate('sign_up'),
+                      "SIGN UP",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: CustomColors.blue,
@@ -302,7 +298,7 @@ class _LoginPageState extends State<LoginPage> {
                   color: CustomColors.blue,
                 ),
                 label: Text(
-                  AppLocalizations.of(context).translate('help_support'),
+                  "Help & Support",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: CustomColors.blue,
@@ -319,8 +315,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void _submit() async {
     if (_nController.text.length != 10) {
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-          AppLocalizations.of(context).translate('enter_valid_phone'), 2));
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
+          "Enter valid Mobile Number", 2));
       return;
     } else {
       CustomDialogs.showLoadingDialog(context, _keyLoader);
@@ -331,8 +327,8 @@ class _LoginPageState extends State<LoginPage> {
             await u.User().getByID(countryCode.toString() + number);
         if (_uJSON == null) {
           Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-          _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-              AppLocalizations.of(context).translate('invalid_user_signup'),
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
+              "No USER found for this Number, please 'SIGN UP'",
               2));
           return;
         } else {
@@ -341,15 +337,14 @@ class _LoginPageState extends State<LoginPage> {
         }
       } on PlatformException catch (err) {
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-        _scaffoldKey.currentState.showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar.errorSnackBar("Error while Login: " + err.message, 2),
         );
       } on Exception catch (err) {
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-        _scaffoldKey.currentState.showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar.errorSnackBar(
-              AppLocalizations.of(context).translate('login_error') +
-                  err.toString(),
+              "Error while Login, Please try again! ",
               2),
         );
       }
@@ -384,9 +379,9 @@ class _LoginPageState extends State<LoginPage> {
 
       if (!result['is_success']) {
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-        _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-            AppLocalizations.of(context).translate('unable_to_login'), 2));
-        _scaffoldKey.currentState
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
+            "Unable to Login, Something went wrong. Please try again Later!", 2));
+        ScaffoldMessenger.of(context)
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 2));
       } else {
         Navigator.of(context).pushAndRemoveUntil(
@@ -398,13 +393,13 @@ class _LoginPageState extends State<LoginPage> {
       }
     }).catchError((error) {
       Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-          AppLocalizations.of(context).translate('try_later'), 2));
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
+          "Something has gone wrong, please try later", 2));
     });
   }
 
   _smsCodeSent(String verificationId, [code]) {
-    _scaffoldKey.currentState
+    ScaffoldMessenger.of(context)
         .showSnackBar(CustomSnackBar.successSnackBar("OTP sent", 1));
 
     _smsVerificationCode = verificationId;
@@ -416,8 +411,8 @@ class _LoginPageState extends State<LoginPage> {
 
   _verificationFailed(dynamic authException, BuildContext context) {
     Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-    _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-        AppLocalizations.of(context).translate('verification_failed') +
+    ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
+        "Verification Failed:" +
             authException.message.toString(),
         2));
   }

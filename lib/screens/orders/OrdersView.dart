@@ -2,7 +2,7 @@ import 'package:chipchop_seller/db/models/order.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
-import 'package:chipchop_seller/services/utils/DateUtils.dart';
+import 'package:chipchop_seller/services/utils/Dateutils.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -153,7 +153,7 @@ class _OrderViewScreenState extends State<OrderViewScreen> {
                 ),
                 trailing: Text(
                   widget.order.delivery.scheduledDate != null
-                      ? DateUtils.formatDateTime(
+                      ? Dateutils.formatDateTime(
                           DateTime.fromMillisecondsSinceEpoch(
                               widget.order.delivery.scheduledDate),
                         )

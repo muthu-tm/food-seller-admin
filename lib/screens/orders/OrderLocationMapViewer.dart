@@ -8,8 +8,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
-import '../../app_localizations.dart';
-
 class OrderLocationMapView extends StatefulWidget {
   final UserLocations loc;
 
@@ -205,8 +203,7 @@ class _OrderLocationMapViewState extends State<OrderLocationMapView> {
                 child: TextField(
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context)
-                        .translate('hint_search_with_picode'),
+                    hintText: "Search",
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(5),
                     suffixIcon: IconButton(

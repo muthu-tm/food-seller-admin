@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/url_launcher_utils.dart';
 
-import '../../app_localizations.dart';
-
 Widget contactAndSupportDialog(context) {
   return Container(
     height: 400,
@@ -23,7 +21,7 @@ Widget contactAndSupportDialog(context) {
               color: CustomColors.alertRed,
             ),
             title: Text(
-              AppLocalizations.of(context).translate('help_and_support'),
+              "Help and Support",
               style: TextStyle(
                   color: CustomColors.primary,
                   fontSize: 18.0,
@@ -43,7 +41,7 @@ Widget contactAndSupportDialog(context) {
             ),
           SizedBox(height: 15),
           Text(
-            AppLocalizations.of(context).translate('lost_need_help'),
+            "Get Lost? Need Some Help?",
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: CustomColors.primary,
@@ -51,7 +49,7 @@ Widget contactAndSupportDialog(context) {
                 fontWeight: FontWeight.bold),
           ),
           Text(
-            AppLocalizations.of(context).translate('happy_to_help'),
+            "We are happy to help you!",
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: CustomColors.positiveGreen,
@@ -60,7 +58,7 @@ Widget contactAndSupportDialog(context) {
           ),
           SizedBox(height: 40),
           Text(
-            AppLocalizations.of(context).translate('contact_us'),
+            "Contact Us",
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: CustomColors.primary,
@@ -87,7 +85,7 @@ Widget contactAndSupportDialog(context) {
                       'Please type your query/issue here with your mobile number.. We will get back to you ASAP!');
                 },
                 label: Text(
-                    AppLocalizations.of(context).translate('email'),
+                    "Email",
                     style: TextStyle(
                       color: CustomColors.blue,
                       fontSize: 14.0,
@@ -112,7 +110,7 @@ Widget contactAndSupportDialog(context) {
                   UrlLauncherUtils.makePhoneCall('919361808580');
                 },
                 label: Text(
-                    AppLocalizations.of(context).translate('phone'),
+                    "Phone",
                     style: TextStyle(
                       color: CustomColors.blue,
                       fontSize: 14.0,

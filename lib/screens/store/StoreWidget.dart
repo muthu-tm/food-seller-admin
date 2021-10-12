@@ -5,7 +5,7 @@ import 'package:chipchop_seller/screens/customers/CustomersScreen.dart';
 import 'package:chipchop_seller/screens/store/EditStoreScreen.dart';
 import 'package:chipchop_seller/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
-import 'package:chipchop_seller/services/utils/DateUtils.dart';
+import 'package:chipchop_seller/services/utils/Dateutils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -167,7 +167,7 @@ class StoreWidget extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "${DateUtils.getFormattedTime(store.activeFrom)} : ${DateUtils.getFormattedTime(store.activeTill)}",
+                            "${Dateutils.getFormattedTime(store.activeFrom)} : ${Dateutils.getFormattedTime(store.activeTill)}",
                             style: TextStyle(
                                 fontSize: 12, color: CustomColors.black),
                           ),

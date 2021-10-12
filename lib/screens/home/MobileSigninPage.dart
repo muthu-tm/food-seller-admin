@@ -11,7 +11,6 @@ import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/controllers/auth/auth_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:chipchop_seller/app_localizations.dart';
 
 class MobileSignInPage extends StatefulWidget {
   @override
@@ -277,21 +276,18 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                          text: AppLocalizations.of(context)
-                              .translate('we_will_send'),
+                          text: "We will send",
                           style: TextStyle(
                               color: CustomColors.blue,
                               fontWeight: FontWeight.w400)),
                       TextSpan(
-                          text: AppLocalizations.of(context)
-                              .translate('one_time_password'),
+                          text: " OTP",
                           style: TextStyle(
                               color: CustomColors.alertRed,
                               fontSize: 16.0,
                               fontWeight: FontWeight.w700)),
                       TextSpan(
-                          text: AppLocalizations.of(context)
-                              .translate('to_mobile_no'),
+                          text: " to this Mobile Number",
                           style: TextStyle(
                               color: CustomColors.blue,
                               fontWeight: FontWeight.w400)),
@@ -311,7 +307,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               child: Padding(
                 padding: EdgeInsets.all(5.0),
                 child: Text(
-                  AppLocalizations.of(context).translate('get_otp'),
+                  "Get OTP",
                   style: TextStyle(
                     color: CustomColors.white,
                     fontSize: 18.0,
@@ -333,8 +329,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   children: <Widget>[
                     Container(
                       child: Text(
-                        AppLocalizations.of(context)
-                            .translate('already_account'),
+                        "Already have an account?",
                         style: TextStyle(
                           fontSize: 14,
                           color: CustomColors.positiveGreen,
@@ -344,7 +339,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                     FlatButton(
                       onPressed: () => Navigator.pop(context),
                       child: Text(
-                        AppLocalizations.of(context).translate('login'),
+                        'LOGIN',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 18,
@@ -363,15 +358,15 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
 
   startPhoneAuth() async {
     if (_phoneNumberController.text.length != 10) {
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-          AppLocalizations.of(context).translate('invalid_number'), 2));
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
+          "Oops! Number seems invalid", 2));
       return;
     } else if (_nameController.text.length <= 2) {
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-          AppLocalizations.of(context).translate('enter_your_name'), 2));
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
+          "Please Enter Your Name", 2));
       return;
     } else if (_passKeyController.text.length < 4) {
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
           "Password must have minimum 4 digits", 2));
       return;
     } else {
@@ -387,7 +382,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           'error': "Found an existing user for this mobile number"
         }, 'sign_up');
         Navigator.pop(context);
-        _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
             "Found an existing user for this mobile number", 2));
       } else {
         await _verifyPhoneNumber();
@@ -425,7 +420,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           authResult.user.uid);
       if (!result['is_success']) {
         Navigator.pop(context);
-        _scaffoldKey.currentState
+        ScaffoldMessenger.of(context)
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
       } else {
         final SharedPreferences prefs = await _prefs;
@@ -440,16 +435,14 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
       }
     }).catchError((error) {
       Navigator.pop(context);
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-          AppLocalizations.of(context).translate('try_later'), 2));
-      _scaffoldKey.currentState
-          .showSnackBar(CustomSnackBar.errorSnackBar("${error.toString()}", 2));
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
+          "Something has gone wrong, please try later", 2));
     });
   }
 
   _smsCodeSent(String verificationId, [code]) {
-    _scaffoldKey.currentState.showSnackBar(CustomSnackBar.successSnackBar(
-        AppLocalizations.of(context).translate('otp_send'), 1));
+    ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.successSnackBar(
+        "OTP sent", 1));
 
     _smsVerificationCode = verificationId;
     _forceResendingToken = code;
@@ -460,7 +453,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
 
   _verificationFailed(dynamic authException, BuildContext context) {
     Navigator.pop(context);
-    _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
         "Verification Failed:" + authException.message.toString(), 2));
   }
 

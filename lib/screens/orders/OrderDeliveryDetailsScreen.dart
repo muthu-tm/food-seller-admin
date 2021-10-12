@@ -1,6 +1,6 @@
 import 'package:chipchop_seller/db/models/order.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
-import 'package:chipchop_seller/services/utils/DateUtils.dart';
+import 'package:chipchop_seller/services/utils/Dateutils.dart';
 import 'package:flutter/material.dart';
 
 class OrderDeliveryDetails extends StatelessWidget {
@@ -58,7 +58,7 @@ class OrderDeliveryDetails extends StatelessWidget {
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text(
-              "Delivered - ${DateUtils.formatDateTime(DateTime.fromMillisecondsSinceEpoch(order.delivery.deliveredAt))}",
+              "Delivered - ${Dateutils.formatDateTime(DateTime.fromMillisecondsSinceEpoch(order.delivery.deliveredAt))}",
               style:
                   TextStyle(color: Colors.green, fontWeight: FontWeight.w700),
             ),

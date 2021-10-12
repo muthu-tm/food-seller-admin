@@ -2,7 +2,7 @@ import 'package:chipchop_seller/db/models/order.dart';
 import 'package:chipchop_seller/screens/orders/OrderDetailsScreen.dart';
 import 'package:chipchop_seller/screens/orders/OrderLocationMapViewer.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
-import 'package:chipchop_seller/services/utils/DateUtils.dart';
+import 'package:chipchop_seller/services/utils/Dateutils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -64,7 +64,7 @@ class OrderWidget extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0, top: 2),
                     child: Text(
-                      DateUtils.formatDateTime(order.createdAt),
+                      Dateutils.formatDateTime(order.createdAt),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -187,7 +187,7 @@ class OrderWidget extends StatelessWidget {
                               ),
                               Text(
                                 order.delivery.deliveredAt != null
-                                    ? DateUtils.formatDateTime(
+                                    ? Dateutils.formatDateTime(
                                         DateTime.fromMillisecondsSinceEpoch(
                                             order.delivery.deliveredAt))
                                     : "",

@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/user.dart';
 import 'package:chipchop_seller/screens/Home/LoginPage.dart';
 import 'package:chipchop_seller/screens/Home/MobileSigninPage.dart';
@@ -312,7 +311,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     style: BorderStyle.none,
                   ),
                 ),
-                hintText: AppLocalizations.of(context).translate('secret_key'),
+                hintText: "Password",
                 fillColor: CustomColors.white,
                 filled: true,
                 contentPadding: EdgeInsets.all(14),
@@ -345,7 +344,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                   );
                 },
                 child: Text(
-                  AppLocalizations.of(context).translate('forget_key'),
+                  "Not YOU, Forgot Password?",
                   textAlign: TextAlign.end,
                   style: TextStyle(
                     color: CustomColors.alertRed,
@@ -368,7 +367,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
               },
               child: Center(
                 child: Text(
-                  AppLocalizations.of(context).translate('login'),
+                  'LOGIN',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18.0,
@@ -387,7 +386,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  AppLocalizations.of(context).translate('no_account'),
+                  "New To Uniques?",
                   style: TextStyle(
                     fontSize: 13.0,
                     fontWeight: FontWeight.bold,
@@ -404,7 +403,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     );
                   },
                   child: Text(
-                    AppLocalizations.of(context).translate('sign_up'),
+                    "SIGN UP",
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
@@ -437,7 +436,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
           if (authenticated) {
             await login(widget._user);
           } else {
-            widget._scaffoldKey.currentState.showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
               CustomSnackBar.errorSnackBar(
                   "Unable to use FingerPrint Login. Please LOGIN using Secret KEY!",
                   2),
@@ -445,7 +444,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             return;
           }
         } else {
-          widget._scaffoldKey.currentState.showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             CustomSnackBar.errorSnackBar(
                 "Unable to use FingerPrint Login. Please LOGIN using Secret KEY!",
                 2),
@@ -454,7 +453,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
         }
       }
     } catch (e) {
-      widget._scaffoldKey.currentState.showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackBar.errorSnackBar(
             "Unable to use FingerPrint Login. Please LOGIN using Secret KEY!",
             2),
@@ -469,10 +468,10 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
 
     if (!result['is_success']) {
       Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-      widget._scaffoldKey.currentState.showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar.errorSnackBar(
-              AppLocalizations.of(context).translate('unable_to_login'), 2));
-      widget._scaffoldKey.currentState
+              "Unable to Login, Something went wrong. Please try again Later!", 2));
+      ScaffoldMessenger.of(context)
           .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 2));
     } else {
       Navigator.of(context).pushAndRemoveUntil(
@@ -486,17 +485,17 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
 
   void _submit(User _user) async {
     if (_pController.text.length == 0) {
-      widget._scaffoldKey.currentState.showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar.errorSnackBar(
-              AppLocalizations.of(context).translate('your_secret_key'), 2));
+              "Enter Your Password", 2));
       return;
     } else {
       String hashKey =
           HashGenerator.hmacGenerator(_pController.text, _user.getID());
       if (hashKey != _user.password) {
-        widget._scaffoldKey.currentState.showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
             CustomSnackBar.errorSnackBar(
-                AppLocalizations.of(context).translate('wrong_secret_key'), 2));
+                "Invalid Password. Please try again !!", 2));
         return;
       } else {
         await login(_user);

@@ -3,7 +3,7 @@ import 'package:chipchop_seller/db/models/product_reviews.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/ImageView.dart';
-import 'package:chipchop_seller/services/utils/DateUtils.dart';
+import 'package:chipchop_seller/services/utils/Dateutils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -133,7 +133,7 @@ class ProductReviewWidget extends StatelessWidget {
                                       width: 10,
                                     ),
                                     Text(
-                                      DateUtils.formatDateTime(
+                                      Dateutils.formatDateTime(
                                         DateTime.fromMillisecondsSinceEpoch(
                                             snapshot.data[index].createdTime),
                                       ),
@@ -235,7 +235,7 @@ class ProductReviewDetailed extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
-                  DateUtils.formatDateTime(
+                  Dateutils.formatDateTime(
                     DateTime.fromMillisecondsSinceEpoch(review.createdTime),
                   ),
                   style: TextStyle(fontSize: 12, color: CustomColors.grey),

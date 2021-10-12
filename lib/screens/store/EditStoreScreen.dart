@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
-import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/product_categories.dart';
 import 'package:chipchop_seller/db/models/product_categories_map.dart';
@@ -25,7 +24,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
+// import 'package:searchable_dropdown/searchable_dropdown.dart';
+import 'package:search_choices/search_choices.dart';
 
 class EditStoreScreen extends StatefulWidget {
   final Store store;
@@ -105,7 +105,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
           if (form.validate()) {
             _selectedProducts.remove(0);
             if (_selectedProducts.length == 0) {
-              _scaffoldKey.currentState.showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar.errorSnackBar(
                     "Please Select your Store Product Type!", 2),
               );
@@ -114,7 +114,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
 
             _selectedCategories.remove(0);
             if (_selectedCategories.length == 0) {
-              _scaffoldKey.currentState.showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar.errorSnackBar(
                     "Please Select Store Categories!", 2),
               );
@@ -123,7 +123,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
 
             _selectedSubCategories.remove(0);
             if (_selectedSubCategories.length == 0) {
-              _scaffoldKey.currentState.showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar.errorSnackBar(
                     "Please Select Store Sub-Categories!", 2),
               );
@@ -131,7 +131,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
             }
 
             if (primaryImage == "") {
-              _scaffoldKey.currentState.showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar.errorSnackBar("Please Set Primary Image!", 2),
               );
               return;
@@ -181,7 +181,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
               ),
             );
           } else {
-            _scaffoldKey.currentState.showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
           }
         },
@@ -756,8 +756,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                                 textAlign: TextAlign.center,
                                 maxLines: 3,
                                 decoration: InputDecoration(
-                                  labelText: AppLocalizations.of(context)
-                                      .translate('building_and_street'),
+                                  labelText: "Building no. & street",
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
@@ -829,8 +828,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                                 initialValue: widget.store.address.city,
                                 textAlign: TextAlign.start,
                                 decoration: InputDecoration(
-                                  labelText: AppLocalizations.of(context)
-                                      .translate('city'),
+                                  labelText: "City",
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
@@ -861,8 +859,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                                 initialValue: widget.store.address.state,
                                 textAlign: TextAlign.start,
                                 decoration: InputDecoration(
-                                  labelText: AppLocalizations.of(context)
-                                      .translate('state'),
+                                  labelText: "State",
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
@@ -899,8 +896,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                                 initialValue: widget.store.address.pincode,
                                 textAlign: TextAlign.start,
                                 decoration: InputDecoration(
-                                  labelText: AppLocalizations.of(context)
-                                      .translate('pincode'),
+                                  labelText: "Pincode",
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
@@ -1045,7 +1041,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   }
 
   Widget getProductTypes() {
-    return SearchableDropdown.multiple(
+    return SearchChoices.multiple(
       icon: Container(),
       clearIcon: Icon(Icons.clear_all),
       onClear: () {
@@ -1122,7 +1118,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   }
 
   Widget getProductCategories() {
-    return SearchableDropdown.multiple(
+    return SearchChoices.multiple(
       icon: Container(),
       clearIcon: Icon(Icons.clear_all),
       onClear: () {
@@ -1199,7 +1195,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   }
 
   Widget getProductSubCategories() {
-    return SearchableDropdown.multiple(
+    return SearchChoices.multiple(
       icon: Container(),
       clearIcon: Icon(Icons.clear_all),
       onClear: () {
@@ -1538,7 +1534,7 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
 
             if (form.validate()) {
               if (deliveryTemp.length == 0) {
-                _scaffoldKey.currentState.showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   CustomSnackBar.errorSnackBar(
                       "Please Select atleast one Delivery Option!", 2),
                 );
@@ -1546,14 +1542,14 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
               }
 
               if (paymentOptions.length == 0) {
-                _scaffoldKey.currentState.showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   CustomSnackBar.errorSnackBar(
                       "Please Select atleast one Payment Option!", 2),
                 );
                 return;
               }
               if (workingDays.length == 0) {
-                _scaffoldKey.currentState.showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   CustomSnackBar.errorSnackBar(
                       "Please Set your Business Working Days!", 2),
                 );
@@ -1561,7 +1557,7 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
               }
 
               if (!deliverAnywhere && this.maxDistance == 0) {
-                _scaffoldKey.currentState.showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   CustomSnackBar.errorSnackBar(
                       "Please Set your Maximum Delivery Range!", 2),
                 );
@@ -1600,7 +1596,7 @@ class _EditStoreStepTwoState extends State<EditStoreStepTwo> {
                 ),
               );
             } else {
-              _scaffoldKey.currentState.showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                   CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
             }
           },

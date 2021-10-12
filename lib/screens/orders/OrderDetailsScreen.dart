@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../db/models/order.dart';
-import '../../services/utils/DateUtils.dart';
+import '../../services/utils/Dateutils.dart';
 import '../utils/AsyncWidgets.dart';
 import '../utils/CustomColors.dart';
 
@@ -172,7 +172,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                 ListTile(
                   leading: Text("Ordered At"),
                   trailing: Text(
-                    DateUtils.formatDateTime(order.createdAt),
+                    Dateutils.formatDateTime(order.createdAt),
                     style: TextStyle(
                       color: CustomColors.black,
                       fontSize: 14,
@@ -194,7 +194,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                         ),
                         trailing: Text(
                           order.delivery.scheduledDate != null
-                              ? DateUtils.formatDateTime(
+                              ? Dateutils.formatDateTime(
                                   DateTime.fromMillisecondsSinceEpoch(
                                       order.delivery.scheduledDate),
                                 )
@@ -288,7 +288,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                         Text(order.getStatus(
                                             order.statusDetails[index].status)),
                                         Text(
-                                          DateUtils.formatDateTime(
+                                          Dateutils.formatDateTime(
                                             DateTime.fromMillisecondsSinceEpoch(
                                                 order.statusDetails[index]
                                                             .status ==

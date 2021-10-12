@@ -1,4 +1,3 @@
-import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
@@ -52,8 +51,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                     textAlign: TextAlign.center,
                     maxLines: 3,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)
-                          .translate('building_and_street'),
+                      labelText: "Building no. & street",
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
@@ -121,7 +119,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                     initialValue: widget.address.city,
                     textAlign: TextAlign.start,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).translate('city'),
+                      labelText: "City",
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
@@ -150,7 +148,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                     textAlign: TextAlign.start,
                     decoration: InputDecoration(
                       labelText:
-                          AppLocalizations.of(context).translate('state'),
+                          "State",
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
@@ -186,7 +184,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                     textAlign: TextAlign.start,
                     decoration: InputDecoration(
                       labelText:
-                          AppLocalizations.of(context).translate('pincode'),
+                          "Pincode",
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,

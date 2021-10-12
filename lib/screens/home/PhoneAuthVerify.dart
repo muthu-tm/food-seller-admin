@@ -14,7 +14,6 @@ import 'package:chipchop_seller/services/controllers/auth/auth_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:chipchop_seller/app_localizations.dart';
 
 class PhoneAuthVerify extends StatefulWidget {
   PhoneAuthVerify(this.isRegister, this.number, this.countryCode, this.passKey,
@@ -173,7 +172,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            AppLocalizations.of(context).translate('verify'),
+                            "VERIFY",
                             style: TextStyle(
                               color: CustomColors.white,
                               fontSize: 18.0,
@@ -333,9 +332,9 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
       if (!result['is_success']) {
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-        _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-            AppLocalizations.of(context).translate('unable_to_login'), 2));
-        _scaffoldKey.currentState
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
+            "Unable to Login, Something went wrong. Please try again Later!", 2));
+        ScaffoldMessenger.of(context)
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 2));
       } else {
         prefs.setString(
@@ -353,13 +352,13 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
       }
     }).catchError((error) {
       Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-          AppLocalizations.of(context).translate('try_later'), 2));
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
+          "Something has gone wrong, please try later", 2));
     });
   }
 
   _smsCodeSent(String verificationId, [code]) {
-    _scaffoldKey.currentState
+    ScaffoldMessenger.of(context)
         .showSnackBar(CustomSnackBar.successSnackBar("OTP sent", 1));
     setState(() {
       resendSMSCount = resendSMSCount + 1;
@@ -370,9 +369,8 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
   _verificationFailed(dynamic authException, BuildContext context) {
     Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-    _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-        AppLocalizations.of(context).translate('verification_failed') +
-            authException.message.toString(),
+    ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
+        "Verification Failed:" + authException.message.toString(),
         2));
   }
 
@@ -380,8 +378,8 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
   signIn() {
     if (currentText.trim().length != 6) {
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-          AppLocalizations.of(context).translate('invalid_otp'), 2));
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
+          "Invalid OTP", 2));
       errorController.add(ErrorAnimationType.shake);
     } else {
       CustomDialogs.showLoadingDialog(context, _keyLoader);
@@ -406,7 +404,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
             authResult.user.uid);
         if (!result['is_success']) {
           Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-          _scaffoldKey.currentState
+          ScaffoldMessenger.of(context)
               .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
         } else {
           await _success();
@@ -419,22 +417,22 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
         if (!result['is_success']) {
           Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-          _scaffoldKey.currentState
+          ScaffoldMessenger.of(context)
               .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
         } else {
           try {
             await _success();
           } catch (err) {
-            _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-                AppLocalizations.of(context).translate('unable_to_login'), 2));
+            ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
+                "Unable to Login, Something went wrong. Please try again Later!", 2));
             return;
           }
         }
       }
     }).catchError((error) {
       Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-          AppLocalizations.of(context).translate('try_later'), 2));
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
+          "Something has gone wrong, please try later", 2));
     });
   }
 

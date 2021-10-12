@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
-import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/delivery_details.dart';
 import 'package:chipchop_seller/db/models/product_categories.dart';
@@ -29,7 +28,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
+// import 'package:searchable_dropdown/searchable_dropdown.dart';
+import 'package:search_choices/search_choices.dart';
 
 class AddNewStoreHome extends StatefulWidget {
   @override
@@ -77,7 +77,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context).translate('create_new_store'),
+          "Create New Store",
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
@@ -98,7 +98,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
           if (form.validate()) {
             _selectedProducts.remove(0);
             if (_selectedProducts.length == 0) {
-              _scaffoldKey.currentState.showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar.errorSnackBar(
                     "Please Select your Store Product Type!", 2),
               );
@@ -107,7 +107,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
 
             _selectedCategories.remove(0);
             if (_selectedCategories.length == 0) {
-              _scaffoldKey.currentState.showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar.errorSnackBar(
                     "Please Select Store Categories!", 2),
               );
@@ -116,7 +116,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
 
             _selectedSubCategories.remove(0);
             if (_selectedSubCategories.length == 0) {
-              _scaffoldKey.currentState.showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar.errorSnackBar(
                     "Please Select Store Sub-Categories!", 2),
               );
@@ -179,7 +179,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
               ),
             );
           } else {
-            _scaffoldKey.currentState.showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
           }
         },
@@ -775,8 +775,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                                     textAlign: TextAlign.center,
                                     maxLines: 3,
                                     decoration: InputDecoration(
-                                      labelText: AppLocalizations.of(context)
-                                          .translate('building_and_street'),
+                                      labelText: "Building no. & street",
                                       floatingLabelBehavior:
                                           FloatingLabelBehavior.always,
                                       labelStyle: TextStyle(
@@ -849,8 +848,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                                     initialValue: updatedAddress.city,
                                     textAlign: TextAlign.start,
                                     decoration: InputDecoration(
-                                      labelText: AppLocalizations.of(context)
-                                          .translate('city'),
+                                      labelText: "City",
                                       floatingLabelBehavior:
                                           FloatingLabelBehavior.always,
                                       labelStyle: TextStyle(
@@ -881,8 +879,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                                     initialValue: updatedAddress.state,
                                     textAlign: TextAlign.start,
                                     decoration: InputDecoration(
-                                      labelText: AppLocalizations.of(context)
-                                          .translate('state'),
+                                      labelText: "State",
                                       floatingLabelBehavior:
                                           FloatingLabelBehavior.always,
                                       labelStyle: TextStyle(
@@ -919,8 +916,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
                                     initialValue: updatedAddress.pincode,
                                     textAlign: TextAlign.start,
                                     decoration: InputDecoration(
-                                      labelText: AppLocalizations.of(context)
-                                          .translate('pincode'),
+                                      labelText: "Pincode",
                                       floatingLabelBehavior:
                                           FloatingLabelBehavior.always,
                                       labelStyle: TextStyle(
@@ -1013,7 +1009,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   }
 
   Widget getProductTypes() {
-    return SearchableDropdown.multiple(
+    return SearchChoices.multiple(
       icon: Container(),
       clearIcon: Icon(Icons.clear_all),
       onClear: () {
@@ -1090,7 +1086,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   }
 
   Widget getProductCategories() {
-    return SearchableDropdown.multiple(
+    return SearchChoices.multiple(
       icon: Container(),
       clearIcon: Icon(Icons.clear_all),
       onClear: () {
@@ -1167,7 +1163,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
   }
 
   Widget getProductSubCategories() {
-    return SearchableDropdown.multiple(
+    return SearchChoices.multiple(
       icon: Container(),
       clearIcon: Icon(Icons.clear_all),
       onClear: () {
@@ -1447,7 +1443,7 @@ class _AddStoreStepTwoState extends State<AddStoreStepTwo> {
         key: _scaffoldKey,
         appBar: AppBar(
           title: Text(
-            AppLocalizations.of(context).translate('create_new_store'),
+            "Create New Store",
             textAlign: TextAlign.start,
             style: TextStyle(color: CustomColors.black, fontSize: 16),
           ),
@@ -1467,7 +1463,7 @@ class _AddStoreStepTwoState extends State<AddStoreStepTwo> {
 
             if (form.validate()) {
               if (deliveryTemp.length == 0) {
-                _scaffoldKey.currentState.showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   CustomSnackBar.errorSnackBar(
                       "Please Select atleast one Delivery Option!", 2),
                 );
@@ -1475,14 +1471,14 @@ class _AddStoreStepTwoState extends State<AddStoreStepTwo> {
               }
 
               if (paymentOptions.length == 0) {
-                _scaffoldKey.currentState.showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   CustomSnackBar.errorSnackBar(
                       "Please Select atleast one Payment Option!", 2),
                 );
                 return;
               }
               if (workingDays.length == 0) {
-                _scaffoldKey.currentState.showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   CustomSnackBar.errorSnackBar(
                       "Please Set your Business Working Days!", 2),
                 );
@@ -1490,7 +1486,7 @@ class _AddStoreStepTwoState extends State<AddStoreStepTwo> {
               }
 
               if (!deliverAnywhere && this.maxDistance == 0) {
-                _scaffoldKey.currentState.showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   CustomSnackBar.errorSnackBar(
                       "Please Set your Maximum Delivery Range!", 2),
                 );
@@ -1528,7 +1524,7 @@ class _AddStoreStepTwoState extends State<AddStoreStepTwo> {
                 ),
               );
             } else {
-              _scaffoldKey.currentState.showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                   CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
             }
           },

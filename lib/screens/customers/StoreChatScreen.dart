@@ -6,7 +6,7 @@ import 'package:chipchop_seller/db/models/chat_temp.dart';
 import 'package:chipchop_seller/screens/app/TakePicturePage.dart';
 import 'package:chipchop_seller/screens/utils/ImageView.dart';
 import 'package:chipchop_seller/services/storage/image_uploader.dart';
-import 'package:chipchop_seller/services/utils/DateUtils.dart';
+import 'package:chipchop_seller/services/utils/Dateutils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -243,7 +243,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
           isLastMessageRight(index)
               ? Container(
                   child: Text(
-                    DateUtils.formatDateTime(
+                    Dateutils.formatDateTime(
                       DateTime.fromMillisecondsSinceEpoch(
                         (document.data()['created_at'] as Timestamp)
                             .millisecondsSinceEpoch,
@@ -344,7 +344,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
           isLastMessageLeft(index)
               ? Container(
                   child: Text(
-                    DateUtils.formatDateTime(
+                    Dateutils.formatDateTime(
                       DateTime.fromMillisecondsSinceEpoch(
                         (document.data()['created_at'] as Timestamp)
                             .millisecondsSinceEpoch,

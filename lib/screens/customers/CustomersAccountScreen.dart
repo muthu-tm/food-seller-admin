@@ -4,7 +4,7 @@ import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
-import 'package:chipchop_seller/services/utils/DateUtils.dart';
+import 'package:chipchop_seller/services/utils/Dateutils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -241,7 +241,7 @@ class _CustomersAccountScreenState extends State<CustomersAccountScreen> {
                                       )
                                     : Container(),
                                 Text(
-                                  '${DateUtils.formatDateTime(DateTime.fromMillisecondsSinceEpoch(history.createdAt))}',
+                                  '${Dateutils.formatDateTime(DateTime.fromMillisecondsSinceEpoch(history.createdAt))}',
                                   style: TextStyle(
                                       fontSize: 12.0, color: textColor),
                                 ),

@@ -1,4 +1,3 @@
-import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
@@ -26,7 +25,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
       appBar: AppBar(
         backgroundColor: CustomColors.primary,
         title: Text(
-          AppLocalizations.of(context).translate('change_secret_key'),
+          "Change Secret KEY",
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
@@ -45,7 +44,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
           size: 35,
         ),
         label: Text(
-          AppLocalizations.of(context).translate('save'),
+          "Save",
           style: TextStyle(
             fontSize: 17,
             
@@ -64,8 +63,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
               elevation: 5.0,
               child: Column(
                 children: <Widget>[
-                  Text(
-                      AppLocalizations.of(context).translate('new_secret_key')),
+                  Text("New Secret KEY"),
                   Padding(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -90,8 +88,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
                       },
                     ),
                   ),
-                  Text(AppLocalizations.of(context)
-                      .translate('confirm_secret_key')),
+                  Text("Confirm Secret KEY"),
                   Padding(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
@@ -113,12 +110,10 @@ class _ChangeSecretState extends State<ChangeSecret> {
                       autofocus: false,
                       validator: (value) {
                         if (value.isEmpty) {
-                          return AppLocalizations.of(context)
-                              .translate('reenter_secret_key');
+                          return "Re-Enter your New KEY";
                         } else {
                           if (secretKey != value) {
-                            return AppLocalizations.of(context)
-                                .translate('secret_key_mismatch');
+                            return "Error! Secret KEY mismatch!";
                           }
                           confirmKey = value;
                           return null;
@@ -148,13 +143,12 @@ class _ChangeSecretState extends State<ChangeSecret> {
       var result = await UserController().updateSecretKey(secretKey);
       if (!result['is_success']) {
         Navigator.pop(context);
-        _scaffoldKey.currentState
+        ScaffoldMessenger.of(context)
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
       } else {
         Navigator.pop(context);
-        _scaffoldKey.currentState.showSnackBar(CustomSnackBar.successSnackBar(
-            AppLocalizations.of(context)
-                .translate('secret_key_updated_successfully'),
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.successSnackBar(
+            "Your Secret KEY updated successfully",
             2));
         await Future.delayed(Duration(seconds: 1));
         Navigator.pop(context);

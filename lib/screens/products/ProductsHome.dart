@@ -5,7 +5,7 @@ import 'package:chipchop_seller/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
 import 'package:chipchop_seller/screens/utils/NoStoresWidget.dart';
-import 'package:chipchop_seller/services/utils/DateUtils.dart';
+import 'package:chipchop_seller/services/utils/Dateutils.dart';
 import 'package:flutter/material.dart';
 
 class ProductsHome extends StatelessWidget {
@@ -142,7 +142,7 @@ class ProductsHome extends StatelessWidget {
                                   style: TextStyle(fontSize: 12),
                                 ),
                                 Text(
-                                  "Timings :  ${DateUtils.getFormattedTime(store.activeFrom)} - ${DateUtils.getFormattedTime(store.activeTill)}",
+                                  "Timings :  ${Dateutils.getFormattedTime(store.activeFrom)} - ${Dateutils.getFormattedTime(store.activeTill)}",
                                   style: TextStyle(
                                     color: CustomColors.alertRed,
                                     fontSize: 12.0,

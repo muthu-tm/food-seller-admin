@@ -1,4 +1,3 @@
-import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/user.dart';
 import 'package:chipchop_seller/screens/home/AuthPage.dart';
 import 'package:chipchop_seller/screens/settings/UserProfileWidget.dart';
@@ -8,7 +7,7 @@ import 'package:chipchop_seller/services/analytics/analytics.dart';
 import 'package:chipchop_seller/services/controllers/auth/auth_controller.dart';
 import 'package:chipchop_seller/services/controllers/user/user_controller.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
-import 'package:chipchop_seller/services/utils/DateUtils.dart';
+import 'package:chipchop_seller/services/utils/Dateutils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -29,7 +28,7 @@ class _UserSettingState extends State<UserSetting> {
       appBar: AppBar(
         backgroundColor: CustomColors.primary,
         title: Text(
-          AppLocalizations.of(context).translate('profile_settings'),
+          "Profile Settings",
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
@@ -149,7 +148,7 @@ class _UserSettingState extends State<UserSetting> {
                     await cachedLocalUser.updateByID({
                       'is_active': false,
                       'deactivated_at':
-                          DateUtils.getUTCDateEpoch(DateTime.now())
+                          Dateutils.getUTCDateEpoch(DateTime.now())
                     }, cachedLocalUser.getID());
                     await AuthController().signOut();
                     Navigator.pushAndRemoveUntil(

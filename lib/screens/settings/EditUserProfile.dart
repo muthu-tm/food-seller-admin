@@ -1,4 +1,3 @@
-import 'package:chipchop_seller/app_localizations.dart';
 import 'package:chipchop_seller/db/models/address.dart';
 import 'package:chipchop_seller/db/models/user.dart';
 import 'package:chipchop_seller/screens/settings/UserProfileSettings.dart';
@@ -8,7 +7,7 @@ import 'package:chipchop_seller/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_seller/screens/utils/field_validator.dart';
 import 'package:chipchop_seller/services/controllers/user/user_controller.dart';
 import 'package:chipchop_seller/services/controllers/user/user_service.dart';
-import 'package:chipchop_seller/services/utils/DateUtils.dart';
+import 'package:chipchop_seller/services/utils/Dateutils.dart';
 import 'package:flutter/material.dart';
 
 class EditUserProfile extends StatefulWidget {
@@ -39,10 +38,10 @@ class _EditUserProfileState extends State<EditUserProfile> {
       gender = cachedLocalUser.gender;
 
     if (user.dateOfBirth != null)
-      this._date.text = DateUtils.formatDate(
+      this._date.text = Dateutils.formatDate(
           DateTime.fromMillisecondsSinceEpoch(user.dateOfBirth));
     else
-      this._date.text = DateUtils.formatDate(DateTime.now());
+      this._date.text = Dateutils.formatDate(DateTime.now());
   }
 
   @override
@@ -54,7 +53,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
       appBar: AppBar(
         backgroundColor: CustomColors.primary,
         title: Text(
-          AppLocalizations.of(context).translate('edit_profile'),
+          "Edit Profile",
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
@@ -73,7 +72,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
           _submit();
         },
         label: Text(
-          AppLocalizations.of(context).translate('save'),
+          "Save",
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.bold,
@@ -97,7 +96,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: Text(
-                          AppLocalizations.of(context).translate('first_name'),
+                          "First Name",
                           style: TextStyle(
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
@@ -111,8 +110,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         textCapitalization: TextCapitalization.sentences,
                         initialValue: user.firstName,
                         decoration: InputDecoration(
-                          hintText: AppLocalizations.of(context)
-                              .translate('first_name'),
+                          hintText: "First Name",
                           fillColor: CustomColors.white,
                           filled: true,
                           contentPadding: EdgeInsets.symmetric(
@@ -135,7 +133,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: Text(
-                          AppLocalizations.of(context).translate('last_name'),
+                          "Last Name",
                           style: TextStyle(
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
@@ -149,8 +147,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         textCapitalization: TextCapitalization.sentences,
                         initialValue: user.lastName,
                         decoration: InputDecoration(
-                          hintText: AppLocalizations.of(context)
-                              .translate('last_name'),
+                          hintText: "Last Name",
                           fillColor: CustomColors.white,
                           filled: true,
                           contentPadding: EdgeInsets.symmetric(
@@ -174,7 +171,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: Text(
-                          AppLocalizations.of(context).translate('email'),
+                          "Email",
                           style: TextStyle(
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
@@ -187,8 +184,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           keyboardType: TextInputType.text,
                           initialValue: user.emailID,
                           decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)
-                                .translate('enter_email_id'),
+                            hintText: "Email",
                             fillColor: CustomColors.white,
                             filled: true,
                             contentPadding: EdgeInsets.symmetric(
@@ -212,7 +208,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: Text(
-                          AppLocalizations.of(context).translate('dob'),
+                          "Date of Birth",
                           style: TextStyle(
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
@@ -255,7 +251,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: Text(
-                          AppLocalizations.of(context).translate('gender'),
+                          "Gender",
                           style: TextStyle(
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
@@ -269,7 +265,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         Flexible(
                           child: RadioListTile(
                             title: Text(
-                              AppLocalizations.of(context).translate('male'),
+                              "Male",
                               style: TextStyle(color: CustomColors.blue),
                             ),
                             value: "Male",
@@ -286,7 +282,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         Flexible(
                           child: RadioListTile(
                             title: Text(
-                              AppLocalizations.of(context).translate('female'),
+                              "Female",
                               style: TextStyle(color: CustomColors.blue),
                             ),
                             value: "Female",
@@ -333,8 +329,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                               textAlign: TextAlign.center,
                               maxLines: 3,
                               decoration: InputDecoration(
-                                labelText: AppLocalizations.of(context)
-                                    .translate('building_and_street'),
+                                labelText: "Building no. & street",
                                 floatingLabelBehavior:
                                     FloatingLabelBehavior.always,
                                 labelStyle: TextStyle(
@@ -406,8 +401,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                               initialValue: user.address.city,
                               textAlign: TextAlign.start,
                               decoration: InputDecoration(
-                                labelText: AppLocalizations.of(context)
-                                    .translate('city'),
+                                labelText: "City",
                                 floatingLabelBehavior:
                                     FloatingLabelBehavior.always,
                                 labelStyle: TextStyle(
@@ -438,8 +432,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                               initialValue: user.address.state,
                               textAlign: TextAlign.start,
                               decoration: InputDecoration(
-                                labelText: AppLocalizations.of(context)
-                                    .translate('state'),
+                                labelText: "State",
                                 floatingLabelBehavior:
                                     FloatingLabelBehavior.always,
                                 labelStyle: TextStyle(
@@ -476,8 +469,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                               initialValue: user.address.pincode,
                               textAlign: TextAlign.start,
                               decoration: InputDecoration(
-                                labelText: AppLocalizations.of(context)
-                                    .translate('pincode'),
+                                labelText: "Pincode",
                                 floatingLabelBehavior:
                                     FloatingLabelBehavior.always,
                                 labelStyle: TextStyle(
@@ -571,7 +563,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
-        updatedUser['date_of_birth'] = DateUtils.getUTCDateEpoch(picked);
+        updatedUser['date_of_birth'] = Dateutils.getUTCDateEpoch(picked);
       });
   }
 
@@ -585,7 +577,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
 
       if (!result['is_success']) {
         Navigator.pop(context);
-        _scaffoldKey.currentState
+        ScaffoldMessenger.of(context)
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 2));
       } else {
         Navigator.pop(context);
@@ -599,7 +591,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
         );
       }
     } else {
-      _scaffoldKey.currentState.showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
     }
   }

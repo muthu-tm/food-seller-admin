@@ -19,7 +19,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
+// import 'package:searchable_dropdown/searchable_dropdown.dart';
+import 'package:search_choices/search_choices.dart';
 
 import '../../db/models/product_categories.dart';
 import '../../db/models/product_sub_categories.dart';
@@ -146,21 +147,21 @@ class _AddProductState extends State<AddProduct> {
   _submit() async {
     try {
       if (_selectedStore == "0") {
-        _scaffoldKey.currentState.showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar.errorSnackBar("Please select your store!", 2),
         );
         return;
       }
 
       if (_selectedType == "0" || _selectedType == null) {
-        _scaffoldKey.currentState.showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar.errorSnackBar("Please select Product Type!", 2),
         );
         return;
       }
 
       if (_selectedCategory == "0" || _selectedCategory == null) {
-        _scaffoldKey.currentState.showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar.errorSnackBar("Please select Product Category!", 2),
         );
         return;
@@ -168,7 +169,7 @@ class _AddProductState extends State<AddProduct> {
 
       if (_variants.isEmpty ||
           (_variants.length == 1 && _variants.first.weight.toDouble() <= 0)) {
-        _scaffoldKey.currentState.showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar.errorSnackBar("Please Fill Product Variants!", 2),
         );
         return;
@@ -176,7 +177,7 @@ class _AddProductState extends State<AddProduct> {
 
       vPriceControllers.forEach((element) {
         if (element.text.trim().isEmpty) {
-          _scaffoldKey.currentState.showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             CustomSnackBar.errorSnackBar("Please Fill Price Details!", 2),
           );
           return;
@@ -219,11 +220,11 @@ class _AddProductState extends State<AddProduct> {
         Navigator.pop(context);
         Navigator.pop(context);
       } else {
-        _scaffoldKey.currentState.showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
             CustomSnackBar.errorSnackBar("Fill Required fields", 2));
       }
     } catch (err) {
-      _scaffoldKey.currentState.showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackBar.errorSnackBar("Unable to create now! Try later!", 2),
       );
     }
@@ -284,7 +285,7 @@ class _AddProductState extends State<AddProduct> {
                           borderRadius: BorderRadius.circular(10.0),
                           border: Border.all(color: CustomColors.grey),
                         ),
-                        child: SearchableDropdown.single(
+                        child: SearchChoices.single(
                           icon: Container(),
                           clearIcon: Icon(Icons.clear_all,
                               color: CustomColors.alertRed),
@@ -359,7 +360,7 @@ class _AddProductState extends State<AddProduct> {
                           borderRadius: BorderRadius.circular(10.0),
                           border: Border.all(color: CustomColors.grey),
                         ),
-                        child: SearchableDropdown.single(
+                        child: SearchChoices.single(
                           icon: Container(),
                           clearIcon: Icon(Icons.clear_all,
                               color: CustomColors.alertRed),
@@ -434,7 +435,7 @@ class _AddProductState extends State<AddProduct> {
                           borderRadius: BorderRadius.circular(10.0),
                           border: Border.all(color: CustomColors.grey),
                         ),
-                        child: SearchableDropdown.single(
+                        child: SearchChoices.single(
                           icon: Container(),
                           clearIcon: Icon(Icons.clear_all,
                               color: CustomColors.alertRed),

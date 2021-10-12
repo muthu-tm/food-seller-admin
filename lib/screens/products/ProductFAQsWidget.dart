@@ -1,7 +1,7 @@
 import 'package:chipchop_seller/db/models/product_faqs.dart';
 import 'package:chipchop_seller/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_seller/screens/utils/CustomColors.dart';
-import 'package:chipchop_seller/services/utils/DateUtils.dart';
+import 'package:chipchop_seller/services/utils/Dateutils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -344,7 +344,7 @@ class ProductFAQsWidget extends StatelessWidget {
                               width: 10,
                             ),
                             Text(
-                              DateUtils.formatDateTime(
+                              Dateutils.formatDateTime(
                                 DateTime.fromMillisecondsSinceEpoch(
                                     _faq.questionedAt),
                               ),
