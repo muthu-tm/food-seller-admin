@@ -7,6 +7,7 @@ import 'package:chipchop_seller/db/models/product_categories_map.dart';
 import 'package:chipchop_seller/db/models/product_description.dart';
 import 'package:chipchop_seller/db/models/product_sub_categories.dart';
 import 'package:chipchop_seller/db/models/product_variants.dart';
+import 'package:chipchop_seller/db/models/product_avail_time.dart';
 import 'package:chipchop_seller/db/models/products.dart';
 import 'package:chipchop_seller/db/models/store.dart';
 import 'package:chipchop_seller/screens/app/TakePicturePage.dart';
@@ -336,7 +337,7 @@ class _EditProductsState extends State<EditProducts> {
                           ));
                         },
                         searchFn: (String keyword, items) {
-                          List<int> ret = List<int>();
+                          List<int> ret = [];
                           if (keyword != null &&
                               items != null &&
                               keyword.isNotEmpty) {
@@ -409,7 +410,7 @@ class _EditProductsState extends State<EditProducts> {
                           ));
                         },
                         searchFn: (String keyword, items) {
-                          List<int> ret = List<int>();
+                          List<int> ret = [];
                           if (keyword != null &&
                               items != null &&
                               keyword.isNotEmpty) {
@@ -486,7 +487,7 @@ class _EditProductsState extends State<EditProducts> {
                           ));
                         },
                         searchFn: (String keyword, items) {
-                          List<int> ret = List<int>();
+                          List<int> ret = [];
                           if (keyword != null &&
                               items != null &&
                               keyword.isNotEmpty) {
@@ -1396,81 +1397,330 @@ class _EditProductsState extends State<EditProducts> {
                               activeColor: Colors.white,
                             ),
                           ),
-                          _pv.isAvailable
-                              ? Row(
-                                  children: [
-                                    Flexible(
-                                      child: Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 5, 0),
-                                        child: TextFormField(
-                                          initialValue: _pv.quantity.toString(),
-                                          textAlign: TextAlign.start,
-                                          autofocus: false,
-                                          keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
-                                            border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: CustomColors
-                                                        .lightGreen)),
-                                            labelText: "Available Quantity",
-                                            contentPadding: EdgeInsets.all(10),
-                                            labelStyle: TextStyle(
-                                                fontSize: 13,
-                                                color: CustomColors.black),
-                                            fillColor: CustomColors.white,
-                                            filled: true,
-                                          ),
-                                          onChanged: (val) {
-                                            _pv.quantity = int.parse(val);
-                                          },
-                                          validator: (quantity) {
-                                            if (quantity.isEmpty) {
-                                              _pv.quantity = 0;
-                                            } else {
-                                              _pv.quantity =
-                                                  int.parse(quantity);
-                                            }
-                                            return null;
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: DropdownButtonFormField(
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color:
-                                                      CustomColors.lightGreen)),
-                                          labelText: "Unit",
-                                          contentPadding: EdgeInsets.all(10),
-                                          labelStyle: TextStyle(
-                                              fontSize: 13,
-                                              color: CustomColors.black),
-                                          fillColor: CustomColors.white,
-                                          filled: true,
-                                        ),
-                                        value: _pv.availableUnit.toString(),
-                                        items: _units.entries.map((f) {
-                                          return DropdownMenuItem<String>(
-                                            value: f.key,
-                                            child: Text(f.value),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 1, top: 1),
+                            child: Container(
+                              child: InputDecorator(
+                                decoration: InputDecoration(
+                                  labelText: 'Available Timings',
+                                  labelStyle:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                ),
+                                child: _pv.availableTimes != null &&
+                                        _pv.availableTimes.length > 0
+                                    ? ListView.builder(
+                                        shrinkWrap: true,
+                                        primary: false,
+                                        itemCount: _pv.availableTimes.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          ProductAvailTime _pa =
+                                              _pv.availableTimes[index];
+
+                                          TimeOfDay fromTime = TimeOfDay(
+                                            hour: int.parse(
+                                                _pa.activeFrom.split(":")[0]),
+                                            minute: int.parse(
+                                                _pa.activeFrom.split(":")[1]),
                                           );
-                                        }).toList(),
-                                        onChanged: (unit) {
-                                          setState(
-                                            () {
-                                              _pv.availableUnit =
-                                                  int.parse(unit);
-                                            },
+                                          TimeOfDay tillTime = TimeOfDay(
+                                            hour: int.parse(
+                                                _pa.activeTill.split(":")[0]),
+                                            minute: int.parse(
+                                                _pa.activeTill.split(":")[1]),
                                           );
-                                        },
+
+                                          return Padding(
+                                            key: ObjectKey(_pa),
+                                            padding:
+                                                EdgeInsets.only(bottom: 8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.3,
+                                                  child: InputDecorator(
+                                                    decoration: InputDecoration(
+                                                      filled: true,
+                                                      fillColor:
+                                                          CustomColors.white,
+                                                      labelText: 'From Time',
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 13,
+                                                          color: CustomColors
+                                                              .black),
+                                                      contentPadding:
+                                                          EdgeInsets.all(10),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                      ),
+                                                    ),
+                                                    child: InkWell(
+                                                      child: Text(
+                                                          "${fromTime.format(context)}"),
+                                                      onTap: () async {
+                                                        await _pickFromTime(fromTime, 
+                                                            _pv, index);
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.3,
+                                                  child: InputDecorator(
+                                                    decoration: InputDecoration(
+                                                      filled: true,
+                                                      fillColor:
+                                                          CustomColors.white,
+                                                      labelText: 'Closing Time',
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 13,
+                                                          color: CustomColors
+                                                              .black),
+                                                      contentPadding:
+                                                          EdgeInsets.all(10),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                      ),
+                                                    ),
+                                                    child: InkWell(
+                                                      child: Text(
+                                                          "${tillTime.format(context)}"),
+                                                      onTap: () async {
+                                                        await _pickTillTime(tillTime, 
+                                                            _pv, index);
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      EdgeInsets.only(left: 2),
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        _pv.availableTimes
+                                                            .removeAt(index);
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: 30,
+                                                      height: 30,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.red,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                      ),
+                                                      child: Icon(
+                                                        Icons
+                                                            .remove_circle_outline,
+                                                        color:
+                                                            CustomColors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      EdgeInsets.only(left: 2),
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      if (_pv.availableTimes
+                                                              .isNotEmpty &&
+                                                          _pv.availableTimes.last
+                                                                  .activeTill ==
+                                                              "0:0") {
+                                                        Fluttertoast.showToast(
+                                                            msg:
+                                                                "Please fill the Product Avail Time");
+                                                        return;
+                                                      } else {
+                                                        setState(() {
+                                                          _pv.availableTimes
+                                                              .add(
+                                                            ProductAvailTime
+                                                                .fromJson(
+                                                              {
+                                                                'id': (_pv
+                                                                        .availableTimes
+                                                                        .length)
+                                                                    .toString()
+                                                              },
+                                                            ),
+                                                          );
+                                                        });
+                                                      }
+                                                    },
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: 30,
+                                                      height: 30,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.green,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                      ),
+                                                      child: Icon(
+                                                        Icons
+                                                            .add_circle_outline,
+                                                        color:
+                                                            CustomColors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        })
+                                    : Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15.0),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                    "Set Available Timings for this Variant ?"),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  if (_pv.availableTimes ==
+                                                      null) {
+                                                    _pv.availableTimes = [];
+                                                  }
+
+                                                  setState(() {
+                                                    _pv.availableTimes.add(
+                                                      ProductAvailTime.fromJson(
+                                                        {
+                                                          'id': (_pv
+                                                                  .availableTimes
+                                                                  .length)
+                                                              .toString(),
+                                                        },
+                                                      ),
+                                                    );
+                                                  });
+                                                },
+                                                child: Container(
+                                                  alignment: Alignment.center,
+                                                  width: 30,
+                                                  height: 30,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.green,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.add_circle_outline,
+                                                    color: CustomColors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ]),
                                       ),
-                                    ),
-                                  ],
-                                )
-                              : Container(),
+                              ),
+                            ),
+                          ),
+                          // _pv.isAvailable
+                          //     ? Row(
+                          //         children: [
+                          //           Flexible(
+                          //             child: Padding(
+                          //               padding:
+                          //                   EdgeInsets.fromLTRB(10, 0, 5, 0),
+                          //               child: TextFormField(
+                          //                 initialValue: _pv.quantity.toString(),
+                          //                 textAlign: TextAlign.start,
+                          //                 autofocus: false,
+                          //                 keyboardType: TextInputType.number,
+                          //                 decoration: InputDecoration(
+                          //                   border: OutlineInputBorder(
+                          //                       borderSide: BorderSide(
+                          //                           color: CustomColors
+                          //                               .lightGreen)),
+                          //                   labelText: "Available Quantity",
+                          //                   contentPadding: EdgeInsets.all(10),
+                          //                   labelStyle: TextStyle(
+                          //                       fontSize: 13,
+                          //                       color: CustomColors.black),
+                          //                   fillColor: CustomColors.white,
+                          //                   filled: true,
+                          //                 ),
+                          //                 onChanged: (val) {
+                          //                   _pv.quantity = int.parse(val);
+                          //                 },
+                          //                 validator: (quantity) {
+                          //                   if (quantity.isEmpty) {
+                          //                     _pv.quantity = 0;
+                          //                   } else {
+                          //                     _pv.quantity =
+                          //                         int.parse(quantity);
+                          //                   }
+                          //                   return null;
+                          //                 },
+                          //               ),
+                          //             ),
+                          //           ),
+                          //           Flexible(
+                          //             child: DropdownButtonFormField(
+                          //               decoration: InputDecoration(
+                          //                 border: OutlineInputBorder(
+                          //                     borderSide: BorderSide(
+                          //                         color:
+                          //                             CustomColors.lightGreen)),
+                          //                 labelText: "Unit",
+                          //                 contentPadding: EdgeInsets.all(10),
+                          //                 labelStyle: TextStyle(
+                          //                     fontSize: 13,
+                          //                     color: CustomColors.black),
+                          //                 fillColor: CustomColors.white,
+                          //                 filled: true,
+                          //               ),
+                          //               value: _pv.availableUnit.toString(),
+                          //               items: _units.entries.map((f) {
+                          //                 return DropdownMenuItem<String>(
+                          //                   value: f.key,
+                          //                   child: Text(f.value),
+                          //                 );
+                          //               }).toList(),
+                          //               onChanged: (unit) {
+                          //                 setState(
+                          //                   () {
+                          //                     _pv.availableUnit =
+                          //                         int.parse(unit);
+                          //                   },
+                          //                 );
+                          //               },
+                          //             ),
+                          //           ),
+                          //         ],
+                          //       )
+                          //     : Container(),
                           Align(
                             alignment: Alignment.bottomRight,
                             child: Padding(
@@ -1546,159 +1796,159 @@ class _EditProductsState extends State<EditProducts> {
                   ]),
             ),
             SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Product Description",
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: CustomColors.black,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              primary: false,
-              itemCount: _descs.length,
-              itemBuilder: (BuildContext context, int index) {
-                ProductDescription _pd = _descs[index];
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            //   child: Align(
+            //     alignment: Alignment.centerLeft,
+            //     child: Text(
+            //       "Product Description",
+            //       style: TextStyle(
+            //           fontSize: 14,
+            //           color: CustomColors.black,
+            //           fontWeight: FontWeight.w600),
+            //     ),
+            //   ),
+            // ),
+            // ListView.builder(
+            //   shrinkWrap: true,
+            //   primary: false,
+            //   itemCount: _descs.length,
+            //   itemBuilder: (BuildContext context, int index) {
+            //     ProductDescription _pd = _descs[index];
 
-                return Padding(
-                  key: ObjectKey(_pd),
-                  padding: EdgeInsets.all(10.0),
-                  child: Container(
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: 'Description : ${index + 1}',
-                        labelStyle: TextStyle(fontWeight: FontWeight.w700),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            child: TextFormField(
-                              initialValue: _pd.title.toString(),
-                              textAlign: TextAlign.start,
-                              autofocus: false,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: CustomColors.lightGreen)),
-                                labelText: "Title",
-                                contentPadding: EdgeInsets.all(10),
-                                labelStyle: TextStyle(
-                                    fontSize: 13, color: CustomColors.black),
-                                fillColor: CustomColors.white,
-                                filled: true,
-                              ),
-                              onChanged: (val) {
-                                setState(() {
-                                  _pd.title = val;
-                                });
-                              },
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Container(
-                            child: TextFormField(
-                              initialValue: _pd.description.toString(),
-                              textAlign: TextAlign.start,
-                              maxLines: 5,
-                              autofocus: false,
-                              keyboardType: TextInputType.multiline,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: CustomColors.lightGreen)),
-                                labelText: "Description",
-                                contentPadding: EdgeInsets.all(10),
-                                labelStyle: TextStyle(
-                                    fontSize: 13, color: CustomColors.black),
-                                fillColor: CustomColors.white,
-                                filled: true,
-                              ),
-                              onChanged: (val) {
-                                _pd.description = val;
-                              },
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 10),
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _descs.removeAt(index);
-                                  });
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: 100,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Text("Remove"),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  width: 160,
-                  child: FlatButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    color: Colors.green,
-                    onPressed: () async {
-                      if (_descs.isNotEmpty &&
-                          _descs.last.title.trim().isEmpty) {
-                        Fluttertoast.showToast(
-                            msg: "Please fill the last Detail");
-                        return;
-                      } else {
-                        setState(() {
-                          _descs.add(
-                            ProductDescription.fromJson(
-                              {},
-                            ),
-                          );
-                        });
-                      }
-                    },
-                    icon: Icon(Icons.add),
-                    label: Text(
-                      "Add Details",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            //     return Padding(
+            //       key: ObjectKey(_pd),
+            //       padding: EdgeInsets.all(10.0),
+            //       child: Container(
+            //         child: InputDecorator(
+            //           decoration: InputDecoration(
+            //             labelText: 'Description : ${index + 1}',
+            //             labelStyle: TextStyle(fontWeight: FontWeight.w700),
+            //             border: OutlineInputBorder(
+            //               borderRadius: BorderRadius.circular(5.0),
+            //             ),
+            //           ),
+            //           child: Column(
+            //             mainAxisSize: MainAxisSize.min,
+            //             children: [
+            //               Container(
+            //                 child: TextFormField(
+            //                   initialValue: _pd.title.toString(),
+            //                   textAlign: TextAlign.start,
+            //                   autofocus: false,
+            //                   keyboardType: TextInputType.text,
+            //                   decoration: InputDecoration(
+            //                     border: OutlineInputBorder(
+            //                         borderSide: BorderSide(
+            //                             color: CustomColors.lightGreen)),
+            //                     labelText: "Title",
+            //                     contentPadding: EdgeInsets.all(10),
+            //                     labelStyle: TextStyle(
+            //                         fontSize: 13, color: CustomColors.black),
+            //                     fillColor: CustomColors.white,
+            //                     filled: true,
+            //                   ),
+            //                   onChanged: (val) {
+            //                     setState(() {
+            //                       _pd.title = val;
+            //                     });
+            //                   },
+            //                 ),
+            //               ),
+            //               SizedBox(height: 5),
+            //               Container(
+            //                 child: TextFormField(
+            //                   initialValue: _pd.description.toString(),
+            //                   textAlign: TextAlign.start,
+            //                   maxLines: 5,
+            //                   autofocus: false,
+            //                   keyboardType: TextInputType.multiline,
+            //                   decoration: InputDecoration(
+            //                     border: OutlineInputBorder(
+            //                         borderSide: BorderSide(
+            //                             color: CustomColors.lightGreen)),
+            //                     labelText: "Description",
+            //                     contentPadding: EdgeInsets.all(10),
+            //                     labelStyle: TextStyle(
+            //                         fontSize: 13, color: CustomColors.black),
+            //                     fillColor: CustomColors.white,
+            //                     filled: true,
+            //                   ),
+            //                   onChanged: (val) {
+            //                     _pd.description = val;
+            //                   },
+            //                 ),
+            //               ),
+            //               Align(
+            //                 alignment: Alignment.bottomRight,
+            //                 child: Padding(
+            //                   padding: EdgeInsets.only(top: 10),
+            //                   child: InkWell(
+            //                     onTap: () {
+            //                       setState(() {
+            //                         _descs.removeAt(index);
+            //                       });
+            //                     },
+            //                     child: Container(
+            //                       alignment: Alignment.center,
+            //                       width: 100,
+            //                       height: 30,
+            //                       decoration: BoxDecoration(
+            //                         color: Colors.red,
+            //                         borderRadius: BorderRadius.circular(5),
+            //                       ),
+            //                       child: Text("Remove"),
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       ),
+            //     );
+            //   },
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            //   child: Align(
+            //     alignment: Alignment.centerRight,
+            //     child: Container(
+            //       width: 160,
+            //       child: FlatButton.icon(
+            //         shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(5.0),
+            //         ),
+            //         color: Colors.green,
+            //         onPressed: () async {
+            //           if (_descs.isNotEmpty &&
+            //               _descs.last.title.trim().isEmpty) {
+            //             Fluttertoast.showToast(
+            //                 msg: "Please fill the last Detail");
+            //             return;
+            //           } else {
+            //             setState(() {
+            //               _descs.add(
+            //                 ProductDescription.fromJson(
+            //                   {},
+            //                 ),
+            //               );
+            //             });
+            //           }
+            //         },
+            //         icon: Icon(Icons.add),
+            //         label: Text(
+            //           "Add Details",
+            //           textAlign: TextAlign.center,
+            //           style: TextStyle(
+            //             fontSize: 14,
+            //             color: Colors.white,
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: 70)
           ],
         ),
@@ -1868,5 +2118,26 @@ class _EditProductsState extends State<EditProducts> {
         );
       }
     }
+  }
+
+  _pickFromTime(fromTime, _pv, index) async {
+    TimeOfDay t = await showTimePicker(
+        context: context,
+        initialTime: fromTime);
+    if (t != null)
+      setState(() {
+        _pv.availableTimes[index].activeFrom =
+            '${t.hour}:${t.minute}';
+      });
+  }
+
+  _pickTillTime(tillTime, _pv, index) async {
+    TimeOfDay t = await showTimePicker(
+        context: context,
+        initialTime: tillTime);
+    if (t != null)
+      setState(() {
+        _pv.availableTimes[index].activeTill = '${t.hour}:${t.minute}';
+      });
   }
 }

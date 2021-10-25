@@ -1058,7 +1058,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
         );
       },
       searchFn: (String keyword, items) {
-        List<int> ret = List<int>();
+        List<int> ret = [];
         if (keyword != null && items != null && keyword.isNotEmpty) {
           keyword.split(" ").forEach((k) {
             int i = 0;
@@ -1135,7 +1135,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
         );
       },
       searchFn: (String keyword, items) {
-        List<int> ret = List<int>();
+        List<int> ret = [];
         if (keyword != null && items != null && keyword.isNotEmpty) {
           keyword.split(" ").forEach((k) {
             int i = 0;
@@ -1217,7 +1217,7 @@ class _AddNewStoreHomeState extends State<AddNewStoreHome> {
         );
       },
       searchFn: (String keyword, items) {
-        List<int> ret = List<int>();
+        List<int> ret = [];
         if (keyword != null && items != null && keyword.isNotEmpty) {
           keyword.split(" ").forEach((k) {
             int i = 0;
@@ -2380,7 +2380,7 @@ class _AddStoreStepTwoState extends State<AddStoreStepTwo> {
 
   _pickTillTime() async {
     TimeOfDay t =
-        await showTimePicker(context: context, initialTime: deliverTillTime);
+        await showTimePicker(context: context, initialTime: tillTime );
     if (t != null)
       setState(() {
         tillTime = t;
@@ -2389,7 +2389,7 @@ class _AddStoreStepTwoState extends State<AddStoreStepTwo> {
   }
 
   _pickDeliverTillTime() async {
-    TimeOfDay t = await showTimePicker(context: context, initialTime: tillTime);
+    TimeOfDay t = await showTimePicker(context: context, initialTime: deliverTillTime);
     if (t != null)
       setState(() {
         deliverTillTime = t;

@@ -1,3 +1,4 @@
+import 'package:chipchop_seller/db/models/product_avail_time.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'product_variants.g.dart';
@@ -22,7 +23,9 @@ class ProductVariants {
   int quantity;
   @JsonKey(name: 'is_available')
   bool isAvailable;
-
+  @JsonKey(name: 'available_times', defaultValue: [""])
+  List<ProductAvailTime> availableTimes;
+  
   ProductVariants();
 
   factory ProductVariants.fromJson(Map<String, dynamic> json) =>
